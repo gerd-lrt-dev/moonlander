@@ -1,0 +1,69 @@
+#include "simcontrol.h"
+
+#include <thread>
+#include <chrono>
+#include <stdexcept>
+
+simcontrol::simcontrol(double v1, double h1, double t)
+{
+    // Überprüfe Parameter
+    if (v1 >= 0 && h1 >= 0 && t>= 0)
+    {
+        runSimulator(v1, h1, t);
+    }
+    else
+    {
+        throw::std::invalid_argument("Ungueltige Startparameter für die Simulation!");
+    }
+}
+
+simcontrol::~simcontrol()
+{
+    
+}
+
+void simcontrol::runSimulator(double v1, double h1, double t)
+{
+    // Instanziere Klassen auf Heap
+    lander = std::make_unique<physics>();
+    drawer = std::make_unique<output>();
+
+    // Erstelle Namensbereich für Clock
+    using clock = std::chrono::steady_clock;
+    
+    auto nextFrame = clock::now();
+
+    auto lastTime = clock::now();
+
+    while (h1 > 0)
+    {
+        auto now = clock::now();
+        std::chrono::duration<double> elapsed = now - lastTime;
+        double dt = elapsed.count();
+        lastTime = now;
+
+    
+        if (t == 0)
+        {
+            drawer->drawCockpit(t, h1, v1, 4000);
+            double v = lander->getVel(dt);
+            double h = lander->getHeight(dt);
+            v1 = v;
+            h1 = h;
+        }
+        else
+        {
+            double v = lander->getVel(dt, v1);
+            double h = lander->getHeight(dt, v1, h1);
+            v1 = v;
+            h1 = h;
+            drawer->drawCockpit(t, h1, v1, 4000);
+        }
+        
+        nextFrame += std::chrono::milliseconds(16);
+
+        std::this_thread::sleep_until(nextFrame);
+
+        t+=dt;
+    }
+}
