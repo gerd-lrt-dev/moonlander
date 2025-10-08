@@ -38,7 +38,7 @@ public:
      *
      * Outputs a formatted cockpit view including a text-based height bar.
      */
-    void drawCockpit(double t, double h, double v, double hMax);
+    void drawCockpit(double t, double h, double v, double hMax, bool integrity);
 };
 
 #endif

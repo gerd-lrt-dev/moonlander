@@ -1,62 +1,61 @@
-# 🌓 Moonlander – C++ Mondlandungssimulation
+# 🌓 Moonlander – C++ Lunar Lander Simulation
 
-**Moonlander** ist ein Lern- und Spaßprojekt in C++, inspiriert vom Beispiel *„Die Mondlandung“* aus dem Buch **Coding for Fun**.  
-Ziel ist es, die klassische Mondlandungssimulation nachzuprogrammieren und schrittweise um moderne Elemente zu erweitern – bis hin zu einer visuellen Darstellung mit **Qt**.
-
----
-
-## 🚀 Projektbeschreibung
-
-Die aktuelle Version simuliert die Mondlandung physikalisch vereinfacht mit:
-
-- **Gravitation**, Geschwindigkeit und Höhe  
-- **Steuerbarem Schub** (Thrust)  
-- **Echtzeit-Simulation** über `std::chrono`  
-- **ASCII-basiertem Cockpit**, das Telemetrie-Daten anzeigt  
-
-Das Projekt ist vollständig objektorientiert aufgebaut und nutzt moderne C++-Features wie **Smart Pointers** und **Kapselung**.
+**Moonlander** is a fun and educational C++ project inspired by the *"Lunar Landing"* example from the book **Coding for Fun**.  
+The goal is to reimplement the classic lunar landing simulation and gradually extend it with modern features, including a visual representation using **Qt**.
 
 ---
 
-## 🧩 Klassenstruktur
+## 🚀 Project Description
 
-| Klasse        | Aufgabe |
-|----------------|----------|
-| `Physics`      | Berechnung von Geschwindigkeit und Höhe unter Einfluss der Gravitation |
-| `Thrust`       | Modelliert Triebwerksschub mit Reaktionszeit und Zielwert |
-| `Output`       | ASCII-Visualisierung des Cockpits |
-| `SimControl`   | Hauptsteuerung der Simulation (Loop, Timing, Parameterprüfung) |
+The current version simulates the lunar landing with simplified physics:
 
----
+- **Gravity**, velocity, and altitude  
+- **Controllable thrust** (Thrust class)  
+- **Real-time simulation** using `std::chrono`  
+- **ASCII-based cockpit** displaying telemetry data  
 
-## 🧠 Zielsetzung
-
-Das Projekt dient dazu, **C++-Grundlagen und moderne Programmiertechniken** an einem anschaulichen Beispiel zu trainieren:
-
-- Physikalisches Denken → Simulation einfacher Bewegungsgleichungen  
-- Objektorientiertes Design → klare Trennung von Logik und Darstellung  
-- Erweiterbarkeit → Vorbereitung auf grafische Darstellung mit **Qt**  
+The project is fully object-oriented and uses modern C++ features such as **smart pointers** and **encapsulation**.
 
 ---
 
-## 🧰 Geplante Erweiterungen
+## 🧩 Class Structure
 
-- Qt-basierte Visualisierung (2D / 3D) der Mondlandung  
-- Steuerung über Tastatur oder GUI-Schieberegler  
-- Partikelsysteme und Animationen  
-- Erweiterte Physik (Treibstoffverbrauch, Trägheit, Autopilot)  
-- Speichern/Laden von Flügen und Statistiken  
+| Class        | Purpose |
+|--------------|---------|
+| `Physics`      | Calculates velocity and height under the influence of gravity |
+| `Thrust`       | Models engine thrust with reaction speed and target value |
+| `Output`       | ASCII-based cockpit visualization |
+| `SimControl`   | Main simulation controller (loop, timing, parameter validation) |
+
+---
+
+## 🧠 Goals
+
+This project is designed to **practice C++ fundamentals and modern programming techniques** through a clear and interactive example:
+
+- Physics thinking → simulating simple motion equations  
+- Object-oriented design → clear separation of logic and display  
+- Extensibility → preparation for graphical representation with **Qt**  
+
+---
+
+## 🧰 Planned Extensions
+
+- Qt-based 2D/3D visualization of the lunar landing  
+- User control via keyboard or GUI sliders  
+- Particle effects and animations  
+- Advanced physics (fuel consumption, inertia, autopilot)  
+- Saving/loading of flights and statistics  
 
 ---
 
 ## ⚙️ Build & Run
 
-### Voraussetzungen
-- **C++20** oder neuer  
-- G++ oder Clang  
-- Optional: **Qt6** für spätere Visualisierung  
+### Requirements
+- **C++20** or newer  
+- G++ or Clang  
+- Optional: **Qt6** for later visualization  
 
-### Kompilieren (Kommandozeile)
+### Compile (command line)
 ```bash
-g++ -std=c++20 -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp -o moonlander
-
+g++ -std=c++20 -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp spacecraft.cpp spacemath.cpp -o moonlander

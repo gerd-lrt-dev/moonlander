@@ -3,6 +3,8 @@
 
 #include "physics.h"
 #include "output.h"
+#include "spacecraft.h"
+
 #include <memory>
 
 /**
@@ -17,8 +19,9 @@
 class simcontrol
 {
 private:
-    std::unique_ptr<physics> lander; ///< Physics engine handling lander motion
-    std::unique_ptr<output> drawer;  ///< Output handler for cockpit display
+    std::unique_ptr<physics> lander;                ///< Physics engine handling lander motion
+    std::unique_ptr<output> drawer;                 ///< Output handler for cockpit display
+    std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
 
     /**
      * @brief Runs the simulation until the lander reaches the surface.
