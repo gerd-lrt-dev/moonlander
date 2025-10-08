@@ -34,6 +34,11 @@ private:
      */
     void runSimulator(double v1, double h1, double t);
 
+    /**
+     * @brief Thread 1 which runs simulation loop
+     */
+    void runSimulationLoop(bool lander1IsIntact, double v1, double h1, double t);
+
 public:
     /**
      * @brief Constructor
@@ -43,7 +48,7 @@ public:
      *
      * Checks input parameters and starts the simulation.
      */
-    simcontrol(double v1, double h1, double t);
+    simcontrol(double v1, double h1, double t = 0);
 
     /**
      * @brief Destructor

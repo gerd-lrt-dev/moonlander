@@ -9,7 +9,7 @@
  *
  * @return Exit status (0 = success)
  */
-int main()
+int main(int argc, char* argv[])
 {
     // Create the simulation controller using a smart pointer
     std::unique_ptr<simcontrol> controller;

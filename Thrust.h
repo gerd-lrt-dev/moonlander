@@ -15,6 +15,7 @@ private:
     double target;   ///< [m/s²] Desired thrust value
     double current;  ///< [m/s²] Current thrust value, updated over time
     double rate;     ///< [Hz] Engine response speed (how quickly current approaches target)
+    bool newThrust;  ///< [1,0] Flag of new incoming thurst (1)
 
 public:
     /**

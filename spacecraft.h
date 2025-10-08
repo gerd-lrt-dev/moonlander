@@ -21,6 +21,8 @@ private:
      * Physical and mechanical properties of the spacecraft.
      */
     ///@{
+    double       dt = 0;      ///< [s] Time steps. Provided by updateTime 
+    double       time = 0;    ///< [s] Absolute time. Will be added by dt from udpateTime
     const double emptyMass;   ///< [kg] Mass of the spacecraft without fuel
     double       fuelMass;    ///< [kg] Mass of the fuel currently onboard
     double       totalMass;   ///< [kg] Total mass of spacecraft - is composed of empty mass and fuel mass in setDefaultValues
@@ -110,6 +112,14 @@ public:
     void updateSpacecraftIntegrity(double delta);
 
     /**
+     * @brief Updates time
+     * @param dt timestep [s]
+     * 
+     * Single source of thruth for time is simcontrol!
+     */
+    void updateTime(double transferedDT);
+
+    /**
      * @brief Applies landing damage based on impact velocity and spacecraft mass.
      * 
      * This function calculates the percentage damage the spacecraft receives
@@ -143,7 +153,14 @@ public:
      */
     void applyLandingDamage(double impactVelocity);
 
-
+    /**
+     * @brief Set thrust up to specific level
+     * @param targetThrust Thrust clamped to [0, 1] where 1 is 100% of max thrust
+     * 
+     * This function initiates the main engine and provide thrust for spacecraft. It 
+     * provides thrust until the setted target thrust is reached.
+     */
+    void setThrust(double targetThrustInPercentage);
     
 };
 

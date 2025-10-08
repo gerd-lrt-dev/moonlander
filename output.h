@@ -39,6 +39,11 @@ public:
      * Outputs a formatted cockpit view including a text-based height bar.
      */
     void drawCockpit(double t, double h, double v, double hMax, bool integrity);
+
+    /**
+     * @brief Draws mission failed screen
+     */
+    void drawMissionFailed();
 };
 
 #endif

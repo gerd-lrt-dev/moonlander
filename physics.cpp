@@ -16,9 +16,9 @@ double physics::calcHeight(double t, double v0, double h0) const
     return -0.5 * gravityMoon * t * t + v0 * t + h0;
 }
 
-double physics::calcVel(double t, double v0) const
+double physics::calcVel(double t, double v0, double thrust) const
 {
-    return - gravityMoon * t + v0;
+    return - gravityMoon * t + v0 + thrust * t;
 }
 
 // public  ---------------------------------------------------------

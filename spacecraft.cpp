@@ -56,3 +56,17 @@ void spacecraft::applyLandingDamage(double impactVelocity)
 
     spacecraftIntegrity += -damageInPercent;
 }
+
+void spacecraft::setThrust(double targetThrustInPercentage)
+{
+    // thrust in percentage = target thrust / maxiumum thrust <=>
+    double targetThrust = targetThrustInPercentage * maxThrust; // [m/s²]
+
+    mainEngine.setTarget(targetThrust);
+}
+
+void spacecraft::updateTime(double transferedDT)
+{
+    dt = transferedDT;
+    time += dt;
+}

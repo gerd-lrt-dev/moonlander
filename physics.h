@@ -30,7 +30,7 @@ private:
      * @param v Initial velocity [m/s]
      * @return Calculated velocity [m/s]
      */
-    double calcVel(double t, double v) const;
+    double calcVel(double t, double v, double thrust = 0) const;
 
 public:
     /**
