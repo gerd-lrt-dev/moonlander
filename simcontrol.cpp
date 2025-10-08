@@ -4,6 +4,8 @@
 #include <chrono>
 #include <stdexcept>
 
+//TODO: Aktuell ist der run abhängig von der Höhe des Raumfahrtsystems. Künftig soll es abhängig sein von der Integrität der Struktur (z.B. intakt - nicht intakt)
+
 simcontrol::simcontrol(double v1, double h1, double t)
 {
     // Überprüfe Parameter
