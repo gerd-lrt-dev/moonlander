@@ -38,7 +38,7 @@ public:
      * @param t Target thrust [m/s²]
      * @return The target thrust value set
      */
-    double setTarget(double t);
+    void setTarget(double t);
 
     /**
      * @brief Update the current thrust based on the time delta
@@ -48,7 +48,7 @@ public:
      * The current thrust approaches the target thrust based on the
      * engine's reaction speed.
      */
-    double update(double dt);
+    void update(double dt);
 
     /**
      * @brief Get the current thrust

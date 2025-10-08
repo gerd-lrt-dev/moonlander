@@ -4,8 +4,10 @@
 #include "physics.h"
 #include "output.h"
 #include "spacecraft.h"
+#include "environmentConfig.h"
 
 #include <memory>
+#include <atomic>
 
 /**
  * @class simcontrol
@@ -23,6 +25,9 @@ private:
     std::unique_ptr<output> drawer;                 ///< Output handler for cockpit display
     std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
 
+    std::atomic<double> userThrustPercent;
+    EnvironmentConfig env;                          ///< Load environment config
+
     /**
      * @brief Runs the simulation until the lander reaches the surface.
      * @param v1 Initial velocity [m/s]
@@ -36,8 +41,17 @@ private:
 
     /**
      * @brief Thread 1 which runs simulation loop
+     * @param lander1IsIntact Is true, if spacecraft in an operational state
+     * @param v1 Initial velocity [m/s]
+     * @param h1 Initial height [m]
+     * @param t Initial simulation time [s]
      */
-    void runSimulationLoop(bool lander1IsIntact, double v1, double h1, double t);
+    void runSimulationLoop(bool& lander1IsIntact, double& v1, double& h1, double&t);
+
+    /**
+     * @brief Additional thread for controlling user input 
+     */
+    void runUserInput();
 
 public:
     /**

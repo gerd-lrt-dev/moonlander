@@ -1,6 +1,6 @@
 #include "simcontrol.h"
-#include "environmentConfig.h"
 
+#include <iostream>
 #include <thread>
 #include <chrono>
 #include <stdexcept>
@@ -14,7 +14,7 @@ simcontrol::simcontrol(double v1, double h1, double t)
     }
     else
     {
-        throw::std::invalid_argument("Ungueltige Startparameter für die Simulation!");
+        throw std::invalid_argument("Ungueltige Startparameter für die Simulation!");
     }
 }
 
@@ -22,11 +22,20 @@ simcontrol::~simcontrol()
 {
     
 }
-
-void simcontrol::runSimulationLoop(bool lander1IsIntact, double v1, double h1, double t)
+void simcontrol::runUserInput()
 {
-    EnvironmentConfig env; // Load environment config
+    double input;
 
+    while(landerSpacecraft->isIntact())
+    {
+        std::cin >> input;
+        userThrustPercent.store(input);
+        std::cout << "INPUT: " << input;
+    }
+}
+
+void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v1, double& h1, double& t)
+{
     // Build namespace for clock
     using clock = std::chrono::steady_clock;
     
@@ -47,7 +56,7 @@ void simcontrol::runSimulationLoop(bool lander1IsIntact, double v1, double h1, d
         double h = lander->getHeight(dt, v1, h1);
         v1 = v;
         h1 = h;
-        drawer->drawCockpit(t, h1, v1, 4000, lander1IsIntact);
+        drawer->drawCockpit(t, h1, v1, env.initialHeight, lander1IsIntact);
 
         nextFrame += std::chrono::milliseconds(env.maxTimeStep);
 
@@ -81,8 +90,14 @@ void simcontrol::runSimulator(double v1, double h1, double t)
     // Call integerity for simulation run
     bool lander1IsIntact = landerSpacecraft->isIntact(); 
 
+    // Start user input thread
+    std::thread inputThread(&simcontrol::runUserInput, this);
+
     // Start simulation
     runSimulationLoop(lander1IsIntact, v1, h1, t);
+
+    // When simulation is ready wait for thread
+    if (inputThread.joinable()) inputThread.join();
 
     if (!lander1IsIntact) drawer->drawMissionFailed();
 }

@@ -7,12 +7,12 @@ Thrust::~Thrust()
 
 }
 
-double Thrust::setTarget(double t)
+void Thrust::setTarget(double t)
 {
     target = t;
 }
 
-double Thrust::update(double dt)
+void Thrust::update(double dt)
 {
     current += (target - current) * rate * dt;
 }
