@@ -5,12 +5,12 @@
 #include <chrono>
 #include <stdexcept>
 
-simcontrol::simcontrol(double v1, double h1, double t)
+simcontrol::simcontrol(double v0, double h0, double t)
 {
     // Überprüfe Parameter
-    if (v1 >= 0 && h1 >= 0 && t>= 0)
+    if (v0 >= 0 && h0 >= 0 && t>= 0)
     {
-        runSimulator(v1, h1, t);
+        runSimulator(v0, h0, t);
     }
     else
     {
@@ -34,7 +34,7 @@ void simcontrol::runUserInput()
     }
 }
 
-void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v1, double& h1, double& t)
+void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0, double& t)
 {
     // Build namespace for clock
     using clock = std::chrono::steady_clock;
@@ -43,36 +43,53 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v1, double& h1
     auto nextFrame = clock::now();
     auto lastTime = clock::now();
 
+    // Start simulation loop
     while (lander1IsIntact)
     {
+        // Update clock
         auto now = clock::now();
         std::chrono::duration<double> elapsed = now - lastTime;
         double dt = elapsed.count();
         lastTime = now;
+
+        // Provide time to spacecraft
         landerSpacecraft->updateTime(dt);
 
-        // visualizing  process
-        double v = lander->getVel(dt, v1);
-        double h = lander->getHeight(dt, v1, h1);
-        v1 = v;
-        h1 = h;
-        drawer->drawCockpit(t, h1, v1, env.initialHeight, lander1IsIntact);
+        // Compute current velocity and altitude based on the time step
+        double v = lander->getVel(dt, v0);
+        double h = lander->getHeight(dt, v0, h0, landerSpacecraft->requestThrust());
+        
+        // Update initial state variables for the next iteration
+        // to ensure the next loop step uses the latest simulation data
+        v0 = v;
+        h0 = h;
 
+        // Visualizing  process
+        drawer->drawCockpit(t, h0, v0, env.initialHeight, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), lander1IsIntact);
+
+        // Update frame
         nextFrame += std::chrono::milliseconds(env.maxTimeStep);
-
         std::this_thread::sleep_until(nextFrame);
 
+        // Count time due to timesteps
         t+=dt;
 
-        // landerSpacecraft->setThrust(1);
-
-        if (h1 <= 0.0)
+        // TEST! Provide thrust when height is down below 3000 meters
+        if (h0 < 3000.0)
         {
-            landerSpacecraft->applyLandingDamage(v1);
+            landerSpacecraft->setThrust(1.0);
         }
 
+        // Calculate damage when spacecraft hits the ground
+        if (h0 <= 0.0)
+        {
+            landerSpacecraft->applyLandingDamage(v0);
+        }
+
+        // Request spacecraft of malfunction
         lander1IsIntact = landerSpacecraft->isIntact(); 
 
+        // If malfunction of spacecraft is to high break simulation
         if (!lander1IsIntact)
         {
             break;

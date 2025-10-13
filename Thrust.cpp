@@ -17,6 +17,11 @@ void Thrust::update(double dt)
     current += (target - current) * rate * dt;
 }
 
+double Thrust::getTargetThrust() const
+{
+    return target;
+}
+
 double Thrust::getCurrentThrust() const
 {
     return current;

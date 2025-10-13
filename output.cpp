@@ -15,7 +15,7 @@ output::~output()
 {
 }
 
-void output::drawCockpit(double t, double h, double v, double hMax, bool intact)
+void output::drawCockpit(double t, double h, double v, double hMax, double thrust, double targetThrust, bool intact)
 {
     const int barLength = 16;
     const int width = 34;       // Inner width for value lines
@@ -40,6 +40,10 @@ void output::drawCockpit(double t, double h, double v, double hMax, bool intact)
               << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << h << " m |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "Velocity:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << v << " m/s |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "Thrust:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << thrust << " m/s² |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "T-Thrust:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << targetThrust << " m/s² |\n";
 
     // Altitude bar
     int hFilled = static_cast<int>(std::round((h / hMax) * barLength));

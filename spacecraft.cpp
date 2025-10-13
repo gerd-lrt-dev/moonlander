@@ -69,4 +69,19 @@ void spacecraft::updateTime(double transferedDT)
 {
     dt = transferedDT;
     time += dt;
+
+    // Start updating time for main engine 
+    mainEngine.update(dt); // TODO: User should start engine and routine starts with that. That need fuel in idle mode. Currently just for testing implemented
+}
+
+double spacecraft::requestTargetThrust() const
+{
+    
+    return mainEngine.getTargetThrust();
+}
+
+double spacecraft::requestThrust() const
+{
+    
+    return mainEngine.getCurrentThrust();
 }

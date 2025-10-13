@@ -20,9 +20,10 @@ private:
      * @param t Time elapsed [s]
      * @param v0 Initial velocity [m/s]
      * @param h Initial height [m]
+     * @param thrustSpacecraft Thrust provided by engines [m/s²]
      * @return Calculated height [m]
      */
-    double calcHeight(double t, double v0,  double h) const;
+    double calcHeight(double t, double v0,  double h, double thrustSpacecraft = 0.0) const;
 
     /**
      * @brief Calculates velocity based on time and initial velocity
@@ -48,9 +49,10 @@ public:
      * @param t Time elapsed [s]
      * @param v0 Initial velocity [m/s] (default = 0)
      * @param h0 Initial height [m] (default = 4000)
+     * @param thrustSpacecraft Thrust provided by engines [m/s²]
      * @return Height [m]
      */
-    double getHeight(double t, double v0 = 0.0, double h0 = 4000.0) const;
+    double getHeight(double t, double v0 = 0.0, double h0 = 4000.0, double thrustSpacecraft = 0.0) const;
 
     /**
      * @brief Get the current velocity of the lander

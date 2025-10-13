@@ -51,6 +51,12 @@ public:
     void update(double dt);
 
     /**
+     * @brief Get the target thrust
+     * @return target thrust [m/s²]
+     */
+    double getTargetThrust() const;
+
+        /**
      * @brief Get the current thrust
      * @return Current thrust [m/s²]
      */

@@ -161,6 +161,24 @@ public:
      * provides thrust until the setted target thrust is reached.
      */
     void setThrust(double targetThrustInPercentage);
+
+    /**
+     * @brief Request target Thrust of Aircraft
+     * @return target thrust
+     * 
+     * Function queries the thrust class for thrust what the user has setted. 
+     */
+    double requestTargetThrust() const;
+
+    /**
+     * @brief Request current thrust of Spacecraft
+     * @return current thrust
+     * 
+     * Function queries the thrust class for the thrust of the spacecraft. 
+     * Not to be confused with the target thrust!
+     */
+    double requestThrust() const;
+
     
 };
 
