@@ -29,7 +29,6 @@ The project is fully object-oriented and uses modern C++ features such as **smar
 | `Output`       | ASCII-based cockpit visualization |
 | `SimControl`   | Main simulation controller (loop, timing, parameter validation) |
 | `Spacecraft`   | Models spacecraft state (mass, fuel, thrust, and integrity) |
-| `Output`       | Handles cockpit or console-based visualization
 | `EnvironmentConfig` | Stores constants such as gravity and simulation timestep
 | `Spacemath`    | Utility library providing mathematical helpers
 

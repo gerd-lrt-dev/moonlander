@@ -35,6 +35,11 @@ void spacecraft::setDefaultValues()
     safeVelocity = 2.0;
 }
 
+void spacecraft::updateTotalMassOnFuelReduction(double emptyMass, double fuelMass)
+{
+    totalMass = emptyMass + fuelMass;
+}
+
 void spacecraft::updateSpacecraftIntegrity(double delta)
 {
     spacecraftIntegrity += delta;
@@ -65,13 +70,15 @@ void spacecraft::setThrust(double targetThrustInPercentage)
     mainEngine.setTarget(targetThrust);
 }
 
-void spacecraft::updateTime(double transferedDT)
+void spacecraft::updateTime(double dt)
 {
-    dt = transferedDT;
     time += dt;
 
     // Start updating time for main engine 
-    mainEngine.update(dt); // TODO: User should start engine and routine starts with that. That need fuel in idle mode. Currently just for testing implemented
+    fuelMass = mainEngine.updateThrust(dt, fuelMass);
+
+    //mainEngine.updateSimpleThrust(dt); // TODO: User should start engine and routine starts with that. That need fuel in idle mode. Currently just for testing implemented
+
 }
 
 double spacecraft::requestTargetThrust() const
@@ -89,4 +96,9 @@ double spacecraft::requestThrust() const
 double spacecraft::requestAcceleration() const
 {
     return spacemath::accelerationBasedOnThrust(mainEngine.getCurrentThrust(), totalMass);
+}
+
+double spacecraft::requestLiveFuelConsumption() const
+{
+    return mainEngine.getFuelConsumption();
 }

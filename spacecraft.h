@@ -58,6 +58,14 @@ private:
      * Called automatically in the constructor.
      */
     void setDefaultValues();
+
+    /**
+     * @brief Updates total mass
+     * Updates the total mass of the spacecraft in connection with fuel consumption due to the combustion process.
+     * Updates the total mass of the class directly without return.
+     */
+    void updateTotalMassOnFuelReduction(double emptyMass, double fuelMass);
+    
     
 public:
     /**
@@ -117,7 +125,7 @@ public:
      * 
      * Single source of thruth for time is simcontrol!
      */
-    void updateTime(double transferedDT);
+    void updateTime(double dt);
 
     /**
      * @brief Applies landing damage based on impact velocity and spacecraft mass.
@@ -181,9 +189,20 @@ public:
 
     /**
      * @brief Request current acceleration based on thrust of spacecraft
-     * @return acceleration of spacecraft
+     * @return Acceleration of spacecraft
      */
     double requestAcceleration() const;
+
+    /**
+     * @brief Request current fuel level
+     * @return Fuel level in percent [%]
+     */
+
+     /**
+      * @brief Request live fuel consumption from thrust class
+      * @return fuel consumption
+      */
+     double requestLiveFuelConsumption() const;
 
     
 };

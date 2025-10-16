@@ -65,7 +65,7 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0
         h0 = h;
 
         // Visualizing  process
-        drawer->drawCockpit(t, h0, v0, env.initialHeight, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), lander1IsIntact);
+        drawer->drawCockpit(t, h0, v0, env.initialHeight, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
 
         // Update frame
         nextFrame += std::chrono::milliseconds(env.maxTimeStep);

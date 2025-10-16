@@ -9,3 +9,13 @@ double spacemath::accelerationBasedOnThrust(double thrust, double mass)
 {
     return thrust / mass;
 }
+
+double spacemath::accelerationComplex(double currentThrust, double totalMass, double gravityConstant)
+{
+    return currentThrust / totalMass - gravityConstant;
+}
+
+double spacemath::calcMassFlowBasedOnThrust(double currenThrust, double Isp, double earthGravity)
+{
+    return currenThrust / (Isp * earthGravity); 
+}

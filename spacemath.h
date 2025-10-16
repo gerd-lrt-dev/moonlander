@@ -30,21 +30,37 @@ public:
      * Calculates the kinetic energy of a body given its mass and velocity:
      * \f$ KE = \frac{1}{2} m v^2 \f$
      *
-     * @param mass Mass of the object [kg]
-     * @param velocity Velocity of the object [m/s]
-     * @return Kinetic energy [J]
+     * @param mass      ///< [kg] Mass of the object 
+     * @param velocity  ///< [m/s] Velocity of the object 
+     * @return          ///< [J] Kinetic energy 
      */
     static double kineticEnergy(double mass, double velocity);
 
     /**
      * @brief Calculates acceleration based on thrust
-     * @param thrust Engine thrust spacecraft
-     * @param mass Total mass of spacecraft
+     * @param thrust    ///< [N] Engine thrust spacecraft
+     * @param mass      ///< [kg] Total mass of spacecraft
      * 
      * a = F{thrust} / m{total}
      */
     static double accelerationBasedOnThrust(double thrust, double mass);
 
+    /**
+     * @brief Calculates acceleration based on thrust, mass and specific impulse
+     * 
+     */
+    static double accelerationComplex(double currentThrust, double totalMass, double gravityConstant);
+
+    /**
+     * @brief Calculates Mass flow based on thrust
+     * @param currentThrust ///< [N] Thrust from the last time step
+     * @param Isp           ///< [s]
+     * 
+     * g0 is always the acceleration due to gravity, regardless of whether you are 
+     * on the moon or Mars. This is defined historically and physically because 
+     * specific impulse is measured according to this standard.
+     */
+    static double calcMassFlowBasedOnThrust(double currenThrust, double Isp, double earthGravity);
 };
 
 #endif

@@ -5,7 +5,6 @@
 #include "output.h"
 #include "spacecraft.h"
 #include "environmentConfig.h"
-#include "spacemath.h"
 
 #include <memory>
 #include <atomic>
