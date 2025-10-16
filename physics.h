@@ -22,6 +22,9 @@ private:
      * @param h Initial height [m]
      * @param thrustSpacecraft Thrust provided by engines [m/s²]
      * @return Calculated height [m]
+     * 
+     * The resulting height is calculated based on the equation of motion.
+     * h(t) = h0 ​+ v0 * ​t + 1/2 ​(thrust−g) * t²
      */
     double calcHeight(double t, double v0,  double h, double thrustSpacecraft = 0.0) const;
 
@@ -30,6 +33,9 @@ private:
      * @param t Time elapsed [s]
      * @param v Initial velocity [m/s]
      * @return Calculated velocity [m/s]
+     * 
+     * v(t) = v0 + a{resutl} * t
+     * a{result} = a{thrust} - g{moon}
      */
     double calcVel(double t, double v, double thrust = 0) const;
 
@@ -60,7 +66,7 @@ public:
      * @param v0 Initial velocity [m/s] (default = 0)
      * @return Velocity [m/s]
      */
-    double getVel(double t, double v0 = 0.0) const;
+    double getVel(double t, double v0 = 0.0, double thrust = 0.0) const;
 };
 
 #endif

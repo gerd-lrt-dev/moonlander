@@ -56,8 +56,8 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0
         landerSpacecraft->updateTime(dt);
 
         // Compute current velocity and altitude based on the time step
-        double v = lander->getVel(dt, v0);
-        double h = lander->getHeight(dt, v0, h0, landerSpacecraft->requestThrust());
+        double v = lander->getVel(dt, v0, landerSpacecraft->requestAcceleration());
+        double h = lander->getHeight(dt, v0, h0, landerSpacecraft->requestAcceleration());
         
         // Update initial state variables for the next iteration
         // to ensure the next loop step uses the latest simulation data

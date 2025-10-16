@@ -179,6 +179,12 @@ public:
      */
     double requestThrust() const;
 
+    /**
+     * @brief Request current acceleration based on thrust of spacecraft
+     * @return acceleration of spacecraft
+     */
+    double requestAcceleration() const;
+
     
 };
 

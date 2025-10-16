@@ -35,6 +35,16 @@ public:
      * @return Kinetic energy [J]
      */
     static double kineticEnergy(double mass, double velocity);
+
+    /**
+     * @brief Calculates acceleration based on thrust
+     * @param thrust Engine thrust spacecraft
+     * @param mass Total mass of spacecraft
+     * 
+     * a = F{thrust} / m{total}
+     */
+    static double accelerationBasedOnThrust(double thrust, double mass);
+
 };
 
 #endif

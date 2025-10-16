@@ -85,3 +85,8 @@ double spacecraft::requestThrust() const
     
     return mainEngine.getCurrentThrust();
 }
+
+double spacecraft::requestAcceleration() const
+{
+    return spacemath::accelerationBasedOnThrust(mainEngine.getCurrentThrust(), totalMass);
+}
