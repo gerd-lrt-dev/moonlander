@@ -1,5 +1,6 @@
 #include "physics.h"
 #include <cmath>
+#include <iostream>
 
 // constructor - destructor ---------------------------------------
 physics::physics(/* args */)
@@ -22,12 +23,25 @@ double physics::calcVel(double t, double v0, double thrust) const
 }
 
 // public  ---------------------------------------------------------
-double physics::getHeight(double t, double v, double h, double thrustSpacecraft) const
+double physics::getHeight(double dt, double v, double h, double thrustSpacecraft) const
 {
-    return calcHeight(t, v, h, thrustSpacecraft);
+    /*
+    std::cout << "dt: " << dt << std::endl;
+    std::cout << "v: " << v << std::endl;
+    std::cout << "h: " << h << std::endl;
+    std::cout << "thrustSpacecraft: " << thrustSpacecraft << std::endl;
+    */
+    return calcHeight(dt, v, h, thrustSpacecraft);
+    
 }
 
-double physics::getVel(double t, double v, double thrust) const 
+double physics::getVel(double dt, double v, double thrust) const 
 {
-    return calcVel(t, v, thrust);
+    /*
+    std::cout << "physics[getVel]" << std::endl;
+    std::cout << "dt: " << dt << std::endl;
+    std::cout << "v: " << v << std::endl;
+    std::cout << "thrust: " << thrust << std::endl;
+    */
+    return calcVel(dt, v, thrust);
 }

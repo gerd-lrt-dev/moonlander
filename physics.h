@@ -52,21 +52,21 @@ public:
 
     /**
      * @brief Get the current height of the lander
-     * @param t Time elapsed [s]
+     * @param dt Time elapsed [s]
      * @param v0 Initial velocity [m/s] (default = 0)
      * @param h0 Initial height [m] (default = 4000)
      * @param thrustSpacecraft Thrust provided by engines [m/s²]
      * @return Height [m]
      */
-    double getHeight(double t, double v0 = 0.0, double h0 = 4000.0, double thrustSpacecraft = 0.0) const;
+    double getHeight(double dt, double v0 = 0.0, double h0 = 4000.0, double thrustSpacecraft = 0.0) const;
 
     /**
      * @brief Get the current velocity of the lander
-     * @param t Time elapsed [s]
+     * @param dt Time elapsed [s]
      * @param v0 Initial velocity [m/s] (default = 0)
      * @return Velocity [m/s]
      */
-    double getVel(double t, double v0 = 0.0, double thrust = 0.0) const;
+    double getVel(double dt, double v0 = 0.0, double thrust = 0.0) const;
 };
 
 #endif

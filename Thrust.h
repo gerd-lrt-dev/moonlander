@@ -1,6 +1,9 @@
 #ifndef THRUST_H
 #define THRUST_H
 
+#include "spacemath.h"
+#include "environmentConfig.h"
+
 /**
  * @class Thrust
  * @brief Simulates the thrust behavior of a spacecraft engine.
@@ -32,7 +35,7 @@ private:
      * 
      * Reduces fuel supply depending on fuel consumption through the thrust provision process
      */
-    const double calcFuelReduction(double fuelMass, double massFlowFuel, double dt);
+    double calcFuelReduction(double fuelMass, double massFlowFuel, double dt);
 
     /**
      * @brief Function calculates fuel consumption based on time increments
@@ -52,7 +55,7 @@ public:
      *
      * Initializes the engine with zero current and target thrust.
      */
-    Thrust(double r) : targetThrust(0), currentThrust(0), Isp(r) {};
+    Thrust(double r) : targetThrust(0.0), currentThrust(0.0), Isp(r) {};
 
     /**
      * @brief Destructor

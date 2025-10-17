@@ -17,17 +17,26 @@ class spacecraft
 {
 private:
     /**
+     * @name Simulation start conditions 
+     * physical conditions passed via constructor
+     * 
+     */
+    ///@{
+    const double emptyMass;   ///< [kg] Mass of the spacecraft without fuel
+    const double maxThrust;   ///< [N] Maximum thrust the main engine can produce
+    Thrust       mainEngine;  ///< Main engine responsible for generating thrust
+    double       fuelMass;    ///< [kg] Mass of the fuel currently onboard
+    ///@}
+    
+    /**
      * @name Physical properties
      * Physical and mechanical properties of the spacecraft.
+     * TODO: When it comes to many more vars organize them in structs
      */
     ///@{
     double       dt = 0;      ///< [s] Time steps. Provided by updateTime 
     double       time = 0;    ///< [s] Absolute time. Will be added by dt from udpateTime
-    const double emptyMass;   ///< [kg] Mass of the spacecraft without fuel
-    double       fuelMass;    ///< [kg] Mass of the fuel currently onboard
     double       totalMass;   ///< [kg] Total mass of spacecraft - is composed of empty mass and fuel mass in setDefaultValues
-    const double maxThrust;   ///< [N] Maximum thrust the main engine can produce
-    Thrust       mainEngine;  ///< Main engine responsible for generating thrust
     ///@}
 
     /**
