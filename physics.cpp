@@ -12,14 +12,14 @@ physics::~physics()
 }
 
 // private ---------------------------------------------------------
-double physics::calcHeight(double t, double v0, double h0, double thrustSpacecraft) const
+double physics::calcHeight(double dt, double v0, double h0, double thrustSpacecraft) const
 {
-    return h0 + v0 * t + 0.5 * (thrustSpacecraft - gravityMoon) * t * t;
+    return h0 + v0 * dt + 0.5 * (thrustSpacecraft - gravityMoon) * dt * dt;
 }
 
-double physics::calcVel(double t, double v0, double thrust) const
+double physics::calcVel(double dt, double v0, double thrust) const
 {
-    return v0 + (thrust - gravityMoon) * t;
+    return v0 + (thrust - gravityMoon) * dt;
 }
 
 // public  ---------------------------------------------------------

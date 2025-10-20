@@ -86,7 +86,7 @@ public:
      *
      * Initializes the spacecraft with its physical parameters and engine.
      */
-    spacecraft(double m, double maxT, double rate, double fuelM);
+    spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant);
 
     /**
      * @brief Destructor

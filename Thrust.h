@@ -17,8 +17,8 @@ class Thrust
 private:
     double targetThrust;    ///< [m/s²] Desired thrust value
     double currentThrust;   ///< [m/s²] Current thrust value, updated over time
-    double timeConstant;    ///< [s] Parameter to be modeled that describes how quickly the current thrust responds to changes in the setpoints
     double Isp;             ///< [s] Specific impulse
+    double timeConstant;    ///< [s] Parameter to be modeled that describes how quickly the current thrust responds to changes in the setpoints
     double rate;            ///< [Hz] Engine response speed (how quickly current approaches target)
     double fuelMass0;       ///< [kg] Fuel mass time step 0 (required for calculating live consumption)
     double fuelMass1;       ///< [kg] Fuel mass time step 1 (required for calculating live consumption)
@@ -51,11 +51,12 @@ private:
 public:
     /**
      * @brief Constructor
-     * @param r ///< [Hz] Reaction speed of the engine 
-     *
+     * @param specificImpulse                   ///< [Hz] Reaction speed of the engine 
+     * @param timeConstantForEulerApproximation ///< [s] Timeconstant also called \tau describes, how quickly the thrustsystem adapt to targetvalue. 
+     *                                              It describes mathematically the inertia of the engine within the differntial equations
      * Initializes the engine with zero current and target thrust.
      */
-    Thrust(double r) : targetThrust(0.0), currentThrust(0.0), Isp(r) {};
+    Thrust(double specificImpulse, double timeConstantForEulerApproximation) : targetThrust(0.0), currentThrust(0.0), Isp(specificImpulse), timeConstant(timeConstantForEulerApproximation) {};
 
     /**
      * @brief Destructor
@@ -68,7 +69,7 @@ public:
      * @brief Set a new target thrust
      * @param t ///<  [m/s²] Target thrust
      */
-    void setTarget(double t);
+    void setTarget(double tThrust);
 
     /**
      * @brief Update the current thrust based on the time delta

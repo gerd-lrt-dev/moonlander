@@ -36,6 +36,28 @@ void simcontrol::runUserInput()
     }
 }
 
+void simcontrol::runSimulator(double v1, double h1, double t)
+{
+    // Instance classes
+    landerPhysics       = std::make_unique<physics>();
+    drawer              = std::make_unique<output>();
+    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 5500.0, 300, 1000.0, 0.5); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s //TODO: organize in struct
+
+    // Call integerity for simulation run
+    bool lander1IsIntact = landerSpacecraft->isIntact(); 
+
+    // Start user input thread
+    //< REACTIVATE//std::thread inputThread(&simcontrol::runUserInput, this);
+
+    // Start simulation
+    runSimulationLoop(lander1IsIntact, v1, h1, t);
+
+    // When simulation is ready wait for thread
+    //< REACTIVATE//if (inputThread.joinable()) inputThread.join();
+
+    if (!lander1IsIntact) drawer->drawMissionFailed();
+}
+
 void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0, double& t0)
 {
     // Build namespace for clock
@@ -57,15 +79,9 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0
         // Provide time to spacecraft
         landerSpacecraft->updateTime(dt);
 
-        /* CORRECT SO FAR
-        std::cout << "lander1IsIntact: " << lander1IsIntact << std::endl;
-        std::cout << "t: " << t0 << std::endl;
-        std::cout << "v: " << v0 << std::endl;
-        std::cout << "h: " << h0 << std::endl;
-        */
         // Compute current velocity and altitude based on the time step
-        double v = lander->getVel(dt, v0, landerSpacecraft->requestAcceleration());
-        double h = lander->getHeight(dt, v0, h0, landerSpacecraft->requestAcceleration());
+        double v = landerPhysics->getVel(dt, v0, landerSpacecraft->requestAcceleration());
+        double h = landerPhysics->getHeight(dt, v0, h0, landerSpacecraft->requestAcceleration());
         
         // Update initial state variables for the next iteration
         // to ensure the next loop step uses the latest simulation data
@@ -103,32 +119,4 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0
             break;
         }
     }
-}
-
-void simcontrol::runSimulator(double v1, double h1, double t)
-{
-    // Instance classes
-    lander              = std::make_unique<physics>();
-    drawer              = std::make_unique<output>();
-    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 5500.0, 0.5, 1000.0); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 0.5 [s], fuel: 1000 [kg] //TODO: organize in struct
-
-    // Call integerity for simulation run
-    bool lander1IsIntact = landerSpacecraft->isIntact(); 
-
-    // Start user input thread
-    //< REACTIVATE//std::thread inputThread(&simcontrol::runUserInput, this);
-
-    // Start simulation
-    /* << CORRECT SO FAR
-    std::cout << "lander is intact: " << lander1IsIntact << std::endl;
-    std::cout << "v1: " << v1 << std::endl;
-    std::cout << "h1: " << h1 << std::endl;
-    std::cout << "t: " << t << std::endl;
-    */
-    runSimulationLoop(lander1IsIntact, v1, h1, t);
-
-    // When simulation is ready wait for thread
-    //< REACTIVATE//if (inputThread.joinable()) inputThread.join();
-
-    if (!lander1IsIntact) drawer->drawMissionFailed();
 }

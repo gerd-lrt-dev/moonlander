@@ -2,8 +2,8 @@
 
 #include "spacemath.h"
 
-spacecraft::spacecraft(double m, double maxT, double rate, double fuelM)
-    : emptyMass(m), maxThrust(maxT), mainEngine(rate), fuelMass(fuelM) 
+spacecraft::spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant)
+    : emptyMass(m), maxThrust(maxT), mainEngine(rate, timeConstant), fuelMass(fuelM) 
     {
         setDefaultValues();
     };

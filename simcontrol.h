@@ -21,7 +21,7 @@
 class simcontrol
 {
 private:
-    std::unique_ptr<physics> lander;                ///< Physics engine handling lander motion
+    std::unique_ptr<physics> landerPhysics;                ///< Physics engine handling lander motion
     std::unique_ptr<output> drawer;                 ///< Output handler for cockpit display
     std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
 
@@ -44,9 +44,9 @@ private:
      * @param lander1IsIntact Is true, if spacecraft in an operational state
      * @param v0 Initial velocity [m/s]
      * @param h0 Initial height [m]
-     * @param t Initial simulation time [s]
+     * @param t0 Initial simulation time [s]
      */
-    void runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0, double&t);
+    void runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0, double&t0);
 
     /**
      * @brief Additional thread for controlling user input 
@@ -62,7 +62,7 @@ public:
      *
      * Checks input parameters and starts the simulation.
      */
-    simcontrol(double v0, double h0, double t = 0);
+    simcontrol(double v0, double h0, double t0 = 0);
 
     /**
      * @brief Destructor

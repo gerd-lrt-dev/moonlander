@@ -5,11 +5,8 @@
 
 double Thrust::calcFuelReduction(double fuelMass, double massFlowFuel, double dt)
 {
-    std::cout << "fuelMass" << fuelMass << std::endl;
-    std::cout << "massFlowFuel" << massFlowFuel << std::endl;
-    std::cout << "dt" << dt << std::endl;
-
     fuelMass -= massFlowFuel * dt;
+
     return fuelMass;
 }
 
@@ -24,9 +21,9 @@ Thrust::~Thrust()
 
 }
 
-void Thrust::setTarget(double t)
+void Thrust::setTarget(double tThrust)
 {
-    targetThrust = t;
+    targetThrust = tThrust;
 }
 
 void Thrust::updateSimpleThrust(double dt)
@@ -36,11 +33,6 @@ void Thrust::updateSimpleThrust(double dt)
 
 double Thrust::updateThrust(double dt, double fuelMass)
 {
-    /*
-    std::cout << Thrust[updateThrust] << std::endl;
-    std::cout << "dt: " << dt << std::endl;
-    std::cout << "FuelMass: " << fuelMass << std::endl;
-    */
     if (fuelMass > 0.0 && targetThrust != 0)
     {
         // Transfer old fuel mass for calculating live consumption
@@ -49,13 +41,7 @@ double Thrust::updateThrust(double dt, double fuelMass)
         // Initate vars
         double newFuelMass(0.0), massFlow(0.0);
 
-        std::cout << "Thrust[updateThrust]" << std::endl;
-        std::cout << "currentThrust: " << currentThrust << std::endl;
-        std::cout << "dt: " << dt << std::endl;
-        std::cout << "timeConstant: " << timeConstant << std::endl;
-        std::cout << "targetThrust: " << targetThrust << std::endl;
-    
-        // Calculate thrust
+        // Calculate thrust TODO: Auslagern und Fehler durch 0 teilen abfangen!
         currentThrust += (dt / timeConstant) * (targetThrust - currentThrust);
 
         // Calculate massFlow for fuel consumption calculation
@@ -70,8 +56,9 @@ double Thrust::updateThrust(double dt, double fuelMass)
     else
     {
         currentThrust = 0.0;
-        return 0;
     }
+    
+    return fuelMass;
 }
 
 double Thrust::getTargetThrust() const
