@@ -45,7 +45,7 @@ void output::drawCockpit(double t, double h, double v, double hMax, double thrus
     std::cout << "| " << std::left << std::setw(labelWidth) << "T-Thrust:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << targetThrust << " N |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "FuelConsumption:" 
-              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << fuelConsumption << " kg |\n";
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << fuelConsumption << " kg/s |\n";
 
     // Altitude bar
     int hFilled = static_cast<int>(std::round((h / hMax) * barLength));

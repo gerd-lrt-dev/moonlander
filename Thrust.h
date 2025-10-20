@@ -15,8 +15,8 @@
 class Thrust
 {
 private:
-    double targetThrust;    ///< [m/s²] Desired thrust value
-    double currentThrust;   ///< [m/s²] Current thrust value, updated over time
+    double targetThrust;    ///< [N] Desired thrust value
+    double currentThrust;   ///< [N] Current thrust value, updated over time
     double Isp;             ///< [s] Specific impulse
     double timeConstant;    ///< [s] Parameter to be modeled that describes how quickly the current thrust responds to changes in the setpoints
     double rate;            ///< [Hz] Engine response speed (how quickly current approaches target)
@@ -37,17 +37,6 @@ private:
      */
     double calcFuelReduction(double fuelMass, double massFlowFuel, double dt);
 
-    /**
-     * @brief Function calculates fuel consumption based on time increments
-     * 
-     * Calculates real-time consumption from fuelmass0 and fuelmass1 
-     * and stores it in liveConsumption.
-     * 
-     * Consumption can be requested via getFuelConsumption.
-     */
-    void calcFuelConsumption();
-
-
 public:
     /**
      * @brief Constructor
@@ -67,7 +56,7 @@ public:
 
     /**
      * @brief Set a new target thrust
-     * @param t ///<  [m/s²] Target thrust
+     * @param t ///<  [N] Target thrust
      */
     void setTarget(double tThrust);
 
@@ -105,13 +94,13 @@ public:
 
     /**
      * @brief Get the target thrust
-     * @return ///< [m/s²] target thrust 
+     * @return ///< [N] target thrust 
      */
     double getTargetThrust() const;
 
     /**
      * @brief Get the current thrust
-     * @return ///< [m/s²] Current thrust 
+     * @return ///< [N] Current thrust 
      */
     double getCurrentThrust() const;
 

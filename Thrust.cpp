@@ -10,11 +10,6 @@ double Thrust::calcFuelReduction(double fuelMass, double massFlowFuel, double dt
     return fuelMass;
 }
 
-void Thrust::calcFuelConsumption()
-{
-    liveConsumption = fuelMass0 - fuelMass1;
-}
-
 // ---Public--------------------------------------
 Thrust::~Thrust()
 {
@@ -35,9 +30,6 @@ double Thrust::updateThrust(double dt, double fuelMass)
 {
     if (fuelMass > 0.0 && targetThrust != 0)
     {
-        // Transfer old fuel mass for calculating live consumption
-        fuelMass0 = fuelMass;
-
         // Initate vars
         double newFuelMass(0.0), massFlow(0.0);
 
@@ -46,6 +38,9 @@ double Thrust::updateThrust(double dt, double fuelMass)
 
         // Calculate massFlow for fuel consumption calculation
         massFlow = math.calcMassFlowBasedOnThrust(currentThrust, Isp, envConfig.earthGravity);
+        
+        // Withdraw massflow to liveconsumption to display the current fuel consumption
+        liveConsumption = massFlow;
 
         // Calculate fuel mass based on fuel consumption
         newFuelMass = calcFuelReduction(fuelMass, massFlow, dt);
