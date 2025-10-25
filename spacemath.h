@@ -54,11 +54,13 @@ public:
     /**
      * @brief Calculates Mass flow based on thrust
      * @param currentThrust ///< [N] Thrust from the last time step
-     * @param Isp           ///< [s]
+     * @param Isp           ///< [s] Specific impulse
      * 
      * g0 is always the acceleration due to gravity, regardless of whether you are 
      * on the moon or Mars. This is defined historically and physically because 
      * specific impulse is measured according to this standard.
+     * 
+     * \dot(m) = F / (I_{Sp} \cdot g_0)
      */
     static double calcMassFlowBasedOnThrust(double currenThrust, double Isp, double earthGravity);
 };

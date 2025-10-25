@@ -1,7 +1,11 @@
 #ifndef SPACECRAFT_H
 #define SPACECRAFT_H
 
+#include <vector>
+#include <eigen3/Eigen/Dense>
+
 #include "Thrust.h"
+
 
 /**
  * @class spacecraft
@@ -16,6 +20,17 @@
 class spacecraft
 {
 private:
+    /**
+     * @name Movement and orientation data of spacecraft
+     * 
+     * Implemented with eigen matrices
+     */
+    ///@{
+
+
+
+    ///@}
+
     /**
      * @name Simulation start conditions 
      * physical conditions passed via constructor

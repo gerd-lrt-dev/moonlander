@@ -12,8 +12,8 @@
 class physics
 {
 private:
-    // Constants
-    const double gravityMoon = 1.635; ///< [m/s²] Lunar gravitational acceleration
+    // Constants & parameters
+    EnvironmentConfig configData;
 
     /**
      * @brief Calculates height based on time, initial velocity, and initial height
