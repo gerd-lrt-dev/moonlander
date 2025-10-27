@@ -74,7 +74,7 @@ The current milestone focuses on a one-dimensional lunar landing simulation, whe
 
 ### Compile (command line)
 ```bash
-g++ -std=c++20 -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp spacecraft.cpp spacemath.cpp -o moonlander
+g++ -std=c++20 -I /usr/include/eigen3 -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp spacecraft.cpp spacemath.cpp -o moonlander
 
 🧭 Future Vision
 

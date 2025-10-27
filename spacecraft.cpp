@@ -2,8 +2,8 @@
 
 #include "spacemath.h"
 
-spacecraft::spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant)
-    : emptyMass(m), maxThrust(maxT), mainEngine(rate, timeConstant), fuelMass(fuelM) 
+spacecraft::spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant, Vector3 initialPos, Vector3 initialRot)
+    : emptyMass(m), maxThrust(maxT), mainEngine(rate, timeConstant), fuelMass(fuelM), position(initialPos), rotation(initialRot)
     {
         setDefaultValues();
     };
@@ -101,4 +101,34 @@ double spacecraft::requestAcceleration() const
 double spacecraft::requestLiveFuelConsumption() const
 {
     return mainEngine.getFuelConsumption();
+}
+
+void spacecraft::setPos(Vector3 pos)
+{
+    position = pos; 
+}
+
+void spacecraft::setRot(Vector3 rot)
+{
+    rotation = rot;
+}
+
+void spacecraft::setVel(Vector3 vel)
+{
+    velocity = vel;
+}
+
+Vector3 spacecraft::getPos()
+{
+    return position;
+}
+
+Vector3 spacecraft::getRot()
+{
+    return rotation;
+}
+
+Vector3 spacecraft::getVel()
+{
+    return velocity;
 }

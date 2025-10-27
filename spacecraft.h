@@ -1,11 +1,8 @@
 #ifndef SPACECRAFT_H
 #define SPACECRAFT_H
 
-#include <vector>
-#include <eigen3/Eigen/Dense>
-
 #include "Thrust.h"
-
+#include "vector3.h"
 
 /**
  * @class spacecraft
@@ -21,15 +18,16 @@ class spacecraft
 {
 private:
     /**
-     * @name Movement and orientation data of spacecraft
-     * 
-     * Implemented with eigen matrices
+     * @name Position, rotation and velocity data of spacecraft
+     * An initial assignment of position, rotation and rotation
+     * is performeed via the constructor
      */
     ///@{
-
-
-
+    Vector3 position; ///< [m] Position in cartesian coordinates 
+    Vector3 rotation; ///< [rad] Rotation in euler angles
+    Vector3 velocity; ///< [m/s] Velocity in three spatial directions
     ///@}
+
 
     /**
      * @name Simulation start conditions 
@@ -101,7 +99,7 @@ public:
      *
      * Initializes the spacecraft with its physical parameters and engine.
      */
-    spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant);
+    spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant, Vector3 initialPos, Vector3 initialRot);
 
     /**
      * @brief Destructor
@@ -228,7 +226,41 @@ public:
       */
      double requestLiveFuelConsumption() const;
 
-    
+    /**
+     * @brief Update position to new values
+     * @param 3D Vector with cartesian-coordinates [m]
+     */
+    void setPos(Vector3 pos);
+
+    /**
+     * @brief Sets rotation of spacecraft
+     * @param 3D Vector with euler rotation \varphi ,\theta ,\psi [rad]
+     */
+    void setRot(Vector3 rot);
+
+    /**
+     * @brief Sets velocity of spacecraft
+     * @param 3D Vector with velocities in three dimensions [m/s]
+     */
+    void setVel(Vector3 vel);
+
+    /**
+     * @brief Return current position of spacecraft
+     * @return Current position in cartesian-coordinates [m]
+     */
+    Vector3 getPos();
+
+    /**
+     * @brief Return current rotation of spacecraft
+     * @return Current rotation in euler angles [rad]
+     */
+    Vector3 getRot();
+
+    /**
+     * @brief Return current velocity of spacecraft
+    //  * @return Current velocity [m/s]
+     */
+    Vector3 getVel();
 };
 
 #endif

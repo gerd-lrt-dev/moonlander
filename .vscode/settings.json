@@ -71,3 +71,11 @@
         "variant": "cpp"
     }
 }
+
+{
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/usr/include/eigen3"
+    ]
+}
+

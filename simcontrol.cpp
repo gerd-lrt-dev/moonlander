@@ -5,13 +5,15 @@
 #include <chrono>
 #include <stdexcept>
 
+
+
 // Constructor
-simcontrol::simcontrol(double v0, double h0, double t0)
+simcontrol::simcontrol(Vector3 vel0, Vector3 pos0, double t0)
 {
     // Überprüfe Parameter
-    if (h0 >= 0 && t0>= 0) // h0 = 0 -> Impact on moon, t0 = 0 (default value) -> otherwise physically illogical 
+    if (pos0.z >= 0 && t0>= 0) // pos0 = 0 -> Impact on moon, t0 = 0 (default value) -> otherwise physically illogical 
     {
-        runSimulator(v0, h0, t0);
+        runSimulator(vel0, pos0, t0);
     }
     else
     {
@@ -36,7 +38,7 @@ void simcontrol::runUserInput()
     }
 }
 
-void simcontrol::runSimulator(double v1, double h1, double t)
+void simcontrol::runSimulator(Vector3 vel0, Vector3 pos0, double t)
 {
     // Instance classes
     landerPhysics       = std::make_unique<physics>();
@@ -50,7 +52,7 @@ void simcontrol::runSimulator(double v1, double h1, double t)
     //< REACTIVATE//std::thread inputThread(&simcontrol::runUserInput, this);
 
     // Start simulation
-    runSimulationLoop(lander1IsIntact, v1, h1, t);
+    runSimulationLoop(lander1IsIntact, vel0, pos0, t);
 
     // When simulation is ready wait for thread
     //< REACTIVATE//if (inputThread.joinable()) inputThread.join();
@@ -58,7 +60,7 @@ void simcontrol::runSimulator(double v1, double h1, double t)
     if (!lander1IsIntact) drawer->drawMissionFailed();
 }
 
-void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0, double& t0)
+void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3& pos0, double& t0)
 {
     // Build namespace for clock
     using clock = std::chrono::steady_clock;
@@ -80,16 +82,22 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0
         landerSpacecraft->updateTime(dt);
 
         // Compute current velocity and altitude based on the time step
-        double v = landerPhysics->getVel(dt, v0, landerSpacecraft->requestAcceleration());
-        double h = landerPhysics->getHeight(dt, v0, h0, landerSpacecraft->requestAcceleration());
+        double v = landerPhysics->getVel(dt, vel0, landerSpacecraft->requestAcceleration());
+        double h = landerPhysics->getHeight(dt, vel0, pos0, landerSpacecraft->requestAcceleration());
+
+        Vector3 thrustSpacecraft; //TODO: DUMMY muss in spacecraft implementiert werden
+        double totalmass(0); // TODO: DUMMY muss in spacecraft implementiert werden
+        Vector3 pos = landerPhysics->updatePos(vel0, pos0, thrustSpacecraft, dt, totalmass);
+        Vector3 vel = landerPhysics->updateVel(vel0, pos0, thrustSpacecraft, dt, totalmass);
+
         
         // Update initial state variables for the next iteration
         // to ensure the next loop step uses the latest simulation data
-        v0 = v;
-        h0 = h;
+        vel0 = v;
+        pos0 = h;
 
         // Visualizing  process
-        drawer->drawCockpit(t0, h0, v0, env.initialHeight, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
+        drawer->drawCockpit(t0, pos0, vel0, env.initialHeight, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
 
         // Update frame
         nextFrame += std::chrono::milliseconds(env.maxTimeStep);
@@ -99,15 +107,15 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, double& v0, double& h0
         t0+=dt;
 
         // TEST! Provide thrust when height is down below 3000 meters
-        if (h0 < 3000.0)
+        if (pos0 < 3000.0)
         {
             landerSpacecraft->setThrust(1.0);
         }
 
         // Calculate damage when spacecraft hits the ground
-        if (h0 <= 0.0)
+        if (pos0 <= 0.0)
         {
-            landerSpacecraft->applyLandingDamage(v0);
+            landerSpacecraft->applyLandingDamage(vel0);
         }
 
         // Request spacecraft of malfunction

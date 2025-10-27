@@ -1,6 +1,9 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
+#include "environmentConfig.h"
+#include "vector3.h"
+
 /**
  * @class physics
  * @brief Handles the physics calculations for a lunar lander.
@@ -16,28 +19,23 @@ private:
     EnvironmentConfig configData;
 
     /**
-     * @brief Calculates height based on time, initial velocity, and initial height
-     * @param t Time elapsed [s]
-     * @param v0 Initial velocity [m/s]
-     * @param h Initial height [m]
-     * @param thrustSpacecraft Thrust provided by engines [m/s²]
-     * @return Calculated height [m]
+     * @brief Calculates three dimensional moon gravity effekt
+     * @param pos Position in 3 dimensions [m]
+     * @return Gravity in three dimensional vector aligned to the center of moon [m/s²]
      * 
-     * The resulting height is calculated based on the equation of motion.
-     * h(t) = h0 ​+ v0 * ​t + 1/2 ​(thrust−g) * t²
+     * Supports calculation of position & velocity
      */
-    double calcHeight(double t, double v0,  double h, double thrustSpacecraft = 0.0) const;
+    Vector3 calcGravityRadialToMoonCenter(Vector3 position) const;
 
     /**
-     * @brief Calculates velocity based on time and initial velocity
-     * @param t Time elapsed [s]
-     * @param v Initial velocity [m/s]
-     * @return Calculated velocity [m/s]
+     * @brief Calculates acceleration under the influence of mass and to the center of moon
+     * @param thrust Thrust vector provided by engines [m/s²]
+     * @param totalMassSpacecraft Totalmass = emptymass + fuelmass [kg]
+     * @param gravityRadialToMoonCenter Gravity in three dimensional vector aligned to the center of moon [m/s²]
      * 
-     * v(t) = v0 + a{resutl} * t
-     * a{result} = a{thrust} - g{moon}
+     * Supports calculation of position & velocity
      */
-    double calcVel(double t, double v, double thrust = 0) const;
+    Vector3 calcAccelerationAlignedToCenterOfMoon(Vector3 thrust, Vector3 gravityRadialToMoonCenter, double totalMassSpacecraft) const;
 
 public:
     /**
@@ -51,22 +49,32 @@ public:
     ~physics();
 
     /**
-     * @brief Get the current height of the lander
+     * @brief Calculates height based on time, initial velocity, and initial height
+     * @param vel Velocity in 3 dimensions [m/s]
+     * @param pos Position in 3 dimensions [m]
+     * @param thrust Thrust vector provided by engines [m/s²]
      * @param dt Time elapsed [s]
-     * @param v0 Initial velocity [m/s] (default = 0)
-     * @param h0 Initial height [m] (default = 4000)
-     * @param thrustSpacecraft Thrust provided by engines [m/s²]
-     * @return Height [m]
+     * @param totalMassSpacecraft Totalmass = emptymass + fuelmass [kg]
+     * @return Calculated height [m]
+     * 
+     * The resulting height is calculated based on the equation of motion.
+     * h(t) = h0 ​+ v0 * ​t + 1/2 ​(thrust−g) * t²
      */
-    double getHeight(double dt, double v0 = 0.0, double h0 = 4000.0, double thrustSpacecraft = 0.0) const;
+    Vector3 updatePos(Vector3 vel,  Vector3 pos, Vector3 thrust, double dt, double totalMassSpacecraft) const;
 
     /**
-     * @brief Get the current velocity of the lander
+     * @brief Calculates velocity based on time and initial velocity
+     * @param vel Velocity in 3 dimensions [m/s]
+     * @param pos Position in 3 dimensions [m]
+     * @param thrust Thrust vector provided by engines [m/s²]
      * @param dt Time elapsed [s]
-     * @param v0 Initial velocity [m/s] (default = 0)
-     * @return Velocity [m/s]
+     * @param totalMassSpacecraft [kg]
+     * @return Calculated velocity [m/s]
+     * 
+     * v(t) = v0 + a{resutl} * t
+     * a{result} = a{thrust} - g{moon}
      */
-    double getVel(double dt, double v0 = 0.0, double thrust = 0.0) const;
+    Vector3 updateVel(Vector3 vel, Vector3 pos, Vector3 thrust, double dt, double totalMassSpacecraft) const;
 };
 
 #endif

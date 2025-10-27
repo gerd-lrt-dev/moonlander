@@ -14,23 +14,29 @@ physics::~physics()
 }
 
 // private ---------------------------------------------------------
-double physics::calcHeight(double dt, double v0, double h0, double thrustSpacecraft) const
+Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const 
 {
-    return h0 + v0 * dt + 0.5 * (thrustSpacecraft - configData.moonGravity) * dt * dt;
+    return - pos * (configData.moonGravity / pow(pos.norm(), 3));
 }
 
-double physics::calcVel(double dt, double v0, double thrust) const
+Vector3 physics::calcAccelerationAlignedToCenterOfMoon(Vector3 thrust, Vector3 gravityRadialToMoonCenter, double totalMassSpacecraft) const
 {
-    return v0 + (thrust - configData.moonGravity) * dt;
+    return (thrust / totalMassSpacecraft) - gravityRadialToMoonCenter;
 }
 
 // public  ---------------------------------------------------------
-double physics::getHeight(double dt, double v, double h, double thrustSpacecraft) const
+Vector3 physics::updatePos(Vector3 vel, Vector3 pos, Vector3 thrust, double dt, double totalMassSpacecraft) const
 {
-    return calcHeight(dt, v, h, thrustSpacecraft);
+    Vector3 gravityRadialToMoonCenter = calcGravityRadialToMoonCenter(pos);
+    Vector3 acceleration = calcAccelerationAlignedToCenterOfMoon(thrust, gravityRadialToMoonCenter, totalMassSpacecraft);
+    
+    return pos + vel * dt + acceleration * 0.5 * dt * dt;
 }
 
-double physics::getVel(double dt, double v, double thrust) const 
+Vector3 physics::updateVel(Vector3 vel, Vector3 pos, Vector3 thrust, double dt, double totalMassSpacecraft) const
 {
-    return calcVel(dt, v, thrust);
+    Vector3 gravityRadialToMoonCenter = calcGravityRadialToMoonCenter(pos);
+    Vector3 acceleration = calcAccelerationAlignedToCenterOfMoon(thrust, gravityRadialToMoonCenter, totalMassSpacecraft);
+    
+    return vel + acceleration * dt;
 }
