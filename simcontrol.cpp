@@ -82,13 +82,10 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3
         landerSpacecraft->updateTime(dt);
 
         // Compute current velocity and altitude based on the time step
-        double v = landerPhysics->getVel(dt, vel0, landerSpacecraft->requestAcceleration());
-        double h = landerPhysics->getHeight(dt, vel0, pos0, landerSpacecraft->requestAcceleration());
-
-        Vector3 thrustSpacecraft; //TODO: DUMMY muss in spacecraft implementiert werden
+        Vector3 accelerationSpacecraft; //TODO: DUMMY muss in spacecraft implementiert werden
         double totalmass(0); // TODO: DUMMY muss in spacecraft implementiert werden
-        Vector3 pos = landerPhysics->updatePos(vel0, pos0, thrustSpacecraft, dt, totalmass);
-        Vector3 vel = landerPhysics->updateVel(vel0, pos0, thrustSpacecraft, dt, totalmass);
+        Vector3 pos = landerPhysics->updatePos(vel0, pos0, accelerationSpacecraft, dt, totalmass);
+        Vector3 vel = landerPhysics->updateVel(vel0, pos0, accelerationSpacecraft, dt, totalmass);
 
         
         // Update initial state variables for the next iteration

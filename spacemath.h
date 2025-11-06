@@ -1,6 +1,9 @@
 #ifndef SPACEMATH_H
 #define SPACEMATH_H
 
+#include "vector3.h"
+
+
 /**
  * @class spacemath
  * @brief Utility class for space-related physics calculations.
@@ -47,9 +50,22 @@ public:
 
     /**
      * @brief Calculates acceleration based on thrust, mass and specific impulse
+     * @param currentThrust     ///< [N] Current thrust of Spacecraft
+     * @param totalMass         ///< [kg] Total mass of Spacecraft
+     * @param directionOfThrust ///< [-] Vektor, in which direction the thrust is running
+     * @param gravityConstant   ///< [m/s²] Constant of Gravity
+     * @return                  ///< [m/s²] Acceleration of Spacecraft due to thrust, mass and thrust 
      * 
      */
-    static double accelerationComplex(double currentThrust, double totalMass, double gravityConstant);
+    static Vector3 accelerationComplex(double currentThrust, double totalMass, Vector3 directionOfThrust, Vector3 gravityConstant);
+
+    /**
+     * @brief Calcualtes acceleration in relation with thrust direction
+     * @param currentThrust     ///< [N] Engine thrust spacecraft
+     * @param thrustDirection   ///< [-] Vector with direction of thrust. Static coordinate system is spacecraft.
+     * @return                  ///< [m/s²] Return acceleration vector
+     */
+    static Vector3 calcAccelerationVector(double currentThrust, Vector3 thrustDirection);
 
     /**
      * @brief Calculates Mass flow based on thrust
@@ -63,6 +79,8 @@ public:
      * \dot(m) = F / (I_{Sp} \cdot g_0)
      */
     static double calcMassFlowBasedOnThrust(double currenThrust, double Isp, double earthGravity);
+
+    
 };
 
 #endif

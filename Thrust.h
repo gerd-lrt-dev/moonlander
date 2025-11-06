@@ -3,6 +3,7 @@
 
 #include "spacemath.h"
 #include "environmentConfig.h"
+#include "vector3.h"
 
 /**
  * @class Thrust
@@ -23,7 +24,9 @@ private:
     double fuelMass0;       ///< [kg] Fuel mass time step 0 (required for calculating live consumption)
     double fuelMass1;       ///< [kg] Fuel mass time step 1 (required for calculating live consumption)
     double liveConsumption; ///< [kg / dt] Real-time fuel consumption
-    bool newThrust;         ///< [1,0] Flag of new incoming thurst (1)
+    bool newThrust;         ///< [1,0] Flag of new incoming thrust (1)
+
+    Vector3 thrustDirection = {0, 0, 1}; ///< [-] Current thrust vector in direction. Default value is straight vertically.
 
     spacemath math;                 ///< Math helper class
     EnvironmentConfig envConfig;    ///< Environment parameters
@@ -36,6 +39,13 @@ private:
      * Reduces fuel supply depending on fuel consumption through the thrust provision process
      */
     double calcFuelReduction(double fuelMass, double massFlowFuel, double dt);
+
+    /**
+     * @brief Sets direction of thrust
+     * 
+     * TODO: Build algorithm to simulate tvc deviation
+     */
+    void setThrustDirection();
 
 public:
     /**
@@ -110,6 +120,13 @@ public:
      */
     double getFuelConsumption() const;
 
+    /**
+     * @brief Getter function for thrust direction
+     * @return ///< [-] Vector with direction of thrust
+     * 
+     * The vector is aligned with the static coordinate system of the spacecraft
+     */
+    Vector3 getDirectionOfThrust() const;
 };
 
 #endif

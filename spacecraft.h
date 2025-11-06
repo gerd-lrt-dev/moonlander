@@ -3,6 +3,7 @@
 
 #include "Thrust.h"
 #include "vector3.h"
+#include "environmentConfig.h"
 
 /**
  * @class spacecraft
@@ -13,6 +14,9 @@
  * This allows for physics-based simulations including thrust updates
  * and mass-dependent calculations.
  * This class calculates the damage a spacecraft takes by specific manouvers.
+ * 
+ * TODO: Spacecraft should get an point for center of gravity, which moves, when
+ * fuel is gettin lower
  */
 class spacecraft
 {
@@ -50,6 +54,7 @@ private:
     double       dt = 0;      ///< [s] Time steps. Provided by updateTime 
     double       time = 0;    ///< [s] Absolute time. Will be added by dt from udpateTime
     double       totalMass;   ///< [kg] Total mass of spacecraft - is composed of empty mass and fuel mass in setDefaultValues
+    EnvironmentConfig config;
     ///@}
 
     /**
@@ -211,9 +216,9 @@ public:
 
     /**
      * @brief Request current acceleration based on thrust of spacecraft
-     * @return Acceleration of spacecraft
+     * @return ///< [m/s²] Vector acceleration of spacecraft
      */
-    double requestAcceleration() const;
+    Vector3 requestAcceleration() const;
 
     /**
      * @brief Request current fuel level

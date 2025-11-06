@@ -10,6 +10,11 @@ double Thrust::calcFuelReduction(double fuelMass, double massFlowFuel, double dt
     return fuelMass;
 }
 
+void Thrust::setThrustDirection()
+{
+    // TODO: On construction...
+}
+
 // ---Public--------------------------------------
 Thrust::~Thrust()
 {
@@ -30,7 +35,7 @@ double Thrust::updateThrust(double dt, double fuelMass)
 {
     if (fuelMass > 0.0 && targetThrust != 0)
     {
-        // Initate vars
+        // Initiate vars
         double newFuelMass(0.0), massFlow(0.0);
 
         // Calculate thrust TODO: Auslagern und Fehler durch 0 teilen abfangen!
@@ -56,6 +61,8 @@ double Thrust::updateThrust(double dt, double fuelMass)
     return fuelMass;
 }
 
+// --- Getter functions ---------------------------------------------
+
 double Thrust::getTargetThrust() const
 {
     return targetThrust;
@@ -69,5 +76,10 @@ double Thrust::getCurrentThrust() const
 double Thrust::getFuelConsumption() const
 {
     return liveConsumption;
+}
+
+Vector3 Thrust::getDirectionOfThrust() const
+{
+    return thrustDirection;
 }
 
