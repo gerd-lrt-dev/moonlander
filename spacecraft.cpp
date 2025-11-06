@@ -134,3 +134,8 @@ Vector3 spacecraft::getVel()
 {
     return velocity;
 }
+
+double spacecraft::getTotalMass()
+{
+    return totalMass;
+}

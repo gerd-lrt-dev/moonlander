@@ -15,7 +15,7 @@ output::~output()
 {
 }
 
-void output::drawCockpit(double t, double h, double v, double hMax, double thrust, double targetThrust, double fuelConsumption, bool intact)
+void output::drawCockpit(double t, double h, double v, double a, double hMax, double thrust, double targetThrust, double fuelConsumption, bool intact)
 {
     const int barLength = 16;
     const int width = 34;       // Inner width for value lines
@@ -40,6 +40,8 @@ void output::drawCockpit(double t, double h, double v, double hMax, double thrus
               << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << h << " m |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "Velocity:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << v << " m/s |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "Acceleration:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << a << " m/s^2 |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "Thrust:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << thrust << " N |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "T-Thrust:" 

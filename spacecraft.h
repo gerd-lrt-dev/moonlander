@@ -43,6 +43,7 @@ private:
     const double maxThrust;   ///< [N] Maximum thrust the main engine can produce
     Thrust       mainEngine;  ///< Main engine responsible for generating thrust
     double       fuelMass;    ///< [kg] Mass of the fuel currently onboard
+    double       totalMass;   ///< [kg] Total mass of spacecraft - is composed of empty mass and fuel mass in setDefaultValues
     ///@}
     
     /**
@@ -53,7 +54,6 @@ private:
     ///@{
     double       dt = 0;      ///< [s] Time steps. Provided by updateTime 
     double       time = 0;    ///< [s] Absolute time. Will be added by dt from udpateTime
-    double       totalMass;   ///< [kg] Total mass of spacecraft - is composed of empty mass and fuel mass in setDefaultValues
     EnvironmentConfig config;
     ///@}
 
@@ -97,14 +97,17 @@ private:
 public:
     /**
      * @brief Constructor
-     * @param m Empty mass of the spacecraft [kg]
-     * @param maxT Maximum thrust of the main engine [N]
-     * @param rate Reaction speed / responsiveness of the engine [Hz]
-     * @param fuelM Initial fuel mass [kg]
+     * @param m             ///< [kg] Empty mass of the spacecraft 
+     * @param maxT          ///< [N] Maximum thrust of the main engine
+     * @param Isp           ///< [s] Specific Impulse
+     * @param fuelM         ///< [kg] Initial fuel mass 
+     * @param timeConstant  ///< []
+     * @param initialPos    ///< [m] Initial position of spacecraft as a vector
+     * @param initialRot    ///< [rad] Initial rotation of spacecraft as a vector
      *
      * Initializes the spacecraft with its physical parameters and engine.
      */
-    spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant, Vector3 initialPos, Vector3 initialRot);
+    spacecraft(double m, double maxT, double Isp, double fuelM, double timeConstant, Vector3 initialPos, Vector3 initialRot);
 
     /**
      * @brief Destructor
@@ -266,6 +269,15 @@ public:
     //  * @return Current velocity [m/s]
      */
     Vector3 getVel();
+
+    /**
+     * @brief Return current total mass
+     * @return total mass
+     * 
+     * Note that total mass is constantly changing due to fuelmass 
+     * which decrease in case of providing thrust
+     */
+    double getTotalMass();
 };
 
 #endif

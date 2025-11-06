@@ -16,7 +16,13 @@ physics::~physics()
 // private ---------------------------------------------------------
 Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const 
 {
-    return - pos * (configData.moonGravity / pow(pos.norm(), 3));
+    // Direction from center Of moon (points to the outside)
+    Vector3 dir = pos.normalized();
+
+    // Distance to center of moon radius + height
+    double r    = configData.radiusMoon + pos.norm(); 
+
+    return - dir * (configData.gravitationalFactorMoon / (r * r));
 }
 
 Vector3 physics::calcAccelerationAlignedToCenterOfMoon(Vector3 accelerationSpacecraft, Vector3 gravityRadialToMoonCenter, double totalMassSpacecraft) const

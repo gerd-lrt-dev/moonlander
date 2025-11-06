@@ -43,7 +43,7 @@ void simcontrol::runSimulator(Vector3 vel0, Vector3 pos0, double t)
     // Instance classes
     landerPhysics       = std::make_unique<physics>();
     drawer              = std::make_unique<output>();
-    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 5500.0, 300, 1000.0, 0.5); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s //TODO: organize in struct
+    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 5500.0, 300, 1000.0, 0.5, pos0, Vector3(0.0, 0.0, 0.0)); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s, initialPos: 0,0,0, intitalRot 0,0,0 //TODO: organize in struct
 
     // Call integerity for simulation run
     bool lander1IsIntact = landerSpacecraft->isIntact(); 
@@ -82,19 +82,19 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3
         landerSpacecraft->updateTime(dt);
 
         // Compute current velocity and altitude based on the time step
-        Vector3 accelerationSpacecraft; //TODO: DUMMY muss in spacecraft implementiert werden
-        double totalmass(0); // TODO: DUMMY muss in spacecraft implementiert werden
+        Vector3 accelerationSpacecraft = landerSpacecraft->requestAcceleration(); 
+        double totalmass = landerSpacecraft->getTotalMass();
         Vector3 pos = landerPhysics->updatePos(vel0, pos0, accelerationSpacecraft, dt, totalmass);
         Vector3 vel = landerPhysics->updateVel(vel0, pos0, accelerationSpacecraft, dt, totalmass);
 
         
         // Update initial state variables for the next iteration
         // to ensure the next loop step uses the latest simulation data
-        vel0 = v;
-        pos0 = h;
+        pos0 = pos;
+        vel0 = vel;
 
         // Visualizing  process
-        drawer->drawCockpit(t0, pos0, vel0, env.initialHeight, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
+        drawer->drawCockpit(t0, pos0.z, vel0.z, accelerationSpacecraft.z, pos0.z, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
 
         // Update frame
         nextFrame += std::chrono::milliseconds(env.maxTimeStep);
@@ -104,15 +104,15 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3
         t0+=dt;
 
         // TEST! Provide thrust when height is down below 3000 meters
-        if (pos0 < 3000.0)
+        if (pos0.z < 3000.0)
         {
             landerSpacecraft->setThrust(1.0);
         }
 
         // Calculate damage when spacecraft hits the ground
-        if (pos0 <= 0.0)
+        if (pos0.z <= 0.0)
         {
-            landerSpacecraft->applyLandingDamage(vel0);
+            landerSpacecraft->applyLandingDamage(vel0.z);
         }
 
         // Request spacecraft of malfunction
