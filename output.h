@@ -1,6 +1,8 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
 
+#include "vector3.h"
+
 /**
  * @class output
  * @brief Handles the visualization of the lunar lander simulation.
@@ -29,7 +31,7 @@ public:
      */
     ~output();
 
-    /**
+    /** TODO: Doku anpassen I_ = inertial / moon-centered
      * @brief Draws the cockpit display for the lunar lander
      * @param t Current simulation time [s]
      * @param h Current height of the lander [m]
@@ -38,7 +40,7 @@ public:
      *
      * Outputs a formatted cockpit view including a text-based height bar.
      */
-    void drawCockpit(double t, double h, double v, double a, double hMax, double thrust, double targetThrust, double fuelConsumption, bool integrity);
+    void drawCockpit(double t, Vector3 I_position, Vector3 B_velocity, Vector3 B_acceleration, double hMax, double thrust, double targetThrust, double fuelConsumption, bool integrity);
 
     /**
      * @brief Draws mission failed screen

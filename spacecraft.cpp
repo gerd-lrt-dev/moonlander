@@ -93,11 +93,9 @@ double spacecraft::requestThrust() const
     return mainEngine.getCurrentThrust();
 }
 
-Vector3 spacecraft::requestAcceleration() const
+Vector3 spacecraft::requestThrustDirection() const
 {
-    Vector3 directionOfThrust = mainEngine.getDirectionOfThrust();
-
-    return spacemath::accelerationComplex(mainEngine.getCurrentThrust(), totalMass, directionOfThrust, config.moonGravityVec);
+    return mainEngine.getDirectionOfThrust();
 }
 
 double spacecraft::requestLiveFuelConsumption() const

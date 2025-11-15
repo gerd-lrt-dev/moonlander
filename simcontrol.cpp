@@ -17,7 +17,7 @@ simcontrol::simcontrol(Vector3 vel0, Vector3 pos0, double t0)
     }
     else
     {
-        throw std::invalid_argument("Ungueltige Startparameter für die Simulation!");
+        throw std::invalid_argument("unvalid parameters for simulation!");
     }
 }
 
@@ -43,7 +43,7 @@ void simcontrol::runSimulator(Vector3 vel0, Vector3 pos0, double t)
     // Instance classes
     landerPhysics       = std::make_unique<physics>();
     drawer              = std::make_unique<output>();
-    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 5500.0, 300, 1000.0, 0.5, pos0, Vector3(0.0, 0.0, 0.0)); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s, initialPos: 0,0,0, intitalRot 0,0,0 //TODO: organize in struct
+    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 10000.0, 300, 1000.0, 0.5, pos0, Vector3(0.0, 0.0, 0.0)); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s, initialPos: 0,0,0, intitalRot 0,0,0 //TODO: organize in struct
 
     // Call integerity for simulation run
     bool lander1IsIntact = landerSpacecraft->isIntact(); 
@@ -82,10 +82,12 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3
         landerSpacecraft->updateTime(dt);
 
         // Compute current velocity and altitude based on the time step
-        Vector3 accelerationSpacecraft = landerSpacecraft->requestAcceleration(); 
-        double totalmass = landerSpacecraft->getTotalMass();
-        Vector3 pos = landerPhysics->updatePos(vel0, pos0, accelerationSpacecraft, dt, totalmass);
-        Vector3 vel = landerPhysics->updateVel(vel0, pos0, accelerationSpacecraft, dt, totalmass);
+        Vector3 accelerationSpacecraft =    landerPhysics->updateAcc(landerSpacecraft->requestThrust(), 
+                                            landerSpacecraft->getTotalMass(), 
+                                            landerSpacecraft->requestThrustDirection(), 
+                                            env.moonGravityVec);
+        Vector3 pos = landerPhysics->updatePos(vel0, pos0, accelerationSpacecraft, dt, landerSpacecraft->getTotalMass());
+        Vector3 vel = landerPhysics->updateVel(vel0, pos0, accelerationSpacecraft, dt, landerSpacecraft->getTotalMass());
 
         
         // Update initial state variables for the next iteration
@@ -94,7 +96,7 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3
         vel0 = vel;
 
         // Visualizing  process
-        drawer->drawCockpit(t0, pos0.z, vel0.z, accelerationSpacecraft.z, pos0.z, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
+        drawer->drawCockpit(t0, pos, vel, accelerationSpacecraft, pos0.z, landerSpacecraft->requestThrust(), landerSpacecraft->requestTargetThrust(), landerSpacecraft->requestLiveFuelConsumption(), lander1IsIntact);
 
         // Update frame
         nextFrame += std::chrono::milliseconds(env.maxTimeStep);

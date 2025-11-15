@@ -27,22 +27,21 @@ Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const
 
 Vector3 physics::calcAccelerationAlignedToCenterOfMoon(Vector3 accelerationSpacecraft, Vector3 gravityRadialToMoonCenter, double totalMassSpacecraft) const
 {
-    return (accelerationSpacecraft / totalMassSpacecraft) - gravityRadialToMoonCenter;
+    return (accelerationSpacecraft / totalMassSpacecraft) + gravityRadialToMoonCenter;
 }
 
 // public  ---------------------------------------------------------
 Vector3 physics::updatePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt, double totalMassSpacecraft) const
 {
-    Vector3 gravityRadialToMoonCenter = calcGravityRadialToMoonCenter(pos);
-    Vector3 acceleration = calcAccelerationAlignedToCenterOfMoon(accelerationSpacecraft, gravityRadialToMoonCenter, totalMassSpacecraft);
-    
-    return pos + vel * dt + acceleration * 0.5 * dt * dt;
+    return pos + vel * dt + accelerationSpacecraft * 0.5 * dt * dt;
 }
 
 Vector3 physics::updateVel(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt, double totalMassSpacecraft) const
 {
-    Vector3 gravityRadialToMoonCenter = calcGravityRadialToMoonCenter(pos);
-    Vector3 acceleration = calcAccelerationAlignedToCenterOfMoon(accelerationSpacecraft, gravityRadialToMoonCenter, totalMassSpacecraft);
-    
-    return vel + acceleration * dt;
+    return vel + accelerationSpacecraft * dt;
+}
+
+Vector3 physics::updateAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const
+{
+    return spacemath::accelerationComplex(currentThrust, totalMass, directionOfThrust, moonGravityVec);
 }

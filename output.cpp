@@ -15,7 +15,7 @@ output::~output()
 {
 }
 
-void output::drawCockpit(double t, double h, double v, double a, double hMax, double thrust, double targetThrust, double fuelConsumption, bool intact)
+void output::drawCockpit(double t, Vector3 B_position, Vector3 B_velocity, Vector3 B_acceleration, double hMax, double thrust, double targetThrust, double fuelConsumption, bool intact)
 {
     const int barLength = 16;
     const int width = 34;       // Inner width for value lines
@@ -36,12 +36,24 @@ void output::drawCockpit(double t, double h, double v, double a, double hMax, do
     // Display values
     std::cout << "| " << std::left << std::setw(labelWidth) << "Time:" 
               << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << t << " s |\n";
-    std::cout << "| " << std::left << std::setw(labelWidth) << "Altitude:" 
-              << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << h << " m |\n";
-    std::cout << "| " << std::left << std::setw(labelWidth) << "Velocity:" 
-              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << v << " m/s |\n";
-    std::cout << "| " << std::left << std::setw(labelWidth) << "Acceleration:" 
-              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << a << " m/s^2 |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Position_x:" 
+              << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << B_position.x << " m |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Position_y:" 
+              << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << B_position.y << " m |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Position_z:" 
+              << std::right << std::setw(valueWidth) << std::fixed << std::setprecision(2) << B_position.z << " m |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Velocity_x:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << B_velocity.x << " m/s |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Velocity_y:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << B_velocity.y << " m/s |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Velocity_z:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << B_velocity.z << " m/s |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Acceleration_x:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << B_acceleration.x << " m/s^2 |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Acceleration_y:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << B_acceleration.y << " m/s^2 |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "B_Acceleration_z:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << B_acceleration.z << " m/s^2 |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "Thrust:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << thrust << " N |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "T-Thrust:" 
@@ -50,7 +62,7 @@ void output::drawCockpit(double t, double h, double v, double a, double hMax, do
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << fuelConsumption << " kg/s |\n";
 
     // Altitude bar
-    int hFilled = static_cast<int>(std::round((h / hMax) * barLength));
+    int hFilled = static_cast<int>(std::round((B_position.z / hMax) * barLength));
     hFilled = std::clamp(hFilled, 0, barLength);
     std::cout << "| Altitude bar: [";
     for (int i = 0; i < hFilled; ++i) std::cout << "#";

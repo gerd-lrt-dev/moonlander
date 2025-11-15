@@ -3,20 +3,33 @@
 
 #include "environmentConfig.h"
 #include "vector3.h"
+#include "spacemath.h"
 
 /**
  * @class physics
  * @brief Handles the physics calculations for a lunar lander.
  *
- * This class provides methods to calculate the lander's velocity and height
+ * This class provides methods to calculate the lander's velocity and position
  * over time, considering lunar gravity. It is stateless except for constant
  * parameters like lunar gravity.
+ *
+ * @note All calculations are performed in a Moon-centered inertial reference
+ *       frame, meaning that positions, velocities, and gravitational forces
+ *       are expressed relative to the Moon's center. 
+ *       This ensures a consistent and physically accurate simulation of 
+ *       orbital and surface dynamics.
+ *
+ * @note Forces originating from the spacecraft itself, such as thrust, are
+ *       defined in the spacecraft's body frame and must be transformed into
+ *       the inertial frame before being combined with gravitational forces.
  */
+
 class physics
 {
 private:
     // Constants & parameters
     EnvironmentConfig configData;
+    spacemath math;
 
     /**
      * @brief Calculates three dimensional moon gravity effekt
@@ -75,6 +88,37 @@ public:
      * a{result} = a{accelerationSpacecraft} - g{moon}
      */
     Vector3 updateVel(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt, double totalMassSpacecraft) const;
+
+    /**
+     * @brief Request current acceleration based on thrust of spacecraft
+     * @param currenThrust      ///< [N] current Thrust of Spacecraft provided by thrust class
+     * @param totalMass         ///< [kg] Total mass of spacecraft taking fuel consumption into account
+     * @param directionOfThrust ///< [-] Vector with direction of thrust
+     * @param moonGravityVec    ///< [m/s²] Acceleration of moon ~1,64
+     * @return  ///< [m/s²] Vector acceleration of spacecraft
+    *
+    * The total acceleration is defined as the sum of thrust acceleration and
+    * gravitational acceleration:
+    *
+    *      a_total = a_thrust + a_gravity
+    *
+    * where
+    *
+    *      a_thrust  = F_thrust / m_total
+    *      a_gravity = - (μ / r²) * r̂
+    *
+    * with:
+    *      F_thrust  : Thrust vector produced by the main engine [N]
+    *      m_total   : Current total spacecraft mass (dry mass + fuel) [kg]
+    *      μ         : Gravitational parameter of the Moon (μ = g_surface * r_moon²) [m³/s²]
+    *      r         : Distance from the lunar center to the spacecraft [m]
+    *      r̂         : Normalized vector from the lunar center to the spacecraft
+    *
+    * The negative sign ensures that the gravitational acceleration vector
+    * always points toward the Moon's center.
+    * The calculation is made by the helper class spacemath
+     */
+    Vector3 updateAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const;
 };
 
 #endif
