@@ -40,7 +40,7 @@ public:
      *
      * Outputs a formatted cockpit view including a text-based height bar.
      */
-    void drawCockpit(double t, Vector3 I_position, Vector3 B_velocity, Vector3 B_acceleration, double hMax, double thrust, double targetThrust, double fuelConsumption, bool integrity);
+    void drawCockpit(double t, Vector3 B_position, Vector3 B_velocity, Vector3 B_acceleration, double hMax, double thrust, double targetThrust, double fuelConsumption, bool integrity);
 
     /**
      * @brief Draws mission failed screen

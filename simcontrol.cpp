@@ -40,10 +40,12 @@ void simcontrol::runUserInput()
 
 void simcontrol::runSimulator(Vector3 vel0, Vector3 pos0, double t)
 {
+    customSpacecraft landerMoon1; // TODO: Hier weiter arbeiten an JSON
+    
     // Instance classes
     landerPhysics       = std::make_unique<physics>();
     drawer              = std::make_unique<output>();
-    landerSpacecraft    = std::make_unique<spacecraft>(1500.0, 10000.0, 300, 1000.0, 0.5, pos0, Vector3(0.0, 0.0, 0.0)); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s, initialPos: 0,0,0, intitalRot 0,0,0 //TODO: organize in struct
+    landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1); // emptymass: 1500 [kg], maxThrust: 5500[N], specific impulse: 300 [s], fuel: 1000 [kg], tau: 0,5 s, initialPos: 0,0,0, intitalRot 0,0,0 //TODO: organize in struct
 
     // Call integerity for simulation run
     bool lander1IsIntact = landerSpacecraft->isIntact(); 

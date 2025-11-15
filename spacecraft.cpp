@@ -2,8 +2,8 @@
 
 #include "spacemath.h"
 
-spacecraft::spacecraft(double m, double maxT, double rate, double fuelM, double timeConstant, Vector3 initialPos, Vector3 initialRot)
-    : emptyMass(m), maxThrust(maxT), mainEngine(rate, timeConstant), fuelMass(fuelM), position(initialPos), rotation(initialRot)
+spacecraft::spacecraft(customSpacecraft landerMoon)
+    : emptyMass(landerMoon.m), maxThrust(landerMoon.maxT), mainEngine(landerMoon.Isp, landerMoon.timeConstant), fuelMass(landerMoon.fuelM), position(landerMoon.B_initialPos), rotation(landerMoon.B_mainThrustDirection)
     {
         setDefaultValues();
     };

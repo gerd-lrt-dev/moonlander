@@ -187,7 +187,7 @@ public:
      *
      * Initializes the spacecraft with its physical parameters and engine.
      */
-    spacecraft(double m, double maxT, double Isp, double fuelM, double timeConstant, Vector3 initialPos, Vector3 initialRot);
+    spacecraft(customSpacecraft landerMoon);
 
     /**
      * @brief Destructor
