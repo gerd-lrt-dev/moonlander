@@ -6,6 +6,7 @@
 #include "spacecraft.h"
 #include "environmentConfig.h"
 #include "vector3.h"
+#include "jsonConfigReader.h"
 
 #include <memory>
 #include <atomic>
@@ -22,9 +23,9 @@
 class simcontrol
 {
 private:
+    std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
     std::unique_ptr<physics> landerPhysics;         ///< Physics engine handling lander motion
     std::unique_ptr<output> drawer;                 ///< Output handler for cockpit display
-    std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
 
     std::atomic<double> userThrustPercent;
     EnvironmentConfig env;                          ///< Load environment config

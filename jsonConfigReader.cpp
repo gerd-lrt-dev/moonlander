@@ -11,7 +11,7 @@ void to_json(nlohmann::json& j, const Vector3& v) {
 }
 
 // Loads json Config file and return nlohmann object
-nlohmann::json jsonConfigReader(const std::string& filename) 
+nlohmann::json jsonConfigReader::loadConfig(const std::string& filename) 
 {
     std::ifstream file(filename);
     if (!file.is_open()) {
