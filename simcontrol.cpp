@@ -88,8 +88,8 @@ void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3
                                             landerSpacecraft->getTotalMass(), 
                                             landerSpacecraft->requestThrustDirection(), 
                                             env.moonGravityVec);
-        Vector3 pos = landerPhysics->updatePos(vel0, pos0, accelerationSpacecraft, dt, landerSpacecraft->getTotalMass());
-        Vector3 vel = landerPhysics->updateVel(vel0, pos0, accelerationSpacecraft, dt, landerSpacecraft->getTotalMass());
+        Vector3 pos = landerPhysics->updatePos(vel0, pos0, accelerationSpacecraft, dt);
+        Vector3 vel = landerPhysics->updateVel(vel0, accelerationSpacecraft, dt);
 
         
         // Update initial state variables for the next iteration

@@ -31,12 +31,12 @@ Vector3 physics::calcAccelerationAlignedToCenterOfMoon(Vector3 accelerationSpace
 }
 
 // public  ---------------------------------------------------------
-Vector3 physics::updatePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt, double totalMassSpacecraft) const
+Vector3 physics::updatePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt) const
 {
     return pos + vel * dt + accelerationSpacecraft * 0.5 * dt * dt;
 }
 
-Vector3 physics::updateVel(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt, double totalMassSpacecraft) const
+Vector3 physics::updateVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const
 {
     return vel + accelerationSpacecraft * dt;
 }

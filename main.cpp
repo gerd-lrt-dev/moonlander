@@ -10,7 +10,7 @@
  *
  * @return Exit status (0 = success)
  */
-int main(int argc, char* argv[]) // Preperation for user input
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) // Preperation for user input. Currently unused.
 {
     // Create the simulation controller using a smart pointer
     std::unique_ptr<simcontrol> controller;
