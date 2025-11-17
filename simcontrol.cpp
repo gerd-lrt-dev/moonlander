@@ -41,7 +41,10 @@ void simcontrol::runUserInput()
 void simcontrol::runSimulator(Vector3 vel0, Vector3 pos0, double t)
 {
     // Load lander config
-    nlohmann::json landerJsonObect  = jsonConfigReader::loadConfig("/configs/lander.json");
+    nlohmann::json config = jsonConfigReader::loadConfig("configs/lander.json");
+    std::cout << "config type: " << config.type_name() << std::endl;
+    nlohmann::json landerJsonObect  = config.at("MoonLander2");
+    
     customSpacecraft landerMoon1    = jsonConfigReader::parseLander(landerJsonObect);
 
     // Instance classes

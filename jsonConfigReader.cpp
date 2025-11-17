@@ -1,10 +1,19 @@
 #include "jsonConfigReader.h"
 
-void from_json(const nlohmann::json& j, Vector3& v) {
-    v.x = j.at("x").get<double>();
-    v.y = j.at("y").get<double>();
-    v.z = j.at("z").get<double>();
+void from_json(const nlohmann::json& j, Vector3& v) 
+{
+    if (j.is_array() && j.size() == 3) {
+        v.x = j[0].get<double>();
+        v.y = j[1].get<double>();
+        v.z = j[2].get<double>();
+    } 
+    else {
+        v.x = j.at("x").get<double>();
+        v.y = j.at("y").get<double>();
+        v.z = j.at("z").get<double>();
+    }
 }
+
 
 void to_json(nlohmann::json& j, const Vector3& v) {
     j = nlohmann::json{{"x", v.x}, {"y", v.y}, {"z", v.z}};
