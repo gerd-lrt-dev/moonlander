@@ -83,9 +83,6 @@ void spacecraft::updateTime(double dt)
 
     // Start updating time for main engine 
     landerMoon.fuelM = mainEngine.updateThrust(dt, landerMoon.fuelM);
-
-    //mainEngine.updateSimpleThrust(dt); // TODO: User should start engine and routine starts with that. That need fuel in idle mode. Currently just for testing implemented
-
 }
 
 double spacecraft::requestTargetThrust() const
