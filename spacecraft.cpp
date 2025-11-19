@@ -2,8 +2,17 @@
 
 #include "spacemath.h"
 
-spacecraft::spacecraft(customSpacecraft landerMoon)
-    : emptyMass(landerMoon.m), maxThrust(landerMoon.maxT), mainEngine(landerMoon.Isp, landerMoon.timeConstant), fuelMass(landerMoon.fuelM), position(landerMoon.B_initialPos), rotation(landerMoon.B_mainThrustDirection)
+spacecraft::spacecraft(customSpacecraft lMoon)
+    : landerMoon(lMoon),
+    mainEngine(
+        EngineConfig::Create(
+            lMoon.Isp,
+            lMoon.timeConstant,
+            lMoon.responseRate,
+            lMoon.B_mainThrustDirection
+        ),
+        FuelState(lMoon.fuelM, lMoon.fuelM, 0.0)
+    )
     {
         setDefaultValues();
     };
@@ -29,10 +38,8 @@ bool spacecraft::isIntact()
 void spacecraft::setDefaultValues()
 {
     spacecraftIntegrity = 1.0;
-    structuralIntegrity = 1.0;
     spacecraftIsOperational = true;
-    totalMass = emptyMass + fuelMass;
-    safeVelocity = 2.0;
+    totalMass = landerMoon.emptyMass + landerMoon.fuelM;
 }
 
 void spacecraft::updateTotalMassOnFuelReduction(double emptyMass, double fuelMass)
@@ -47,14 +54,14 @@ void spacecraft::updateSpacecraftIntegrity(double delta)
     if(spacecraftIntegrity < 0.0) spacecraftIntegrity = 0.0;
 
     // Update operational status
-    spacecraftIsOperational = spacecraftIntegrity >= structuralIntegrity;
+    spacecraftIsOperational = spacecraftIntegrity >= landerMoon.structuralIntegrity;
 }
 
 void spacecraft::applyLandingDamage(double impactVelocity)
 {
     double KE(0), KEref(0), damageInPercent(0);
 
-    KEref   = spacemath::kineticEnergy(totalMass, safeVelocity);
+    KEref   = spacemath::kineticEnergy(totalMass, landerMoon.safeVelocity);
     KE      = spacemath::kineticEnergy(totalMass, impactVelocity);
 
     damageInPercent = KE / KEref;
@@ -65,7 +72,7 @@ void spacecraft::applyLandingDamage(double impactVelocity)
 void spacecraft::setThrust(double targetThrustInPercentage)
 {
     // thrust in percentage = target thrust / maxiumum thrust <=>
-    double targetThrust = targetThrustInPercentage * maxThrust; // [m/s²]
+    double targetThrust = targetThrustInPercentage * landerMoon.maxT; // [m/s²]
 
     mainEngine.setTarget(targetThrust);
 }
@@ -75,7 +82,7 @@ void spacecraft::updateTime(double dt)
     time += dt;
 
     // Start updating time for main engine 
-    fuelMass = mainEngine.updateThrust(dt, fuelMass);
+    landerMoon.fuelM = mainEngine.updateThrust(dt, landerMoon.fuelM);
 
     //mainEngine.updateSimpleThrust(dt); // TODO: User should start engine and routine starts with that. That need fuel in idle mode. Currently just for testing implemented
 
@@ -105,32 +112,32 @@ double spacecraft::requestLiveFuelConsumption() const
 
 void spacecraft::setPos(Vector3 pos)
 {
-    position = pos; 
+    B_Pos = pos; 
 }
 
 void spacecraft::setRot(Vector3 rot)
 {
-    rotation = rot;
+    B_Rot = rot;
 }
 
 void spacecraft::setVel(Vector3 vel)
 {
-    velocity = vel;
+    B_Vel = vel;
 }
 
 Vector3 spacecraft::getPos()
 {
-    return position;
+    return B_Pos;
 }
 
 Vector3 spacecraft::getRot()
 {
-    return rotation;
+    return B_Rot;
 }
 
 Vector3 spacecraft::getVel()
 {
-    return velocity;
+    return B_Vel;
 }
 
 double spacecraft::getTotalMass()

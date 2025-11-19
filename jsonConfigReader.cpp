@@ -36,12 +36,14 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
 {
     customSpacecraft lander;
 
-    lander.m            = j.at("m").get<double>();
+    lander.emptyMass    = j.at("emptyMass").get<double>();
     lander.fuelM        = j.at("fuelM").get<double>();
     lander.maxFuelM     = j.at("maxFuelM").get<double>();
+
     lander.maxT         = j.at("maxT").get<double>();
     lander.Isp          = j.at("Isp").get<double>();
     lander.timeConstant = j.at("timeConstant").get<double>();
+    lander.responseRate = j.at("responseRate").get<double>();
 
     lander.B_mainThrustDirection    = j.at("B_mainThrustDirection").get<Vector3>();
     lander.B_mainThrustPosition     = j.at("B_mainThrustPosition").get<Vector3>();
@@ -52,7 +54,12 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     
     lander.B_initialPos = j.at("B_initialPos").get<Vector3>();
     lander.B_initialRot = j.at("B_initialRot").get<Vector3>();
-    lander.B_centerOfMass = j.at("B_centerOfMass").get<Vector3>();
+    lander.B_initialCenterOfMass = j.at("B_initialCenterOfMass").get<Vector3>();
+
+    lander.initialVelocity      = j.at("initialVelocity").get<Vector3>();
+
+    lander.structuralIntegrity  = j.at("structuralIntegrity").get<double>();
+    lander.safeVelocity         = j.at("safeVelocity").get<double>();
 
     return lander;
 }

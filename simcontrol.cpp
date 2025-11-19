@@ -38,14 +38,41 @@ void simcontrol::runUserInput()
     }
 }
 
+customSpacecraft simcontrol::laodSpacecraftConfig(std::string filePath, std::string spacecraftName)
+{
+    // Open file
+    nlohmann::json config = jsonConfigReader::loadConfig("configs/lander.json");
+
+    // Check object type
+    std::cout << "config type: " << config.type_name() << std::endl;
+
+    // Get array spacecraft
+    auto spacecraftArray = config.at("spacecraft");
+
+    // Search specific element
+    nlohmann::json landerJsonObject;
+
+    for (const auto& sc : spacecraftArray)
+    {
+        if (sc.at("name").get<std::string>() == spacecraftName)
+        {
+            landerJsonObject = sc;
+            break;
+        }
+    }
+
+    if (landerJsonObject.is_null())
+    {
+        throw std::runtime_error("Spacecraft '" + spacecraftName + "' not found in JSON file: " + filePath);
+    }
+
+    return jsonConfigReader::parseLander(landerJsonObject);
+}
+
 void simcontrol::runSimulator(Vector3 vel0, Vector3 pos0, double t)
 {
     // Load lander config
-    nlohmann::json config = jsonConfigReader::loadConfig("configs/lander.json");
-    std::cout << "config type: " << config.type_name() << std::endl;
-    nlohmann::json landerJsonObect  = config.at("MoonLander2");
-    
-    customSpacecraft landerMoon1    = jsonConfigReader::parseLander(landerJsonObect);
+    customSpacecraft landerMoon1 = laodSpacecraftConfig("configs/lander.json", "MoonLander_Classic");
 
     // Instance classes
     landerPhysics       = std::make_unique<physics>();

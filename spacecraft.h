@@ -20,7 +20,7 @@ struct customSpacecraft
     // Mass Properties
     // -------------------------------------------------------------------------
 
-    double m;              
+    double emptyMass;              
     ///< [kg] Dry mass of the spacecraft (structure + engines, no fuel).
 
     double fuelM;          
@@ -28,7 +28,6 @@ struct customSpacecraft
 
     double maxFuelM;       
     ///< [kg] Maximum fuel tank capacity (optional; used for validation or HUD).
-
 
     // -------------------------------------------------------------------------
     // Propulsion System
@@ -42,6 +41,9 @@ struct customSpacecraft
 
     double timeConstant;   
     ///< [s] Engine throttle response time (first-order system time constant).
+
+    double responseRate;
+    ///< [s] Maximum rate of thrust change.
 
     Vector3 B_mainThrustDirection;
     ///< [unit] Normalized thrust direction vector in body frame (B-frame).
@@ -68,19 +70,30 @@ struct customSpacecraft
 
 
     // -------------------------------------------------------------------------
-    // Initial State (Body Frame Coordinates)
+    // State (Body Frame Coordinates)
     // -------------------------------------------------------------------------
 
     Vector3 B_initialPos;  
     ///< [m] Initial spacecraft position expressed in body coordinates.
-    ///< Typically (0, 0, 0) because physics handles world/Moon coordinates.
+    ///< Typically initial (0, 0, 0) because physics handles world/Moon coordinates.
 
     Vector3 B_initialRot;  
     ///< [rad] Initial orientation (pitch, yaw, roll) in body coordinates.
 
-    Vector3 B_centerOfMass;
+    Vector3 B_initialCenterOfMass;
     ///< [m] Center of mass location in body frame at t=0.
     ///< Should be updated dynamically if fuel mass distribution changes.
+
+    Vector3 initialVelocity;
+    ///< [m/s] Velocity in three spatial directions
+
+    // -------------------------------------------------------------------------
+    // Integrity & Operational Status
+    // Attributes controlling spacecraft health, integrity, and operational status.
+    // -------------------------------------------------------------------------
+
+    double       structuralIntegrity;       ///< [%] Threshold at which the spacecraft becomes non-operational
+    double       safeVelocity;              ///< [m/s] Velocity in which is the spacecraft able to land safely
 };
 
 
@@ -102,50 +115,26 @@ class spacecraft
 {
 private:
     /**
-     * @name Position, rotation and velocity data of spacecraft
-     * An initial assignment of position, rotation and rotation
-     * is performeed via the constructor
-     */
-    ///@{
-    Vector3 position; ///< [m] Position in cartesian coordinates 
-    Vector3 rotation; ///< [rad] Rotation in euler angles
-    Vector3 velocity; ///< [m/s] Velocity in three spatial directions
-    ///@}
-
-
-    /**
-     * @name Simulation start conditions 
-     * physical conditions passed via constructor
-     * 
-     */
-    ///@{
-    const double emptyMass;   ///< [kg] Mass of the spacecraft without fuel
-    const double maxThrust;   ///< [N] Maximum thrust the main engine can produce
-    Thrust       mainEngine;  ///< Main engine responsible for generating thrust
-    double       fuelMass;    ///< [kg] Mass of the fuel currently onboard
-    double       totalMass;   ///< [kg] Total mass of spacecraft - is composed of empty mass and fuel mass in setDefaultValues
-    ///@}
-    
-    /**
      * @name Physical properties
      * Physical and mechanical properties of the spacecraft.
-     * TODO: When it comes to many more vars organize them in structs
+     * Dynamic parameters are strictly seperated from constant parameters
+     * Dynamic -> private members, static -> customSpacecraft struct
+     * operation vs. configuration
+     * TODO: When it comes to many more vars organize them also in structs
      */
     ///@{
-    double       dt = 0;      ///< [s] Time steps. Provided by updateTime 
-    double       time = 0;    ///< [s] Absolute time. Will be added by dt from udpateTime
-    EnvironmentConfig config;
-    ///@}
-
-    /**
-     * @name Integrity & Operational Status
-     * Attributes controlling spacecraft health, integrity, and operational status.
-     */
-    ///@{
-    double       spacecraftIntegrity;       ///< [%] Current integrity of the spacecraft
-    double       structuralIntegrity;       ///< [%] Threshold at which the spacecraft becomes non-operational
-    bool         spacecraftIsOperational;   ///< [true/false] Whether the spacecraft is still operational
-    double       safeVelocity;              ///< [m/s] Velocity in which is the spacecraft able to land safely
+    customSpacecraft landerMoon;    ///< [] Parameters which defines spacecraft. This are filled by json config data.
+    Thrust mainEngine;              ///< [] Dynamic state of the engine thrust.
+    double totalMass;               ///< [kg] Total mass of spacecraft.
+    double dt = 0;                  ///< [s] Time steps. Provided by updateTime.
+    double time = 0;                ///< [s] Absolute time. Will be added by dt from udpateTime.
+    Vector3 B_Pos;                  ///< [m] Current spacecraft position expressed in body coordinates.
+    Vector3 B_Rot;                  ///< [rad] Current orientation (pitch, yaw, roll) in body coordinates.
+    Vector3 B_CenterOfMass;         ///< [m] Center of mass location in body frame at actual time.
+    Vector3 B_Vel;                  ///< [m/s] Velocity in three spatial directions.
+    double spacecraftIntegrity;     ///< [%] Current integrity of the spacecraft.
+    bool spacecraftIsOperational;   ///< [true/false] Whether the spacecraft is still operational.
+    EnvironmentConfig config;       ///< [-] Environment config struct with constant parameters.
     ///@}
 
     /**
@@ -175,19 +164,49 @@ private:
     
     
 public:
-    /**
-     * @brief Constructor
-     * @param m             ///< [kg] Empty mass of the spacecraft 
-     * @param maxT          ///< [N] Maximum thrust of the main engine
-     * @param Isp           ///< [s] Specific Impulse
-     * @param fuelM         ///< [kg] Initial fuel mass 
-     * @param timeConstant  ///< []
-     * @param initialPos    ///< [m] Initial position of spacecraft as a vector
-     * @param initialRot    ///< [rad] Initial rotation of spacecraft as a vector
-     *
-     * Initializes the spacecraft with its physical parameters and engine.
-     */
-    spacecraft(customSpacecraft landerMoon);
+/**
+ * @brief Constructs a spacecraft using parameters loaded from a configuration object.
+ *
+ * This constructor initializes all physical, mechanical, and inertial properties of the
+ * spacecraft using the values provided in a @ref customSpacecraft configuration structure.
+ * All mass properties, propulsion system parameters, inertial characteristics, initial
+ * state vectors, and integrity limits are copied directly into the spacecraft instance.
+ *
+ * The spacecraft’s main engine, thrust model, inertia model, and initial state (position,
+ * rotation, velocity, and center of mass) are fully initialized based on this configuration.
+ *
+ * @param landerMoon 
+ *     A configuration structure containing complete physical and operational parameters
+ *     of the spacecraft. Fields include:
+ *       - @c emptyMass                 Dry mass of the spacecraft (kg)
+ *       - @c fuelM                     Initial fuel mass (kg)
+ *       - @c maxFuelM                  Maximum fuel capacity (kg)
+ *
+ *       - @c maxT                      Maximum main engine thrust (N)
+ *       - @c Isp                       Specific impulse of the main engine (s)
+ *       - @c timeConstant              Engine throttle response time constant (s)
+ *       - @c responseRate              Maximum engine thrust rate-of-change (1/s)
+ *       - @c B_mainThrustDirection     Direction of thrust vector in body frame (unit vector)
+ *       - @c B_mainThrustPosition      Thrust application point relative to body origin (m)
+ *
+ *       - @c Ixx                       Moment of inertia around body X-axis (kg·m²)
+ *       - @c Iyy                       Moment of inertia around body Y-axis (kg·m²)
+ *       - @c Izz                       Moment of inertia around body Z-axis (kg·m²)
+ *
+ *       - @c B_initialPos              Initial spacecraft position in body coordinates (m)
+ *       - @c B_initialRot              Initial spacecraft rotation in body coordinates (rad)
+ *       - @c B_initialCenterOfMass     Initial center of mass location (m)
+ *       - @c initialVelocity           Initial velocity vector in body frame (m/s)
+ *
+ *       - @c structuralIntegrity       Percentage threshold below which spacecraft fails (%)
+ *       - @c safeVelocity              Maximum safe landing velocity (m/s)
+ *
+ * The constructor assumes that the provided configuration structure has been validated
+ * prior to construction (e.g., via JSON loader or configuration class).
+ */
+spacecraft(customSpacecraft lMoon);
+
+
 
     /**
      * @brief Destructor

@@ -15,7 +15,26 @@ void Thrust::setThrustDirection()
     // TODO: On construction...
 }
 
+void Thrust::setDefaultValues()
+{
+    // Initialize target & current thrust with 0.0 as start condition
+    thrustState.current = 0.0;
+    thrustState.target = 0.0;
+}
+
 // ---Public--------------------------------------
+Thrust::Thrust(const EngineConfig& eConfig, FuelState fState) 
+    : engineConfig(EngineConfig::Create(
+        eConfig.Isp,
+        eConfig.timeConstant,
+        eConfig.responseRate,
+        eConfig.direction)
+    ),
+     fuelstate(fState)
+{
+    setDefaultValues();
+}
+
 Thrust::~Thrust()
 {
 
@@ -23,39 +42,38 @@ Thrust::~Thrust()
 
 void Thrust::setTarget(double tThrust)
 {
-    targetThrust = tThrust;
+    thrustState.target = tThrust;
 }
 
 void Thrust::updateSimpleThrust(double dt)
 {
-    currentThrust += (targetThrust - currentThrust) * rate * dt;
+    thrustState.current += (thrustState.target - thrustState.current) * engineConfig.responseRate * dt;
 }
 
 double Thrust::updateThrust(double dt, double fuelMass)
 {
-    if (fuelMass > 0.0 && targetThrust != 0)
+    if (fuelMass > 0.0 && thrustState.target != 0)
     {
         // Initiate vars
         double newFuelMass(0.0), massFlow(0.0);
 
         // Calculate thrust TODO: Auslagern und Fehler durch 0 teilen abfangen!
-        currentThrust += (dt / timeConstant) * (targetThrust - currentThrust);
+        thrustState.current += (dt / thrustState.target) * (thrustState.target - thrustState.current);
 
         // Calculate massFlow for fuel consumption calculation
-        massFlow = math.calcMassFlowBasedOnThrust(currentThrust, Isp, envConfig.earthGravity);
+        massFlow = math.calcMassFlowBasedOnThrust(thrustState.current, engineConfig.Isp, envConfig.earthGravity);
         
         // Withdraw massflow to liveconsumption to display the current fuel consumption
-        liveConsumption = massFlow;
+        fuelstate.consumptionRate = massFlow;
 
         // Calculate fuel mass based on fuel consumption
         newFuelMass = calcFuelReduction(fuelMass, massFlow, dt);
-        fuelMass1   = newFuelMass; 
 
         return newFuelMass;
     }
     else
     {
-        currentThrust = 0.0;
+        thrustState.current = 0.0;
     }
     
     return fuelMass;
@@ -65,21 +83,21 @@ double Thrust::updateThrust(double dt, double fuelMass)
 
 double Thrust::getTargetThrust() const
 {
-    return targetThrust;
+    return thrustState.target;
 }
 
 double Thrust::getCurrentThrust() const
 {
-    return currentThrust;
+    return thrustState.current;
 }
 
 double Thrust::getFuelConsumption() const
 {
-    return liveConsumption;
+    return fuelstate.consumptionRate;
 }
 
 Vector3 Thrust::getDirectionOfThrust() const
 {
-    return thrustDirection;
+    return engineConfig.direction;
 }
 

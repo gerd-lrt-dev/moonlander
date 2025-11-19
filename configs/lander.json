@@ -1,34 +1,62 @@
 {
-  "MoonLander1": {
-    "m": 1500.0,
-    "fuelM": 1000.0,
-    "maxFuelM": 1000.0,
-    "maxT": 10000.0,
-    "Isp": 300.0,
-    "timeConstant": 0.5,
-    "B_mainThrustDirection": [0, 0, -1],
-    "B_mainThrustPosition": [0, 0, 0],
-    "Ixx": 500.0,
-    "Iyy": 500.0,
-    "Izz": 800.0,
-    "B_initialPos": [0, 0, 0],
-    "B_initialRot": [0, 0, 0],
-    "B_centerOfMass": [0, 0, 0]
-  },
-  "MoonLander2": {
-    "m": 1200.0,
-    "fuelM": 800.0,
-    "maxFuelM": 800.0,
-    "maxT": 8000.0,
-    "Isp": 280.0,
-    "timeConstant": 0.6,
-    "B_mainThrustDirection": [0, 0, -1],
-    "B_mainThrustPosition": [0, 0, 0],
-    "Ixx": 450.0,
-    "Iyy": 450.0,
-    "Izz": 700.0,
-    "B_initialPos": [0, 0, 0],
-    "B_initialRot": [0, 0, 0],
-    "B_centerOfMass": [0, 0, 0]
-  }
+  "spacecraft": [
+    {
+      "name": "MoonLander_Classic",
+
+      "emptyMass": 1500.0,
+      "fuelM": 1000.0,
+      "maxFuelM": 1200.0,
+
+      "maxT": 16000.0,
+      "Isp": 320.0,
+      "timeConstant": 0.6,
+      "responseRate": 6.0,
+
+      "B_mainThrustDirection": { "x": 0.0, "y": 0.0, "z": 1.0 },
+      "B_mainThrustPosition":  { "x": 0.0, "y": 0.0, "z": -1.2 },
+
+      "Ixx": 850.0,
+      "Iyy": 910.0,
+      "Izz": 720.0,
+
+      "B_initialPos": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.2 },
+
+      "initialVelocity": { "x": 0.0, "y": 0.0, "z": 0.0 },
+
+      "structuralIntegrity": 75.0,
+      "safeVelocity": 2.5
+    },
+
+    {
+      "name": "MoonLander_Heavy",
+
+      "emptyMass": 4000.0,
+      "fuelM": 2500.0,
+      "maxFuelM": 3000.0,
+
+      "maxT": 45000.0,
+      "Isp": 360.0,
+      "timeConstant": 0.8,
+      "responseRate": 5.0,
+
+      "B_mainThrustDirection": { "x": 0.0, "y": 0.0, "z": 1.0 },
+      "B_mainThrustPosition":  { "x": 0.0, "y": 0.0, "z": -1.5 },
+
+      "Ixx": 2300.0,
+      "Iyy": 2500.0,
+      "Izz": 1800.0,
+
+      "B_initialPos": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
+
+      "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.3 },
+
+      "initialVelocity": { "x": 0.0, "y": 0.0, "z": 0.0 },
+
+      "structuralIntegrity": 60.0,
+      "safeVelocity": 3.0
+    }
+  ]
 }
