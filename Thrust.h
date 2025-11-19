@@ -211,6 +211,26 @@ private:
     double calcFuelReduction(double fuelMass, double massFlowFuel, double dt);
 
     /**
+     * @brief Updates the current thrust value using an exponential smoothing approach.
+     *
+     * This function adjusts the current thrust toward the target thrust based on
+     * a continuous-time first-order response model. The differential equation
+     *
+     *     d(current) / dt = (target - current) / τ
+     *
+     * describes the convergence of the current thrust toward the target with
+     * time constant τ. Solving this yields the discrete update rule:
+     *
+     *     current += (1 - exp(-dt / τ)) * (target - current)
+     *
+     * This provides framerate-independent, smooth convergence of the thrust,
+     * where a smaller τ results in faster response.
+     *
+     * @param dt  Time step in seconds.
+     */
+    void calculateThrust(double dt);
+
+    /**
      * @brief Sets direction of thrust
      * 
      * TODO: Build algorithm to simulate tvc deviation

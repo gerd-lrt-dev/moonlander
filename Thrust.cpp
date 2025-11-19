@@ -10,6 +10,19 @@ double Thrust::calcFuelReduction(double fuelMass, double massFlowFuel, double dt
     return fuelMass;
 }
 
+void Thrust::calculateThrust(double dt)
+{
+    if(engineConfig.timeConstant != 0)
+    {
+        thrustState.current += (1 - exp(-dt / engineConfig.timeConstant)) * (thrustState.target - thrustState.current);
+    }
+    else
+    {
+        throw std::runtime_error("time constant tau is zero!");
+    }
+}
+
+
 void Thrust::setThrustDirection()
 {
     // TODO: On construction...
@@ -45,11 +58,6 @@ void Thrust::setTarget(double tThrust)
     thrustState.target = tThrust;
 }
 
-void Thrust::updateSimpleThrust(double dt)
-{
-    thrustState.current += (thrustState.target - thrustState.current) * engineConfig.responseRate * dt;
-}
-
 double Thrust::updateThrust(double dt, double fuelMass)
 {
     if (fuelMass > 0.0 && thrustState.target != 0)
@@ -57,8 +65,8 @@ double Thrust::updateThrust(double dt, double fuelMass)
         // Initiate vars
         double newFuelMass(0.0), massFlow(0.0);
 
-        // Calculate thrust TODO: Auslagern und Fehler durch 0 teilen abfangen!
-        thrustState.current += (dt / thrustState.target) * (thrustState.target - thrustState.current);
+        // Calculate & Update thrust
+        calculateThrust(dt);
 
         // Calculate massFlow for fuel consumption calculation
         massFlow = math.calcMassFlowBasedOnThrust(thrustState.current, engineConfig.Isp, envConfig.earthGravity);

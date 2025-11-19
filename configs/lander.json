@@ -10,7 +10,7 @@
       "maxT": 16000.0,
       "Isp": 320.0,
       "timeConstant": 0.6,
-      "responseRate": 6.0,
+      "responseRate": 1.0,
 
       "B_mainThrustDirection": { "x": 0.0, "y": 0.0, "z": 1.0 },
       "B_mainThrustPosition":  { "x": 0.0, "y": 0.0, "z": -1.2 },
