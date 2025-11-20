@@ -377,6 +377,16 @@ spacecraft(customSpacecraft lMoon);
      * which decrease in case of providing thrust
      */
     double getTotalMass();
+
+    /**
+     * @brief Return current fuel mass
+     * @return fuel mass
+     * 
+     * Fuel mass is updated by update thrust
+     */
+    double getfuelMass() const;
+
+
 };
 
 #endif

@@ -267,15 +267,6 @@ public:
     /**
      * @brief Update the current thrust based on the time delta
      * @param dt    ///< [s] Time step since last update 
-     * @return 
-     * The current thrust approaches the target thrust based on the
-     * engine's reaction speed.
-     */
-    void updateSimpleThrust(double dt);
-
-    /**
-     * @brief Update the current thrust based on the time delta
-     * @param dt    ///< [s] Time step since last update 
      * @param fuelMass
      * @return Returns fuel mass after combustion step
      * 
@@ -294,7 +285,7 @@ public:
      * Steps to calculate thrust:
      * 1. updateThrust - function initializes the thrust calculation. From now on, the thrust is determined based on the target thrust. Even if thrust = 0. Later with idle mode
      */
-    double updateThrust(double dt, double fuelMass);
+    void updateThrust(double dt);
 
     /**
      * @brief Get the target thrust
@@ -313,6 +304,12 @@ public:
      * @return ///< [kg / dt] Real-time fuel consumption
      */
     double getFuelConsumption() const;
+
+    /**
+     * @brief Getter function for current fuel mass
+     * @return ///< [kg] fuel mass
+     */
+    double getCurrentFuelMass() const;
 
     /**
      * @brief Getter function for thrust direction

@@ -15,7 +15,7 @@ output::~output()
 {
 }
 
-void output::drawCockpit(double t, Vector3 B_position, Vector3 B_velocity, Vector3 B_acceleration, double hMax, double thrust, double targetThrust, double fuelConsumption, bool intact)
+void output::drawCockpit(double t, Vector3 B_position, Vector3 B_velocity, Vector3 B_acceleration, double hMax, double thrust, double targetThrust, double fuelConsumption, double fuelMass, bool intact)
 {
     const int barLength = 16;
     const int width = 34;       // Inner width for value lines
@@ -58,6 +58,8 @@ void output::drawCockpit(double t, Vector3 B_position, Vector3 B_velocity, Vecto
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << thrust << " N |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "T-Thrust:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << targetThrust << " N |\n";
+    std::cout << "| " << std::left << std::setw(labelWidth) << "FuelMass:" 
+              << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << fuelMass << " kg |\n";
     std::cout << "| " << std::left << std::setw(labelWidth) << "FuelConsumption:" 
               << std::right << std::setw(valueWidth - 2) << std::fixed << std::setprecision(2) << fuelConsumption << " kg/s |\n";
 

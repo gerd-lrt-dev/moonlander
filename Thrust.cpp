@@ -58,9 +58,10 @@ void Thrust::setTarget(double tThrust)
     thrustState.target = tThrust;
 }
 
-double Thrust::updateThrust(double dt, double fuelMass)
+void Thrust::updateThrust(double dt)
 {
-    if (fuelMass > 0.0 && thrustState.target != 0)
+    // TODO: 
+    if (fuelstate.massCurrent > 0.0 && thrustState.target != 0)
     {
         // Initiate vars
         double newFuelMass(0.0), massFlow(0.0);
@@ -75,16 +76,12 @@ double Thrust::updateThrust(double dt, double fuelMass)
         fuelstate.consumptionRate = massFlow;
 
         // Calculate fuel mass based on fuel consumption
-        newFuelMass = calcFuelReduction(fuelMass, massFlow, dt);
-
-        return newFuelMass;
+        fuelstate.massCurrent = calcFuelReduction(fuelstate.massCurrent, massFlow, dt);
     }
     else
     {
         thrustState.current = 0.0;
     }
-    
-    return fuelMass;
 }
 
 // --- Getter functions ---------------------------------------------
@@ -102,6 +99,11 @@ double Thrust::getCurrentThrust() const
 double Thrust::getFuelConsumption() const
 {
     return fuelstate.consumptionRate;
+}
+
+double Thrust::getCurrentFuelMass() const
+{
+    return fuelstate.massCurrent;
 }
 
 Vector3 Thrust::getDirectionOfThrust() const

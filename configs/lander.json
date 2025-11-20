@@ -4,10 +4,10 @@
       "name": "MoonLander_Classic",
 
       "emptyMass": 1500.0,
-      "fuelM": 1000.0,
+      "fuelM": 50.0,
       "maxFuelM": 1200.0,
 
-      "maxT": 16000.0,
+      "maxT": 5000.0,
       "Isp": 320.0,
       "timeConstant": 0.6,
       "responseRate": 1.0,

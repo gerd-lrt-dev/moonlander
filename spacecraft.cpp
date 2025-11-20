@@ -82,7 +82,7 @@ void spacecraft::updateTime(double dt)
     time += dt;
 
     // Start updating time for main engine 
-    landerMoon.fuelM = mainEngine.updateThrust(dt, landerMoon.fuelM);
+    mainEngine.updateThrust(dt);
 }
 
 double spacecraft::requestTargetThrust() const
@@ -140,4 +140,9 @@ Vector3 spacecraft::getVel()
 double spacecraft::getTotalMass()
 {
     return totalMass;
+}
+
+double spacecraft::getfuelMass() const
+{
+    return mainEngine.getCurrentFuelMass();
 }
