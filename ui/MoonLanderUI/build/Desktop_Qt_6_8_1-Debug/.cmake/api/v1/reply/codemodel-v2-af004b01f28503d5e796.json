@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-385ba11789b01de4636a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MoonLanderUI",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "MoonLanderUI::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MoonLanderUI-Debug-b755960a3a43baccb957.json",
+					"name" : "MoonLanderUI",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MoonLanderUI_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MoonLanderUI_autogen-Debug-af3eda27a25bae08523f.json",
+					"name" : "MoonLanderUI_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "MoonLanderUI_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MoonLanderUI_autogen_timestamp_deps-Debug-16ed8684542f85707af2.json",
+					"name" : "MoonLanderUI_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug",
+		"source" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

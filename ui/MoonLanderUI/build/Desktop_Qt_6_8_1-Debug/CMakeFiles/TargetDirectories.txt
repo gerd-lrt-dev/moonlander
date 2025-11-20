@@ -1,0 +1,9 @@
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/MoonLanderUI.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/edit_cache.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/rebuild_cache.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/list_install_components.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/install.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/install/local.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/install/strip.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/MoonLanderUI_autogen_timestamp_deps.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/MoonLanderUI/build/Desktop_Qt_6_8_1-Debug/CMakeFiles/MoonLanderUI_autogen.dir
