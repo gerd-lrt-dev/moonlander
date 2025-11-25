@@ -1,10 +1,13 @@
-add_library(simulation
-    src/main.cpp           # optional, falls main in Konsole
-    src/jsonConfigReader.cpp
-    src/output.cpp
-    src/physics.cpp
-    src/simcontrol.cpp
-    src/spacecraft.cpp
-    src/spacemath.cpp
-    src/Thrust.cpp
+project(MoonLanderBackend)
+
+file(GLOB BACKEND_SOURCES
+    src/*.cpp
 )
+
+add_library(moonlander_backend ${BACKEND_SOURCES})
+
+target_include_directories(moonlander_backend
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+

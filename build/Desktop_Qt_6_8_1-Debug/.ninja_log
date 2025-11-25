@@ -1,0 +1,18 @@
+# ninja log v6
+4	128	1764087669388162448	backend/CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o	fbf1ba26e234e06a
+4	323	1764087669387797615	backend/CMakeFiles/moonlander_backend.dir/src/physics.cpp.o	c355ec4ccfec07b9
+3	325	1764087669385997064	backend/CMakeFiles/moonlander_backend.dir/src/Thrust.cpp.o	c38fa492d28cfb9d
+4	327	1764087669388074269	backend/CMakeFiles/moonlander_backend.dir/src/spacecraft.cpp.o	812a3fb6def38bd
+3	892	1764087669387682447	backend/CMakeFiles/moonlander_backend.dir/src/output.cpp.o	ef13316b8669b25a
+3	1171	1764087669387516723	backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o	c2be53a5acfef02f
+4	1851	1764087669387871747	backend/CMakeFiles/moonlander_backend.dir/src/simcontrol.cpp.o	c549a41b09f3cb71
+3	2000	1764087669387335451	backend/CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o	3f800628420c3514
+2000	2097	1764087671382997914	backend/libmoonlander_backend.a	a213f7eb63a9621f
+2097	2391	1764087671771008734	ui/moonlander_ui_autogen/timestamp	30b732e75315d4c8
+2097	2391	1764087671771008734	ui/moonlander_ui_autogen/mocs_compilation.cpp	30b732e75315d4c8
+2097	2391	1764087671771008734	/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/timestamp	30b732e75315d4c8
+2097	2391	1764087671771008734	/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/mocs_compilation.cpp	30b732e75315d4c8
+2391	3906	1764087671773998081	ui/CMakeFiles/moonlander_ui.dir/moonlander_ui_autogen/mocs_compilation.cpp.o	4d28638cb1dba54c
+2391	3941	1764087671775363377	ui/CMakeFiles/moonlander_ui.dir/main.cpp.o	9eee579bf6d310df
+2391	3960	1764087671775476766	ui/CMakeFiles/moonlander_ui.dir/mainwindow.cpp.o	1846b6bbff0a6b62
+3960	4162	1764087673342998750	ui/moonlander_ui	a373552b8315bb02

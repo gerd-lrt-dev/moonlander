@@ -1,0 +1,4 @@
+set(__QT_DEPLOY_TARGET_moonlander_backend_FILE /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/backend/libmoonlander_backend.a)
+set(__QT_DEPLOY_TARGET_moonlander_backend_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_moonlander_ui_FILE /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui)
+set(__QT_DEPLOY_TARGET_moonlander_ui_TYPE EXECUTABLE)

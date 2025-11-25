@@ -1,0 +1,141 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "backend",
+					"jsonFile" : "directory-backend-Debug-8702910ebe8ec25d8860.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "backend",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "ui",
+					"jsonFile" : "directory-ui-Debug-af8d1db614f1c3f3d0dc.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "ui",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "MoonLanderProject"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "MoonLanderBackend",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "MoonLanderUI",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						3
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "moonlander_backend::@e17dcb4e28158375c849",
+					"jsonFile" : "target-moonlander_backend-Debug-5ac2c9b6a8485b438eb9.json",
+					"name" : "moonlander_backend",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "moonlander_ui::@19b8bf288843bf358763",
+					"jsonFile" : "target-moonlander_ui-Debug-1d67d558f822b899bebc.json",
+					"name" : "moonlander_ui",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "moonlander_ui_autogen::@19b8bf288843bf358763",
+					"jsonFile" : "target-moonlander_ui_autogen-Debug-67f19f407ea6157c347c.json",
+					"name" : "moonlander_ui_autogen",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "moonlander_ui_autogen_timestamp_deps::@19b8bf288843bf358763",
+					"jsonFile" : "target-moonlander_ui_autogen_timestamp_deps-Debug-352f9c063fce111f12e6.json",
+					"name" : "moonlander_ui_autogen_timestamp_deps",
+					"projectIndex" : 2
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug",
+		"source" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
