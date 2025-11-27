@@ -382,7 +382,10 @@
 	],
 	"MOC_PREDEFS_FILE" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/moc_predefs.h",
 	"MOC_RELAXED_MODE" : false,
-	"MOC_SKIP" : [],
+	"MOC_SKIP" : 
+	[
+		"/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/qrc_resources.cpp"
+	],
 	"MULTI_CONFIG" : false,
 	"PARALLEL" : 8,
 	"PARSE_CACHE_FILE" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/moonlander_ui_autogen.dir/ParseCache.txt",
@@ -406,7 +409,10 @@
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],
-	"UIC_SKIP" : [],
+	"UIC_SKIP" : 
+	[
+		"/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/qrc_resources.cpp"
+	],
 	"UIC_UI_FILES" : [],
 	"USE_BETTER_GRAPH" : true,
 	"VERBOSITY" : 0

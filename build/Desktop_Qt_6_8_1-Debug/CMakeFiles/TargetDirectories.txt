@@ -3,8 +3,8 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/backend/CMakeFiles/moonlander_backend.dir
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/backend/CMakeFiles/edit_cache.dir
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/backend/CMakeFiles/rebuild_cache.dir
-/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/moonlander_ui.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/Moonlander_UI.dir
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/edit_cache.dir
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/rebuild_cache.dir
-/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/moonlander_ui_autogen_timestamp_deps.dir
-/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/moonlander_ui_autogen.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/Moonlander_UI_autogen_timestamp_deps.dir
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/Moonlander_UI_autogen.dir

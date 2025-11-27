@@ -21,9 +21,9 @@
 			"id" : "moonlander_backend::@e17dcb4e28158375c849"
 		}
 	],
-	"id" : "moonlander_ui_autogen_timestamp_deps::@19b8bf288843bf358763",
+	"id" : "Moonlander_UI_autogen_timestamp_deps::@19b8bf288843bf358763",
 	"isGeneratorProvided" : true,
-	"name" : "moonlander_ui_autogen_timestamp_deps",
+	"name" : "Moonlander_UI_autogen_timestamp_deps",
 	"paths" : 
 	{
 		"build" : "ui",

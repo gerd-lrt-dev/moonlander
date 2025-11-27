@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "ui/moonlander_ui"
+			"path" : "ui/Moonlander_UI"
 		}
 	],
 	"backtrace" : 1,
@@ -42,13 +42,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 14,
+				"line" : 17,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 16,
+				"line" : 23,
 				"parent" : 0
 			},
 			{
@@ -207,7 +207,7 @@
 			[
 				{
 					"backtrace" : 0,
-					"path" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/include"
+					"path" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/include"
 				},
 				{
 					"backtrace" : 2,
@@ -253,7 +253,8 @@
 			[
 				0,
 				1,
-				2
+				2,
+				4
 			]
 		}
 	],
@@ -264,14 +265,14 @@
 			"id" : "moonlander_backend::@e17dcb4e28158375c849"
 		},
 		{
-			"backtrace" : 0,
-			"id" : "moonlander_ui_autogen::@19b8bf288843bf358763"
+			"id" : "Moonlander_UI_autogen_timestamp_deps::@19b8bf288843bf358763"
 		},
 		{
-			"id" : "moonlander_ui_autogen_timestamp_deps::@19b8bf288843bf358763"
+			"backtrace" : 0,
+			"id" : "Moonlander_UI_autogen::@19b8bf288843bf358763"
 		}
 	],
-	"id" : "moonlander_ui::@19b8bf288843bf358763",
+	"id" : "Moonlander_UI::@19b8bf288843bf358763",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -325,8 +326,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "moonlander_ui",
-	"nameOnDisk" : "moonlander_ui",
+	"name" : "Moonlander_UI",
+	"nameOnDisk" : "Moonlander_UI",
 	"paths" : 
 	{
 		"build" : "ui",
@@ -340,21 +341,36 @@
 			[
 				0,
 				1,
-				2
+				2,
+				4
 			]
 		},
 		{
-			"name" : "",
+			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
 				3
 			]
 		},
 		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				5
+			]
+		},
+		{
+			"name" : "Resources",
+			"sourceIndexes" : 
+			[
+				6
+			]
+		},
+		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				4
+				7
 			]
 		}
 	],
@@ -364,7 +380,7 @@
 			"backtrace" : 0,
 			"compileGroupIndex" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/mocs_compilation.cpp",
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/mocs_compilation.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -380,16 +396,33 @@
 			"sourceGroupIndex" : 0
 		},
 		{
-			"backtrace" : 0,
-			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/timestamp",
+			"backtrace" : 1,
+			"path" : "ui/mainwindow.h",
 			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/qrc_resources.cpp",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/timestamp.rule",
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/timestamp",
 			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"path" : "ui/resources.qrc",
+			"sourceGroupIndex" : 3
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/timestamp.rule",
+			"sourceGroupIndex" : 4
 		}
 	],
 	"type" : "EXECUTABLE"

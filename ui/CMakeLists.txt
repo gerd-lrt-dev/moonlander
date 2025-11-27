@@ -7,15 +7,21 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-file(GLOB UI_SOURCES
-    *.cpp
+file(GLOB
+    UI_SOURCES *.cpp
+    UI_HEADERS *.h
 )
 
-add_executable(moonlander_ui ${UI_SOURCES})
+qt_add_resources(UI_RESOURCES resources.qrc)
 
-target_link_libraries(moonlander_ui
+add_executable(Moonlander_UI
+    ${UI_SOURCES}
+    ${UI_HEADERS}
+    ${UI_RESOURCES})
+
+
+target_link_libraries(Moonlander_UI
     PRIVATE
         Qt6::Widgets
         moonlander_backend
 )
-

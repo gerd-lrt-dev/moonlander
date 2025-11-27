@@ -31,7 +31,7 @@
 					"source" : "backend",
 					"targetIndexes" : 
 					[
-						0
+						3
 					]
 				},
 				{
@@ -46,9 +46,9 @@
 					"source" : "ui",
 					"targetIndexes" : 
 					[
+						0,
 						1,
-						2,
-						3
+						2
 					]
 				}
 			],
@@ -76,7 +76,7 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
-						0
+						3
 					]
 				},
 				{
@@ -88,41 +88,41 @@
 					"parentIndex" : 0,
 					"targetIndexes" : 
 					[
+						0,
 						1,
-						2,
-						3
+						2
 					]
 				}
 			],
 			"targets" : 
 			[
 				{
+					"directoryIndex" : 2,
+					"id" : "Moonlander_UI::@19b8bf288843bf358763",
+					"jsonFile" : "target-Moonlander_UI-Debug-c5e42a6eff5a8572f214.json",
+					"name" : "Moonlander_UI",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Moonlander_UI_autogen::@19b8bf288843bf358763",
+					"jsonFile" : "target-Moonlander_UI_autogen-Debug-c7f62e11ee195bcb399f.json",
+					"name" : "Moonlander_UI_autogen",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Moonlander_UI_autogen_timestamp_deps::@19b8bf288843bf358763",
+					"jsonFile" : "target-Moonlander_UI_autogen_timestamp_deps-Debug-20117e2101f142229995.json",
+					"name" : "Moonlander_UI_autogen_timestamp_deps",
+					"projectIndex" : 2
+				},
+				{
 					"directoryIndex" : 1,
 					"id" : "moonlander_backend::@e17dcb4e28158375c849",
-					"jsonFile" : "target-moonlander_backend-Debug-5ac2c9b6a8485b438eb9.json",
+					"jsonFile" : "target-moonlander_backend-Debug-f7aa5f8e6f0112da4c22.json",
 					"name" : "moonlander_backend",
 					"projectIndex" : 1
-				},
-				{
-					"directoryIndex" : 2,
-					"id" : "moonlander_ui::@19b8bf288843bf358763",
-					"jsonFile" : "target-moonlander_ui-Debug-1d67d558f822b899bebc.json",
-					"name" : "moonlander_ui",
-					"projectIndex" : 2
-				},
-				{
-					"directoryIndex" : 2,
-					"id" : "moonlander_ui_autogen::@19b8bf288843bf358763",
-					"jsonFile" : "target-moonlander_ui_autogen-Debug-67f19f407ea6157c347c.json",
-					"name" : "moonlander_ui_autogen",
-					"projectIndex" : 2
-				},
-				{
-					"directoryIndex" : 2,
-					"id" : "moonlander_ui_autogen_timestamp_deps::@19b8bf288843bf358763",
-					"jsonFile" : "target-moonlander_ui_autogen_timestamp_deps-Debug-352f9c063fce111f12e6.json",
-					"name" : "moonlander_ui_autogen_timestamp_deps",
-					"projectIndex" : 2
 				}
 			]
 		}

@@ -17,12 +17,12 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "moonlander_ui_autogen_timestamp_deps::@19b8bf288843bf358763"
+			"id" : "Moonlander_UI_autogen_timestamp_deps::@19b8bf288843bf358763"
 		}
 	],
-	"id" : "moonlander_ui_autogen::@19b8bf288843bf358763",
+	"id" : "Moonlander_UI_autogen::@19b8bf288843bf358763",
 	"isGeneratorProvided" : true,
-	"name" : "moonlander_ui_autogen",
+	"name" : "Moonlander_UI_autogen",
 	"paths" : 
 	{
 		"build" : "ui",
@@ -51,19 +51,19 @@
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/moonlander_ui_autogen",
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/Moonlander_UI_autogen",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/moonlander_ui_autogen.rule",
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/Moonlander_UI_autogen.rule",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/moonlander_ui_autogen/timestamp.rule",
+			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/timestamp.rule",
 			"sourceGroupIndex" : 1
 		}
 	],
