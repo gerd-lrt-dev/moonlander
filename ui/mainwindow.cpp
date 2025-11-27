@@ -48,13 +48,39 @@ QWidget* MainWindow::createHomepage(QStackedWidget *stackedWidget)
     logoLabel->setPixmap(logoPixmap);
     logoLabel->setAlignment(Qt::AlignCenter);
 
-    // Add widgets to Layout
+    // Add copryright
+    QLabel *copyright = new QLabel("© gerd-lrt-dev", this);
+    copyright->setAlignment(Qt::AlignCenter);
+    copyright->setStyleSheet("font-size: 16px; font-weight: light;");
 
+    // Add widgets to Layout
     vLayout->addWidget(title);
     vLayout->addSpacing(15);
     vLayout->addWidget(logoLabel);
+    vLayout->addSpacing(15);
+    vLayout->addWidget(copyright);
     vLayout->setAlignment(Qt::AlignTop);
     vLayout->setAlignment(Qt::AlignVCenter);
 
     return homepage;
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+
+    if (!windowHandle())
+    {
+        return;
+    }
+
+    QScreen *screen = windowHandle()->screen();
+
+    if(!screen)
+    {
+        return;
+    }
+
+    QRect screenGeometry = screen->availableGeometry();
+    resize(screenGeometry.width() * 0.7, screenGeometry.height() * 0.7);
 }
