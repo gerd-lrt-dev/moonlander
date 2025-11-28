@@ -6,6 +6,8 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.cpp \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/resources.qrc \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/uibuilder.cpp \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/uibuilder.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QList \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
@@ -190,9 +192,11 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QVBoxLayout \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qboxlayout.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgridlayout.h \
@@ -200,6 +204,7 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \

@@ -254,7 +254,8 @@
 				0,
 				1,
 				2,
-				4
+				4,
+				6
 			]
 		}
 	],
@@ -342,35 +343,37 @@
 				0,
 				1,
 				2,
-				4
+				4,
+				6
 			]
 		},
 		{
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				3
+				3,
+				5
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				5
+				7
 			]
 		},
 		{
 			"name" : "Resources",
 			"sourceIndexes" : 
 			[
-				6
+				8
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				7
+				9
 			]
 		}
 	],
@@ -398,6 +401,17 @@
 		{
 			"backtrace" : 1,
 			"path" : "ui/mainwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/uibuilder.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/uibuilder.h",
 			"sourceGroupIndex" : 1
 		},
 		{

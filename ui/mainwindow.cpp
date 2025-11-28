@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "uibuilder.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -51,16 +52,26 @@ QWidget* MainWindow::createHomepage(QStackedWidget *stackedWidget)
     // Add copryright
     QLabel *copyright = new QLabel("© gerd-lrt-dev", this);
     copyright->setAlignment(Qt::AlignCenter);
-    copyright->setStyleSheet("font-size: 16px; font-weight: light;");
+    copyright->setStyleSheet("color: #AFC2D9; font-size: 14px; font-weight: 500; letter-spacing: 1px;");
+
+    // Add Buttons
+    UIBuilder uiBuilder;
+    QPushButton *selectSpacecraftButton = uiBuilder.createButton("Select Spacecraft", this);
+    QPushButton *startSimulationButton = uiBuilder.createButton("Start Simulation", this);
 
     // Add widgets to Layout
+    vLayout->addSpacing(30);
     vLayout->addWidget(title);
     vLayout->addSpacing(15);
     vLayout->addWidget(logoLabel);
     vLayout->addSpacing(15);
     vLayout->addWidget(copyright);
+    vLayout->addSpacing(15);
+    vLayout->addWidget(selectSpacecraftButton, 0, Qt::AlignHCenter);
+    vLayout->addSpacing(15);
+    vLayout->addWidget(startSimulationButton, 0, Qt::AlignHCenter);
     vLayout->setAlignment(Qt::AlignTop);
-    vLayout->setAlignment(Qt::AlignVCenter);
+    vLayout->setAlignment(Qt::AlignCenter);
 
     return homepage;
 }

@@ -184,9 +184,11 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QVBoxLayout \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qboxlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgridlayout.h \
@@ -194,6 +196,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \

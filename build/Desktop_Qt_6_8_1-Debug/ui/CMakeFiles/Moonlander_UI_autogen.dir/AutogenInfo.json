@@ -332,6 +332,12 @@
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
+		],
+		[
+			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/uibuilder.h",
+			"MU",
+			"EWIEGA46WW/moc_uibuilder.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -404,6 +410,11 @@
 		],
 		[
 			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/uibuilder.cpp",
 			"MU",
 			null
 		]

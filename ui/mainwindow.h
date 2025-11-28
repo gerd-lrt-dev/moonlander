@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QMainWindow>
 #include <QPixmap>
+#include <QPushButton>
 #include <QRect>
 #include <QScreen>
 #include <QShowEvent>
