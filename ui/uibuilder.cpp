@@ -28,3 +28,22 @@ QPushButton* UIBuilder::createButton(const QString &buttonName, QWidget *parent)
 
     return button;
 }
+
+QLabel* UIBuilder::createCopyright(const QString &copyRightStr, QWidget *parent)
+{
+    QLabel *copyright = new QLabel(copyRightStr, parent);
+    copyright->setAlignment(Qt::AlignCenter);
+    copyright->setStyleSheet("color: #AFC2D9; font-size: 14px; font-weight: 500; letter-spacing: 1px;");
+
+    return copyright;
+}
+
+QLabel* UIBuilder::createPageTitle(const QString &titleStr, QWidget *parent)
+{
+    QLabel *title = new QLabel(titleStr, parent);
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("font-size: 32px;"
+                         "font-weight: bold;");
+
+    return title;
+}

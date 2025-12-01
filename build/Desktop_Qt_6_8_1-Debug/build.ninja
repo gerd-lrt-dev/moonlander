@@ -196,6 +196,14 @@ build ui/CMakeFiles/Moonlander_UI.dir/Moonlander_UI_autogen/mocs_compilation.cpp
   OBJECT_DIR = ui/CMakeFiles/Moonlander_UI.dir
   OBJECT_FILE_DIR = ui/CMakeFiles/Moonlander_UI.dir/Moonlander_UI_autogen
 
+build ui/CMakeFiles/Moonlander_UI.dir/cockpitpage.cpp.o: CXX_COMPILER__Moonlander_UI_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.cpp || cmake_object_order_depends_target_Moonlander_UI
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = ui/CMakeFiles/Moonlander_UI.dir/cockpitpage.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++20 -fdiagnostics-color=always -fPIC
+  INCLUDES = -I/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/include -I/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include -isystem /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets -isystem /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include -isystem /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore -isystem /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/mkspecs/linux-g++ -isystem /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui
+  OBJECT_DIR = ui/CMakeFiles/Moonlander_UI.dir
+  OBJECT_FILE_DIR = ui/CMakeFiles/Moonlander_UI.dir
+
 build ui/CMakeFiles/Moonlander_UI.dir/main.cpp.o: CXX_COMPILER__Moonlander_UI_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/main.cpp || cmake_object_order_depends_target_Moonlander_UI
   DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB
   DEP_FILE = ui/CMakeFiles/Moonlander_UI.dir/main.cpp.o.d
@@ -236,7 +244,7 @@ build ui/CMakeFiles/Moonlander_UI.dir/qrc_resources.cpp.o: CXX_COMPILER__Moonlan
 #############################################
 # Link the executable ui/Moonlander_UI
 
-build ui/Moonlander_UI: CXX_EXECUTABLE_LINKER__Moonlander_UI_Debug ui/CMakeFiles/Moonlander_UI.dir/Moonlander_UI_autogen/mocs_compilation.cpp.o ui/CMakeFiles/Moonlander_UI.dir/main.cpp.o ui/CMakeFiles/Moonlander_UI.dir/mainwindow.cpp.o ui/CMakeFiles/Moonlander_UI.dir/uibuilder.cpp.o ui/CMakeFiles/Moonlander_UI.dir/qrc_resources.cpp.o | /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Widgets.so.6.8.1 backend/libmoonlander_backend.a /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Gui.so.6.8.1 /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Core.so.6.8.1 || backend/libmoonlander_backend.a ui/Moonlander_UI_autogen ui/Moonlander_UI_autogen_timestamp_deps
+build ui/Moonlander_UI: CXX_EXECUTABLE_LINKER__Moonlander_UI_Debug ui/CMakeFiles/Moonlander_UI.dir/Moonlander_UI_autogen/mocs_compilation.cpp.o ui/CMakeFiles/Moonlander_UI.dir/cockpitpage.cpp.o ui/CMakeFiles/Moonlander_UI.dir/main.cpp.o ui/CMakeFiles/Moonlander_UI.dir/mainwindow.cpp.o ui/CMakeFiles/Moonlander_UI.dir/uibuilder.cpp.o ui/CMakeFiles/Moonlander_UI.dir/qrc_resources.cpp.o | /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Widgets.so.6.8.1 backend/libmoonlander_backend.a /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Gui.so.6.8.1 /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Core.so.6.8.1 || backend/libmoonlander_backend.a ui/Moonlander_UI_autogen ui/Moonlander_UI_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_LIBRARIES = -Wl,-rpath,/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Widgets.so.6.8.1  backend/libmoonlander_backend.a  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Gui.so.6.8.1  /usr/lib/x86_64-linux-gnu/libGLX.so  /usr/lib/x86_64-linux-gnu/libOpenGL.so  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Core.so.6.8.1  -Wl,-rpath-link,/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib
   OBJECT_DIR = ui/CMakeFiles/Moonlander_UI.dir

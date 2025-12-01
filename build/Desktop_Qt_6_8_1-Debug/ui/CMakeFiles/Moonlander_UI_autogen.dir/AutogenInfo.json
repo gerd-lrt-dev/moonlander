@@ -328,6 +328,12 @@
 	"HEADERS" : 
 	[
 		[
+			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h",
+			"MU",
+			"EWIEGA46WW/moc_cockpitpage.cpp",
+			null
+		],
+		[
 			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -403,6 +409,11 @@
 	"SETTINGS_FILE" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/CMakeFiles/Moonlander_UI_autogen.dir/AutogenUsed.txt",
 	"SOURCES" : 
 	[
+		[
+			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.cpp",
+			"MU",
+			null
+		],
 		[
 			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/main.cpp",
 			"MU",

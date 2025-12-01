@@ -253,8 +253,10 @@
 			[
 				0,
 				1,
-				2,
-				4
+				3,
+				4,
+				6,
+				8
 			]
 		}
 	],
@@ -341,36 +343,40 @@
 			[
 				0,
 				1,
-				2,
-				4
+				3,
+				4,
+				6,
+				8
 			]
 		},
 		{
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				3
+				2,
+				5,
+				7
 			]
 		},
 		{
 			"name" : "",
 			"sourceIndexes" : 
 			[
-				5
+				9
 			]
 		},
 		{
 			"name" : "Resources",
 			"sourceIndexes" : 
 			[
-				6
+				10
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				7
+				11
 			]
 		}
 	],
@@ -382,6 +388,17 @@
 			"isGenerated" : true,
 			"path" : "build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/mocs_compilation.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/cockpitpage.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/cockpitpage.h",
+			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
@@ -398,6 +415,17 @@
 		{
 			"backtrace" : 1,
 			"path" : "ui/mainwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/uibuilder.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/uibuilder.h",
 			"sourceGroupIndex" : 1
 		},
 		{

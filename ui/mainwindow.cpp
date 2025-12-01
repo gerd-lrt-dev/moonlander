@@ -33,14 +33,14 @@ MainWindow::~MainWindow()
 
 QWidget* MainWindow::createHomepage(QStackedWidget *stackedWidget)
 {
+    // Build instance for ui building class
+    UIBuilder uiBuilder;
+
     // Build widget object (return value)
     QWidget *homepage = new QWidget(this);
 
     // Add title
-    QLabel *title = new QLabel("Lunar Lander Simulation", this);
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("font-size: 32px;"
-                         "font-weight: bold;");
+    QLabel *title = uiBuilder.createPageTitle("Lunar Lander Simulation", this);
 
     // Add logo
     QLabel *logoLabel   = new QLabel(this);
@@ -50,12 +50,9 @@ QWidget* MainWindow::createHomepage(QStackedWidget *stackedWidget)
     logoLabel->setAlignment(Qt::AlignCenter);
 
     // Add copryright
-    QLabel *copyright = new QLabel("© gerd-lrt-dev", this);
-    copyright->setAlignment(Qt::AlignCenter);
-    copyright->setStyleSheet("color: #AFC2D9; font-size: 14px; font-weight: 500; letter-spacing: 1px;");
+    QLabel *copyright = uiBuilder.createCopyright("© gerd-lrt-dev", this);
 
     // Add Buttons
-    UIBuilder uiBuilder;
     QPushButton *selectSpacecraftButton = uiBuilder.createButton("Select Spacecraft", this);
     QPushButton *startSimulationButton = uiBuilder.createButton("Start Simulation", this);
 

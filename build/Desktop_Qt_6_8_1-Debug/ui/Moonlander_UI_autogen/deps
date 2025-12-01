@@ -2,6 +2,8 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/.qtc/package-manager/auto-setup.cmake \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/CMakeLists.txt \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.cpp \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/main.cpp \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.cpp \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h \
