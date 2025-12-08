@@ -1,4 +1,5 @@
 #include "cockpitpage.h"
+#include <QHBoxLayout>
 
 cockpitPage::cockpitPage(QWidget *parent)
     : QWidget(parent)
@@ -7,6 +8,12 @@ cockpitPage::cockpitPage(QWidget *parent)
 }
 
 void cockpitPage::setupUI()
+{
+    QHBoxLayout *lcdCockpit = new QHBoxLayout(this);
+
+}
+
+void cockpitPage::setupConnections()
 {
 
 }

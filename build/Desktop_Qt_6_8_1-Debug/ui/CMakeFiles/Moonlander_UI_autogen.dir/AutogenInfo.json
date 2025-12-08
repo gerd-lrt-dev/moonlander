@@ -334,6 +334,12 @@
 			null
 		],
 		[
+			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h",
+			"MU",
+			"EWIEGA46WW/moc_homepage.cpp",
+			null
+		],
+		[
 			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
@@ -411,6 +417,11 @@
 	[
 		[
 			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.cpp",
+			"MU",
+			null
+		],
+		[
+			"/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.cpp",
 			"MU",
 			null
 		],

@@ -4,6 +4,8 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/CMakeLists.txt \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.cpp \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.cpp \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/main.cpp \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.cpp \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h \
@@ -192,6 +194,7 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qvectornd.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
@@ -205,6 +208,7 @@ Moonlander_UI_autogen/timestamp: \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
 	/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \

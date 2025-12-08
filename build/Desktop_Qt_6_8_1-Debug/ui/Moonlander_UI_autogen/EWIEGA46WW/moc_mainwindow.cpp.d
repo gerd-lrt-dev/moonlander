@@ -1,5 +1,7 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QList \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
@@ -182,6 +184,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qvectornd.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
@@ -195,6 +198,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \

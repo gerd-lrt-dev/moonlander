@@ -1,4 +1,4 @@
-/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_cockpitpage.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_homepage.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \
@@ -45,6 +45,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qglobalstatic.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qhash.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qhashfunctions.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiodevice.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiodevicebase.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiterable.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiterator.h \
@@ -114,6 +115,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtversionchecks.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtypeinfo.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtypes.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qurl.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qutf8stringview.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qvariant.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qvarlengtharray.h \
@@ -133,22 +135,34 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qkeysequence.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpaintdevice.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpalette.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpixelformat.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpixmap.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpolygon.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qregion.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qrgb.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qrgba64.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtgui-config.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtransform.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QVBoxLayout \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qboxlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgridlayout.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
