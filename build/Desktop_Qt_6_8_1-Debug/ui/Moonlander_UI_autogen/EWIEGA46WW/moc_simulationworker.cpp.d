@@ -1,11 +1,10 @@
-/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_cockpitpage.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
+/home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_simulationworker.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/simulationworker.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
-  /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/landingview.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QObject \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QTimer \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20memory.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20type_traits.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q23utility.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qalgorithms.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qanystringview.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qarraydata.h \
@@ -15,6 +14,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qatomic.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qatomic_cxx11.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbasicatomic.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbasictimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbindingstorage.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbytearray.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
@@ -30,11 +30,8 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontainerfwd.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontainerinfo.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontainertools_impl.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontiguouscache.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdarwinhelpers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdatastream.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdebug.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qendian.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qfloat16.h \
@@ -44,19 +41,14 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qgenericatomic.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qglobalstatic.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qhash.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qhashfunctions.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiodevice.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiodevicebase.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiterable.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiterator.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qlatin1stringview.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qline.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qlist.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qlogging.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmalloc.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmap.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmargins.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmath.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetacontainer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetatype.h \
@@ -69,19 +61,10 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qoverload.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qpair.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qpoint.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qprocessordetection.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qrect.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qrefcount.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qscopedpointer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qscopeguard.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qset.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qshareddata.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qshareddata_impl.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qsize.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qspan.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qstring.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qstringalgorithms.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qstringbuilder.h \
@@ -105,7 +88,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationdefinitions.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtextstream.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtmetamacros.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
@@ -116,53 +99,10 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtversionchecks.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtypeinfo.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtypes.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qurl.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qutf8stringview.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qvariant.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qvarlengtharray.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qversiontagging.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qxptype_traits.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qyieldcpu.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qaction.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qbitmap.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qbrush.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qcolor.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qcursor.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qfont.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qfontinfo.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qfontmetrics.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qicon.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qimage.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qkeysequence.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpaintdevice.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpalette.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpicture.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpixelformat.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpixmap.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qpolygon.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qregion.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qrgb.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qrgba64.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtextdocument.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtgui-config.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtguiexports.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtransform.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
-  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qwidget.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -280,7 +220,6 @@
   /usr/include/c++/13/bits/uses_allocator_args.h \
   /usr/include/c++/13/bits/utility.h \
   /usr/include/c++/13/bits/vector.tcc \
-  /usr/include/c++/13/cassert \
   /usr/include/c++/13/cctype \
   /usr/include/c++/13/cerrno \
   /usr/include/c++/13/charconv \

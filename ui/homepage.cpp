@@ -2,18 +2,55 @@
 #include "uibuilder.h"
 
 Homepage::Homepage(QWidget *parent) :
-    QWidget(parent)
+    QMainWindow(parent)
 {
-    setupUI();
+    setupStackedWidget();
+    setupConnections();
+    setupThread();
 }
 
-void Homepage::setupUI()
+Homepage::~Homepage()
 {
-    // Initialize Layout
-    vHomepageLayout = new QVBoxLayout(this);
+    simulationThread->quit();
+    simulationThread->wait();
+}
+
+void Homepage::setupStackedWidget()
+{
+    // Build central QWidget
+    centralWidget = new QWidget(this);
+
+    // Build vertical box layout
+    QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+
+    // Build stackedWidget for pages
+    stackedWidget = new QStackedWidget(this);
+
+    // Create pages
+    QWidget *homepage = createHomePage(stackedWidget);
+    cockpit = new cockpitPage(this);
+
+    // Add pages to stacked widget
+    stackedWidget->addWidget(homepage);
+    stackedWidget->addWidget(cockpit);
+
+    // Add stackedwidget to Layout
+    layout->addWidget(stackedWidget);
+
+    // Set central page
+    setCentralWidget(centralWidget);
+}
+
+QWidget* Homepage::createHomePage(QStackedWidget *stackedWidget)
+{
+    //Create Widget
+    QWidget *homepage = new QWidget(this);
 
     // Build instance for ui building class
     UIBuilder uiBuilder;
+
+    // Initialize Layout
+    vHomepageLayout = new QVBoxLayout(homepage);
 
     // Add title
     QLabel *title = uiBuilder.createPageTitle("Lunar Lander Simulation", this);
@@ -45,14 +82,43 @@ void Homepage::setupUI()
     vHomepageLayout->addWidget(startSimulationButton, 0, Qt::AlignHCenter);
     vHomepageLayout->setAlignment(Qt::AlignTop);
     vHomepageLayout->setAlignment(Qt::AlignCenter);
+
+    return homepage;
 }
 
 void Homepage::setupConnections()
 {
     connect(startSimulationButton, &QPushButton::clicked, this, [this]
-    {
-        qDebug() << "Homepage[setupUI]: Emitting signal requestStartOfSimulation...";
-        emit requestStartOfSimulation();
-    });
+            {
+                stackedWidget->setCurrentWidget(cockpit);
+            });
+}
+
+void Homepage::setupThread()
+{
+    // Instance thread
+    simulationThread = new QThread(this);
+
+    // Instance class
+    simulationWorker = new SimulationWorker();
+
+    simulationWorker->moveToThread(simulationThread);
+
+    // Build connections
+    connect(simulationThread, &QThread::finished, simulationWorker, &QObject::deleteLater);
+
+    connect(this, &QObject::destroyed, simulationThread, &QThread::quit);
+
+    connect(cockpit, &cockpitPage::startRequested,
+            simulationWorker, &SimulationWorker::start);
+
+    connect(cockpit, &cockpitPage::pauseRequested,
+            simulationWorker, &SimulationWorker::pause);
+
+    connect(cockpit, &cockpitPage::stopRequested,
+            simulationWorker, &SimulationWorker::stop);
+
+    // Start simulation
+    simulationThread->start();
 }
 

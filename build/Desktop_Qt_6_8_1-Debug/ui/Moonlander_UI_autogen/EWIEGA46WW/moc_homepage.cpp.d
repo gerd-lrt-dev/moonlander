@@ -1,5 +1,11 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_homepage.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/landingview.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/simulationworker.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QObject \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QThread \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QTimer \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20memory.h \
@@ -14,6 +20,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qatomic.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qatomic_cxx11.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbasicatomic.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbasictimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbindingstorage.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbytearray.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
@@ -32,7 +39,9 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontiguouscache.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdarwinhelpers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdatastream.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdeadlinetimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdebug.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qelapsedtimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qendian.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
@@ -105,6 +114,8 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtextstream.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qthread.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtmetamacros.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
@@ -148,7 +159,9 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtransform.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QVBoxLayout \
@@ -160,9 +173,12 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsexports.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -183,7 +199,9 @@
   /usr/include/c++/13/bits/allocated_ptr.h \
   /usr/include/c++/13/bits/allocator.h \
   /usr/include/c++/13/bits/atomic_base.h \
+  /usr/include/c++/13/bits/atomic_futex.h \
   /usr/include/c++/13/bits/atomic_lockfree_defines.h \
+  /usr/include/c++/13/bits/atomic_timed_wait.h \
   /usr/include/c++/13/bits/atomic_wait.h \
   /usr/include/c++/13/bits/basic_ios.h \
   /usr/include/c++/13/bits/basic_ios.tcc \
@@ -244,6 +262,7 @@
   /usr/include/c++/13/bits/ranges_util.h \
   /usr/include/c++/13/bits/refwrap.h \
   /usr/include/c++/13/bits/requires_hosted.h \
+  /usr/include/c++/13/bits/semaphore_base.h \
   /usr/include/c++/13/bits/shared_ptr.h \
   /usr/include/c++/13/bits/shared_ptr_atomic.h \
   /usr/include/c++/13/bits/shared_ptr_base.h \
@@ -252,6 +271,7 @@
   /usr/include/c++/13/bits/std_abs.h \
   /usr/include/c++/13/bits/std_function.h \
   /usr/include/c++/13/bits/std_mutex.h \
+  /usr/include/c++/13/bits/std_thread.h \
   /usr/include/c++/13/bits/stl_algo.h \
   /usr/include/c++/13/bits/stl_algobase.h \
   /usr/include/c++/13/bits/stl_bvector.h \
@@ -277,7 +297,9 @@
   /usr/include/c++/13/bits/streambuf_iterator.h \
   /usr/include/c++/13/bits/string_view.tcc \
   /usr/include/c++/13/bits/stringfwd.h \
+  /usr/include/c++/13/bits/this_thread_sleep.h \
   /usr/include/c++/13/bits/uniform_int_dist.h \
+  /usr/include/c++/13/bits/unique_lock.h \
   /usr/include/c++/13/bits/unique_ptr.h \
   /usr/include/c++/13/bits/unordered_map.h \
   /usr/include/c++/13/bits/uses_allocator.h \
@@ -294,6 +316,7 @@
   /usr/include/c++/13/cmath \
   /usr/include/c++/13/compare \
   /usr/include/c++/13/concepts \
+  /usr/include/c++/13/condition_variable \
   /usr/include/c++/13/cstddef \
   /usr/include/c++/13/cstdint \
   /usr/include/c++/13/cstdio \
@@ -314,6 +337,7 @@
   /usr/include/c++/13/ext/type_traits.h \
   /usr/include/c++/13/format \
   /usr/include/c++/13/functional \
+  /usr/include/c++/13/future \
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
@@ -325,6 +349,7 @@
   /usr/include/c++/13/locale \
   /usr/include/c++/13/map \
   /usr/include/c++/13/memory \
+  /usr/include/c++/13/mutex \
   /usr/include/c++/13/new \
   /usr/include/c++/13/numbers \
   /usr/include/c++/13/numeric \
@@ -335,9 +360,11 @@
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/glue_numeric_defs.h \
   /usr/include/c++/13/ratio \
+  /usr/include/c++/13/semaphore \
   /usr/include/c++/13/span \
   /usr/include/c++/13/sstream \
   /usr/include/c++/13/stdexcept \
+  /usr/include/c++/13/stop_token \
   /usr/include/c++/13/streambuf \
   /usr/include/c++/13/string \
   /usr/include/c++/13/string_view \
@@ -373,6 +400,7 @@
   /usr/include/locale.h \
   /usr/include/pthread.h \
   /usr/include/sched.h \
+  /usr/include/semaphore.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
   /usr/include/stdio.h \
@@ -411,6 +439,7 @@
   /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h \
   /usr/include/x86_64-linux-gnu/bits/sched.h \
   /usr/include/x86_64-linux-gnu/bits/select.h \
+  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
   /usr/include/x86_64-linux-gnu/bits/setjmp.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-intn.h \
   /usr/include/x86_64-linux-gnu/bits/stdint-least.h \
@@ -478,6 +507,7 @@
   /usr/include/x86_64-linux-gnu/sys/cdefs.h \
   /usr/include/x86_64-linux-gnu/sys/select.h \
   /usr/include/x86_64-linux-gnu/sys/syscall.h \
+  /usr/include/x86_64-linux-gnu/sys/time.h \
   /usr/include/x86_64-linux-gnu/sys/types.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h \
   /usr/lib/gcc/x86_64-linux-gnu/13/include/stdbool.h \

@@ -13,8 +13,13 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QStackedWidget>
+#include <QThread>
+#include <QMainWindow>
 #include <QVBoxLayout>
 #include <QWidget>
+
+#include "cockpitpage.h"
+#include "simulationworker.h"
 
 /**
  * @class Homepage
@@ -23,7 +28,7 @@
  * Inherits from QWidget. Contains buttons to navigate to the simulation
  * or other setup/configuration pages.
  */
-class Homepage : public QWidget
+class Homepage : public QMainWindow
 {
     Q_OBJECT
 
@@ -35,6 +40,7 @@ public:
      * Initializes UI elements and layouts for the landing page.
      */
     explicit Homepage(QWidget *parent = nullptr);
+    ~Homepage();
 
 signals:
     /**
@@ -46,17 +52,37 @@ private:
     // ==========================================
     // Member Variables
     // ==========================================
+    // Pages
+    cockpitPage *cockpit;
+
+    // Widgets
+    QWidget         *centralWidget;
+    QStackedWidget  *stackedWidget;
+
+    // Layouts
     QVBoxLayout *vHomepageLayout;        ///< Layout for arranging homepage widgets vertically
 
     // Buttons
     QPushButton *selectSpacecraftButton; ///< Opens spacecraft selection dialog
     QPushButton *startSimulationButton;  ///< Starts the simulation
 
+    // Threads
+    QThread *simulationThread;  ///< Thread running the simulation
+    SimulationWorker *simulationWorker; ///< Worker object for simlation
+
     // ==========================================
     // Member Functions
     // ==========================================
-    void setupUI(); ///< Sets up UI elements and layouts for the homepage
+    void setupStackedWidget(); ///< Sets up stacked widget and build homepage as central widget
     void setupConnections(); ///< Connects signals and slots for the GUI
+    void setupThread();
+
+    /**
+    * @brief createHomePage & Sets up UI elements and layouts for the homepage
+        * @param stackedWidget
+        * @return homepageWidget
+    */
+    QWidget* createHomePage(QStackedWidget *stackedWidget);
 };
 
 #endif // HOMEPAGE_H
