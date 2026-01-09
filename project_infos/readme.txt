@@ -1,86 +1,101 @@
-# 🌓 Moonlander – C++ Lunar Lander Simulation
+========================
+Moonlander – C++ Lunar Lander Simulation
+========================
 
-**Moonlander** is a fun and educational C++ project inspired by the *"Lunar Landing"* example from the book **Coding for Fun**.  
-The goal is to reimplement the classic lunar landing simulation and gradually extend it with modern features, including a visual representation using **Qt**.
+Overview
+--------
+Moonlander is an educational C++ project inspired by the "Lunar Landing" example from the book "Coding for Fun".
+It simulates a lunar landing in one or more dimensions, providing a modular backend and a Qt-based frontend.
 
----
+The project separates:
+- Backend: Physics, simulation, spacecraft state, logging, controller testing
+- Frontend: Qt UI, cockpit, landing view, telemetry, real-time user interaction
 
-## 🚀 Project Description
+The backend runs in its own thread via `SimulationWorker`, independent of Qt, while the UI updates in the main thread.
+The Logger class allows the backend to report debug messages without Qt dependencies.
 
-The current version simulates the lunar landing with simplified physics:
+Frontend Components
+-------------------
+cockpitPage        - Qt widget displaying telemetry (time, altitude, speed, thrust, fuel, hull status)
+landingView        - Visual representation of the spacecraft and lunar surface
+homepage           - Main UI container, manages resource loading, configuration, and signals to worker
+SimulationWorker   - Worker running the simulation loop in a separate thread, sends state updates via signals
+UIBuilder          - Helper class to build consistent Qt UI elements across pages (buttons, LCDs, labels)
 
-- **Gravity**, velocity, and altitude  
-- **Controllable thrust** (Thrust class)  
-- **Fuel consumption tied to engine usage
-- **Real-time simulation** using `std::chrono`  
-- **Threaded user input, allowing control while simulation Requirements
-- **ASCII-based cockpit** displaying telemetry data  
+Backend Components
+------------------
+Physics            - Calculates velocity and position under gravity and thrust
+Thrust             - Engine model: target thrust, response rate, actual thrust
+Output             - Handles backend visualization logic (ASCII cockpit, optional logs) with using ui oboselete
+SimControl         - Orchestrates the simulation: validates parameters, steps the simulation
+Spacecraft         - State of spacecraft: mass, fuel, position, velocity, thrust, integrity
+EnvironmentConfig  - Constants for gravity, timestep, max simulation step, etc.
+Spacemath          - Math utilities for vectors, physics calculations
+Logger             - Singleton logger for backend debug output (no Qt dependency)
 
-The project is fully object-oriented and uses modern C++ features such as **smart pointers** and **encapsulation**.
+Threading & Signals
+------------------
+- The backend simulation is executed in a dedicated thread (`SimulationWorker`)
+- Signals communicate simulation state (`stateUpdated`) to the frontend
+- The frontend updates cockpitPage, landingView, and other widgets in real time
+- Qt timers drive the simulation step frequency, replacing previous std::chrono loops
+- JSON configuration is loaded in the main thread (homepage) and passed as string to the worker
 
----
+Current Features
+----------------
+- Full separation of backend and frontend
+- Real-time telemetry displayed in cockpitPage
+- Thread-safe simulation loop with Qt signal/slot integration
+- Logger captures debug output from backend without Qt
+- Initial support for resource-based JSON configuration
+- Backend supports testing spacecraft controllers independently of UI
 
-## 🧩 Class Structure
+Goals
+-----
+- Build a solid simulation environment for testing different controllers
+- Provide a robust framework for physics and control development
+- Enable development of UI separately from backend
+- Maintain modular architecture for easy extensions and testing
 
-| Class        | Purpose |
-|--------------|---------|
-| `Physics`      | Calculates velocity and height under the influence of gravity |
-| `Thrust`       | Models engine thrust with reaction speed and target value |
-| `Output`       | ASCII-based cockpit visualization |
-| `SimControl`   | Main simulation controller (loop, timing, parameter validation) |
-| `Spacecraft`   | Models spacecraft state (mass, fuel, thrust, and integrity) |
-| `EnvironmentConfig` | Stores constants such as gravity and simulation timestep
-| `Spacemath`    | Utility library providing mathematical helpers
+Planned Extensions
+------------------
+Short-Term:
+  - Stabilize Qt-based telemetry display and cockpit updates
+  - Integrate landingView with real spacecraft positions
+  - Extend Logger with file output and multiple log levels
+  - Improve backend simulation precision and controller hooks
 
----
+Mid-Term:
+  - Implement full 3D spacecraft model
+  - Simulate stable lunar orbit before descent
+  - Environment simulation to test multiple controllers (PID, adaptive, etc.)
+  - Modularize frontend widgets (UIBuilder) for consistent design
 
-## 🧠 Goals
+Long-Term:
+  - Replay and record simulation sessions
+  - Implement advanced autopilot and control algorithms
+  - Extend environment with terrain and atmospheric effects
+  - Multi-spacecraft scenarios and orbital dynamics
 
-This project is designed to **practice C++ fundamentals and modern programming techniques** through a clear and interactive example:
+Build & Run
+-----------
+Requirements:
+  - C++20 or newer
+  - Qt6 (for frontend UI)
+  - G++ or Clang compiler
 
-The current milestone focuses on a one-dimensional lunar landing simulation, where:
-- The user can adjust thrust during descent (currently via console, later via Qt GUI).
-- The simulation updates altitude, velocity, and fuel in real time.
-- The system detects crash landings based on descent velocity.
-- This serves as a foundation for extending the simulation to 2D or 3D later on.
+Compile (command line):
+  g++ -std=c++20 -I -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp spacecraft.cpp spacemath.cpp jsonConfigReader.cpp Logger.cpp cockpitPage.cpp landingView.cpp homepage.cpp SimulationWorker.cpp UIBuilder.cpp -o moonlander
 
----
+Run:
+  ./moonlander
 
-## 🧰 Planned Extensions
-
-🪶 Short-Term
-- Integrate Qt GUI for user input (thrust control) and cockpit visualization
-- Replace console input with real-time slider or button controls
-- Improve physics precision and fuel model
-
-🌗 Mid-Term
-- Add 2D/3D visualization (Qt Quick or OpenGL)
-- Implement lateral control and rotation dynamics
-- Modularize communication for ROS node integration
-
-🌕 Long-Term
-- Record and replay simulation data
-- Add autopilot and control algorithms (PID control)
-- Include atmospheric and terrain effects
-
----
-
-## ⚙️ Build & Run
-
-### Requirements
-- **C++20** or newer  
-- G++ or Clang  
-- Optional: **Qt6** for later visualization  
-
-### Compile (command line)
-```bash
-g++ -std=c++20 -I -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp spacecraft.cpp spacemath.cpp jsonConfigReader.cpp -o moonlander
-
-🧭 Future Vision
-
-Moonlander will evolve into a modular simulation framework, where:
-- The core physics engine runs independently of visualization
-- The Qt interface acts as a listener and control layer
-- ROS nodes can later be used for distributed simulation and telemetry exchange
-
-This design allows independent development of simulation, visualization, and control — following modern software engineering principles.
+Future Vision
+-------------
+Moonlander will evolve into a modular lunar landing simulation framework where:
+- Backend handles physics, state, and controller testing independently
+- Frontend provides real-time telemetry, user input, and visualization
+- Logger centralizes all backend debug messages
+- UI development (Qt widgets) continues separately from backend improvements
+- Simulation environment allows full testing of different control algorithms
+- Ultimately supports 3D dynamics, orbital maneuvers, and environmental effects
