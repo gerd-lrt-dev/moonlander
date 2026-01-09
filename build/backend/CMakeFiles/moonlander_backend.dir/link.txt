@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmoonlander_backend.a CMakeFiles/moonlander_backend.dir/src/Thrust.cpp.o CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o CMakeFiles/moonlander_backend.dir/src/main.cpp.o CMakeFiles/moonlander_backend.dir/src/output.cpp.o CMakeFiles/moonlander_backend.dir/src/physics.cpp.o CMakeFiles/moonlander_backend.dir/src/simcontrol.cpp.o CMakeFiles/moonlander_backend.dir/src/spacecraft.cpp.o CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o
-/usr/bin/ranlib libmoonlander_backend.a

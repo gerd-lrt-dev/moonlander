@@ -1,5 +1,15 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_simulationworker.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/simulationworker.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Thrust.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/jsonConfigReader.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/output.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/physics.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/simcontrol.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacecraft.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacemath.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/vector3.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QObject \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QTimer \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
@@ -30,8 +40,10 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontainerfwd.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontainerinfo.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontainertools_impl.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontiguouscache.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdarwinhelpers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdatastream.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdebug.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qfloat16.h \
@@ -41,6 +53,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qgenericatomic.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qglobal.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qglobalstatic.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qhash.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qhashfunctions.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiodevicebase.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qiterable.h \
@@ -49,6 +62,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qlist.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qlogging.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmalloc.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmap.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmath.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetacontainer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetatype.h \
@@ -65,6 +79,11 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qrefcount.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qscopedpointer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qscopeguard.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qset.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qshareddata.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qshareddata_impl.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qsharedpointer_impl.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qstring.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qstringalgorithms.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qstringbuilder.h \
@@ -88,6 +107,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationdefinitions.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtextstream.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtmetamacros.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
@@ -100,6 +120,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtypeinfo.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtypes.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qutf8stringview.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qvarlengtharray.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qversiontagging.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qxptype_traits.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qyieldcpu.h \
@@ -108,6 +129,7 @@
   /usr/include/asm-generic/errno.h \
   /usr/include/assert.h \
   /usr/include/c++/13/algorithm \
+  /usr/include/c++/13/any \
   /usr/include/c++/13/array \
   /usr/include/c++/13/atomic \
   /usr/include/c++/13/backward/auto_ptr.h \
@@ -139,11 +161,17 @@
   /usr/include/c++/13/bits/exception.h \
   /usr/include/c++/13/bits/exception_defines.h \
   /usr/include/c++/13/bits/exception_ptr.h \
+  /usr/include/c++/13/bits/forward_list.h \
+  /usr/include/c++/13/bits/forward_list.tcc \
+  /usr/include/c++/13/bits/fstream.tcc \
   /usr/include/c++/13/bits/functexcept.h \
   /usr/include/c++/13/bits/functional_hash.h \
+  /usr/include/c++/13/bits/gslice.h \
+  /usr/include/c++/13/bits/gslice_array.h \
   /usr/include/c++/13/bits/hash_bytes.h \
   /usr/include/c++/13/bits/hashtable.h \
   /usr/include/c++/13/bits/hashtable_policy.h \
+  /usr/include/c++/13/bits/indirect_array.h \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
   /usr/include/c++/13/bits/istream.tcc \
@@ -157,6 +185,7 @@
   /usr/include/c++/13/bits/locale_facets_nonio.h \
   /usr/include/c++/13/bits/locale_facets_nonio.tcc \
   /usr/include/c++/13/bits/localefwd.h \
+  /usr/include/c++/13/bits/mask_array.h \
   /usr/include/c++/13/bits/max_size_type.h \
   /usr/include/c++/13/bits/memory_resource.h \
   /usr/include/c++/13/bits/memoryfwd.h \
@@ -183,6 +212,7 @@
   /usr/include/c++/13/bits/shared_ptr.h \
   /usr/include/c++/13/bits/shared_ptr_atomic.h \
   /usr/include/c++/13/bits/shared_ptr_base.h \
+  /usr/include/c++/13/bits/slice_array.h \
   /usr/include/c++/13/bits/specfun.h \
   /usr/include/c++/13/bits/sstream.tcc \
   /usr/include/c++/13/bits/std_abs.h \
@@ -219,7 +249,12 @@
   /usr/include/c++/13/bits/uses_allocator.h \
   /usr/include/c++/13/bits/uses_allocator_args.h \
   /usr/include/c++/13/bits/utility.h \
+  /usr/include/c++/13/bits/valarray_after.h \
+  /usr/include/c++/13/bits/valarray_array.h \
+  /usr/include/c++/13/bits/valarray_array.tcc \
+  /usr/include/c++/13/bits/valarray_before.h \
   /usr/include/c++/13/bits/vector.tcc \
+  /usr/include/c++/13/cassert \
   /usr/include/c++/13/cctype \
   /usr/include/c++/13/cerrno \
   /usr/include/c++/13/charconv \
@@ -248,11 +283,14 @@
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
   /usr/include/c++/13/format \
+  /usr/include/c++/13/forward_list \
+  /usr/include/c++/13/fstream \
   /usr/include/c++/13/functional \
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
+  /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \
@@ -269,6 +307,7 @@
   /usr/include/c++/13/pstl/glue_algorithm_defs.h \
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/glue_numeric_defs.h \
+  /usr/include/c++/13/ranges \
   /usr/include/c++/13/ratio \
   /usr/include/c++/13/span \
   /usr/include/c++/13/sstream \
@@ -294,6 +333,7 @@
   /usr/include/c++/13/typeinfo \
   /usr/include/c++/13/unordered_map \
   /usr/include/c++/13/utility \
+  /usr/include/c++/13/valarray \
   /usr/include/c++/13/variant \
   /usr/include/c++/13/vector \
   /usr/include/ctype.h \
@@ -306,6 +346,51 @@
   /usr/include/linux/errno.h \
   /usr/include/linux/limits.h \
   /usr/include/locale.h \
+  /usr/include/nlohmann/adl_serializer.hpp \
+  /usr/include/nlohmann/byte_container_with_subtype.hpp \
+  /usr/include/nlohmann/detail/abi_macros.hpp \
+  /usr/include/nlohmann/detail/conversions/from_json.hpp \
+  /usr/include/nlohmann/detail/conversions/to_chars.hpp \
+  /usr/include/nlohmann/detail/conversions/to_json.hpp \
+  /usr/include/nlohmann/detail/exceptions.hpp \
+  /usr/include/nlohmann/detail/hash.hpp \
+  /usr/include/nlohmann/detail/input/binary_reader.hpp \
+  /usr/include/nlohmann/detail/input/input_adapters.hpp \
+  /usr/include/nlohmann/detail/input/json_sax.hpp \
+  /usr/include/nlohmann/detail/input/lexer.hpp \
+  /usr/include/nlohmann/detail/input/parser.hpp \
+  /usr/include/nlohmann/detail/input/position_t.hpp \
+  /usr/include/nlohmann/detail/iterators/internal_iterator.hpp \
+  /usr/include/nlohmann/detail/iterators/iter_impl.hpp \
+  /usr/include/nlohmann/detail/iterators/iteration_proxy.hpp \
+  /usr/include/nlohmann/detail/iterators/iterator_traits.hpp \
+  /usr/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
+  /usr/include/nlohmann/detail/iterators/primitive_iterator.hpp \
+  /usr/include/nlohmann/detail/json_custom_base_class.hpp \
+  /usr/include/nlohmann/detail/json_pointer.hpp \
+  /usr/include/nlohmann/detail/json_ref.hpp \
+  /usr/include/nlohmann/detail/macro_scope.hpp \
+  /usr/include/nlohmann/detail/macro_unscope.hpp \
+  /usr/include/nlohmann/detail/meta/call_std/begin.hpp \
+  /usr/include/nlohmann/detail/meta/call_std/end.hpp \
+  /usr/include/nlohmann/detail/meta/cpp_future.hpp \
+  /usr/include/nlohmann/detail/meta/detected.hpp \
+  /usr/include/nlohmann/detail/meta/identity_tag.hpp \
+  /usr/include/nlohmann/detail/meta/is_sax.hpp \
+  /usr/include/nlohmann/detail/meta/std_fs.hpp \
+  /usr/include/nlohmann/detail/meta/type_traits.hpp \
+  /usr/include/nlohmann/detail/meta/void_t.hpp \
+  /usr/include/nlohmann/detail/output/binary_writer.hpp \
+  /usr/include/nlohmann/detail/output/output_adapters.hpp \
+  /usr/include/nlohmann/detail/output/serializer.hpp \
+  /usr/include/nlohmann/detail/string_concat.hpp \
+  /usr/include/nlohmann/detail/string_escape.hpp \
+  /usr/include/nlohmann/detail/value_t.hpp \
+  /usr/include/nlohmann/json.hpp \
+  /usr/include/nlohmann/json_fwd.hpp \
+  /usr/include/nlohmann/ordered_map.hpp \
+  /usr/include/nlohmann/thirdparty/hedley/hedley.hpp \
+  /usr/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
   /usr/include/pthread.h \
   /usr/include/sched.h \
   /usr/include/stdc-predef.h \
@@ -396,8 +481,10 @@
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h \

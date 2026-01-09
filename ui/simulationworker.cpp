@@ -16,7 +16,25 @@ void SimulationWorker::start()
     // return if simulation does not run (default of running is false)
     if (running)
         return;
-    qDebug("simulationworker[constructor]: Simulation start button pushed");
+
+    // Initialize the controller with:
+    // v0 = 0 m/s, h0 = 3200 m, t0 = 0 s
+    try {
+            controller = std::make_unique<simcontrol>(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 3200.0), 0);
+            //controller->instanceLoggingAction();
+            controller->initialize(jsonConfig);
+        }
+    catch (const std::exception& e)
+    {
+        qCritical() << "Simulation start failed: " << e.what();
+            emit simulationError(QString::fromStdString(e.what()));
+        return;
+    }
+
+    running = true;
+    simulationTimer->start();
+
+    qDebug("simulationworker[constructor]: Simulation started successfully");
 }
 
 void SimulationWorker::pause()
@@ -30,6 +48,14 @@ void SimulationWorker::stop()
     simulationTimer->stop();
 }
 
+void SimulationWorker::receiveJsonConfig(const QString &json)
+{
+    this->jsonConfig = json.toStdString();
+
+    qDebug() << "SimulationWorker received JSON config, size:"
+             << jsonConfig.size();
+}
+
 void SimulationWorker::setTargetThrust(double percent)
 {
     // TODO: Build later
@@ -41,24 +67,22 @@ void SimulationWorker::stepSimulation()
     if(!running)
         return;
 
-    // =====================================
-    // TODO: Backend anbinden
-    // =====================================
-    currentTime += 0.05;
+    // times
+    double dt = 0.05;
+    currentTime += dt;
 
-    double altitude = 1000.0 - currentTime * 10.0;
-    double vSpeed   = -10.0;
-    double hSpeed   = 0.0;
-    double thrust   = 50.0;
-    double fuel     = 500.0;
-    bool   intact   = true;
+    // simulator
+    simData spacecraftData = controller->runSimulation(dt);
 
+    // signals
     emit stateUpdated(currentTime,
-                      altitude,
-                      vSpeed,
-                      hSpeed,
-                      thrust,
-                      fuel,
-                      intact);
-
+                      spacecraftData.pos,
+                      spacecraftData.vel,
+                      spacecraftData.acc,
+                      spacecraftData.spacecraftIntegrity,
+                      spacecraftData.thrust,
+                      spacecraftData.targetThrust,
+                      spacecraftData.fuelMass,
+                      spacecraftData.fuelFlow
+                      );
 }

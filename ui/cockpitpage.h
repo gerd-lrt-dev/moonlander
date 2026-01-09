@@ -14,6 +14,7 @@
 #include <QLCDNumber>
 #include <QLabel>
 #include <QPushButton>
+#include <vector3.h>
 
 #include "landingview.h"
 
@@ -124,7 +125,21 @@ signals:
     void pauseRequested();
     void stopRequested();
 
+public slots:
+void onStateUpdated(double time,
+                    const Vector3& pos,
+                    const Vector3& vel,
+                    const Vector3& acc,
+                    bool intact,
+                    double thrust,
+                    double targetThrust,
+                    double fuelMass,
+                    double fuelFlow);
+
+
 private:
+    // Members
+    double lastTimeDisplay;         ///< Intermediate storage of time to calm the display down
     // =====================================================
     // Internal Setup Functions
     // =====================================================

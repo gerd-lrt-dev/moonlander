@@ -198,15 +198,51 @@ void cockpitPage::setupConnections()
 // ------------------------------------------------
 // Update Interface
 // ------------------------------------------------
-void cockpitPage::updateTime(double t)                { lcdTime->display(t); }
-void cockpitPage::updateAltitude(double altitude)     { lcdAltitude->display(altitude); }
-void cockpitPage::updateVerticalVelocity(double v)    { lcdVSpeed->display(v); }
-void cockpitPage::updateHorizontalVelocity(double h)  { lcdHSpeed->display(h); }
-void cockpitPage::updateAcceleration(double a)        { lcdAcceleration->display(a); }
-void cockpitPage::updateThrust(double t)              { lcdThrust->display(t); }
-void cockpitPage::updateTargetThrust(double t)        { lcdTargetThrust->display(t); }
-void cockpitPage::updateFuelMass(double f)            { lcdFuelMass->display(f); }
-void cockpitPage::updateFuelFlow(double f)            { lcdFuelFlow->display(f); }
+void cockpitPage::updateTime(double t)
+{
+    lcdTime->display(QString::number(t, 'f', 2));
+}
+
+void cockpitPage::updateAltitude(double altitude)
+{
+    lcdAltitude->display(QString::number(altitude, 'f', 1));
+}
+
+void cockpitPage::updateVerticalVelocity(double v)
+{
+    lcdVSpeed->display(QString::number(v, 'f', 1));
+}
+
+void cockpitPage::updateHorizontalVelocity(double h)
+{
+    lcdHSpeed->display(QString::number(h, 'f', 1));
+}
+
+void cockpitPage::updateAcceleration(double a)
+{
+    lcdAcceleration->display(QString::number(a, 'f', 2));
+}
+
+void cockpitPage::updateThrust(double t)
+{
+    lcdThrust->display(QString::number(t, 'f', 1));
+}
+
+void cockpitPage::updateTargetThrust(double t)
+{
+    lcdTargetThrust->display(QString::number(t, 'f', 1));
+}
+
+void cockpitPage::updateFuelMass(double f)
+{
+    lcdFuelMass->display(QString::number(f, 'f', 1));
+}
+
+void cockpitPage::updateFuelFlow(double f)
+{
+    lcdFuelFlow->display(QString::number(f, 'f', 2));
+}
+
 
 void cockpitPage::updateHullStatus(bool intact)
 {
@@ -217,3 +253,32 @@ void cockpitPage::updateHullStatus(bool intact)
             : "color: red; font-weight: bold;"
         );
 }
+
+// ------------------------------------------------
+// Slots
+// ------------------------------------------------
+void cockpitPage::onStateUpdated(double time,
+                                 const Vector3& pos,
+                                 const Vector3& vel,
+                                 const Vector3& acc,
+                                 bool intact,
+                                 double thrust,
+                                 double targetThrust,
+                                 double fuelMass,
+                                 double fuelFlow)
+{
+    // rounded to 1 digit after komma
+
+    updateTime(time);
+    updateAltitude(std::round(pos.z * 10.0) / 10.0);   //
+    updateVerticalVelocity(std::round(vel.z * 10.0) / 10.0);
+    updateHorizontalVelocity(std::round(vel.x * 10.0) / 10.0);
+    updateAcceleration(std::round(acc.z * 100.0) / 100.0);
+    updateThrust(std::round(thrust * 10.0) / 10.0);
+    updateTargetThrust(std::round(targetThrust * 10.0) / 10.0);
+    updateFuelMass(std::round(fuelMass * 10.0) / 10.0);
+    updateFuelFlow(std::round(fuelFlow * 100.0) / 100.0);
+
+    updateHullStatus(intact);
+}
+

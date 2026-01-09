@@ -42,7 +42,18 @@ static constexpr auto qt_meta_stringdata_ZN11cockpitPageE = QtMocHelpers::string
     "startRequested",
     "",
     "pauseRequested",
-    "stopRequested"
+    "stopRequested",
+    "onStateUpdated",
+    "time",
+    "Vector3",
+    "pos",
+    "vel",
+    "acc",
+    "intact",
+    "thrust",
+    "targetThrust",
+    "fuelMass",
+    "fuelFlow"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -54,7 +65,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11cockpitPageE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       3,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -62,14 +73,20 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11cockpitPageE[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   32,    2, 0x06,    1 /* Public */,
-       3,    0,   33,    2, 0x06,    2 /* Public */,
-       4,    0,   34,    2, 0x06,    3 /* Public */,
+       1,    0,   38,    2, 0x06,    1 /* Public */,
+       3,    0,   39,    2, 0x06,    2 /* Public */,
+       4,    0,   40,    2, 0x06,    3 /* Public */,
+
+ // slots: name, argc, parameters, tag, flags, initial metatype offsets
+       5,    9,   41,    2, 0x0a,    4 /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+
+ // slots: parameters
+    QMetaType::Void, QMetaType::Double, 0x80000000 | 7, 0x80000000 | 7, 0x80000000 | 7, QMetaType::Bool, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    6,    8,    9,   10,   11,   12,   13,   14,   15,
 
        0        // eod
 };
@@ -88,7 +105,18 @@ Q_CONSTINIT const QMetaObject cockpitPage::staticMetaObject = { {
         // method 'pauseRequested'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'stopRequested'
-        QtPrivate::TypeAndForceComplete<void, std::false_type>
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onStateUpdated'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const Vector3 &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const Vector3 &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const Vector3 &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>
     >,
     nullptr
 } };
@@ -101,6 +129,7 @@ void cockpitPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 0: _t->startRequested(); break;
         case 1: _t->pauseRequested(); break;
         case 2: _t->stopRequested(); break;
+        case 3: _t->onStateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
         default: ;
         }
     }
@@ -149,14 +178,14 @@ int cockpitPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 3)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 3;
+        _id -= 4;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 3)
+        if (_id < 4)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 3;
+        _id -= 4;
     }
     return _id;
 }

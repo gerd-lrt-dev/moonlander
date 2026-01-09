@@ -4,9 +4,11 @@
 Homepage::Homepage(QWidget *parent) :
     QMainWindow(parent)
 {
+    jsonConfigStr = loadJsonResource(":/configs/Resources/configs/lander.json");
     setupStackedWidget();
-    setupConnections();
     setupThread();
+    setupConnections();
+
 }
 
 Homepage::~Homepage()
@@ -14,6 +16,42 @@ Homepage::~Homepage()
     simulationThread->quit();
     simulationThread->wait();
 }
+
+QString Homepage::loadJsonResource(const QString& path)
+{
+    // 1) Check if file exists
+    bool exists = QFile::exists(path);
+    qDebug() << "JSON resource exists:" << exists << "| path:" << path;
+
+    if (!exists)
+    {
+        qCritical() << "JSON resource NOT found:" << path;
+        return {};
+    }
+
+    // 2) open file
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        qCritical() << "Could not open JSON resource:" << path
+                    << "| error:" << file.errorString();
+        return {};
+    }
+
+    // 3) read content
+    QByteArray data = file.readAll();
+    if (data.isEmpty())
+    {
+        qCritical() << "JSON resource is empty:" << path;
+        return {};
+    }
+
+    qDebug() << "JSON resource loaded successfully, size:"
+             << data.size() << "bytes";
+
+    return QString::fromUtf8(data);
+}
+
 
 void Homepage::setupStackedWidget()
 {
@@ -92,6 +130,8 @@ void Homepage::setupConnections()
             {
                 stackedWidget->setCurrentWidget(cockpit);
             });
+
+    connect(cockpit, &cockpitPage::startRequested, simulationWorker, &SimulationWorker::start);
 }
 
 void Homepage::setupThread()
@@ -118,7 +158,16 @@ void Homepage::setupThread()
     connect(cockpit, &cockpitPage::stopRequested,
             simulationWorker, &SimulationWorker::stop);
 
+    connect(this, &Homepage::sendJsonToWorker, simulationWorker,
+            &SimulationWorker::receiveJsonConfig, Qt::QueuedConnection);
+
+    connect(simulationWorker, &SimulationWorker::stateUpdated,
+            cockpit, &cockpitPage::onStateUpdated);
+
+
     // Start simulation
     simulationThread->start();
+
+    emit sendJsonToWorker(jsonConfigStr);
 }
 

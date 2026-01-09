@@ -10,6 +10,7 @@
 #ifndef HOMEPAGE_H
 #define HOMEPAGE_H
 
+#include <QFile>
 #include <QLabel>
 #include <QPushButton>
 #include <QStackedWidget>
@@ -48,10 +49,18 @@ signals:
      */
     void requestStartOfSimulation();
 
+    /**
+     * @brief Sends jsonConfig to worker thread
+     */
+    void sendJsonToWorker(const QString &json);
+
 private:
     // ==========================================
     // Member Variables
     // ==========================================
+    // Recources
+    QString jsonConfigStr;
+
     // Pages
     cockpitPage *cockpit;
 
@@ -73,6 +82,8 @@ private:
     // ==========================================
     // Member Functions
     // ==========================================
+
+    QString loadJsonResource(const QString& path); ///< Loads json config with spacecraft specifications
     void setupStackedWidget(); ///< Sets up stacked widget and build homepage as central widget
     void setupConnections(); ///< Connects signals and slots for the GUI
     void setupThread();

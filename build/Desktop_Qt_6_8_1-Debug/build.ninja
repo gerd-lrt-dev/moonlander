@@ -92,6 +92,13 @@ build backend/CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o: CXX_
   OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
   OBJECT_FILE_DIR = backend/CMakeFiles/moonlander_backend.dir/src
 
+build backend/CMakeFiles/moonlander_backend.dir/src/logger.cpp.o: CXX_COMPILER__moonlander_backend_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/src/logger.cpp || cmake_object_order_depends_target_moonlander_backend
+  DEP_FILE = backend/CMakeFiles/moonlander_backend.dir/src/logger.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include
+  OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
+  OBJECT_FILE_DIR = backend/CMakeFiles/moonlander_backend.dir/src
+
 build backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o: CXX_COMPILER__moonlander_backend_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/src/main.cpp || cmake_object_order_depends_target_moonlander_backend
   DEP_FILE = backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o.d
   FLAGS = -DQT_QML_DEBUG -g -std=gnu++20 -fdiagnostics-color=always
@@ -142,7 +149,7 @@ build backend/CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o: CXX_COMPILE
 #############################################
 # Link the static library backend/libmoonlander_backend.a
 
-build backend/libmoonlander_backend.a: CXX_STATIC_LIBRARY_LINKER__moonlander_backend_Debug backend/CMakeFiles/moonlander_backend.dir/src/Thrust.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/output.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/physics.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/simcontrol.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacecraft.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o
+build backend/libmoonlander_backend.a: CXX_STATIC_LIBRARY_LINKER__moonlander_backend_Debug backend/CMakeFiles/moonlander_backend.dir/src/Thrust.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/logger.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/output.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/physics.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/simcontrol.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacecraft.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o
   LANGUAGE_COMPILE_FLAGS = -DQT_QML_DEBUG -g
   OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
   POST_BUILD = :
@@ -317,7 +324,7 @@ build ui/Moonlander_UI_autogen: phony ui/CMakeFiles/Moonlander_UI_autogen ui/Moo
 #############################################
 # Custom command for ui/qrc_resources.cpp
 
-build ui/qrc_resources.cpp | ${cmake_ninja_workdir}ui/qrc_resources.cpp: CUSTOM_COMMAND /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/resources.qrc /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/Resources/Images/logo.png ui/resources.qrc.depends /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/libexec/rcc || backend/libmoonlander_backend.a ui/Moonlander_UI_autogen ui/Moonlander_UI_autogen_timestamp_deps
+build ui/qrc_resources.cpp | ${cmake_ninja_workdir}ui/qrc_resources.cpp: CUSTOM_COMMAND /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/resources.qrc /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/Resources/Images/logo.png /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/Resources/configs/lander.json ui/resources.qrc.depends /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/libexec/rcc || backend/libmoonlander_backend.a ui/Moonlander_UI_autogen ui/Moonlander_UI_autogen_timestamp_deps
   COMMAND = cd /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui && /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/libexec/rcc --name resources --output /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/qrc_resources.cpp /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/resources.qrc
   DESC = Generating qrc_resources.cpp
   restat = 1

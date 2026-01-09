@@ -1,5 +1,6 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_cockpitpage.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/vector3.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/landingview.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \

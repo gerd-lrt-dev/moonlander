@@ -11,6 +11,10 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QDebug>
+#include <iostream>
+
+#include "simcontrol.h"
 
 /**
  * @class SimulationWorker
@@ -53,6 +57,11 @@ public slots:
      */
     void setTargetThrust(double percent);
 
+    /**
+     * @brief Receives QString with json config data
+     */
+    void receiveJsonConfig(const QString &json);
+
 signals:
     /*
      * @brief Emitted after each simulation step.
@@ -66,12 +75,17 @@ signals:
      * @param intact Hull integrity flag
      */
     void stateUpdated(double time,
-                      double altitude,
-                      double vSpeed,
-                      double hSpeed,
+                      Vector3 pos,
+                      Vector3 vel,
+                      Vector3 acc,
+                      bool spacecraftIntegrity,
                       double thrust,
-                      double fuel,
-                      bool intact);
+                      double targetThrust,
+                      double fuelMass,
+                      double fuelFlow
+                      );
+
+    void simulationError(QString errorMsg);
 
 public slots:
     /**
@@ -83,10 +97,14 @@ private:
      // ==========================
      // Internal State
      // ==========================
+    std::string jsonConfig;     ///< String with spacecraft config data
     QTimer *simulationTimer;    ///< Drives simulation ticks
     bool running = false;       ///< Simulation running flag
 
     double currentTime = 0.0;   ///< Simulation time [s]
+
+    // Create the simulation controller using a smart pointer
+    std::unique_ptr<simcontrol> controller;
 };
 
 #endif // SIMULATIONWORKER_H

@@ -1,10 +1,21 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Thrust.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/jsonConfigReader.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/output.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/physics.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/simcontrol.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacecraft.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacemath.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/vector3.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/cockpitpage.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/landingview.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/simulationworker.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QEvent \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QFile \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QList \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QMargins \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QObject \
@@ -55,6 +66,8 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qendian.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qeventloop.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qfile.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qfiledevice.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qfloat16.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qforeach.h \
@@ -220,6 +233,7 @@
   /usr/include/asm-generic/errno.h \
   /usr/include/assert.h \
   /usr/include/c++/13/algorithm \
+  /usr/include/c++/13/any \
   /usr/include/c++/13/array \
   /usr/include/c++/13/atomic \
   /usr/include/c++/13/backward/auto_ptr.h \
@@ -253,11 +267,21 @@
   /usr/include/c++/13/bits/exception.h \
   /usr/include/c++/13/bits/exception_defines.h \
   /usr/include/c++/13/bits/exception_ptr.h \
+  /usr/include/c++/13/bits/forward_list.h \
+  /usr/include/c++/13/bits/forward_list.tcc \
+  /usr/include/c++/13/bits/fs_dir.h \
+  /usr/include/c++/13/bits/fs_fwd.h \
+  /usr/include/c++/13/bits/fs_ops.h \
+  /usr/include/c++/13/bits/fs_path.h \
+  /usr/include/c++/13/bits/fstream.tcc \
   /usr/include/c++/13/bits/functexcept.h \
   /usr/include/c++/13/bits/functional_hash.h \
+  /usr/include/c++/13/bits/gslice.h \
+  /usr/include/c++/13/bits/gslice_array.h \
   /usr/include/c++/13/bits/hash_bytes.h \
   /usr/include/c++/13/bits/hashtable.h \
   /usr/include/c++/13/bits/hashtable_policy.h \
+  /usr/include/c++/13/bits/indirect_array.h \
   /usr/include/c++/13/bits/invoke.h \
   /usr/include/c++/13/bits/ios_base.h \
   /usr/include/c++/13/bits/istream.tcc \
@@ -271,6 +295,7 @@
   /usr/include/c++/13/bits/locale_facets_nonio.h \
   /usr/include/c++/13/bits/locale_facets_nonio.tcc \
   /usr/include/c++/13/bits/localefwd.h \
+  /usr/include/c++/13/bits/mask_array.h \
   /usr/include/c++/13/bits/max_size_type.h \
   /usr/include/c++/13/bits/memory_resource.h \
   /usr/include/c++/13/bits/memoryfwd.h \
@@ -298,6 +323,7 @@
   /usr/include/c++/13/bits/shared_ptr.h \
   /usr/include/c++/13/bits/shared_ptr_atomic.h \
   /usr/include/c++/13/bits/shared_ptr_base.h \
+  /usr/include/c++/13/bits/slice_array.h \
   /usr/include/c++/13/bits/specfun.h \
   /usr/include/c++/13/bits/sstream.tcc \
   /usr/include/c++/13/bits/std_abs.h \
@@ -337,6 +363,10 @@
   /usr/include/c++/13/bits/uses_allocator.h \
   /usr/include/c++/13/bits/uses_allocator_args.h \
   /usr/include/c++/13/bits/utility.h \
+  /usr/include/c++/13/bits/valarray_after.h \
+  /usr/include/c++/13/bits/valarray_array.h \
+  /usr/include/c++/13/bits/valarray_array.tcc \
+  /usr/include/c++/13/bits/valarray_before.h \
   /usr/include/c++/13/bits/vector.tcc \
   /usr/include/c++/13/cassert \
   /usr/include/c++/13/cctype \
@@ -346,6 +376,7 @@
   /usr/include/c++/13/climits \
   /usr/include/c++/13/clocale \
   /usr/include/c++/13/cmath \
+  /usr/include/c++/13/codecvt \
   /usr/include/c++/13/compare \
   /usr/include/c++/13/concepts \
   /usr/include/c++/13/condition_variable \
@@ -367,13 +398,17 @@
   /usr/include/c++/13/ext/numeric_traits.h \
   /usr/include/c++/13/ext/string_conversions.h \
   /usr/include/c++/13/ext/type_traits.h \
+  /usr/include/c++/13/filesystem \
   /usr/include/c++/13/format \
+  /usr/include/c++/13/forward_list \
+  /usr/include/c++/13/fstream \
   /usr/include/c++/13/functional \
   /usr/include/c++/13/future \
   /usr/include/c++/13/initializer_list \
   /usr/include/c++/13/iomanip \
   /usr/include/c++/13/ios \
   /usr/include/c++/13/iosfwd \
+  /usr/include/c++/13/iostream \
   /usr/include/c++/13/istream \
   /usr/include/c++/13/iterator \
   /usr/include/c++/13/limits \
@@ -391,6 +426,7 @@
   /usr/include/c++/13/pstl/glue_algorithm_defs.h \
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/glue_numeric_defs.h \
+  /usr/include/c++/13/ranges \
   /usr/include/c++/13/ratio \
   /usr/include/c++/13/semaphore \
   /usr/include/c++/13/span \
@@ -418,6 +454,7 @@
   /usr/include/c++/13/typeinfo \
   /usr/include/c++/13/unordered_map \
   /usr/include/c++/13/utility \
+  /usr/include/c++/13/valarray \
   /usr/include/c++/13/variant \
   /usr/include/c++/13/vector \
   /usr/include/ctype.h \
@@ -430,6 +467,51 @@
   /usr/include/linux/errno.h \
   /usr/include/linux/limits.h \
   /usr/include/locale.h \
+  /usr/include/nlohmann/adl_serializer.hpp \
+  /usr/include/nlohmann/byte_container_with_subtype.hpp \
+  /usr/include/nlohmann/detail/abi_macros.hpp \
+  /usr/include/nlohmann/detail/conversions/from_json.hpp \
+  /usr/include/nlohmann/detail/conversions/to_chars.hpp \
+  /usr/include/nlohmann/detail/conversions/to_json.hpp \
+  /usr/include/nlohmann/detail/exceptions.hpp \
+  /usr/include/nlohmann/detail/hash.hpp \
+  /usr/include/nlohmann/detail/input/binary_reader.hpp \
+  /usr/include/nlohmann/detail/input/input_adapters.hpp \
+  /usr/include/nlohmann/detail/input/json_sax.hpp \
+  /usr/include/nlohmann/detail/input/lexer.hpp \
+  /usr/include/nlohmann/detail/input/parser.hpp \
+  /usr/include/nlohmann/detail/input/position_t.hpp \
+  /usr/include/nlohmann/detail/iterators/internal_iterator.hpp \
+  /usr/include/nlohmann/detail/iterators/iter_impl.hpp \
+  /usr/include/nlohmann/detail/iterators/iteration_proxy.hpp \
+  /usr/include/nlohmann/detail/iterators/iterator_traits.hpp \
+  /usr/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
+  /usr/include/nlohmann/detail/iterators/primitive_iterator.hpp \
+  /usr/include/nlohmann/detail/json_custom_base_class.hpp \
+  /usr/include/nlohmann/detail/json_pointer.hpp \
+  /usr/include/nlohmann/detail/json_ref.hpp \
+  /usr/include/nlohmann/detail/macro_scope.hpp \
+  /usr/include/nlohmann/detail/macro_unscope.hpp \
+  /usr/include/nlohmann/detail/meta/call_std/begin.hpp \
+  /usr/include/nlohmann/detail/meta/call_std/end.hpp \
+  /usr/include/nlohmann/detail/meta/cpp_future.hpp \
+  /usr/include/nlohmann/detail/meta/detected.hpp \
+  /usr/include/nlohmann/detail/meta/identity_tag.hpp \
+  /usr/include/nlohmann/detail/meta/is_sax.hpp \
+  /usr/include/nlohmann/detail/meta/std_fs.hpp \
+  /usr/include/nlohmann/detail/meta/type_traits.hpp \
+  /usr/include/nlohmann/detail/meta/void_t.hpp \
+  /usr/include/nlohmann/detail/output/binary_writer.hpp \
+  /usr/include/nlohmann/detail/output/output_adapters.hpp \
+  /usr/include/nlohmann/detail/output/serializer.hpp \
+  /usr/include/nlohmann/detail/string_concat.hpp \
+  /usr/include/nlohmann/detail/string_escape.hpp \
+  /usr/include/nlohmann/detail/value_t.hpp \
+  /usr/include/nlohmann/json.hpp \
+  /usr/include/nlohmann/json_fwd.hpp \
+  /usr/include/nlohmann/ordered_map.hpp \
+  /usr/include/nlohmann/thirdparty/hedley/hedley.hpp \
+  /usr/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
   /usr/include/pthread.h \
   /usr/include/sched.h \
   /usr/include/semaphore.h \
@@ -522,8 +604,10 @@
   /usr/include/x86_64-linux-gnu/bits/wordsize.h \
   /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/atomic_word.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++allocator.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++config.h \
+  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/c++locale.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/cpu_defines.h \
   /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_base.h \
