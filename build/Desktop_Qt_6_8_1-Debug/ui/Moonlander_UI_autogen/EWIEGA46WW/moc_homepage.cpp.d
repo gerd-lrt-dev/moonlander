@@ -14,6 +14,7 @@
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/simulationworker.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QFile \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QMutexLocker \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QObject \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QThread \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QTimer \
@@ -82,6 +83,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetacontainer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetatype.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qminmax.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmutex.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qnumeric.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qobject.h \
@@ -133,6 +135,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtresource.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtsan_impl.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qttranslation.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qttypetraits.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtversion.h \
@@ -175,12 +178,17 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QPushButton \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QSlider \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QStackedWidget \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QVBoxLayout \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QWidget \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractbutton.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qabstractslider.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qboxlayout.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgridlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
@@ -188,8 +196,10 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmainwindow.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qpushbutton.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qsizepolicy.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qslider.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qstackedwidget.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtabwidget.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qtwidgets-config.h \

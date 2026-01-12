@@ -26,6 +26,7 @@ void simcontrol::runUserInput()
     }
 }
 
+// Function is only used in standalone mode without UI
 customSpacecraft simcontrol::laodSpacecraftConfig(std::string filePath, std::string spacecraftName)
 {
     // Open file
@@ -57,6 +58,7 @@ customSpacecraft simcontrol::laodSpacecraftConfig(std::string filePath, std::str
     return jsonConfigReader::parseLander(landerJsonObject);
 }
 
+// Function is needed when UI is working
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName)
 {
     nlohmann::json config;
@@ -132,19 +134,19 @@ void simcontrol::buildSimulationEnvironment(Vector3 vel0, Vector3 pos0, double t
     landerSpacecraft->setPos(pos0);
     landerSpacecraft->setVel(vel0);
 
-    // Call integerity for simulation run
-    bool lander1IsIntact = landerSpacecraft->isIntact(); 
+    // Call integerity for simulation run (only standalone without UI)
+    //< REACTIVATE //bool lander1IsIntact = landerSpacecraft->isIntact();
 
-    // Start user input thread
+    // Start user input thread (only standalone without UI & User Input via console)
     //< REACTIVATE//std::thread inputThread(&simcontrol::runUserInput, this);
 
-    // Start simulation //TODO: Wird obsolet
-    //runSimulationLoop(lander1IsIntact, vel0, pos0, t);
+    // Start simulation (only standalone without UI)
+    //< REACTIVATE //runSimulationLoop(lander1IsIntact, vel0, pos0, t);
 
-    // When simulation is ready wait for thread
-    //< REACTIVATE//if (inputThread.joinable()) inputThread.join();
+    // When simulation is ready wait for thread (only standalone without UI)
+    //< REACTIVATE //if (inputThread.joinable()) inputThread.join();
 
-    if (!lander1IsIntact) drawer->drawMissionFailed();
+    //if (!lander1IsIntact) drawer->drawMissionFailed();
 }
 
 simData simcontrol::runSimulation(const double dt)
@@ -161,34 +163,50 @@ simData simcontrol::runSimulation(const double dt)
         landerSpacecraft->updateTime(dt);
 
         // Compute velocity and altitude
-        spacecraftData.acc = landerPhysics->updateAcc(
-            landerSpacecraft->requestThrust(),
-            landerSpacecraft->getTotalMass(),
-            landerSpacecraft->requestThrustDirection(),
-            env.moonGravityVec
-            );
 
-        spacecraftData.pos = landerPhysics->updatePos(
-            landerSpacecraft->getVel(),
-            landerSpacecraft->getPos(),
-            spacecraftData.acc,
-            dt
-            );
-
-        spacecraftData.vel = landerPhysics->updateVel(
-            landerSpacecraft->getVel(),
-            spacecraftData.acc,
-            dt
-            );
-
-        // Landing damage
-        if (spacecraftData.pos.z <= 0.0)
+        // TODO: Abfrage nach den 4 states richten(s. private)
+        if (landerSpacecraft->isIntact())
         {
-            landerSpacecraft->applyLandingDamage(spacecraftData.vel.z);
-            logger.log("Landing damage applied. Velocity Z: " + std::to_string(spacecraftData.vel.z));
+            landerSpacecraft->setAcc(landerPhysics->updateAcc(
+                landerSpacecraft->requestThrust(),
+                landerSpacecraft->getTotalMass(),
+                landerSpacecraft->requestThrustDirection(),
+                env.moonGravityVec
+                ));
+
+            landerSpacecraft->setVel(landerPhysics->updateVel(
+                landerSpacecraft->getVel(),
+                landerSpacecraft->getAcc(),
+                dt
+                ));
+
+            landerSpacecraft->setPos(landerPhysics->updatePos(
+                landerSpacecraft->getVel(),
+                landerSpacecraft->getPos(),
+                landerSpacecraft->getAcc(),
+                dt
+                ));
+
+            landerSpacecraft->updateSpacecraftIntegrity(landerSpacecraft->getIntegrity());
+        }
+        else
+        {
+            landerSpacecraft->setAcc(damageVec);
+            landerSpacecraft->setVel(damageVec);
+            landerSpacecraft->setPos(damageVec);
         }
 
-        // Request state
+        // Apply landing damage
+        if (landerSpacecraft->getPos().z <= -0.1)
+        {
+            landerSpacecraft->applyLandingDamage(landerSpacecraft->getVel().z);
+            logger.log("Landing damage applied. Velocity Z: " + std::to_string(landerSpacecraft->getVel().z));
+        }
+
+        // Fill struct with data for emitting signal to UI
+        spacecraftData.acc = landerSpacecraft->getAcc();
+        spacecraftData.vel = landerSpacecraft->getVel();
+        spacecraftData.pos = landerSpacecraft->getPos();
         spacecraftData.spacecraftIntegrity = landerSpacecraft->isIntact();
         spacecraftData.thrust = landerSpacecraft->requestThrust();
         spacecraftData.targetThrust = landerSpacecraft->requestTargetThrust();
@@ -196,7 +214,7 @@ simData simcontrol::runSimulation(const double dt)
         spacecraftData.fuelFlow = landerSpacecraft->requestLiveFuelConsumption();
 
         // Log results
-        logger.log("Step results - Pos: (" +
+        logger.log("Step results send to UI - Pos: (" +
                    std::to_string(spacecraftData.pos.x) + ", " +
                    std::to_string(spacecraftData.pos.y) + ", " +
                    std::to_string(spacecraftData.pos.z) + "), Vel: (" +
@@ -223,10 +241,19 @@ simData simcontrol::runSimulation(const double dt)
     return spacecraftData;
 }
 
-
 void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
 {
     jsonConfigString = jsonConfigStr;
+}
+
+void simcontrol::setTargetThrust(double thrustPercent)
+{
+    landerSpacecraft->setThrust(thrustPercent / 100.0);
+}
+
+void simcontrol::setResetBoolean()
+{
+    resetRequested = true;
 }
 
 void simcontrol::runSimulationLoop(bool& lander1IsIntact, Vector3& vel0, Vector3& pos0, double& t0)

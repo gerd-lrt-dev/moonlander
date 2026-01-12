@@ -10,6 +10,7 @@
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacemath.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/vector3.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QMutexLocker \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QObject \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QTimer \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
@@ -43,7 +44,9 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qcontiguouscache.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdarwinhelpers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdatastream.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdeadlinetimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qdebug.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qelapsedtimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qexceptionhandling.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qflags.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qfloat16.h \
@@ -67,6 +70,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetacontainer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmetatype.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qminmax.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qmutex.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qnamespace.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qnumeric.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qobject.h \
@@ -113,6 +117,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtresource.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtsan_impl.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qttranslation.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qttypetraits.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtversion.h \

@@ -42,7 +42,10 @@ static constexpr auto qt_meta_stringdata_ZN11cockpitPageE = QtMocHelpers::string
     "startRequested",
     "",
     "pauseRequested",
-    "stopRequested",
+    "stopConfirmed",
+    "resetSimulationRequested",
+    "thrustTargetRequested",
+    "percent",
     "onStateUpdated",
     "time",
     "Vector3",
@@ -53,7 +56,8 @@ static constexpr auto qt_meta_stringdata_ZN11cockpitPageE = QtMocHelpers::string
     "thrust",
     "targetThrust",
     "fuelMass",
-    "fuelFlow"
+    "fuelFlow",
+    "onStopClicked"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -65,28 +69,34 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11cockpitPageE[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       3,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    0,   38,    2, 0x06,    1 /* Public */,
-       3,    0,   39,    2, 0x06,    2 /* Public */,
-       4,    0,   40,    2, 0x06,    3 /* Public */,
+       1,    0,   56,    2, 0x06,    1 /* Public */,
+       3,    0,   57,    2, 0x06,    2 /* Public */,
+       4,    0,   58,    2, 0x06,    3 /* Public */,
+       5,    0,   59,    2, 0x06,    4 /* Public */,
+       6,    1,   60,    2, 0x06,    5 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       5,    9,   41,    2, 0x0a,    4 /* Public */,
+       8,    9,   63,    2, 0x0a,    7 /* Public */,
+      19,    0,   82,    2, 0x08,   17 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Double,    7,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Double, 0x80000000 | 7, 0x80000000 | 7, 0x80000000 | 7, QMetaType::Bool, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    6,    8,    9,   10,   11,   12,   13,   14,   15,
+    QMetaType::Void, QMetaType::Double, 0x80000000 | 10, 0x80000000 | 10, 0x80000000 | 10, QMetaType::Bool, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    9,   11,   12,   13,   14,   15,   16,   17,   18,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -104,8 +114,13 @@ Q_CONSTINIT const QMetaObject cockpitPage::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         // method 'pauseRequested'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
-        // method 'stopRequested'
+        // method 'stopConfirmed'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'resetSimulationRequested'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'thrustTargetRequested'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
         // method 'onStateUpdated'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -116,7 +131,9 @@ Q_CONSTINIT const QMetaObject cockpitPage::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
-        QtPrivate::TypeAndForceComplete<double, std::false_type>
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
+        // method 'onStopClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -128,8 +145,11 @@ void cockpitPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->startRequested(); break;
         case 1: _t->pauseRequested(); break;
-        case 2: _t->stopRequested(); break;
-        case 3: _t->onStateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
+        case 2: _t->stopConfirmed(); break;
+        case 3: _t->resetSimulationRequested(); break;
+        case 4: _t->thrustTargetRequested((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
+        case 5: _t->onStateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
+        case 6: _t->onStopClicked(); break;
         default: ;
         }
     }
@@ -151,8 +171,22 @@ void cockpitPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         }
         {
             using _q_method_type = void (cockpitPage::*)();
-            if (_q_method_type _q_method = &cockpitPage::stopRequested; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+            if (_q_method_type _q_method = &cockpitPage::stopConfirmed; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 2;
+                return;
+            }
+        }
+        {
+            using _q_method_type = void (cockpitPage::*)();
+            if (_q_method_type _q_method = &cockpitPage::resetSimulationRequested; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 3;
+                return;
+            }
+        }
+        {
+            using _q_method_type = void (cockpitPage::*)(double );
+            if (_q_method_type _q_method = &cockpitPage::thrustTargetRequested; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
+                *result = 4;
                 return;
             }
         }
@@ -178,14 +212,14 @@ int cockpitPage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 7;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 4)
+        if (_id < 7)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 4;
+        _id -= 7;
     }
     return _id;
 }
@@ -203,8 +237,21 @@ void cockpitPage::pauseRequested()
 }
 
 // SIGNAL 2
-void cockpitPage::stopRequested()
+void cockpitPage::stopConfirmed()
 {
     QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
+}
+
+// SIGNAL 3
+void cockpitPage::resetSimulationRequested()
+{
+    QMetaObject::activate(this, &staticMetaObject, 3, nullptr);
+}
+
+// SIGNAL 4
+void cockpitPage::thrustTargetRequested(double _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
 }
 QT_WARNING_POP

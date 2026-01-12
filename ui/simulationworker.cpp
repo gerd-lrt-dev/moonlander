@@ -39,13 +39,28 @@ void SimulationWorker::start()
 
 void SimulationWorker::pause()
 {
-    // TODO: Build later
+    running = false;
+    simulationTimer->stop();
 }
 
 void SimulationWorker::stop()
 {
     running = false;
     simulationTimer->stop();
+    currentTime = 0.0;
+
+    emit stateUpdated(currentTime,
+                      {0.0, 0.0, 0.0},
+                      {0.0, 0.0, 0.0},
+                      {0.0, 0.0, 0.0},
+                      1.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                      );
+
+    controller->setResetBoolean();
 }
 
 void SimulationWorker::receiveJsonConfig(const QString &json)
@@ -58,12 +73,13 @@ void SimulationWorker::receiveJsonConfig(const QString &json)
 
 void SimulationWorker::setTargetThrust(double percent)
 {
-    // TODO: Build later
-    Q_UNUSED(percent);
+    QMutexLocker locker(&mutex);  // protect access
+    requestedThrustPercent = percent;
 }
 
 void SimulationWorker::stepSimulation()
 {
+    // Return if not running
     if(!running)
         return;
 
@@ -71,8 +87,11 @@ void SimulationWorker::stepSimulation()
     double dt = 0.05;
     currentTime += dt;
 
-    // simulator
+    // Calling backend simulator
     simData spacecraftData = controller->runSimulation(dt);
+
+    // Withdraw user input due to thrust
+    controller->setTargetThrust(requestedThrustPercent);
 
     // signals
     emit stateUpdated(currentTime,
@@ -86,3 +105,5 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.fuelFlow
                       );
 }
+
+

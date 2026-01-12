@@ -13,7 +13,9 @@
 #include <QWidget>
 #include <QLCDNumber>
 #include <QLabel>
+#include <QMessageBox>
 #include <QPushButton>
+#include <QSlider>
 #include <vector3.h>
 
 #include "landingview.h"
@@ -123,19 +125,23 @@ public:
 signals:
     void startRequested();
     void pauseRequested();
-    void stopRequested();
+    void stopConfirmed();
+    void resetSimulationRequested();
+    void thrustTargetRequested(double percent);
 
 public slots:
-void onStateUpdated(double time,
-                    const Vector3& pos,
-                    const Vector3& vel,
-                    const Vector3& acc,
-                    bool intact,
-                    double thrust,
-                    double targetThrust,
-                    double fuelMass,
-                    double fuelFlow);
+    void onStateUpdated(double time,
+                        const Vector3& pos,
+                        const Vector3& vel,
+                        const Vector3& acc,
+                        bool intact,
+                        double thrust,
+                        double targetThrust,
+                        double fuelMass,
+                        double fuelFlow);
 
+private slots:
+    void onStopClicked(); ///< Combining stop button with prompt
 
 private:
     // Members
@@ -201,6 +207,12 @@ private:
     QPushButton *btnSimStart;
     QPushButton *btnSimPause;
     QPushButton *btnSimStop;
+
+    // =====================================================
+    // Thrust Controle Console
+    // =====================================================
+    QSlider* thrustSlider = nullptr;
+    QLabel* lblThrustCmd  = nullptr;
 };
 
 #endif // COCKPITPAGE_H

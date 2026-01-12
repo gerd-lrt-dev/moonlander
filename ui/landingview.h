@@ -10,6 +10,7 @@
 #define LANDINGVIEW_H
 
 #include <QWidget>
+#include <QTimer>
 
 /**
  * @class LandingView
@@ -80,6 +81,15 @@ private:
     void drawGround(QPainter &p);
     void drawLander(QPainter &p, const QRect &landerRect);
     void drawThrust(QPainter &p, const QRect &landerRect);
+    void drawMotionStripes(QPainter& p, int landerY);
+
+    // =====================
+    // Motion stripes animation
+    // =====================
+
+    QTimer animationTimer;
+    int motionOffset = 0;
+
 };
 
 #endif // LANDINGVIEW_H

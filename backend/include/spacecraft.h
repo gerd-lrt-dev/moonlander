@@ -132,9 +132,18 @@ private:
     Vector3 B_Rot;                  ///< [rad] Current orientation (pitch, yaw, roll) in body coordinates.
     Vector3 B_CenterOfMass;         ///< [m] Center of mass location in body frame at actual time.
     Vector3 B_Vel;                  ///< [m/s] Velocity in three spatial directions.
+    Vector3 B_Acc;                  ///< [m/s²] Acceleration in three spatial directions.
     double spacecraftIntegrity;     ///< [%] Current integrity of the spacecraft.
     bool spacecraftIsOperational;   ///< [true/false] Whether the spacecraft is still operational.
     EnvironmentConfig config;       ///< [-] Environment config struct with constant parameters.
+    enum class SpacecraftState      ///< State of spacecraft
+    {
+        Operational,                ///< Fully physics
+        Landed,                     ///< no translation, time & systems running
+        Crashed,                    ///< no translation, but state stable
+        Destroyed                   ///< everything besides time is frozen
+    };
+
     ///@}
 
     /**
@@ -352,6 +361,18 @@ spacecraft(customSpacecraft lMoon);
     void setVel(Vector3 vel);
 
     /**
+     * @brief Sets acceleration of spacecraft
+     * @param 3D Vector with acceleration in three dimensions [m/s²]
+     */
+    void setAcc(Vector3 vel);
+
+    /**
+     * @brief getter for Integrity
+     * @return [%] integrity
+     */
+    double getIntegrity();
+
+    /**
      * @brief Return current position of spacecraft
      * @return Current position in cartesian-coordinates [m]
      */
@@ -368,6 +389,12 @@ spacecraft(customSpacecraft lMoon);
     //  * @return Current velocity [m/s]
      */
     Vector3 getVel();
+
+    /**
+     * @brief Return current Acceleration of spacecraft
+    //  * @return Current Acceleration [m/s²]
+     */
+    Vector3 getAcc();
 
     /**
      * @brief Return current total mass

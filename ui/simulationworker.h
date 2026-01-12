@@ -12,7 +12,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QDebug>
-#include <iostream>
+#include <QMutexLocker>
 
 #include "simcontrol.h"
 
@@ -63,7 +63,7 @@ public slots:
     void receiveJsonConfig(const QString &json);
 
 signals:
-    /*
+    /**
      * @brief Emitted after each simulation step.
      *
      * @param time Simulation time [s]
@@ -85,6 +85,10 @@ signals:
                       double fuelFlow
                       );
 
+    /**
+     * @brief simulationError
+     * @param errorMsg
+     */
     void simulationError(QString errorMsg);
 
 public slots:
@@ -102,6 +106,9 @@ private:
     bool running = false;       ///< Simulation running flag
 
     double currentTime = 0.0;   ///< Simulation time [s]
+
+    QMutex mutex;               ///< Thread safety
+    double requestedThrustPercent = 0.0; ///< Desired thrust in percentage
 
     // Create the simulation controller using a smart pointer
     std::unique_ptr<simcontrol> controller;

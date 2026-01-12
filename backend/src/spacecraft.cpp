@@ -122,6 +122,16 @@ void spacecraft::setVel(Vector3 vel)
     B_Vel = vel;
 }
 
+void spacecraft::setAcc(Vector3 acc)
+{
+    B_Acc = acc;
+}
+
+double spacecraft::getIntegrity()
+{
+    return spacecraftIntegrity;
+}
+
 Vector3 spacecraft::getPos()
 {
     return B_Pos;
@@ -135,6 +145,11 @@ Vector3 spacecraft::getRot()
 Vector3 spacecraft::getVel()
 {
     return B_Vel;
+}
+
+Vector3 spacecraft::getAcc()
+{
+    return B_Acc;
 }
 
 double spacecraft::getTotalMass()

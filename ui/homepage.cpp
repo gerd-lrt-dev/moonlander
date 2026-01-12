@@ -132,6 +132,11 @@ void Homepage::setupConnections()
             });
 
     connect(cockpit, &cockpitPage::startRequested, simulationWorker, &SimulationWorker::start);
+
+    // Connect thrust input from user with backend
+    connect(cockpit, &cockpitPage::thrustTargetRequested,
+            simulationWorker, &SimulationWorker::setTargetThrust);
+
 }
 
 void Homepage::setupThread()
@@ -155,7 +160,7 @@ void Homepage::setupThread()
     connect(cockpit, &cockpitPage::pauseRequested,
             simulationWorker, &SimulationWorker::pause);
 
-    connect(cockpit, &cockpitPage::stopRequested,
+    connect(cockpit, &cockpitPage::stopConfirmed,
             simulationWorker, &SimulationWorker::stop);
 
     connect(this, &Homepage::sendJsonToWorker, simulationWorker,

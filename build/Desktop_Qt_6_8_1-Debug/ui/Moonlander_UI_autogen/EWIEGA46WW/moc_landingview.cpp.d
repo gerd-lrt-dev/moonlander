@@ -1,5 +1,6 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_landingview.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/landingview.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QTimer \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20functional.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20iterator.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/q20memory.h \
@@ -14,6 +15,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qatomic.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qatomic_cxx11.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbasicatomic.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbasictimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbindingstorage.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbytearray.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qbytearrayalgorithms.h \
@@ -104,6 +106,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtdeprecationmarkers.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtenvironmentvariables.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtextstream.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtimer.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtmetamacros.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtnoop.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/qtpreprocessorsupport.h \

@@ -62,10 +62,12 @@ private:
     EnvironmentConfig env;                          ///< Load environment config
     std::string jsonConfigString;                   ///< String with raw space config data provided by frontend
     customSpacecraft landerMoon1;                   ///< Config for used spacecraft provided by json config
+    bool resetRequested;                            ///< Represents user desire to reset simulation
 
     // Inital data
     Vector3 initialVel;                             ///< [m/s] Initial velocity in three dimensions
     Vector3 initialPos;                             ///< [m] Initial positions in three dimensions
+    Vector3 damageVec = {0.0, 0.0, 0.0};            ///< [m, m/s, m/s²] Sets every telemtry data to zero in case of hull defect
     double initialTime;                             ///< [s] Initial simulation time
 
     /**
@@ -80,7 +82,7 @@ private:
     void buildSimulationEnvironment(Vector3 vel0, Vector3 pos0, double t);
 
     /**
-     * @brief Thread 1 which runs simulation loop
+     * @brief Thread 1 which runs simulation loop (only used stand alone without UI)
      * @param lander1IsIntact Is true, if spacecraft in an operational state
      * @param vel0  ///< [m/s] Initial velocities in three dimensions 
      * @param pos0  ///< [m] Initial position in three dimensions 
@@ -148,6 +150,17 @@ public:
      * transferd from qstring to std::string in frontend
      */
     void setJsonConfigStr(const std::string &jsonConfigStr);
+
+    /**
+     * @brief Sets target thrust
+     * @param thrustPercent [%]
+     */
+    void setTargetThrust(double thrustPercent);
+
+    /**
+     * @brief Sets reset Boolean to true
+     */
+    void setResetBoolean();
 
     /**
      * @brief Instances the logging action and provides filepath for logging file

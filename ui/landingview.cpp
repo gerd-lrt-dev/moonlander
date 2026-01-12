@@ -8,6 +8,14 @@ LandingView::LandingView(QWidget *parent)
 {
     setMinimumSize(300, 300);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // Animation timer (≈30 FPS)
+    connect(&animationTimer, &QTimer::timeout, this, [this]() {
+        motionOffset = (motionOffset + 2) % 20;
+        update();
+    });
+
+    animationTimer.start(33);
 }
 
 // =====================
@@ -53,6 +61,7 @@ void LandingView::paintEvent(QPaintEvent *)
 
     QRect landerRect(width() / 2 - 15, landerY - 30, 30, 30);
 
+    drawMotionStripes(p, landerY);
     drawLander(p, landerRect);
     drawThrust(p, landerRect);
 }
@@ -66,13 +75,33 @@ void LandingView::drawGround(QPainter &p)
     p.drawLine(20, height() - 40, width() - 20, height() - 40);
 }
 
-void LandingView::drawLander(QPainter &p, const QRect &landerRect)
+void LandingView::drawLander(QPainter &p, const QRect &r)
 {
     QColor hullColor = hullIntact ? QColor("#CFD8DC") : QColor("#E53935");
-
-    p.setPen(Qt::NoPen);
+    p.setPen(QPen(Qt::black, 1));
     p.setBrush(hullColor);
-    p.drawRoundedRect(landerRect, 4, 4);
+
+    // Body (trapezoid)
+    QPolygon body;
+    body << QPoint(r.left() + 5, r.top())
+         << QPoint(r.right() - 5, r.top())
+         << QPoint(r.right(), r.bottom())
+         << QPoint(r.left(), r.bottom());
+    p.drawPolygon(body);
+
+    // Legs
+    p.setPen(QPen(QColor("#90A4AE"), 2));
+    p.drawLine(r.left(),  r.bottom(), r.left()  - 10, r.bottom() + 12);
+    p.drawLine(r.right(), r.bottom(), r.right() + 10, r.bottom() + 12);
+
+    // Engine nozzle
+    QRect nozzle(r.center().x() - 4, r.bottom() - 2, 8, 6);
+    p.setBrush(QColor("#455A64"));
+    p.drawRect(nozzle);
+
+    // Window
+    p.setBrush(QColor("#4FC3F7"));
+    p.drawEllipse(r.center().x() - 4, r.top() + 6, 8, 8);
 }
 
 void LandingView::drawThrust(QPainter &p, const QRect &landerRect)
@@ -97,3 +126,24 @@ void LandingView::drawThrust(QPainter &p, const QRect &landerRect)
     p.setPen(Qt::NoPen);
     p.drawRoundedRect(flameRect, 3, 3);
 }
+
+void LandingView::drawMotionStripes(QPainter& p, int landerY)
+{
+    p.setPen(QPen(QColor(255, 255, 255, 40), 2));
+
+    const int stripeCount = 6;
+    const int stripeSpacing = 18;
+
+    for (int i = 0; i < stripeCount; ++i)
+    {
+        int y = landerY + 40 + (i * stripeSpacing) + motionOffset;
+        if (y > height() - 40)
+            continue;
+
+        p.drawLine(
+            width() / 2 - 40, y,
+            width() / 2 + 40, y
+            );
+    }
+}
+
