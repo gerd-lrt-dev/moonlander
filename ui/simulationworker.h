@@ -101,6 +101,7 @@ private:
      // ==========================
      // Internal State
      // ==========================
+    simData spacecraftData;
     std::string jsonConfig;     ///< String with spacecraft config data
     QTimer *simulationTimer;    ///< Drives simulation ticks
     bool running = false;       ///< Simulation running flag

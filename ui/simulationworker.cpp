@@ -79,16 +79,18 @@ void SimulationWorker::setTargetThrust(double percent)
 
 void SimulationWorker::stepSimulation()
 {
+    double dt = 0.00;   ///< Initialized discrete timestep
+
     // Return if not running
     if(!running)
         return;
 
     // times
-    double dt = 0.05;
+    dt = 0.05; // TODO: should specified in json as well
     currentTime += dt;
 
     // Calling backend simulator
-    simData spacecraftData = controller->runSimulation(dt);
+    spacecraftData = controller->runSimulation(dt);
 
     // Withdraw user input due to thrust
     controller->setTargetThrust(requestedThrustPercent);

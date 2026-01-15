@@ -96,6 +96,15 @@ struct customSpacecraft
     double       safeVelocity;              ///< [m/s] Velocity in which is the spacecraft able to land safely
 };
 
+struct stateVector
+{
+    Vector3 I_Position = {0.0, 0.0, 0.0};
+    Vector3 I_Velocity = {0.0, 0.0, 0.0};
+    Vector3 IB_Orientation = {0.0, 0.0, 0.0};
+
+
+};
+
 
 
 /**
