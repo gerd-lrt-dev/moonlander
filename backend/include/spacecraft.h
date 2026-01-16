@@ -5,146 +5,13 @@
 #include "vector3.h"
 #include "environmentConfig.h"
 #include "quaternion.h"
+#include "physics.h"
+#include "simDataStruct.h"
+#include "spacecraftStateStruct.h"
+#include "stateVectorStruct.h"
+#include "customSpacecraftStruct.h"
 
-/**
- * @struct customSpacecraft
- * @brief Defines all physical and configuration parameters of a spacecraft.
- *
- * All parameters are expressed in the spacecraft's body reference frame (B-frame),
- * unless explicitly stated otherwise. The struct contains mass properties,
- * propulsion characteristics, attitude-related inertial properties, and 
- * frame-initialization parameters.
- */
-struct customSpacecraft
-{
-    // -------------------------------------------------------------------------
-    // Mass Properties
-    // -------------------------------------------------------------------------
-
-    double emptyMass;              
-    ///< [kg] Dry mass of the spacecraft (structure + engines, no fuel).
-
-    double fuelM;          
-    ///< [kg] Initial fuel mass at simulation start.
-
-    double maxFuelM;       
-    ///< [kg] Maximum fuel tank capacity (optional; used for validation or HUD).
-
-    // -------------------------------------------------------------------------
-    // Propulsion System
-    // -------------------------------------------------------------------------
-
-    double maxT;           
-    ///< [N] Maximum thrust produced by the main engine at full throttle.
-
-    double Isp;            
-    ///< [s] Specific impulse of the main engine (constant exhaust efficiency).
-
-    double timeConstant;   
-    ///< [s] Engine throttle response time (first-order system time constant).
-
-    double responseRate;
-    ///< [s] Maximum rate of thrust change.
-
-    Vector3 B_mainThrustDirection;
-    ///< [unit] Normalized thrust direction vector in body frame (B-frame).
-    ///< Convention: +Z axis typically points "down" along the engine nozzle.
-
-    Vector3 B_mainThrustPosition;
-    ///< [m] Position of the main engine's thrust application point in B-frame.
-    ///< This produces torque if offset from the spacecraft's center of mass.
-
-
-    // -------------------------------------------------------------------------
-    // Attitude Dynamics (Rigid Body Inertia)
-    // -------------------------------------------------------------------------
-
-    double Ixx;            
-    ///< [kg·m²] Moment of inertia about the spacecraft’s body X-axis.
-
-    double Iyy;            
-    ///< [kg·m²] Moment of inertia about the body Y-axis.
-
-    double Izz;            
-    ///< [kg·m²] Moment of inertia about the body Z-axis.
-    ///< Assumed diagonal inertia tensor (symmetric spacecraft).
-
-
-    // -------------------------------------------------------------------------
-    // State (Body Frame Coordinates)
-    // -------------------------------------------------------------------------
-
-    Vector3 B_initialPos;  
-    ///< [m] Initial spacecraft position expressed in body coordinates.
-    ///< Typically initial (0, 0, 0) because physics handles world/Moon coordinates.
-
-    Vector3 B_initialRot;  
-    ///< [rad] Initial orientation (pitch, yaw, roll) in body coordinates.
-
-    Vector3 B_initialCenterOfMass;
-    ///< [m] Center of mass location in body frame at t=0.
-    ///< Should be updated dynamically if fuel mass distribution changes.
-
-    Vector3 initialVelocity;
-    ///< [m/s] Velocity in three spatial directions
-
-    // -------------------------------------------------------------------------
-    // Integrity & Operational Status
-    // Attributes controlling spacecraft health, integrity, and operational status.
-    // -------------------------------------------------------------------------
-
-    double       structuralIntegrity;       ///< [%] Threshold at which the spacecraft becomes non-operational
-    double       safeVelocity;              ///< [m/s] Velocity in which is the spacecraft able to land safely
-};
-
-/**
- * @struct StateVector
- * @brief Encapsulates the complete translational and rotational state of the spacecraft.
- *
- * This struct represents the full dynamic state of the spacecraft at any given time.
- * It includes inertial position and velocity, orientation with respect to the inertial frame,
- * angular velocity in the body frame, and the total mass.
- *
- * It is intended to be the single source of truth for the spacecraft's state in the simulation.
- */
-struct StateVector
-{
-    /**
-     * @brief Inertial position vector of the spacecraft [m].
-     *
-     * Expressed in the chosen inertial frame (e.g., Moon-centered inertial frame).
-     */
-    Vector3 I_Position = {0.0, 0.0, 0.0};
-
-    /**
-     * @brief Inertial velocity vector of the spacecraft [m/s].
-     *
-     * Expressed in the chosen inertial frame.
-     */
-    Vector3 I_Velocity = {0.0, 0.0, 0.0};
-
-    /**
-     * @brief Orientation quaternion of the spacecraft.
-     *
-     * Represents the rotation from the body-fixed frame to the inertial frame.
-     * Default constructor creates the identity quaternion (no rotation).
-     */
-    Quaternion IB_Orientation;
-
-    /**
-     * @brief Angular velocity vector of the spacecraft [rad/s].
-     *
-     * Expressed in the body-fixed frame.
-     */
-    Vector3 B_AngularVelocity = {0.0, 0.0, 0.0};
-
-    /**
-     * @brief Total mass of the spacecraft [kg].
-     *
-     * Can change during simulation if propellant consumption is modeled.
-     */
-    double totalMass = 0.0;
-};
+#include <memory>
 
 /**
  * @class spacecraft
@@ -171,27 +38,24 @@ private:
      * TODO: When it comes to many more vars organize them also in structs
      */
     ///@{
+    StateVector state_;                     ///< Encapsulates the complete translational and rotational state of the spacecraft and is single source of thruth
+    std::unique_ptr<physics> physics_;      ///< Physics engine handling lander motion
+    EnvironmentConfig environmentConfig_;   ///< [-] Environment config struct with constant parameters.
+    SpacecraftState spacecraftState_;       ///< State of spacecraft
     customSpacecraft landerMoon;    ///< [] Parameters which defines spacecraft. This are filled by json config data.
+
     Thrust mainEngine;              ///< [] Dynamic state of the engine thrust.
     double totalMass;               ///< [kg] Total mass of spacecraft.
     double dt = 0;                  ///< [s] Time steps. Provided by updateTime.
     double time = 0;                ///< [s] Absolute time. Will be added by dt from udpateTime.
-    Vector3 B_Pos;                  ///< [m] Current spacecraft position expressed in body coordinates.
+    Vector3 I_Pos;                  ///< [m] Current spacecraft position expressed in body coordinates.
+    Vector3 I_Vel;                  ///< [m/s] Velocity in three spatial directions.
     Vector3 B_Rot;                  ///< [rad] Current orientation (pitch, yaw, roll) in body coordinates.
     Vector3 B_CenterOfMass;         ///< [m] Center of mass location in body frame at actual time.
-    Vector3 B_Vel;                  ///< [m/s] Velocity in three spatial directions.
+
     Vector3 B_Acc;                  ///< [m/s²] Acceleration in three spatial directions.
     double spacecraftIntegrity;     ///< [%] Current integrity of the spacecraft.
     bool spacecraftIsOperational;   ///< [true/false] Whether the spacecraft is still operational.
-    EnvironmentConfig config;       ///< [-] Environment config struct with constant parameters.
-    enum class SpacecraftState      ///< State of spacecraft
-    {
-        Operational,                ///< Fully physics
-        Landed,                     ///< no translation, time & systems running
-        Crashed,                    ///< no translation, but state stable
-        Destroyed                   ///< everything besides time is frozen
-    };
-
     ///@}
 
     /**
@@ -212,12 +76,77 @@ private:
      */
     void setDefaultValues();
 
+    // -------------------------------------------------------------------------
+    // Private update functions
+    // -------------------------------------------------------------------------
+
     /**
      * @brief Updates total mass
      * Updates the total mass of the spacecraft in connection with fuel consumption due to the combustion process.
      * Updates the total mass of the class directly without return.
      */
     void updateTotalMassOnFuelReduction(double emptyMass, double fuelMass);
+
+    /**
+     * @brief Updates all dynamic movement-related data of the spacecraft.
+     *
+     * This function evaluates all relevant physical models affecting the spacecraft
+     * motion, including environmental forces, actuation effects, and control inputs.
+     * Based on these evaluations, the time derivatives of the spacecraft state are
+     * computed and applied to update the internal state vector.
+     *
+     * The function does not manage simulation time or time stepping directly.
+     * It is intended to be called as part of a higher-level update routine
+     * (e.g. updateStep), ensuring a consistent and coordinated state update.
+     *
+     * All updates performed by this function are internal to the spacecraft object.
+     * No partial or intermediate state is exposed to external components.
+     */
+    void updateMovementData(double dt);
+
+    // -------------------------------------------------------------------------
+    // Private setter functions
+    // -------------------------------------------------------------------------
+    /**
+     * @brief Sets spacecraft state
+     * @param newState
+     */
+    void setSpacecraftState(SpacecraftState newState);
+
+    /**
+     * @brief Update position to new values
+     * @param 3D Vector with cartesian-coordinates [m]
+     */
+    void setPosition(const Vector3& pos);
+
+    /**
+     * @brief Sets velocity of spacecraft
+     * @param 3D Vector with velocities in three dimensions [m/s]
+     */
+    void setVelocity(const Vector3& vel);
+
+    /**
+     * @brief Sets orientation of spacecraft
+     * @param Quaternion with q0 Scalar component, q1 First vector component, q2 Second vector component, q3 Third vector component
+     */
+    void setOrientation(const Quaternion& q);
+
+    /**
+     * @brief Sets angular velocity of spacecraft
+     * @param Angular velocity vector of the spacecraft [rad/s].
+     */
+    void setAngularVelocity(const Vector3& angVel);
+
+    // -------------------------------------------------------------------------
+    // Private getter functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * @brief Getter for spacecraft state
+     * @return Current spacecraft state
+     */
+    SpacecraftState getSpacecraftState() const;
+
     
     
 public:
@@ -291,6 +220,30 @@ spacecraft(customSpacecraft lMoon);
      */
     bool isIntact();
 
+    // -------------------------------------------------------------------------
+    // Updater functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * @brief Advances the simulation by one discrete time step.
+     *
+     * This function performs a complete and physically consistent state update
+     * of the spacecraft over the given time increment. It triggers the evaluation
+     * of all relevant dynamic models (e.g. environment, actuation, and control),
+     * computes the time derivatives of the full state vector, and integrates the
+     * result over the specified time step.
+     *
+     * The update is executed as a single, atomic operation to ensure that the
+     * translational and rotational states remain synchronized. No partial state
+     * updates are exposed during the execution of this function.
+     *
+     * This method is intended to be called exactly once per simulation time step
+     * by the simulation controller.
+     *
+     * @param dt Simulation time step [s].
+     */
+    void updateStep(double dt);
+
     /**
      * @brief Updates spacecraft integrity in case of damage
      * 
@@ -303,13 +256,13 @@ spacecraft(customSpacecraft lMoon);
      * Damage will deduct the integrity of spacecraft
      * - @ref spacecraftIntegrity
      */
-    void updateSpacecraftIntegrity(double delta);
+    void updateSpacecraftIntegrity();
 
     /**
      * @brief Updates time
      * @param dt timestep [s]
-     * 
-     * Single source of thruth for time is simcontrol!
+     *
+     * Single source of thruth for time is frontend simulation worker via simcontrol!
      */
     void updateTime(double dt);
 
@@ -356,6 +309,9 @@ spacecraft(customSpacecraft lMoon);
      */
     void setThrust(double targetThrustInPercentage);
 
+    // -------------------------------------------------------------------------
+    // Requester functions
+    // -------------------------------------------------------------------------
     /**
      * @brief Request target Thrust of Aircraft
      * @return target thrust
@@ -380,39 +336,35 @@ spacecraft(customSpacecraft lMoon);
     Vector3 requestThrustDirection() const;
 
     /**
-     * @brief Request current fuel level
-     * @return Fuel level in percent [%]
+     * @brief Request live fuel consumption from thrust class
+     * @return fuel consumption
      */
+    double requestLiveFuelConsumption() const;
 
-     /**
-      * @brief Request live fuel consumption from thrust class
-      * @return fuel consumption
-      */
-     double requestLiveFuelConsumption() const;
-
-    /**
-     * @brief Update position to new values
-     * @param 3D Vector with cartesian-coordinates [m]
-     */
-    void setPos(Vector3 pos);
+    // -------------------------------------------------------------------------
+    // Public setter functions
+    // -------------------------------------------------------------------------
 
     /**
-     * @brief Sets rotation of spacecraft
-     * @param 3D Vector with euler rotation \varphi ,\theta ,\psi [rad]
+     * @brief Set inital position
+     * Sets position only in spacecraftdata struct.
+     * This function has no rights to wirte into statevector!
      */
-    void setRot(Vector3 rot);
+    void setInitalPosition(const Vector3& position);
 
     /**
-     * @brief Sets velocity of spacecraft
-     * @param 3D Vector with velocities in three dimensions [m/s]
+     * @brief Set inital velocity
+     * Sets velocity only in spacecraftdata struct.
+     * This function has no rights to wirte into statevector!
      */
-    void setVel(Vector3 vel);
+    void setInitalVelocity(const Vector3& velocity);
 
-    /**
-     * @brief Sets acceleration of spacecraft
-     * @param 3D Vector with acceleration in three dimensions [m/s²]
-     */
-    void setAcc(Vector3 vel);
+
+    // -------------------------------------------------------------------------
+    // Public getter functions
+    // -------------------------------------------------------------------------
+
+    simData getFullSimulationData() const;
 
     /**
      * @brief getter for Integrity
@@ -420,29 +372,35 @@ spacecraft(customSpacecraft lMoon);
      */
     double getIntegrity();
 
+     /**
+     * @brief Return current state of spacecraft
+     * @return Current state of space craft organized in a full state struct
+     */
+    const StateVector& getState() const;
+
     /**
      * @brief Return current position of spacecraft
      * @return Current position in cartesian-coordinates [m]
      */
-    Vector3 getPos();
-
-    /**
-     * @brief Return current rotation of spacecraft
-     * @return Current rotation in euler angles [rad]
-     */
-    Vector3 getRot();
+    Vector3 getPosition() const;
 
     /**
      * @brief Return current velocity of spacecraft
     //  * @return Current velocity [m/s]
      */
-    Vector3 getVel();
+    Vector3 getVelocity() const;
 
     /**
-     * @brief Return current Acceleration of spacecraft
-    //  * @return Current Acceleration [m/s²]
+     * @brief Return orientation of spacecraft
+     * @return Quaternion with q0 Scalar component, q1 First vector component, q2 Second vector component, q3 Third vector component
      */
-    Vector3 getAcc();
+    Quaternion getOrientation() const;
+
+    /**
+     * @brief Return angular velocity of spacecraft
+     * @return Angular velocity vector of the spacecraft [rad/s].
+     */
+    Vector3 getAngularVelocity() const;
 
     /**
      * @brief Return current total mass

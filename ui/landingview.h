@@ -11,6 +11,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <spacecraftStateStruct.h>
 
 /**
  * @class LandingView
@@ -58,7 +59,7 @@ public:
      * @brief Updates hull integrity state.
      * @param intact True if spacecraft is intact.
      */
-    void setHullIntact(bool intact);
+    void setHullIntact(SpacecraftState spacecraftState_);
 
 protected:
     /**

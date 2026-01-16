@@ -52,7 +52,8 @@ static constexpr auto qt_meta_stringdata_ZN11cockpitPageE = QtMocHelpers::string
     "pos",
     "vel",
     "acc",
-    "intact",
+    "SpacecraftState",
+    "spacecraftState_",
     "thrust",
     "targetThrust",
     "fuelMass",
@@ -85,7 +86,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11cockpitPageE[] = {
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
        8,    9,   63,    2, 0x0a,    7 /* Public */,
-      19,    0,   82,    2, 0x08,   17 /* Private */,
+      20,    0,   82,    2, 0x08,   17 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -95,7 +96,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN11cockpitPageE[] = {
     QMetaType::Void, QMetaType::Double,    7,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Double, 0x80000000 | 10, 0x80000000 | 10, 0x80000000 | 10, QMetaType::Bool, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    9,   11,   12,   13,   14,   15,   16,   17,   18,
+    QMetaType::Void, QMetaType::Double, 0x80000000 | 10, 0x80000000 | 10, 0x80000000 | 10, 0x80000000 | 14, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    9,   11,   12,   13,   15,   16,   17,   18,   19,
     QMetaType::Void,
 
        0        // eod
@@ -127,7 +128,7 @@ Q_CONSTINIT const QMetaObject cockpitPage::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<const Vector3 &, std::false_type>,
         QtPrivate::TypeAndForceComplete<const Vector3 &, std::false_type>,
         QtPrivate::TypeAndForceComplete<const Vector3 &, std::false_type>,
-        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<SpacecraftState, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -148,7 +149,7 @@ void cockpitPage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 2: _t->stopConfirmed(); break;
         case 3: _t->resetSimulationRequested(); break;
         case 4: _t->thrustTargetRequested((*reinterpret_cast< std::add_pointer_t<double>>(_a[1]))); break;
-        case 5: _t->onStateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
+        case 5: _t->onStateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<SpacecraftState>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
         case 6: _t->onStopClicked(); break;
         default: ;
         }

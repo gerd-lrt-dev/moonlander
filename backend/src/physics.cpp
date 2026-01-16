@@ -31,17 +31,22 @@ Vector3 physics::calcAccelerationAlignedToCenterOfMoon(Vector3 accelerationSpace
 }
 
 // public  ---------------------------------------------------------
-Vector3 physics::updatePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt) const
+Vector3 physics::computePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt) const
 {
     return pos + vel * dt + accelerationSpacecraft * 0.5 * dt * dt;
 }
 
-Vector3 physics::updateVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const
+Vector3 physics::computeVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const
 {
+    /*
+    std::cout << "Current Velocity in z: " << vel.z << std::endl;
+    std::cout << "Current acceleration in z: " << accelerationSpacecraft.z << std::endl;
+    std::cout << "dt: " << dt << std::endl;
+    */
     return vel + accelerationSpacecraft * dt;
 }
 
-Vector3 physics::updateAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const
+Vector3 physics::computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const
 {
     return spacemath::accelerationComplex(currentThrust, totalMass, directionOfThrust, moonGravityVec);
 }

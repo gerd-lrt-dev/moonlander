@@ -73,7 +73,7 @@ public:
      * The resulting height is calculated based on the equation of motion.
      * h(t) = h0 ​+ v0 * ​t + 1/2 ​(accelerationSpacecraft−g) * t²
      */
-    Vector3 updatePos(Vector3 vel,  Vector3 pos, Vector3 accelerationSpacecraft, double dt) const;
+    Vector3 computePos(Vector3 vel,  Vector3 pos, Vector3 accelerationSpacecraft, double dt) const;
 
     /**
      * @brief Calculates velocity based on time and initial velocity
@@ -87,7 +87,7 @@ public:
      * v(t) = v0 + a{resutl} * t
      * a{result} = a{accelerationSpacecraft} - g{moon}
      */
-    Vector3 updateVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const;
+    Vector3 computeVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const;
 
     /**
      * @brief Request current acceleration based on thrust of spacecraft
@@ -118,7 +118,7 @@ public:
     * always points toward the Moon's center.
     * The calculation is made by the helper class spacemath
      */
-    Vector3 updateAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const;
+    Vector3 computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const;
 };
 
 #endif

@@ -17,7 +17,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) // Preperatio
 
     // Initialize the controller with:
     // v0 = 0 m/s, h0 = 3200 m, t0 = 0 s
-    controller = std::make_unique<simcontrol>(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 3200.0), 0);
+    controller = std::make_unique<simcontrol>(0);
 
     // Simulation runs inside simcontrol constructor / runSimulator
 

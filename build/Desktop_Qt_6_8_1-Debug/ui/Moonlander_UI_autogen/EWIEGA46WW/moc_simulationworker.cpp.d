@@ -1,13 +1,18 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_simulationworker.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/simulationworker.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Thrust.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/customSpacecraftStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/jsonConfigReader.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/output.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/physics.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/quaternion.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/simDataStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/simcontrol.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacecraft.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacecraftStateStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/spacemath.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/stateVectorStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/vector3.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QDebug \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtCore/QMutexLocker \

@@ -45,7 +45,8 @@ static constexpr auto qt_meta_stringdata_ZN16SimulationWorkerE = QtMocHelpers::s
     "pos",
     "vel",
     "acc",
-    "spacecraftIntegrity",
+    "SpacecraftState",
+    "spacecraftState_",
     "thrust",
     "targetThrust",
     "fuelMass",
@@ -80,26 +81,26 @@ Q_CONSTINIT static const uint qt_meta_data_ZN16SimulationWorkerE[] = {
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
        1,    9,   62,    2, 0x06,    1 /* Public */,
-      13,    1,   81,    2, 0x06,   11 /* Public */,
+      14,    1,   81,    2, 0x06,   11 /* Public */,
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-      15,    0,   84,    2, 0x0a,   13 /* Public */,
-      16,    0,   85,    2, 0x0a,   14 /* Public */,
-      17,    0,   86,    2, 0x0a,   15 /* Public */,
-      18,    1,   87,    2, 0x0a,   16 /* Public */,
-      20,    1,   90,    2, 0x0a,   18 /* Public */,
-      22,    0,   93,    2, 0x0a,   20 /* Public */,
+      16,    0,   84,    2, 0x0a,   13 /* Public */,
+      17,    0,   85,    2, 0x0a,   14 /* Public */,
+      18,    0,   86,    2, 0x0a,   15 /* Public */,
+      19,    1,   87,    2, 0x0a,   16 /* Public */,
+      21,    1,   90,    2, 0x0a,   18 /* Public */,
+      23,    0,   93,    2, 0x0a,   20 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::Double, 0x80000000 | 4, 0x80000000 | 4, 0x80000000 | 4, QMetaType::Bool, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    3,    5,    6,    7,    8,    9,   10,   11,   12,
-    QMetaType::Void, QMetaType::QString,   14,
+    QMetaType::Void, QMetaType::Double, 0x80000000 | 4, 0x80000000 | 4, 0x80000000 | 4, 0x80000000 | 8, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    3,    5,    6,    7,    9,   10,   11,   12,   13,
+    QMetaType::Void, QMetaType::QString,   15,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Double,   19,
-    QMetaType::Void, QMetaType::QString,   21,
+    QMetaType::Void, QMetaType::Double,   20,
+    QMetaType::Void, QMetaType::QString,   22,
     QMetaType::Void,
 
        0        // eod
@@ -120,7 +121,7 @@ Q_CONSTINIT const QMetaObject SimulationWorker::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<Vector3, std::false_type>,
         QtPrivate::TypeAndForceComplete<Vector3, std::false_type>,
         QtPrivate::TypeAndForceComplete<Vector3, std::false_type>,
-        QtPrivate::TypeAndForceComplete<bool, std::false_type>,
+        QtPrivate::TypeAndForceComplete<SpacecraftState, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -151,7 +152,7 @@ void SimulationWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     auto *_t = static_cast<SimulationWorker *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->stateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<bool>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
+        case 0: _t->stateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<SpacecraftState>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
         case 1: _t->simulationError((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 2: _t->start(); break;
         case 3: _t->pause(); break;
@@ -165,7 +166,7 @@ void SimulationWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (SimulationWorker::*)(double , Vector3 , Vector3 , Vector3 , bool , double , double , double , double );
+            using _q_method_type = void (SimulationWorker::*)(double , Vector3 , Vector3 , Vector3 , SpacecraftState , double , double , double , double );
             if (_q_method_type _q_method = &SimulationWorker::stateUpdated; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -213,7 +214,7 @@ int SimulationWorker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void SimulationWorker::stateUpdated(double _t1, Vector3 _t2, Vector3 _t3, Vector3 _t4, bool _t5, double _t6, double _t7, double _t8, double _t9)
+void SimulationWorker::stateUpdated(double _t1, Vector3 _t2, Vector3 _t3, Vector3 _t4, SpacecraftState _t5, double _t6, double _t7, double _t8, double _t9)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t8))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t9))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

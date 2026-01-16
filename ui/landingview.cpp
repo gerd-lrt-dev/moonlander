@@ -33,9 +33,21 @@ void LandingView::setThrust(double percent)
     update();
 }
 
-void LandingView::setHullIntact(bool intact)
+void LandingView::setHullIntact(SpacecraftState spacecraftState_)
 {
-    hullIntact = intact;
+    if (spacecraftState_ == SpacecraftState::Operational)
+    {
+        hullIntact = true;
+    }
+    else if (spacecraftState_ == SpacecraftState::Landed)
+    {
+        hullIntact = true;
+    }
+    else
+    {
+        hullIntact = false;
+    }
+
     update();
 }
 

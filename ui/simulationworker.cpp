@@ -13,22 +13,14 @@ SimulationWorker::SimulationWorker(QObject *parent)
 
 void SimulationWorker::start()
 {
-    // return if simulation does not run (default of running is false)
-    if (running)
-        return;
-
-    // Initialize the controller with:
-    // v0 = 0 m/s, h0 = 3200 m, t0 = 0 s
     try {
-            controller = std::make_unique<simcontrol>(Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 3200.0), 0);
-            //controller->instanceLoggingAction();
-            controller->initialize(jsonConfig);
-        }
+        controller = std::make_unique<simcontrol>(0);
+        controller->initialize(jsonConfig);
+    }
     catch (const std::exception& e)
     {
         qCritical() << "Simulation start failed: " << e.what();
-            emit simulationError(QString::fromStdString(e.what()));
-        return;
+        emit simulationError(QString::fromStdString(e.what()));
     }
 
     running = true;
@@ -53,7 +45,7 @@ void SimulationWorker::stop()
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
-                      1.0,
+                      SpacecraftState::Operational,
                       0.0,
                       0.0,
                       0.0,
@@ -97,10 +89,10 @@ void SimulationWorker::stepSimulation()
 
     // signals
     emit stateUpdated(currentTime,
-                      spacecraftData.pos,
-                      spacecraftData.vel,
-                      spacecraftData.acc,
-                      spacecraftData.spacecraftIntegrity,
+                      spacecraftData.statevector_.I_Position,
+                      spacecraftData.statevector_.I_Velocity,
+                      {0.0, 0.0, 0.0}, // TODO: bring accelartion into UI
+                      spacecraftData.spacecraftState_,
                       spacecraftData.thrust,
                       spacecraftData.targetThrust,
                       spacecraftData.fuelMass,

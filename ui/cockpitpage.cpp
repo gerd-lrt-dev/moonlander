@@ -195,12 +195,28 @@ void cockpitPage::updateTargetThrust(double t)       { lcdTargetThrust->display(
 void cockpitPage::updateFuelMass(double f)           { lcdFuelMass->display(QString::number(f, 'f', 1)); }
 void cockpitPage::updateFuelFlow(double f)           { lcdFuelFlow->display(QString::number(f, 'f', 2)); }
 
-void cockpitPage::updateHullStatus(bool intact)
+void cockpitPage::updateHullStatus(SpacecraftState spacecraftState_)
 {
-    lblHullStatus->setText(intact ? "HULL: OK" : "HULL: DAMAGED");
-    lblHullStatus->setStyleSheet(intact
-                                     ? "color: lime; font-weight: bold;"
-                                     : "color: red; font-weight: bold;");
+    if (spacecraftState_ == SpacecraftState::Operational)
+    {
+        lblHullStatus->setText("Operational");
+        lblHullStatus->setStyleSheet("color: lime; font-weight: bold;");
+    }
+    else if (spacecraftState_ == SpacecraftState::Landed)
+    {
+        lblHullStatus->setText("Landed");
+        lblHullStatus->setStyleSheet("color: green; font-weight: bold;");
+    }
+    else if (spacecraftState_ == SpacecraftState::Crashed)
+    {
+        lblHullStatus->setText("Crashed");
+        lblHullStatus->setStyleSheet("color: red; font-weight: bold;");
+    }
+    else if (spacecraftState_ == SpacecraftState::Destroyed)
+    {
+        lblHullStatus->setText("Destroyed");
+        lblHullStatus->setStyleSheet("color: red; font-weight: bold;");
+    }
 }
 
 // ------------------------------------------------
@@ -210,7 +226,7 @@ void cockpitPage::onStateUpdated(double time,
                                  const Vector3& pos,
                                  const Vector3& vel,
                                  const Vector3& acc,
-                                 bool intact,
+                                 SpacecraftState spacecraftState_,
                                  double thrust,
                                  double targetThrust,
                                  double fuelMass,
@@ -225,11 +241,11 @@ void cockpitPage::onStateUpdated(double time,
     updateTargetThrust(qRound(targetThrust * 10.0) / 10.0);
     updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
     updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
-    updateHullStatus(intact);
+    updateHullStatus(spacecraftState_);
 
     landingView->setAltitude(pos.z);
     landingView->setThrust(thrust);
-    landingView->setHullIntact(intact);
+    landingView->setHullIntact(spacecraftState_);
 }
 
 void cockpitPage::onStopClicked()

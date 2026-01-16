@@ -78,7 +78,7 @@ signals:
                       Vector3 pos,
                       Vector3 vel,
                       Vector3 acc,
-                      bool spacecraftIntegrity,
+                      SpacecraftState spacecraftState_,
                       double thrust,
                       double targetThrust,
                       double fuelMass,

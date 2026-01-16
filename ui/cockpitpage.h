@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QSlider>
 #include <vector3.h>
+#include <spacecraftStateStruct.h>
 
 #include "landingview.h"
 
@@ -120,7 +121,7 @@ public:
      *
      * @param intact True if hull is intact, false if damaged.
      */
-    void updateHullStatus(bool intact);
+    void updateHullStatus(SpacecraftState spacecraftState_);
 
 signals:
     void startRequested();
@@ -134,7 +135,7 @@ public slots:
                         const Vector3& pos,
                         const Vector3& vel,
                         const Vector3& acc,
-                        bool intact,
+                        SpacecraftState spacecraftState_,
                         double thrust,
                         double targetThrust,
                         double fuelMass,

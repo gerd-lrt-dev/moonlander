@@ -19,7 +19,7 @@
       "Iyy": 910.0,
       "Izz": 720.0,
 
-      "B_initialPos": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "B_initialPos": { "x": 0.0, "y": 0.0, "z": 3200.0 },
       "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
       "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.2 },
 
