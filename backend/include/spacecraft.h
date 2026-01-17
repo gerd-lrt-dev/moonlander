@@ -104,6 +104,14 @@ private:
      */
     void updateMovementData(double dt);
 
+    /**
+     * @brief Updates all dynamic movement-related data of the spacecraft to zero
+     * @param dt
+     *
+     * Function is used for landed or crashed states
+     */
+    void updateMovementDataToZero(double dt);
+
     // -------------------------------------------------------------------------
     // Private setter functions
     // -------------------------------------------------------------------------
@@ -147,8 +155,44 @@ private:
      */
     SpacecraftState getSpacecraftState() const;
 
-    
-    
+    // -------------------------------------------------------------------------
+    // Apply functions
+    // -------------------------------------------------------------------------
+
+    /**
+     * @brief Applies landing damage based on impact velocity and spacecraft mass.
+     *
+     * This function calculates the percentage damage the spacecraft receives
+     * during landing. The damage is proportional to the kinetic energy (KE) at impact
+     * relative to a reference safe landing energy.
+     *
+     * The calculation steps are as follows:
+     * 1. Compute the total kinetic energy of the spacecraft:
+     *      KE = 0.5 * total_mass * v^2
+     *      where:
+     *          - total_mass = emptyMass + fuelMass
+     *          - v = vertical velocity at impact [m/s]
+     *
+     * 2. Define a reference kinetic energy (KE_ref) corresponding to a safe landing:
+     *      KE_ref = 0.5 * total_mass * v_safe^2
+     *      where:
+     *          - v_safe = maximum safe landing velocity
+     *
+     * 3. Compute proportional damage:
+     *      damage_percent = KE / KE_ref
+     *
+     * 4. Update spacecraft integrity:
+     *      new_integrity = old_integrity - damage_percent
+     *      Integrity is clamped to [0, 1].
+     *
+     * 5. Update operational status:
+     *      spacecraftIsOperational = (new_integrity >= structuralIntegrity)
+     *
+     * @param impactVelocity Vertical velocity at landing [m/s]
+     * @param safeVelocity Maximum safe landing velocity [m/s] (default is 2 m/s)
+     */
+    void applyLandingDamage(double impactVelocity);
+
 public:
 /**
  * @brief Constructs a spacecraft using parameters loaded from a configuration object.
@@ -265,40 +309,6 @@ spacecraft(customSpacecraft lMoon);
      * Single source of thruth for time is frontend simulation worker via simcontrol!
      */
     void updateTime(double dt);
-
-    /**
-     * @brief Applies landing damage based on impact velocity and spacecraft mass.
-     * 
-     * This function calculates the percentage damage the spacecraft receives
-     * during landing. The damage is proportional to the kinetic energy (KE) at impact
-     * relative to a reference safe landing energy.
-     * 
-     * The calculation steps are as follows:
-     * 1. Compute the total kinetic energy of the spacecraft:
-     *      KE = 0.5 * total_mass * v^2
-     *      where:
-     *          - total_mass = emptyMass + fuelMass
-     *          - v = vertical velocity at impact [m/s]
-     *
-     * 2. Define a reference kinetic energy (KE_ref) corresponding to a safe landing:
-     *      KE_ref = 0.5 * total_mass * v_safe^2
-     *      where:
-     *          - v_safe = maximum safe landing velocity
-     *
-     * 3. Compute proportional damage:
-     *      damage_percent = KE / KE_ref
-     *
-     * 4. Update spacecraft integrity:
-     *      new_integrity = old_integrity - damage_percent
-     *      Integrity is clamped to [0, 1].
-     *
-     * 5. Update operational status:
-     *      spacecraftIsOperational = (new_integrity >= structuralIntegrity)
-     *
-     * @param impactVelocity Vertical velocity at landing [m/s]
-     * @param safeVelocity Maximum safe landing velocity [m/s] (default is 2 m/s)
-     */
-    void applyLandingDamage(double impactVelocity);
 
     /**
      * @brief Set thrust up to specific level

@@ -9,7 +9,7 @@
 void spacecraft::setDefaultValues()
 {
     spacecraftIntegrity = 1.0;
-    spacecraftIsOperational = true;
+    spacecraftState_ = SpacecraftState::Operational;
     totalMass = landerMoon.emptyMass + landerMoon.fuelM;
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
@@ -59,6 +59,12 @@ void spacecraft::updateMovementData(double dt)
     state_.I_Position = position;
 }
 
+void spacecraft::updateMovementDataToZero(double dt)
+{
+    // --- Commit to state vector ---
+    state_.I_Velocity = {0.0, 0.0, 0.0};
+}
+
 
 void spacecraft::setSpacecraftState(SpacecraftState newState)
 {
@@ -68,6 +74,18 @@ void spacecraft::setSpacecraftState(SpacecraftState newState)
 SpacecraftState spacecraft::getSpacecraftState() const
 {
     return spacecraftState_;
+}
+
+void spacecraft::applyLandingDamage(double impactVelocity)
+{
+    double KE(0), KEref(0), damageInPercent(0);
+
+    KEref   = spacemath::kineticEnergy(totalMass, landerMoon.safeVelocity);
+    KE      = spacemath::kineticEnergy(totalMass, impactVelocity);
+
+    damageInPercent = KE / KEref;
+
+    spacecraftIntegrity += -damageInPercent;
 }
 
 void spacecraft::setPosition(const Vector3& pos)
@@ -133,6 +151,16 @@ void spacecraft::updateStep(double dt)
     // Update mass data
     updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
 
+    std::cout << "Spacecraft position: " << state_.I_Position.z << std::endl;
+    // Apply landing damage
+    if (state_.I_Position.z <= 0.0)
+    {
+        std::cout << "Apply landing damage!!!" << std::endl;
+        applyLandingDamage(state_.I_Velocity.z);
+    }
+
+    updateSpacecraftIntegrity();
+
     // Update Movement data due to spacecraft state
     switch (spacecraftState_)
     {
@@ -142,6 +170,7 @@ void spacecraft::updateStep(double dt)
 
     case SpacecraftState::Landed:
         // Translation disabled, rotation optional
+        updateMovementDataToZero(dt);
         break;
 
     case SpacecraftState::Crashed:
@@ -153,13 +182,6 @@ void spacecraft::updateStep(double dt)
         break;
     }
 
-    // Apply landing damage
-    if (state_.I_Velocity.z <= -0.1)
-    {
-        applyLandingDamage(state_.I_Velocity.z);
-    }
-
-    updateSpacecraftIntegrity();
 }
 
 void spacecraft::updateSpacecraftIntegrity()
@@ -167,32 +189,44 @@ void spacecraft::updateSpacecraftIntegrity()
     if(spacecraftIntegrity > 1.0) spacecraftIntegrity = 1.0;
     if(spacecraftIntegrity < 0.0) spacecraftIntegrity = 0.0;
 
-    // Update operational status
-    // Update operational status
+    // --- Update spacecraft state ---
+    //TODO: set thrust to zero when landed etc.
+
+    // 1. Completely destroyed (terminal)
     if (spacecraftIntegrity <= 0.0)
     {
         spacecraftState_ = SpacecraftState::Destroyed;
+        std::cout << "[STATE] Spacecraft DESTROYED" << std::endl;
+        return;
     }
-    else if (spacecraftIntegrity < 1.0)
+
+    // 2. Structural failure (terminal but stable)
+    if (spacecraftIntegrity < landerMoon.structuralIntegrity)
     {
         spacecraftState_ = SpacecraftState::Crashed;
+        std::cout << "[STATE] Spacecraft CRASHED (structural failure)" << std::endl;
+        return;
     }
-    else if (spacecraftIntegrity <= landerMoon.structuralIntegrity)
+
+    // 3. Successful touchdown
+    if (getPosition().z <= 0.0)
     {
-        spacecraftState_ = SpacecraftState::Operational;
+        spacecraftState_ = SpacecraftState::Landed;
+        std::cout << "[STATE] Spacecraft LANDED" << std::endl;
+        return;
     }
-}
 
-void spacecraft::applyLandingDamage(double impactVelocity)
-{
-    double KE(0), KEref(0), damageInPercent(0);
+    // 4. Still operational (possibly damaged)
+    spacecraftState_ = SpacecraftState::Operational;
 
-    KEref   = spacemath::kineticEnergy(totalMass, landerMoon.safeVelocity);
-    KE      = spacemath::kineticEnergy(totalMass, impactVelocity);
-
-    damageInPercent = KE / KEref;
-
-    spacecraftIntegrity += -damageInPercent;
+    if (spacecraftIntegrity < 1.0)
+    {
+        std::cout << "[STATE] Spacecraft OPERATIONAL (DAMAGED)" << std::endl;
+    }
+    else
+    {
+        std::cout << "[STATE] Spacecraft OPERATIONAL" << std::endl;
+    }
 }
 
 void spacecraft::setThrust(double targetThrustInPercentage)
@@ -203,6 +237,8 @@ void spacecraft::setThrust(double targetThrustInPercentage)
     mainEngine.setTarget(targetThrust);
 }
 
+//TODO: Obsolete?
+//TODO:
 void spacecraft::updateTime(double dt)
 {
     time += dt;
