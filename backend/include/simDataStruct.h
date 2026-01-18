@@ -33,6 +33,9 @@ struct simData
     double fuelMass;
     double fuelFlow;
 
+    // Forces
+    double GLoad;
+
 };
 
 #endif // SIMDATASTRUCT_H

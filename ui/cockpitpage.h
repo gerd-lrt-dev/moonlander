@@ -134,7 +134,7 @@ public slots:
     void onStateUpdated(double time,
                         const Vector3& pos,
                         const Vector3& vel,
-                        const Vector3& acc,
+                        const double& GLoad,
                         SpacecraftState spacecraftState_,
                         double thrust,
                         double targetThrust,

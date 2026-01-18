@@ -93,7 +93,7 @@ void cockpitPage::setupUI()
     engineLayout->addWidget(lcdThrust,                       0, 1);
     engineLayout->addWidget(new QLabel("Target Thrust [N]"), 1, 0);
     engineLayout->addWidget(lcdTargetThrust,                 1, 1);
-    engineLayout->addWidget(new QLabel("Accel [m/s²]"),      2, 0);
+    engineLayout->addWidget(new QLabel("G-Load [m/s²]"),      2, 0);
     engineLayout->addWidget(lcdAcceleration,                 2, 1);
 
     // ================= FUEL =================
@@ -225,7 +225,7 @@ void cockpitPage::updateHullStatus(SpacecraftState spacecraftState_)
 void cockpitPage::onStateUpdated(double time,
                                  const Vector3& pos,
                                  const Vector3& vel,
-                                 const Vector3& acc,
+                                 const double& GLoad,
                                  SpacecraftState spacecraftState_,
                                  double thrust,
                                  double targetThrust,
@@ -236,7 +236,7 @@ void cockpitPage::onStateUpdated(double time,
     updateAltitude(qRound(pos.z * 10.0) / 10.0);
     updateVerticalVelocity(qRound(vel.z * 10.0) / 10.0);
     updateHorizontalVelocity(qRound(vel.x * 10.0) / 10.0);
-    updateAcceleration(qRound(acc.z * 100.0) / 100.0);
+    updateAcceleration(qRound(GLoad * 100.0) / 100.0);
     updateThrust(qRound(thrust * 10.0) / 10.0);
     updateTargetThrust(qRound(targetThrust * 10.0) / 10.0);
     updateFuelMass(qRound(fuelMass * 10.0) / 10.0);

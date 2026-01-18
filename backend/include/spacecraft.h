@@ -43,34 +43,29 @@ private:
     EnvironmentConfig environmentConfig_;   ///< [-] Environment config struct with constant parameters.
     SpacecraftState spacecraftState_;       ///< State of spacecraft
     customSpacecraft landerMoon;    ///< [] Parameters which defines spacecraft. This are filled by json config data.
-
     Thrust mainEngine;              ///< [] Dynamic state of the engine thrust.
+
     double totalMass;               ///< [kg] Total mass of spacecraft.
     double dt = 0;                  ///< [s] Time steps. Provided by updateTime.
     double time = 0;                ///< [s] Absolute time. Will be added by dt from udpateTime.
-    Vector3 I_Pos;                  ///< [m] Current spacecraft position expressed in body coordinates.
-    Vector3 I_Vel;                  ///< [m/s] Velocity in three spatial directions.
-    Vector3 B_Rot;                  ///< [rad] Current orientation (pitch, yaw, roll) in body coordinates.
-    Vector3 B_CenterOfMass;         ///< [m] Center of mass location in body frame at actual time.
+    double GLoad = 0;               ///< [m/s²] GLoad of spacecraft
 
-    Vector3 B_Acc;                  ///< [m/s²] Acceleration in three spatial directions.
     double spacecraftIntegrity;     ///< [%] Current integrity of the spacecraft.
-    bool spacecraftIsOperational;   ///< [true/false] Whether the spacecraft is still operational.
     ///@}
 
     /**
      * @brief Sets default values required to run the simulation
      * 
      * This function initializes all spacecraft parameters that are not explicitly
-     * set via the constructor. It ensures that the spacecraft has a valid initial
-     * state for simulation.
+     * set via the constructor or via customSpacecraft struct with constant parameters.
+     * It ensures that the spacecraft has a valid initial state for simulation.
      *
      * Specifically, it sets default values for:
      * - @ref spacecraftIntegrity
-     * - @ref structuralIntegrity
-     * - @ref spacecraftIsOperational
+     * - @ref spacecraftState_
      * - @ref totalMass
-     * - @ref safeVelocity
+     * - @ref state_.I_Position
+     * - @ref state_.I_Velocity
      *
      * Called automatically in the constructor.
      */
@@ -112,12 +107,22 @@ private:
      */
     void updateMovementDataToZero(double dt);
 
+    /**
+     * @brief Update G-Load in preperation for sending to UI
+     * @param totalAcceleration
+     * @param gravityAcceleration
+     * @return GLoad
+     */
+    void updateGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration);
+
     // -------------------------------------------------------------------------
     // Private setter functions
     // -------------------------------------------------------------------------
     /**
      * @brief Sets spacecraft state
      * @param newState
+     *
+     * Currently not used. Maybe obsolete
      */
     void setSpacecraftState(SpacecraftState newState);
 
@@ -144,6 +149,12 @@ private:
      * @param Angular velocity vector of the spacecraft [rad/s].
      */
     void setAngularVelocity(const Vector3& angVel);
+
+    /**
+     * @brief Sets GLoad
+     * @param GLoad [m/²].
+     */
+    void setGLoad(const double& GLoad);
 
     // -------------------------------------------------------------------------
     // Private getter functions
@@ -236,33 +247,12 @@ public:
  */
 spacecraft(customSpacecraft lMoon);
 
-
-
     /**
      * @brief Destructor
      *
      * Cleans up resources if needed. Currently trivial.
      */
     ~spacecraft();
-
-    /**
-     * @brief Checks whether the spacecraft is still operational.
-     * @return Returns true if the spacecraft is operational (airworthy), false otherwise.
-     *
-     * This function evaluates the spacecraft's integrity (0–100%) and updates the
-     * operational status. If the integrity falls below 50%, the spacecraft is
-     * considered no longer operational.
-     *
-     * Example usage:
-     * @code
-     * if(spacecraft.isIntact()) {
-     *     // proceed with simulation
-     * } else {
-     *     // handle failure / crash
-     * }
-     * @endcode
-     */
-    bool isIntact();
 
     // -------------------------------------------------------------------------
     // Updater functions
@@ -429,7 +419,11 @@ spacecraft(customSpacecraft lMoon);
      */
     double getfuelMass() const;
 
-
+    /**
+     * @brief Return GLoad
+     * @return GLoad [m/s²]
+     */
+    double getGload() const;
 };
 
 #endif

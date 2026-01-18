@@ -1,16 +1,11 @@
 #ifndef SIMCONTROL_H
 #define SIMCONTROL_H
 
-#include "physics.h"
-#include "output.h"
 #include "spacecraft.h"
-#include "environmentConfig.h"
-#include "vector3.h"
-#include "jsonConfigReader.h"
 #include "simDataStruct.h"
+#include "jsonConfigReader.h"
 
 #include <memory>
-#include <atomic>
 
 /**
  * @class simcontrol
@@ -39,19 +34,14 @@ private:
     //*************    Memberfuctions                ************
     //***********************************************************
     /**
-     * @brief Runs the simulation until the lander reaches the surface.
-     * @param vel0  ///< [m/s] Initial velocity in three dimensions 
-     * @param pos0  ///< [m] Initial positions in three dimensions
-     * @param t     ///< [s] Initial simulation time 
-     *
-     * Updates lander physics, calculates velocity and position, and
-     * triggers output drawing for each time step.
+     * @brief Build instances necessary for the simulation
      */
     void buildSimulationEnvironment(double t);
 
     /**
      * @brief Load json config out of string provided from frontend which defines spacecraft parameters
-     * @param Filepath Path to config file
+     * @param jsonString                            ///< String with config data
+     * @param spacecraftName                        ///< Selected spacecraft from config data
      *
      * Working jsonconfig together with frontend!
      */
@@ -63,8 +53,6 @@ public:
     //***********************************************************
     /**
      * @brief Constructor
-     * @param vel0  ///< [m/s] Initial velocity in three dimensions
-     * @param pos0  ///< [m] Initial positions in three dimensions
      * @param t     ///< [s] Initial simulation time
      */
     simcontrol(double t0) : initialTime(t0) {};
@@ -78,7 +66,7 @@ public:
 
     /**
      * @brief Initializes simulation environment and spacecraft config
-     * @param jsonConfigStr ///< String with spacecraft config data
+     * @param jsonConfigStr                         ///< String with spacecraft config data
      */
     void initialize(const std::string& jsonConfigStr);
 
@@ -92,7 +80,7 @@ public:
      *
      * This function owns the states of simulation. It knows all physical, environmental and spacecraft conditions.
      * All states are calculated by given timesteps from worker.
-     * @param dt
+     * @param dt                                    ///< [s] discrete timestep
      */
     simData runSimulation(const double dt);
 

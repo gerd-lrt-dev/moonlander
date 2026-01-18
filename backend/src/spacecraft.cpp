@@ -43,10 +43,10 @@ void spacecraft::updateMovementData(double dt)
         );
 
     // --- Compute velocity ---
-    Vector3 velocity = physics_->computeVel(state_.I_Velocity, acceleration, dt);
+    Vector3 velocity = physics_->computeVel(getVelocity(), acceleration, dt);
 
     // --- Compute position ---
-    Vector3 position = physics_->computePos(velocity, state_.I_Position, acceleration, dt);
+    Vector3 position = physics_->computePos(velocity, getPosition(), acceleration, dt);
 
     // --- TODO: Compute orientation and angular velocity ---
     // ...
@@ -54,17 +54,24 @@ void spacecraft::updateMovementData(double dt)
     // --- TODO: Update total mass ---
     // ...
 
+    updateGLoad(acceleration, environmentConfig_.moonGravityVec);
+
     // --- Commit to state vector ---
-    state_.I_Velocity = velocity;
-    state_.I_Position = position;
+    setVelocity(velocity);
+    setPosition(position);
+    //setGload(GLoad);
 }
 
 void spacecraft::updateMovementDataToZero(double dt)
 {
     // --- Commit to state vector ---
-    state_.I_Velocity = {0.0, 0.0, 0.0};
+    setVelocity({0.0, 0.0, 0.0});
 }
 
+void spacecraft::updateGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)
+{
+    GLoad = physics_->computeGLoad(totalAcceleration, environmentConfig_.moonGravityVec);
+}
 
 void spacecraft::setSpacecraftState(SpacecraftState newState)
 {
@@ -132,30 +139,14 @@ spacecraft::~spacecraft()
 {
 }
 
-bool spacecraft::isIntact()
-{
-    if (spacecraftIntegrity < 0.5)
-    {
-        spacecraftIsOperational = false;
-    }
-    else 
-    {
-        spacecraftIsOperational = true;
-    }
-
-    return spacecraftIsOperational;
-}
-
 void spacecraft::updateStep(double dt)
 {
     // Update mass data
     updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
 
-    std::cout << "Spacecraft position: " << state_.I_Position.z << std::endl;
     // Apply landing damage
     if (state_.I_Position.z <= 0.0)
     {
-        std::cout << "Apply landing damage!!!" << std::endl;
         applyLandingDamage(state_.I_Velocity.z);
     }
 
@@ -181,7 +172,6 @@ void spacecraft::updateStep(double dt)
         // Do nothing
         break;
     }
-
 }
 
 void spacecraft::updateSpacecraftIntegrity()
@@ -196,7 +186,6 @@ void spacecraft::updateSpacecraftIntegrity()
     if (spacecraftIntegrity <= 0.0)
     {
         spacecraftState_ = SpacecraftState::Destroyed;
-        std::cout << "[STATE] Spacecraft DESTROYED" << std::endl;
         return;
     }
 
@@ -204,7 +193,6 @@ void spacecraft::updateSpacecraftIntegrity()
     if (spacecraftIntegrity < landerMoon.structuralIntegrity)
     {
         spacecraftState_ = SpacecraftState::Crashed;
-        std::cout << "[STATE] Spacecraft CRASHED (structural failure)" << std::endl;
         return;
     }
 
@@ -212,7 +200,6 @@ void spacecraft::updateSpacecraftIntegrity()
     if (getPosition().z <= 0.0)
     {
         spacecraftState_ = SpacecraftState::Landed;
-        std::cout << "[STATE] Spacecraft LANDED" << std::endl;
         return;
     }
 
@@ -291,8 +278,11 @@ simData spacecraft::getFullSimulationData() const
 
     simData_.thrust = requestThrust();
     simData_.targetThrust = requestTargetThrust();
+
     simData_.fuelMass = getfuelMass();
     simData_.fuelFlow = requestLiveFuelConsumption();
+
+    simData_.GLoad = getGload();
 
     return simData_;
 }
@@ -335,4 +325,9 @@ double spacecraft::getTotalMass()
 double spacecraft::getfuelMass() const
 {
     return mainEngine.getCurrentFuelMass();
+}
+
+double spacecraft::getGload() const
+{
+    return GLoad;
 }

@@ -50,3 +50,16 @@ Vector3 physics::computeAcc(double currentThrust, double totalMass, Vector3 dire
 {
     return spacemath::accelerationComplex(currentThrust, totalMass, directionOfThrust, moonGravityVec);
 }
+
+double physics::computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)
+{
+    constexpr double g0 = 9.80665; // [m/s^2]
+
+    // Berechne Proper Acceleration
+    Vector3 properAcceleration = totalAcceleration - gravityAcceleration;
+
+    double gLoad = properAcceleration.norm() / g0;
+
+    return gLoad;
+}
+

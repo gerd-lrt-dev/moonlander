@@ -77,7 +77,7 @@ signals:
     void stateUpdated(double time,
                       Vector3 pos,
                       Vector3 vel,
-                      Vector3 acc,
+                      double GLoad,
                       SpacecraftState spacecraftState_,
                       double thrust,
                       double targetThrust,

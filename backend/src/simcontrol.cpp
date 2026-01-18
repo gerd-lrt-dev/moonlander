@@ -105,6 +105,9 @@ simData simcontrol::runSimulation(const double dt)
         // --- Retrieve full simulation data ---
         simdata_ = landerSpacecraft->getFullSimulationData();
 
+        // --- Retrieve G-Load ---
+
+
         // --- Log results (adapt later to new state vector) ---
         /*
         logger.log("Step results send to UI - Pos: (" +

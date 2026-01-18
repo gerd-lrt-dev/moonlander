@@ -44,7 +44,7 @@ static constexpr auto qt_meta_stringdata_ZN16SimulationWorkerE = QtMocHelpers::s
     "Vector3",
     "pos",
     "vel",
-    "acc",
+    "GLoad",
     "SpacecraftState",
     "spacecraftState_",
     "thrust",
@@ -92,7 +92,7 @@ Q_CONSTINIT static const uint qt_meta_data_ZN16SimulationWorkerE[] = {
       23,    0,   93,    2, 0x0a,   20 /* Public */,
 
  // signals: parameters
-    QMetaType::Void, QMetaType::Double, 0x80000000 | 4, 0x80000000 | 4, 0x80000000 | 4, 0x80000000 | 8, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    3,    5,    6,    7,    9,   10,   11,   12,   13,
+    QMetaType::Void, QMetaType::Double, 0x80000000 | 4, 0x80000000 | 4, QMetaType::Double, 0x80000000 | 8, QMetaType::Double, QMetaType::Double, QMetaType::Double, QMetaType::Double,    3,    5,    6,    7,    9,   10,   11,   12,   13,
     QMetaType::Void, QMetaType::QString,   15,
 
  // slots: parameters
@@ -120,7 +120,7 @@ Q_CONSTINIT const QMetaObject SimulationWorker::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<Vector3, std::false_type>,
         QtPrivate::TypeAndForceComplete<Vector3, std::false_type>,
-        QtPrivate::TypeAndForceComplete<Vector3, std::false_type>,
+        QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<SpacecraftState, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
         QtPrivate::TypeAndForceComplete<double, std::false_type>,
@@ -152,7 +152,7 @@ void SimulationWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     auto *_t = static_cast<SimulationWorker *>(_o);
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: _t->stateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<SpacecraftState>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
+        case 0: _t->stateUpdated((*reinterpret_cast< std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<Vector3>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[4])),(*reinterpret_cast< std::add_pointer_t<SpacecraftState>>(_a[5])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[6])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[7])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[8])),(*reinterpret_cast< std::add_pointer_t<double>>(_a[9]))); break;
         case 1: _t->simulationError((*reinterpret_cast< std::add_pointer_t<QString>>(_a[1]))); break;
         case 2: _t->start(); break;
         case 3: _t->pause(); break;
@@ -166,7 +166,7 @@ void SimulationWorker::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
     if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _q_method_type = void (SimulationWorker::*)(double , Vector3 , Vector3 , Vector3 , SpacecraftState , double , double , double , double );
+            using _q_method_type = void (SimulationWorker::*)(double , Vector3 , Vector3 , double , SpacecraftState , double , double , double , double );
             if (_q_method_type _q_method = &SimulationWorker::stateUpdated; *reinterpret_cast<_q_method_type *>(_a[1]) == _q_method) {
                 *result = 0;
                 return;
@@ -214,7 +214,7 @@ int SimulationWorker::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void SimulationWorker::stateUpdated(double _t1, Vector3 _t2, Vector3 _t3, Vector3 _t4, SpacecraftState _t5, double _t6, double _t7, double _t8, double _t9)
+void SimulationWorker::stateUpdated(double _t1, Vector3 _t2, Vector3 _t3, double _t4, SpacecraftState _t5, double _t6, double _t7, double _t8, double _t9)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t8))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t9))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

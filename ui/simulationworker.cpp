@@ -44,7 +44,7 @@ void SimulationWorker::stop()
     emit stateUpdated(currentTime,
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
-                      {0.0, 0.0, 0.0},
+                      0.0,
                       SpacecraftState::Operational,
                       0.0,
                       0.0,
@@ -91,7 +91,7 @@ void SimulationWorker::stepSimulation()
     emit stateUpdated(currentTime,
                       spacecraftData.statevector_.I_Position,
                       spacecraftData.statevector_.I_Velocity,
-                      {0.0, 0.0, 0.0}, // TODO: bring accelartion into UI
+                      spacecraftData.GLoad,
                       spacecraftData.spacecraftState_,
                       spacecraftData.thrust,
                       spacecraftData.targetThrust,

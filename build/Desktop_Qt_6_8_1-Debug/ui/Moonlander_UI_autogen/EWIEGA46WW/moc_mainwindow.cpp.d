@@ -4,7 +4,6 @@
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/customSpacecraftStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/jsonConfigReader.h \
-  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/output.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/physics.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/quaternion.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/simDataStruct.h \

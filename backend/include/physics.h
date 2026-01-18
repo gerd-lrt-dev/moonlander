@@ -119,6 +119,31 @@ public:
     * The calculation is made by the helper class spacemath
      */
     Vector3 computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const;
+
+    /**
+     * @brief Computes the proper G-load experienced by the spacecraft.
+     *
+     * The G-load represents the acceleration felt by the lander, excluding
+     * the effect of gravity. It is expressed in units of Earth's standard
+     * gravity (g0 = 9.80665 m/s²). This function is suitable for both 1D
+     * and 3D acceleration vectors.
+     *
+     * @param totalAcceleration The total acceleration acting on the spacecraft [m/s²].
+     *                          Typically includes thrust and gravity.
+     * @param gravityAcceleration The acceleration due to gravity [m/s²] at the
+     *                            spacecraft's current location (e.g., Moon gravity vector).
+     *
+     * @return Proper G-load experienced by the spacecraft in units of g0.
+     *
+     * @note This function calculates proper acceleration by subtracting the
+     *       gravitational component from the total acceleration. Only the
+     *       remaining acceleration contributes to the G-load.
+     * @note The function uses the Euclidean norm for vector inputs:
+     *       G = ||totalAcceleration - gravityAcceleration|| / g0
+     * @see Vector3
+     */
+    double computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration);
+
 };
 
 #endif
