@@ -26,12 +26,20 @@ Backend Components
 ------------------
 Physics            - Calculates velocity and position under gravity and thrust
 Thrust             - Engine model: target thrust, response rate, actual thrust
-Output             - Handles backend visualization logic (ASCII cockpit, optional logs) with using ui oboselete
+Output             - Handles backend visualization logic (ASCII cockpit, optional logs) without Qt dependency
 SimControl         - Orchestrates the simulation: validates parameters, steps the simulation
-Spacecraft         - State of spacecraft: mass, fuel, position, velocity, thrust, integrity
+Spacecraft         - Central owner of spacecraft state and dynamics: mass, fuel, position, velocity, thrust, orientation, integrity
 EnvironmentConfig  - Constants for gravity, timestep, max simulation step, etc.
 Spacemath          - Math utilities for vectors, physics calculations
 Logger             - Singleton logger for backend debug output (no Qt dependency)
+
+State Vector & Dynamics
+----------------------
+- A single `StateVector` is now the source of truth for the spacecraft state
+- Encapsulates: inertial position, inertial velocity, orientation (quaternion), body angular velocity, total mass
+- Only the `Spacecraft` class has write access; other classes have read-only access
+- All dynamic calculations (forces, moments, accelerations) are aggregated in `Spacecraft`
+- Proper G-load computation implemented in `Spacecraft` based on thrust and gravity vectors
 
 Threading & Signals
 ------------------
@@ -47,8 +55,11 @@ Current Features
 - Real-time telemetry displayed in cockpitPage
 - Thread-safe simulation loop with Qt signal/slot integration
 - Logger captures debug output from backend without Qt
+- Spacecraft is the sole owner of state and dynamics
+- Calculation of proper G-forces based on thrust and gravity
 - Initial support for resource-based JSON configuration
 - Backend supports testing spacecraft controllers independently of UI
+- Legacy variables removed, state vector integrated into `simData` for frontend
 
 Goals
 -----
@@ -64,11 +75,12 @@ Short-Term:
   - Integrate landingView with real spacecraft positions
   - Extend Logger with file output and multiple log levels
   - Improve backend simulation precision and controller hooks
+  - Implement optimal control routines for automated landing minimizing fuel consumption
 
 Mid-Term:
   - Implement full 3D spacecraft model
   - Simulate stable lunar orbit before descent
-  - Environment simulation to test multiple controllers (PID, adaptive, etc.)
+  - Environment simulation to test multiple controllers (PID, adaptive, optimal, etc.)
   - Modularize frontend widgets (UIBuilder) for consistent design
 
 Long-Term:
@@ -99,3 +111,4 @@ Moonlander will evolve into a modular lunar landing simulation framework where:
 - UI development (Qt widgets) continues separately from backend improvements
 - Simulation environment allows full testing of different control algorithms
 - Ultimately supports 3D dynamics, orbital maneuvers, and environmental effects
+- Automated landing with fuel-optimal control
