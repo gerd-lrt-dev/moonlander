@@ -1666,6 +1666,18 @@
 			"value" : "/home/gerd-lrt-dev/Code/codingForFun/moonlander/ui"
 		},
 		{
+			"name" : "NLopt_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The directory containing a CMake configuration file for NLopt."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/usr/lib/x86_64-linux-gnu/cmake/nlopt"
+		},
+		{
 			"name" : "OPENGL_EGL_INCLUDE_DIR",
 			"properties" : 
 			[

@@ -87,7 +87,7 @@ struct EngineConfig
         if (timeConstant < 0.05 || timeConstant > 3.0)
         {
             std::cerr << "[EngineConfig] Warning: time constant tau out of range (" << timeConstant << "), resetting to default 0.5 [s]." << std::endl;
-            timeConstant = 0.5;
+            timeConstant = 0.05;
         }
 
         /**

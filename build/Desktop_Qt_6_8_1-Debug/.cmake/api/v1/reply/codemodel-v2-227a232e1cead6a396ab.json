@@ -99,7 +99,7 @@
 				{
 					"directoryIndex" : 2,
 					"id" : "Moonlander_UI::@19b8bf288843bf358763",
-					"jsonFile" : "target-Moonlander_UI-Debug-49b30f073187fed4e6cc.json",
+					"jsonFile" : "target-Moonlander_UI-Debug-1cd68ca63890d39925ac.json",
 					"name" : "Moonlander_UI",
 					"projectIndex" : 2
 				},
@@ -120,7 +120,7 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "moonlander_backend::@e17dcb4e28158375c849",
-					"jsonFile" : "target-moonlander_backend-Debug-45f0329cace6653691ac.json",
+					"jsonFile" : "target-moonlander_backend-Debug-ab3960fa70acfb0181ad.json",
 					"name" : "moonlander_backend",
 					"projectIndex" : 1
 				}

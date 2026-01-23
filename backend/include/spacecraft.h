@@ -10,6 +10,7 @@
 #include "spacecraftStateStruct.h"
 #include "stateVectorStruct.h"
 #include "customSpacecraftStruct.h"
+#include "Optimization/thrustOptimizer.h"
 
 #include <memory>
 
@@ -308,6 +309,12 @@ spacecraft(customSpacecraft lMoon);
      * provides thrust until the setted target thrust is reached.
      */
     void setThrust(double targetThrustInPercentage);
+
+    /**
+     * @brief compute optimization
+     * @return vector with optimized thrust controls
+     */
+    std::vector<double> compute_optimization(double h0, double v0, double m0, double dt);
 
     // -------------------------------------------------------------------------
     // Requester functions

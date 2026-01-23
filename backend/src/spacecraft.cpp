@@ -2,6 +2,8 @@
 
 #include "spacemath.h"
 
+#include <iomanip>
+
 // -------------------------------------------------------------------------
 // Private
 // -------------------------------------------------------------------------
@@ -13,6 +15,28 @@ void spacecraft::setDefaultValues()
     totalMass = landerMoon.emptyMass + landerMoon.fuelM;
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
+
+    /*
+    // TODO just testing here
+    std::vector<double> thrust = compute_optimization(landerMoon.I_initialPos.z, landerMoon.I_initialVelocity.z, totalMass, 0.05);
+
+    std::cout << "\n=== Thrust Optimization Result ===\n";
+    std::cout << "Steps: " << thrust.size() << "\n";
+    std::cout << "dt   : " << dt << " s\n\n";
+
+    std::cout << " k\t time [s]\t thrust [N]\n";
+    std::cout << "-------------------------------------\n";
+
+    for (size_t k = 0; k < thrust.size(); ++k)
+    {
+        std::cout
+            << std::setw(3) << k << "\t"
+            << std::setw(8) << k * dt << "\t"
+            << std::setw(12) << thrust[k] << "\n";
+    }
+
+    std::cout << "=====================================\n";
+*/
 }
 
 void spacecraft::updateTotalMassOnFuelReduction(double emptyMass, double fuelMass)
@@ -205,15 +229,6 @@ void spacecraft::updateSpacecraftIntegrity()
 
     // 4. Still operational (possibly damaged)
     spacecraftState_ = SpacecraftState::Operational;
-
-    if (spacecraftIntegrity < 1.0)
-    {
-        std::cout << "[STATE] Spacecraft OPERATIONAL (DAMAGED)" << std::endl;
-    }
-    else
-    {
-        std::cout << "[STATE] Spacecraft OPERATIONAL" << std::endl;
-    }
 }
 
 void spacecraft::setThrust(double targetThrustInPercentage)
@@ -222,6 +237,29 @@ void spacecraft::setThrust(double targetThrustInPercentage)
     double targetThrust = targetThrustInPercentage * landerMoon.maxT; // [m/s²]
 
     mainEngine.setTarget(targetThrust);
+}
+
+std::vector<double> spacecraft::compute_optimization(double h0, double v0, double m0, double dt)
+{
+    ThrustOptimizationProblem problem;
+
+    problem.x0.h = h0;
+    problem.x0.v = v0;
+    problem.x0.m = m0;
+
+    problem.params.g = 1.64;
+    problem.params.alpha = 1e-4;
+
+    problem.dt = dt;
+    problem.N  = 40;
+
+    problem.w_h = 100.0;
+    problem.w_v = 100.0;
+    problem.w_m = 1.0;
+    problem.w_T = 0.01;
+
+    ThrustOptimizer optimizer;
+    return optimizer.optimize(problem, landerMoon.maxT);
 }
 
 //TODO: Obsolete?

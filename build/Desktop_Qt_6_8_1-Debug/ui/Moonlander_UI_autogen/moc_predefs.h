@@ -35,6 +35,7 @@
 #define __CET__ 3
 #define __cpp_noexcept_function_type 201510L
 #define __GCC_ATOMIC_CHAR32_T_LOCK_FREE 2
+#define NLOPT_DLL 1
 #define __cpp_variadic_templates 200704L
 #define __UINT_FAST64_MAX__ 0xffffffffffffffffUL
 #define __SIG_ATOMIC_TYPE__ int

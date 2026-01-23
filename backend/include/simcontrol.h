@@ -6,6 +6,7 @@
 #include "jsonConfigReader.h"
 
 #include <memory>
+#include <nlopt.h>
 
 /**
  * @class simcontrol

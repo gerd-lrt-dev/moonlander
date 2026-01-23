@@ -776,6 +776,7 @@ Moonlander_UI_autogen/timestamp: \
 	/usr/include/nlohmann/ordered_map.hpp \
 	/usr/include/nlohmann/thirdparty/hedley/hedley.hpp \
 	/usr/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
+	/usr/include/nlopt.h \
 	/usr/include/pthread.h \
 	/usr/include/sched.h \
 	/usr/include/semaphore.h \

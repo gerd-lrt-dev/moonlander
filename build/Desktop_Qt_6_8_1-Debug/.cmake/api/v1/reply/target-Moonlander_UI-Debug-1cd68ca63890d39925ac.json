@@ -32,7 +32,10 @@
 			"/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/cmake/Qt6/QtPublicDependencyHelpers.cmake",
 			"/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake",
 			"/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/cmake/Qt6Gui/Qt6GuiConfig.cmake",
-			"/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/cmake/Qt6Widgets/Qt6WidgetsDependencies.cmake"
+			"/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/cmake/Qt6Widgets/Qt6WidgetsDependencies.cmake",
+			"backend/CMakeLists.txt",
+			"/usr/lib/x86_64-linux-gnu/cmake/nlopt/NLoptLibraryDepends.cmake",
+			"/usr/lib/x86_64-linux-gnu/cmake/nlopt/NLoptConfig.cmake"
 		],
 		"nodes" : 
 		[
@@ -172,6 +175,41 @@
 				"file" : 4,
 				"line" : 710,
 				"parent" : 23
+			},
+			{
+				"file" : 11
+			},
+			{
+				"command" : 1,
+				"file" : 11,
+				"line" : 28,
+				"parent" : 26
+			},
+			{
+				"command" : 4,
+				"file" : 11,
+				"line" : 3,
+				"parent" : 26
+			},
+			{
+				"file" : 13,
+				"parent" : 28
+			},
+			{
+				"command" : 3,
+				"file" : 13,
+				"line" : 16,
+				"parent" : 29
+			},
+			{
+				"file" : 12,
+				"parent" : 30
+			},
+			{
+				"command" : 2,
+				"file" : 12,
+				"line" : 71,
+				"parent" : 31
 			}
 		]
 	},
@@ -190,6 +228,10 @@
 			],
 			"defines" : 
 			[
+				{
+					"backtrace" : 2,
+					"define" : "NLOPT_DLL"
+				},
 				{
 					"backtrace" : 2,
 					"define" : "QT_CORE_LIB"
@@ -322,6 +364,16 @@
 			{
 				"backtrace" : 9,
 				"fragment" : "/home/gerd-lrt-dev/Qt/6.8.1/gcc_64/lib/libQt6Core.so.6.8.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 27,
+				"fragment" : "/usr/lib/x86_64-linux-gnu/libnlopt.so.0.11.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 32,
+				"fragment" : "-lm",
 				"role" : "libraries"
 			},
 			{
