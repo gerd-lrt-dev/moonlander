@@ -1,8 +1,8 @@
 #include "Optimization/thrustOptimizer.h"
-#include <nlopt.h>
 #include <stdexcept>
+#include <iostream>
 
-extern double thrust_cost_function(unsigned, const double*, double*, void*);
+extern double thrustCostFunction(unsigned, const double*, double*, void*);
 
 std::vector<double> ThrustOptimizer::optimize(ThrustOptimizationProblem& problem, double T_max)
 {
@@ -22,7 +22,7 @@ std::vector<double> ThrustOptimizer::optimize(ThrustOptimizationProblem& problem
     nlopt_set_upper_bounds(opt, ub.data());
 
     // Objective
-    nlopt_set_min_objective(opt, thrust_cost_function, &problem);
+    nlopt_set_min_objective(opt, thrustCostFunction, &problem);
 
     // Initial guess
     std::vector<double> u(problem.N, 0.5 * T_max);
@@ -32,6 +32,13 @@ std::vector<double> ThrustOptimizer::optimize(ThrustOptimizationProblem& problem
     // optimize
     nlopt_result res = nlopt_optimize(opt, u.data(), &minf);
 
+    std::cerr << "[Optimizer] nlopt_result = " << res << "\n";
+    std::cerr << "[Optimizer] minf        = " << minf << "\n";
+
+    std::cerr << "[Optimizer] nlopt_result = "
+              << nloptResultToString(res) << "\n";
+
+
     nlopt_destroy(opt);
 
     if (res < 0)
@@ -40,4 +47,22 @@ std::vector<double> ThrustOptimizer::optimize(ThrustOptimizationProblem& problem
     }
 
     return u;
+}
+
+const char* ThrustOptimizer::nloptResultToString(nlopt_result r)
+{
+    switch (r) {
+    case NLOPT_SUCCESS: return "SUCCESS";
+    case NLOPT_STOPVAL_REACHED: return "STOPVAL_REACHED";
+    case NLOPT_FTOL_REACHED: return "FTOL_REACHED";
+    case NLOPT_XTOL_REACHED: return "XTOL_REACHED";
+    case NLOPT_MAXEVAL_REACHED: return "MAXEVAL_REACHED";
+    case NLOPT_MAXTIME_REACHED: return "MAXTIME_REACHED";
+    case NLOPT_FAILURE: return "FAILURE";
+    case NLOPT_INVALID_ARGS: return "INVALID_ARGS";
+    case NLOPT_OUT_OF_MEMORY: return "OUT_OF_MEMORY";
+    case NLOPT_ROUNDOFF_LIMITED: return "ROUNDOFF_LIMITED";
+    case NLOPT_FORCED_STOP: return "FORCED_STOP";
+    default: return "UNKNOWN";
+    }
 }

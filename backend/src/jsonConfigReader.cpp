@@ -52,7 +52,7 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     lander.Iyy          = j.at("Iyy").get<double>();
     lander.Izz          = j.at("Izz").get<double>();
     
-    lander.I_initialPos = j.at("B_initialPos").get<Vector3>();
+    lander.I_initialPos = j.at("I_initialPos").get<Vector3>();
     lander.B_initialRot = j.at("B_initialRot").get<Vector3>();
     lander.B_initialCenterOfMass = j.at("B_initialCenterOfMass").get<Vector3>();
 

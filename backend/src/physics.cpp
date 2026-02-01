@@ -20,7 +20,7 @@ Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const
     Vector3 dir = pos.normalized();
 
     // Distance to center of moon radius + height
-    double r    = configData.radiusMoon + pos.norm(); 
+    double r    = pos.norm();
 
     return - dir * (configData.gravitationalFactorMoon / (r * r));
 }
@@ -38,17 +38,14 @@ Vector3 physics::computePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacec
 
 Vector3 physics::computeVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const
 {
-    /*
-    std::cout << "Current Velocity in z: " << vel.z << std::endl;
-    std::cout << "Current acceleration in z: " << accelerationSpacecraft.z << std::endl;
-    std::cout << "dt: " << dt << std::endl;
-    */
     return vel + accelerationSpacecraft * dt;
 }
 
-Vector3 physics::computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const
+Vector3 physics::computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 pos) const
 {
-    return spacemath::accelerationComplex(currentThrust, totalMass, directionOfThrust, moonGravityVec);
+    Vector3 moonGravityRadialToMoonCenter = calcGravityRadialToMoonCenter(pos);
+
+    return spacemath::accelerationComplex(currentThrust, totalMass, directionOfThrust, moonGravityRadialToMoonCenter);
 }
 
 double physics::computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)

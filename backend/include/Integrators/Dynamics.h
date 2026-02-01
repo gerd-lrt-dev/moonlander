@@ -1,12 +1,10 @@
 #pragma once
-#include "Optimization/optimizationStruct.h"
-#include "Optimization/modelParams.h"
+#include "Optimization/thrustOptimizationProblem.h"
 
-OptimizationState integrateEuler
-(
-    const OptimizationState& x,
-    double thrust,
-    double dt,
-    const OptimizationModelParams& params
-
-);
+/// @brief Forward Euler integrator for a simple vertical dynamics system.
+OptimizationState integrateEuler(
+    const OptimizationState& x,           // current state
+    double T,                             // thrust
+    double dt,                            // time step
+    const ThrustOptimizationProblem& problem
+    );

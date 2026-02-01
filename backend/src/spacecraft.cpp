@@ -16,9 +16,9 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
-    /*
     // TODO just testing here
-    std::vector<double> thrust = compute_optimization(landerMoon.I_initialPos.z, landerMoon.I_initialVelocity.z, totalMass, 0.05);
+    /*
+    std::vector<double> thrust = compute_optimization(landerMoon.I_initialPos.z, landerMoon.I_initialVelocity.z, totalMass, 1.0);
 
     std::cout << "\n=== Thrust Optimization Result ===\n";
     std::cout << "Steps: " << thrust.size() << "\n";
@@ -36,7 +36,7 @@ void spacecraft::setDefaultValues()
     }
 
     std::cout << "=====================================\n";
-*/
+    */
 }
 
 void spacecraft::updateTotalMassOnFuelReduction(double emptyMass, double fuelMass)
@@ -59,12 +59,7 @@ void spacecraft::updateMovementData(double dt)
     Vector3 thrustDir = requestThrustDirection();
 
     // --- Compute acceleration ---
-    Vector3 acceleration = physics_->computeAcc(
-        requestThrust(),
-        getTotalMass(),
-        thrustDir,
-        environmentConfig_.moonGravityVec
-        );
+    Vector3 acceleration = physics_->computeAcc(requestThrust(), getTotalMass(), thrustDir, getPosition());
 
     // --- Compute velocity ---
     Vector3 velocity = physics_->computeVel(getVelocity(), acceleration, dt);
@@ -169,7 +164,7 @@ void spacecraft::updateStep(double dt)
     updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
 
     // Apply landing damage
-    if (state_.I_Position.z <= 0.0)
+    if (state_.I_Position.z <= environmentConfig_.radiusMoon)
     {
         applyLandingDamage(state_.I_Velocity.z);
     }
@@ -221,7 +216,7 @@ void spacecraft::updateSpacecraftIntegrity()
     }
 
     // 3. Successful touchdown
-    if (getPosition().z <= 0.0)
+    if (getPosition().z <= environmentConfig_.radiusMoon)
     {
         spacecraftState_ = SpacecraftState::Landed;
         return;
@@ -248,15 +243,20 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     problem.x0.m = m0;
 
     problem.params.g = 1.64;
-    problem.params.alpha = 1e-4;
+    problem.params.Isp = 300.0;
 
     problem.dt = dt;
     problem.N  = 40;
 
-    problem.w_h = 100.0;
-    problem.w_v = 100.0;
-    problem.w_m = 1.0;
+    problem.w_h = 1.0;
+    problem.w_v = 1.0;
+    problem.w_m = 0.1;
     problem.w_T = 0.01;
+
+    problem.h_ref = std::max(1.0, std::abs(h0));
+    problem.v_ref = std::max(1.0, std::abs(v0));
+    problem.m_ref = m0;
+    problem.T_ref = landerMoon.maxT;
 
     ThrustOptimizer optimizer;
     return optimizer.optimize(problem, landerMoon.maxT);
@@ -310,9 +310,11 @@ simData spacecraft::getFullSimulationData() const
 
     simData_.statevector_ = getState();
 
+    // Reduce height by radius of moon
+    simData_.statevector_.I_Position.z = simData_.statevector_.I_Position.z - environmentConfig_.radiusMoon;
+
     // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;
-    simData_.spacecraftIntegrity = true; // TODO: Change to spacecraft state
 
     simData_.thrust = requestThrust();
     simData_.targetThrust = requestTargetThrust();

@@ -118,7 +118,7 @@ public:
     * always points toward the Moon's center.
     * The calculation is made by the helper class spacemath
      */
-    Vector3 computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 moonGravityVec) const;
+    Vector3 computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 pos) const;
 
     /**
      * @brief Computes the proper G-load experienced by the spacecraft.

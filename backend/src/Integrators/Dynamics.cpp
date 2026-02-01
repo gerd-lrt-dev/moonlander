@@ -1,12 +1,66 @@
 #include "Integrators/Dynamics.h"
-
-OptimizationState integrateEuler(const OptimizationState& x, double T, double dt, const OptimizationModelParams& p)
+#include <cmath>
+#include <algorithm>
+#include "spacemath.h"
+/*
+OptimizationState integrateEuler(
+    const OptimizationState& x,           // current state
+    double T,                             // thrust
+    double dt,                            // time step
+    const ThrustOptimizationProblem& problem
+    )
 {
-    OptimizationState xn = x;
+    OptimizationState xn = x;            // start from current state
+    const auto& p = problem.params;      // grab model parameters
 
-    xn.h += x.v * dt;
-    xn.v += (T / x.m - p.g) * dt;
-    xn.m -= p.alpha * T * dt;
+    // Safety: prevent mass dropping below dry mass
+    if (xn.m <= problem.m_dry)
+    {
+        xn.m = problem.m_dry;
+        xn.v = 0.0;  // optional: "out of fuel" stop
+        return xn;
+    }
+
+    // Position update
+    xn.h += xn.v * dt;
+
+    // Velocity update: simple vertical dynamics
+    xn.v += (T / xn.m - p.g) * dt;
+
+    // Mass update
+    double mdot = T / (p.Isp * p.g0);
+    xn.m = std::max(xn.m - mdot * dt, problem.m_dry);
 
     return xn;
 }
+*/
+
+OptimizationState integrateEuler(const OptimizationState& x, double T, double dt, const ThrustOptimizationProblem& problem)
+{
+    OptimizationState xn = x;                 // next state
+    const auto& p = problem.params;
+
+    // --- Acceleration (vertical 1D) ---
+    // a = T/m - g
+    double a = (T / x.m) - p.g;
+
+    // --- Position & velocity update ---
+    xn.h += x.v * dt + 0.5 * a * dt * dt;
+    xn.v += a * dt;
+
+    // --- Mass flow based on thrust ---
+    double mdot = spacemath::calcMassFlowBasedOnThrust(T, p.Isp, p.g0);
+    xn.m = std::max(x.m - mdot * dt, problem.m_dry);
+
+    // Optional numeric safety
+    if (!std::isfinite(xn.h) || !std::isfinite(xn.v) || !std::isfinite(xn.m))
+    {
+        xn.h = 0.0;
+        xn.v = 0.0;
+        xn.m = problem.m_dry;
+    }
+
+    return xn;
+}
+
+
