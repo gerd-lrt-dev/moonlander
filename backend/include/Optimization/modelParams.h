@@ -22,4 +22,10 @@ struct OptimizationModelParams
 
     /// Minimum allowed thrust [N] (possibly 0)
     double T_min;
+
+    /// Standard gravitational parameter [m³/s²]
+    double mu_moon;
+
+    /// Radius of moon [m]
+    double R_moon;
 };

@@ -17,26 +17,13 @@ void spacecraft::setDefaultValues()
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
     // TODO just testing here
-    /*
-    std::vector<double> thrust = compute_optimization(landerMoon.I_initialPos.z, landerMoon.I_initialVelocity.z, totalMass, 1.0);
 
-    std::cout << "\n=== Thrust Optimization Result ===\n";
-    std::cout << "Steps: " << thrust.size() << "\n";
-    std::cout << "dt   : " << dt << " s\n\n";
+    double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
+    double v0 = landerMoon.I_initialVelocity.z; // vertikale Geschwindigkeit
+    double m0 = totalMass;
 
-    std::cout << " k\t time [s]\t thrust [N]\n";
-    std::cout << "-------------------------------------\n";
+    std::vector<double> thrust = compute_optimization(h0, v0, m0, 0.5);
 
-    for (size_t k = 0; k < thrust.size(); ++k)
-    {
-        std::cout
-            << std::setw(3) << k << "\t"
-            << std::setw(8) << k * dt << "\t"
-            << std::setw(12) << thrust[k] << "\n";
-    }
-
-    std::cout << "=====================================\n";
-    */
 }
 
 void spacecraft::updateTotalMassOnFuelReduction(double emptyMass, double fuelMass)
@@ -238,29 +225,61 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
 {
     ThrustOptimizationProblem problem;
 
+    // -----------------------------
+    // Initial state
+    // -----------------------------
     problem.x0.h = h0;
     problem.x0.v = v0;
     problem.x0.m = m0;
 
-    problem.params.g = 1.64;
-    problem.params.Isp = 300.0;
+    // -----------------------------
+    // Physical model
+    // -----------------------------
+    problem.params.mu_moon = 4.9048695e12;   // [m^3/s^2]
+    problem.params.R_moon  = 1.7374e6;       // [m]
+    problem.params.Isp     = 300.0;          // [s]
+    problem.params.g0      = 9.80665;        // [m/s^2]
 
+    // -----------------------------
+    // Horizon
+    // -----------------------------
     problem.dt = dt;
     problem.N  = 40;
 
-    problem.w_h = 1.0;
-    problem.w_v = 1.0;
-    problem.w_m = 0.1;
-    problem.w_T = 0.01;
+    // -----------------------------
+    // Cost weights
+    // -----------------------------
+    problem.w_fuel        = 10.0;
+    problem.w_terminal    = 50.0;
+    problem.w_hf          = 1.0;
+    problem.w_vf          = 3.0;
+    problem.w_v_constraint= 20.0;
+    problem.w_smooth      = 0.05;
+    problem.w_descent     = 1.0;
 
+    // -----------------------------
+    // References
+    // -----------------------------
     problem.h_ref = std::max(1.0, std::abs(h0));
-    problem.v_ref = std::max(1.0, std::abs(v0));
+    problem.v_safe = 2.5;                    // [m/s] touchdown safe speed
     problem.m_ref = m0;
     problem.T_ref = landerMoon.maxT;
 
+    // -----------------------------
+    // Constraints
+    // -----------------------------
+    problem.m_dry = landerMoon.emptyMass;
+
+    problem.v_min = -50.0;   // max fall speed
+    problem.v_max =  5.0;    // max upward drift
+
+    // -----------------------------
+    // Optimize
+    // -----------------------------
     ThrustOptimizer optimizer;
     return optimizer.optimize(problem, landerMoon.maxT);
 }
+
 
 //TODO: Obsolete?
 //TODO:
@@ -311,7 +330,7 @@ simData spacecraft::getFullSimulationData() const
     simData_.statevector_ = getState();
 
     // Reduce height by radius of moon
-    simData_.statevector_.I_Position.z = simData_.statevector_.I_Position.z - environmentConfig_.radiusMoon;
+    simData_.statevector_.I_Position.z -= environmentConfig_.radiusMoon;
 
     // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;

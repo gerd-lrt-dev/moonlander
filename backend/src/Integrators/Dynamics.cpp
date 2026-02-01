@@ -35,24 +35,25 @@ OptimizationState integrateEuler(
 }
 */
 
-OptimizationState integrateEuler(const OptimizationState& x, double T, double dt, const ThrustOptimizationProblem& problem)
+OptimizationState integrateEuler1D(const OptimizationState& x, double T, double dt, const ThrustOptimizationProblem& problem)
 {
-    OptimizationState xn = x;                 // next state
-    const auto& p = problem.params;
+    OptimizationState xn = x;
 
-    // --- Acceleration (vertical 1D) ---
-    // a = T/m - g
-    double a = (T / x.m) - p.g;
+    // --- Gravity depends on height ---
+    double g = problem.params.mu_moon / ((problem.params.R_moon + x.h) * (problem.params.R_moon + x.h));
+
+    // --- Total acceleration ---
+    double a = (T / x.m) - g;
 
     // --- Position & velocity update ---
     xn.h += x.v * dt + 0.5 * a * dt * dt;
     xn.v += a * dt;
 
-    // --- Mass flow based on thrust ---
-    double mdot = spacemath::calcMassFlowBasedOnThrust(T, p.Isp, p.g0);
+    // --- Mass flow ---
+    double mdot = spacemath::calcMassFlowBasedOnThrust(T, problem.params.Isp, problem.params.g0);
     xn.m = std::max(x.m - mdot * dt, problem.m_dry);
 
-    // Optional numeric safety
+    // --- Safety ---
     if (!std::isfinite(xn.h) || !std::isfinite(xn.v) || !std::isfinite(xn.m))
     {
         xn.h = 0.0;
@@ -62,5 +63,7 @@ OptimizationState integrateEuler(const OptimizationState& x, double T, double dt
 
     return xn;
 }
+
+
 
 
