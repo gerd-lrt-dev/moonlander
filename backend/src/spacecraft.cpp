@@ -244,23 +244,23 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     // Horizon
     // -----------------------------
     problem.dt = dt;
-    problem.N  = 40;
+    problem.N  = 120;
 
     // -----------------------------
     // Cost weights
     // -----------------------------
-    problem.w_fuel        = 10.0;
-    problem.w_terminal    = 50.0;
-    problem.w_hf          = 1.0;
-    problem.w_vf          = 3.0;
-    problem.w_v_constraint= 20.0;
+    problem.w_fuel        = 5.0;
+    problem.w_terminal    = 1e5;
+    problem.w_hf          = 1e5;
+    problem.w_vf          = 1e5;
+    problem.w_v_constraint= 30.0;
     problem.w_smooth      = 0.05;
-    problem.w_descent     = 1.0;
+    problem.w_descent     = 0.0;
 
     // -----------------------------
     // References
     // -----------------------------
-    problem.h_ref = std::max(1.0, std::abs(h0));
+    problem.h_ref = std::max(1.0, std::abs(h0 - environmentConfig_.radiusMoon));
     problem.v_safe = 2.5;                    // [m/s] touchdown safe speed
     problem.m_ref = m0;
     problem.T_ref = landerMoon.maxT;
@@ -271,7 +271,12 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     problem.m_dry = landerMoon.emptyMass;
 
     problem.v_min = -50.0;   // max fall speed
-    problem.v_max =  5.0;    // max upward drift
+    problem.v_max =  50.0;   // max upward drift
+
+    // -----------------------------
+    // Target properties
+    // -----------------------------
+    problem.r_target = environmentConfig_.radiusMoon;
 
     // -----------------------------
     // Optimize
