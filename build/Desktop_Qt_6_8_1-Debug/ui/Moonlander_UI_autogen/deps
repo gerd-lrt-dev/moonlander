@@ -1,4 +1,10 @@
 Moonlander_UI_autogen/timestamp: \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Integrators/iIntegrator.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/modelParams.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/optimizationStruct.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/thrustOptimizationProblem.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/thrustOptimizer.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Physics/iPhysicsModel.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Thrust.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/customSpacecraftStruct.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \

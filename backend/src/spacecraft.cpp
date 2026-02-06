@@ -1,8 +1,8 @@
 #include "spacecraft.h"
 
 #include "spacemath.h"
-
-#include <iomanip>
+#include "Physics/basicMoonGravityModel.h"
+#include "Integrators/eulerIntegrator.h"
 
 // -------------------------------------------------------------------------
 // Private
@@ -16,13 +16,13 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
-    // TODO just testing here
+    // TODO just testing here optimization
 
     double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
     double v0 = landerMoon.I_initialVelocity.z; // vertikale Geschwindigkeit
     double m0 = totalMass;
 
-    std::vector<double> thrust = compute_optimization(h0, v0, m0, 0.5);
+    //std::vector<double> thrust = compute_optimization(h0, v0, m0, 0.5);
 
 }
 
@@ -137,7 +137,10 @@ spacecraft::spacecraft(customSpacecraft lMoon)
     )
     {
         // initialize physics
-        physics_ = std::make_unique<physics>();
+        std::shared_ptr<IPhysicsModel> model_ = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
+        std::shared_ptr<IIntegrator> integrator_ = std::make_shared<EulerIntegrator>();
+        physics_ = std::make_unique<physics>(model_, integrator_);
+
         setDefaultValues();
     };
 

@@ -11,13 +11,19 @@ add_library(moonlander_backend
     ${BACKEND_SOURCES}
     ${BACKEND_HEADERS}
     src/Integrators/Dynamics.cpp
+    src/Integrators/eulerIntegrator.cpp
     src/Optimization/thrustCostFunction.cpp
     src/Optimization/thrustOptimizer.cpp
+    src/Physics/basicMoonGravityModel.cpp
     include/Integrators/Dynamics.h
+    include/Integrators/iIntegrator.h
+    include/Integrators/eulerIntegrator.h
     include/Optimization/optimizationStruct.h
     include/Optimization/modelParams.h
     include/Optimization/thrustOptimizationProblem.h
     include/Optimization/thrustOptimizer.h
+    include/Physics/iPhysicsModel.h
+    include/Physics/basicMoonGravityModel.h
 )
 
 target_include_directories(moonlander_backend

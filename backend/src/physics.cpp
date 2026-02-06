@@ -1,20 +1,17 @@
 #include "physics.h"
 #include <cmath>
-#include <iostream>
+
 
 #include "environmentConfig.h"
 
 // constructor - destructor ---------------------------------------
-physics::physics(/* args */)
-{
-}
 
 physics::~physics()
 {
 }
 
 // private ---------------------------------------------------------
-Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const 
+Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const
 {
     // Direction from center Of moon (points to the outside)
     Vector3 dir = pos.normalized();

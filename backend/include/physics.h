@@ -1,9 +1,13 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
+#include <memory>
+
 #include "environmentConfig.h"
 #include "vector3.h"
 #include "spacemath.h"
+#include "Physics/iPhysicsModel.h"
+#include "Integrators/iIntegrator.h"
 
 /**
  * @class physics
@@ -30,6 +34,8 @@ private:
     // Constants & parameters
     EnvironmentConfig configData;
     spacemath math;
+    std::shared_ptr<IPhysicsModel> model_;
+    std::shared_ptr<IIntegrator> integrator_;
 
     /**
      * @brief Calculates three dimensional moon gravity effekt
@@ -54,7 +60,7 @@ public:
     /**
      * @brief Constructor
      */
-    physics();
+    physics(std::shared_ptr<IPhysicsModel> model, std::shared_ptr<IIntegrator> integrator) : model_(model), integrator_(integrator) {};
 
     /**
      * @brief Destructor

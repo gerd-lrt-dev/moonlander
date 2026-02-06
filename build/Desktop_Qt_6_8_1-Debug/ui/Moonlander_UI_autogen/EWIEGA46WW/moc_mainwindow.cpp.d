@@ -1,9 +1,11 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/mainwindow.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Integrators/iIntegrator.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/modelParams.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/optimizationStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/thrustOptimizationProblem.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/thrustOptimizer.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Physics/iPhysicsModel.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Thrust.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/customSpacecraftStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \
