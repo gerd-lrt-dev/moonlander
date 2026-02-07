@@ -46,13 +46,13 @@ void spacecraft::updateMovementData(double dt)
     Vector3 thrustDir = requestThrustDirection();
 
     // --- Compute acceleration ---
-    Vector3 acceleration = physics_->computeAcc(requestThrust(), getTotalMass(), thrustDir, getPosition());
+    Vector3 acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), requestThrust(), requestThrustDirection());
 
     // --- Compute velocity ---
     Vector3 velocity = physics_->computeVel(getVelocity(), acceleration, dt);
 
     // --- Compute position ---
-    Vector3 position = physics_->computePos(velocity, getPosition(), acceleration, dt);
+    Vector3 position = physics_->computePos(getPosition(), velocity, acceleration, dt);
 
     // --- TODO: Compute orientation and angular velocity ---
     // ...

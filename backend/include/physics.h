@@ -11,23 +11,26 @@
 
 /**
  * @class physics
- * @brief Handles the physics calculations for a lunar lander.
+ * @brief Orchestrator class coordinating physics model and numerical integration.
  *
- * This class provides methods to calculate the lander's velocity and position
- * over time, considering lunar gravity. It is stateless except for constant
- * parameters like lunar gravity.
+ * The physics class acts as a façade and coordination layer between
+ * the physical model (IPhysicsModel) and the numerical integrator
+ * (IIntegrator). It does not implement physical laws or numerical
+ * algorithms itself.
  *
- * @note All calculations are performed in a Moon-centered inertial reference
- *       frame, meaning that positions, velocities, and gravitational forces
- *       are expressed relative to the Moon's center. 
- *       This ensures a consistent and physically accurate simulation of 
- *       orbital and surface dynamics.
+ * Responsibilities:
+ * - Query the active physics model for current acceleration.
+ * - Delegate position and velocity updates to the configured integrator.
+ * - Provide wrapper functions for external systems (e.g. spacecraft)
+ *   to keep their interface stable and independent of internal changes.
  *
- * @note Forces originating from the spacecraft itself, such as thrust, are
- *       defined in the spacecraft's body frame and must be transformed into
- *       the inertial frame before being combined with gravitational forces.
+ * This design enables interchangeable physics models (e.g. Moon, Mars,
+ * drag models) and integrators (Euler, RK4, Verlet) without modifying
+ * higher-level systems.
+ *
+ * The class is intentionally lightweight and stateless except for
+ * references to the selected model and integrator.
  */
-
 class physics
 {
 private:
@@ -36,26 +39,6 @@ private:
     spacemath math;
     std::shared_ptr<IPhysicsModel> model_;
     std::shared_ptr<IIntegrator> integrator_;
-
-    /**
-     * @brief Calculates three dimensional moon gravity effekt
-     * @param pos Position in 3 dimensions [m]
-     * @return Gravity in three dimensional vector aligned to the center of moon [m/s²]
-     * 
-     * Supports calculation of position & velocity
-     */
-    Vector3 calcGravityRadialToMoonCenter(Vector3 position) const;
-
-    /**
-     * @brief Calculates acceleration under the influence of mass and to the center of moon
-     * @param accelerationSpacecraft Thrust vector provided by engines [m/s²]
-     * @param totalMassSpacecraft Totalmass = emptymass + fuelmass [kg]
-     * @param gravityRadialToMoonCenter Gravity in three dimensional vector aligned to the center of moon [m/s²]
-     * 
-     * Supports calculation of position & velocity
-     */
-    Vector3 calcAccelerationAlignedToCenterOfMoon(Vector3 accelerationSpacecraft, Vector3 gravityRadialToMoonCenter, double totalMassSpacecraft) const;
-
 public:
     /**
      * @brief Constructor
@@ -68,63 +51,43 @@ public:
     ~physics();
 
     /**
-     * @brief Calculates height based on time, initial velocity, and initial height
-     * @param vel Velocity in 3 dimensions [m/s]
-     * @param pos Position in 3 dimensions [m]
-     * @param accelerationSpacecraft Thrust vector provided by engines [m/s²]
-     * @param dt Time elapsed [s]
-     * @param totalMassSpacecraft Totalmass = emptymass + fuelmass [kg]
-     * @return Calculated height [m]
-     * 
-     * The resulting height is calculated based on the equation of motion.
-     * h(t) = h0 ​+ v0 * ​t + 1/2 ​(accelerationSpacecraft−g) * t²
+     * @brief Computes the current acceleration via the active physics model.
+     *
+     * Wrapper function delegating the calculation to the configured
+     * IPhysicsModel implementation.
+     *
+     * @param thrust    Current thrust force magnitude.
+     * @param mass      Current spacecraft mass.
+     * @param thrustDir Normalized thrust direction vector.
+     * @param pos       Current position vector.
+     * @return Resulting acceleration vector.
      */
-    Vector3 computePos(Vector3 vel,  Vector3 pos, Vector3 accelerationSpacecraft, double dt) const;
+    Vector3 computeAcc(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const;
 
     /**
-     * @brief Calculates velocity based on time and initial velocity
-     * @param vel Velocity in 3 dimensions [m/s]
-     * @param pos Position in 3 dimensions [m]
-     * @param accelerationSpacecraft Thrust vector provided by engines [m/s²]
-     * @param dt Time elapsed [s]
-     * @param totalMassSpacecraft [kg]
-     * @return Calculated velocity [m/s]
-     * 
-     * v(t) = v0 + a{resutl} * t
-     * a{result} = a{accelerationSpacecraft} - g{moon}
+     * @brief Integrates velocity using the configured integrator.
+     *
+     * Wrapper function delegating numerical integration to IIntegrator.
+     *
+     * @param vel Current velocity vector.
+     * @param acc Current acceleration vector.
+     * @param dt  Time step in seconds.
+     * @return Updated velocity vector.
      */
-    Vector3 computeVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const;
+    Vector3 computeVel(const Vector3& vel, const Vector3& acc, double dt) const;
 
     /**
-     * @brief Request current acceleration based on thrust of spacecraft
-     * @param currenThrust      ///< [N] current Thrust of Spacecraft provided by thrust class
-     * @param totalMass         ///< [kg] Total mass of spacecraft taking fuel consumption into account
-     * @param directionOfThrust ///< [-] Vector with direction of thrust
-     * @param moonGravityVec    ///< [m/s²] Acceleration of moon ~1,64
-     * @return  ///< [m/s²] Vector acceleration of spacecraft
-    *
-    * The total acceleration is defined as the sum of thrust acceleration and
-    * gravitational acceleration:
-    *
-    *      a_total = a_thrust + a_gravity
-    *
-    * where
-    *
-    *      a_thrust  = F_thrust / m_total
-    *      a_gravity = - (μ / r²) * r̂
-    *
-    * with:
-    *      F_thrust  : Thrust vector produced by the main engine [N]
-    *      m_total   : Current total spacecraft mass (dry mass + fuel) [kg]
-    *      μ         : Gravitational parameter of the Moon (μ = g_surface * r_moon²) [m³/s²]
-    *      r         : Distance from the lunar center to the spacecraft [m]
-    *      r̂         : Normalized vector from the lunar center to the spacecraft
-    *
-    * The negative sign ensures that the gravitational acceleration vector
-    * always points toward the Moon's center.
-    * The calculation is made by the helper class spacemath
+     * @brief Integrates position using the configured integrator.
+     *
+     * Wrapper function delegating numerical integration to IIntegrator.
+     *
+     * @param pos Current position vector.
+     * @param vel Current velocity vector.
+     * @param acc Current acceleration vector.
+     * @param dt  Time step in seconds.
+     * @return Updated position vector.
      */
-    Vector3 computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 pos) const;
+    Vector3 computePos(const Vector3& pos, const Vector3& vel, const Vector3& acc, double dt) const;
 
     /**
      * @brief Computes the proper G-load experienced by the spacecraft.

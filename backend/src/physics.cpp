@@ -1,7 +1,6 @@
 #include "physics.h"
 #include <cmath>
 
-
 #include "environmentConfig.h"
 
 // constructor - destructor ---------------------------------------
@@ -10,39 +9,20 @@ physics::~physics()
 {
 }
 
-// private ---------------------------------------------------------
-Vector3 physics::calcGravityRadialToMoonCenter(Vector3 pos) const
-{
-    // Direction from center Of moon (points to the outside)
-    Vector3 dir = pos.normalized();
-
-    // Distance to center of moon radius + height
-    double r    = pos.norm();
-
-    return - dir * (configData.gravitationalFactorMoon / (r * r));
-}
-
-Vector3 physics::calcAccelerationAlignedToCenterOfMoon(Vector3 accelerationSpacecraft, Vector3 gravityRadialToMoonCenter, double totalMassSpacecraft) const
-{
-    return (accelerationSpacecraft / totalMassSpacecraft) + gravityRadialToMoonCenter;
-}
-
 // public  ---------------------------------------------------------
-Vector3 physics::computePos(Vector3 vel, Vector3 pos, Vector3 accelerationSpacecraft, double dt) const
+Vector3 physics::computeAcc(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const
 {
-    return pos + vel * dt + accelerationSpacecraft * 0.5 * dt * dt;
+    return model_->computeAcceleration(pos, vel, mass, thrust, thrustDir);
 }
 
-Vector3 physics::computeVel(Vector3 vel, Vector3 accelerationSpacecraft, double dt) const
+Vector3 physics::computeVel(const Vector3& vel, const Vector3& acc, double dt) const
 {
-    return vel + accelerationSpacecraft * dt;
+    return integrator_->integrateVel(vel, acc, dt);
 }
 
-Vector3 physics::computeAcc(double currentThrust, double totalMass, Vector3 directionOfThrust, const Vector3 pos) const
+Vector3 physics::computePos(const Vector3& pos, const Vector3& vel, const Vector3& acc, double dt) const
 {
-    Vector3 moonGravityRadialToMoonCenter = calcGravityRadialToMoonCenter(pos);
-
-    return spacemath::accelerationComplex(currentThrust, totalMass, directionOfThrust, moonGravityRadialToMoonCenter);
+    return integrator_->integratePos(pos, vel, acc, dt);
 }
 
 double physics::computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)
