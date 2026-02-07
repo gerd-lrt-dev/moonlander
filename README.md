@@ -2,14 +2,17 @@
 Moonlander – C++ Lunar Lander Simulation
 ========================
 
+Updated from 07.02.2026
+
 Overview
 --------
 Moonlander is an educational C++ project inspired by the "Lunar Landing" example from the book "Coding for Fun".
 It simulates a lunar landing in one or more dimensions, providing a modular backend and a Qt-based frontend.
 
-The project separates:
-- Backend: Physics, simulation, spacecraft state, logging, controller testing
-- Frontend: Qt UI, cockpit, landing view, telemetry, real-time user interaction
+The project now features **full modularization**:
+- Physics, Integrator, and Sensor models are decoupled
+- Orchestrator classes manage high-level operations without implementing raw calculations
+- Concrete sensor models provide telemetry (e.g., proper G-load) independent of physics state
 
 The backend runs in its own thread via `SimulationWorker`, independent of Qt, while the UI updates in the main thread.
 The Logger class allows the backend to report debug messages without Qt dependencies.
@@ -24,22 +27,52 @@ UIBuilder          - Helper class to build consistent Qt UI elements across page
 
 Backend Components
 ------------------
-Physics            - Calculates velocity and position under gravity and thrust
-Thrust             - Engine model: target thrust, response rate, actual thrust
-Output             - Handles backend visualization logic (ASCII cockpit, optional logs) without Qt dependency
-SimControl         - Orchestrates the simulation: validates parameters, steps the simulation
-Spacecraft         - Central owner of spacecraft state and dynamics: mass, fuel, position, velocity, thrust, orientation, integrity
-EnvironmentConfig  - Constants for gravity, timestep, max simulation step, etc.
-Spacemath          - Math utilities for vectors, physics calculations
-Logger             - Singleton logger for backend debug output (no Qt dependency)
+Integrators:
+  - IIntegrator          - Interface for all integrators
+  - EulerIntegrator      - Example concrete integrator for 1D/ND Euler integration
+  - Dynamics             - Physics-specific helper for acceleration, forces
+
+Optimization:
+  - OptimizationModelParams    - Physical model parameters (gravity, Isp, thrust limits)
+  - OptimizationStruct          - Base optimization data structure (state, horizon, weights)
+  - ThrustOptimizationProblem  - Struct encapsulating optimization problem (initial state, constraints, cost weights)
+  - ThrustOptimizer            - Executes NLopt optimization over thrust profile
+
+Physics:
+  - IPhysicsModel        - Abstract interface for physics models
+  - BasicMoonGravity     - Implements lunar gravity, inherits IPhysicsModel
+  - Physics (orchestrator) - Delegates physics calls to active physics model and integrator
+
+Sensor & Perception:
+  - ISensor              - Sensor interface
+  - SensorModel          - Computes proper G-load, inherits ISensor
+
+Thrust & Spacecraft:
+  - Thrust               - Engine model (target thrust, actual thrust, response)
+  - CustomSpacecraftStruct - Defines spacecraft mass, geometry, fuel, etc.
+  - Spacecraft           - Central owner of spacecraft state and dynamics
+  - SpacecraftStateStruct - Encapsulates mass, fuel, position, velocity, thrust, integrity
+  - StateVectorStruct    - Unified state vector for all physics calculations
+  - Quaternion           - Orientation representation for 3D expansion
+  - Vector3              - 3D vector math utility
+
+Environment & Utilities:
+  - EnvironmentConfig    - Constants for gravity, timestep, max simulation step, moon radius
+  - JsonConfigReader     - Reads configuration from JSON
+  - Spacemath            - Obsolete math utilities (partially replaced by Vector3/Quaternion)
+  - SimDataStruct        - Stores simulation state for frontend visualization
+  - SimControl           - Orchestrates simulation, validates parameters, steps simulation
+  - Logger               - Singleton logger for backend debug output
+  - Output               - Obsolete visualization logic (ASCII cockpit/logs, deprecated)
 
 State Vector & Dynamics
 ----------------------
-- A single `StateVector` is now the source of truth for the spacecraft state
+- `StateVectorStruct` is the single source of truth for spacecraft state
 - Encapsulates: inertial position, inertial velocity, orientation (quaternion), body angular velocity, total mass
 - Only the `Spacecraft` class has write access; other classes have read-only access
-- All dynamic calculations (forces, moments, accelerations) are aggregated in `Spacecraft`
-- Proper G-load computation implemented in `Spacecraft` based on thrust and gravity vectors
+- Physics computations are delegated via `IPhysicsModel` and `IIntegrator` interfaces
+- `Physics` orchestrator calls integrators without performing calculations itself
+- Proper G-load is computed via `SensorModel`, independent of the physics state
 
 Threading & Signals
 ------------------
@@ -52,30 +85,51 @@ Threading & Signals
 Current Features
 ----------------
 - Full separation of backend and frontend
-- Real-time telemetry displayed in cockpitPage
+- Modular physics with interchangeable models (`IPhysicsModel`) and integrators (`IIntegrator`)
+- Real-time telemetry displayed in cockpitPage via `SensorModel`
+- Proper G-load calculation using onboard sensor abstraction
 - Thread-safe simulation loop with Qt signal/slot integration
-- Logger captures debug output from backend without Qt
 - Spacecraft is the sole owner of state and dynamics
-- Calculation of proper G-forces based on thrust and gravity
-- Initial support for resource-based JSON configuration
 - Backend supports testing spacecraft controllers independently of UI
-- Legacy variables removed, state vector integrated into `simData` for frontend
+- Legacy variables removed; state vector integrated into `SimDataStruct` for frontend
+
+Thrust Optimization (Experimental)
+---------------------------------
+- A 1D lunar landing thrust optimizer has been implemented in the backend.
+- OptimizationGoal: Minimize fuel consumption while ensuring a safe landing (target altitude and velocity).
+- Forward simulation uses `EulerIntegrator` to propagate spacecraft state under candidate thrust profiles.
+- Cost function includes:
+  - Terminal cost (deviation from target height and safe landing velocity)
+  - Fuel consumption
+  - Thrust smoothness
+  - Linear descent encouragement
+- Current status:
+  - Optimizer runs and evaluates thrust sequences but is **not yet fully stable**.
+  - Some simulation steps show minor mass fluctuations due to mass floor enforcement (mass cannot physically increase).
+  - Descent trajectories are plausible, but landing precision and fuel optimization are still under tuning.
+- Next steps:
+  - Correct mass handling to prevent non-physical mass increases.
+  - Adjust cost weights to prioritize terminal conditions over smoothness/descent incentives.
+  - Integrate thrust normalization to ensure candidate thrust profiles are within physical limits.
+  - Stabilize optimizer convergence for consistent landing trajectories.
+- This module serves as a **testbed for future fuel-optimal automated landing algorithms** and is integrated into the current modular backend architecture.
 
 Goals
 -----
-- Build a solid simulation environment for testing different controllers
-- Provide a robust framework for physics and control development
-- Enable development of UI separately from backend
-- Maintain modular architecture for easy extensions and testing
+- Build a robust simulation environment for testing different controllers
+- Provide a modular framework for physics, sensors, and control development
+- Enable frontend UI development separately from backend improvements
+- Maintain extendable architecture for easy integration of new physics models, sensors, and integrators
 
 Planned Extensions
 ------------------
 Short-Term:
   - Stabilize Qt-based telemetry display and cockpit updates
-  - Integrate landingView with real spacecraft positions
   - Extend Logger with file output and multiple log levels
+  - Implement additional sensors (gyroscope, altimeter) using SensorModel base
   - Improve backend simulation precision and controller hooks
-  - Implement optimal control routines for automated landing minimizing fuel consumption
+  - Implement and stabilize 1D thrust optimization routines for automated landing
+  - Adjust cost functions and weightings to enforce physically plausible trajectories
 
 Mid-Term:
   - Implement full 3D spacecraft model
@@ -95,17 +149,21 @@ Requirements:
   - C++20 or newer
   - Qt6 (for frontend UI)
   - G++ or Clang compiler
+  - NLopt library (for 1D thrust optimization)
+    - Linux: `sudo apt install libnlopt-dev`
+    - Windows: download prebuilt binaries or build from source
+    - Include NLopt headers in project: `#include <nlopt.hpp>`
 
 Compile (command line):
-  g++ -std=c++20 -I -Wall -Wextra -O2 main.cpp physics.cpp output.cpp simcontrol.cpp Thrust.cpp spacecraft.cpp spacemath.cpp jsonConfigReader.cpp Logger.cpp cockpitPage.cpp landingView.cpp homepage.cpp SimulationWorker.cpp UIBuilder.cpp -o moonlander
+  g++ -std=c++20 -I -Wall -Wextra -O2 main.cpp physics.cpp BasicMoonGravityModel.cpp EulerIntegrator.cpp SensorModel.cpp Thrust.cpp simcontrol.cpp spacecraft.cpp customSpacecraftStruct.cpp stateVectorStruct.cpp quaternion.cpp vector3.cpp jsonConfigReader.cpp Logger.cpp cockpitPage.cpp landingView.cpp homepage.cpp SimulationWorker.cpp UIBuilder.cpp -o moonlander -lnlopt
 
 Run:
   ./moonlander
 
 Future Vision
 -------------
-Moonlander will evolve into a modular lunar landing simulation framework where:
-- Backend handles physics, state, and controller testing independently
+Moonlander will evolve into a fully modular lunar landing simulation framework where:
+- Backend handles physics, state, integrator, sensor telemetry, and optimization independently
 - Frontend provides real-time telemetry, user input, and visualization
 - Logger centralizes all backend debug messages
 - UI development (Qt widgets) continues separately from backend improvements
