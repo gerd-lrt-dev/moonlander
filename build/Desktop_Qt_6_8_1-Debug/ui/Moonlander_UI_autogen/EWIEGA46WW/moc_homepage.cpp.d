@@ -6,6 +6,7 @@
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/thrustOptimizationProblem.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/thrustOptimizer.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Physics/iPhysicsModel.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Sensory_Perception/iSensor.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Thrust.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/customSpacecraftStruct.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/environmentConfig.h \

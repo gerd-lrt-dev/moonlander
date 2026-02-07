@@ -43,8 +43,8 @@ private:
     std::unique_ptr<physics> physics_;      ///< Physics engine handling lander motion
     EnvironmentConfig environmentConfig_;   ///< [-] Environment config struct with constant parameters.
     SpacecraftState spacecraftState_;       ///< State of spacecraft
-    customSpacecraft landerMoon;    ///< [] Parameters which defines spacecraft. This are filled by json config data.
-    Thrust mainEngine;              ///< [] Dynamic state of the engine thrust.
+    customSpacecraft landerMoon;            ///< [] Parameters which defines spacecraft. This are filled by json config data.
+    Thrust mainEngine;                      ///< [] Dynamic state of the engine thrust.
 
     double totalMass;               ///< [kg] Total mass of spacecraft.
     double dt = 0;                  ///< [s] Time steps. Provided by updateTime.

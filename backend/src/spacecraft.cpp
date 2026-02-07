@@ -3,6 +3,7 @@
 #include "spacemath.h"
 #include "Physics/basicMoonGravityModel.h"
 #include "Integrators/eulerIntegrator.h"
+#include "Sensory_Perception/sensorModel.h"
 
 // -------------------------------------------------------------------------
 // Private
@@ -137,9 +138,11 @@ spacecraft::spacecraft(customSpacecraft lMoon)
     )
     {
         // initialize physics
-        std::shared_ptr<IPhysicsModel> model_ = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
-        std::shared_ptr<IIntegrator> integrator_ = std::make_shared<EulerIntegrator>();
-        physics_ = std::make_unique<physics>(model_, integrator_);
+        std::shared_ptr<IPhysicsModel> model_       = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
+        std::shared_ptr<IIntegrator> integrator_    = std::make_shared<EulerIntegrator>();
+        std::shared_ptr<ISensor> sensor_            = std::make_shared<SensorModel>(environmentConfig_);
+
+        physics_ = std::make_unique<physics>(model_, integrator_, sensor_);
 
         setDefaultValues();
     };

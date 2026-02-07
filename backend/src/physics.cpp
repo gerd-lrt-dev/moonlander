@@ -27,13 +27,6 @@ Vector3 physics::computePos(const Vector3& pos, const Vector3& vel, const Vector
 
 double physics::computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)
 {
-    constexpr double g0 = 9.80665; // [m/s^2]
-
-    // Berechne Proper Acceleration
-    Vector3 properAcceleration = totalAcceleration - gravityAcceleration;
-
-    double gLoad = properAcceleration.norm() / g0;
-
-    return gLoad;
+    return sensor_->computeGLoad(totalAcceleration, gravityAcceleration);
 }
 

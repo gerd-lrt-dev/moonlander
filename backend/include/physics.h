@@ -8,6 +8,7 @@
 #include "spacemath.h"
 #include "Physics/iPhysicsModel.h"
 #include "Integrators/iIntegrator.h"
+#include "Sensory_Perception/iSensor.h"
 
 /**
  * @class physics
@@ -39,11 +40,12 @@ private:
     spacemath math;
     std::shared_ptr<IPhysicsModel> model_;
     std::shared_ptr<IIntegrator> integrator_;
+    std::shared_ptr<ISensor> sensor_;
 public:
     /**
      * @brief Constructor
      */
-    physics(std::shared_ptr<IPhysicsModel> model, std::shared_ptr<IIntegrator> integrator) : model_(model), integrator_(integrator) {};
+    physics(std::shared_ptr<IPhysicsModel> model, std::shared_ptr<IIntegrator> integrator, std::shared_ptr<ISensor> sensor) : model_(model), integrator_(integrator), sensor_(sensor) {};
 
     /**
      * @brief Destructor
@@ -92,27 +94,28 @@ public:
     /**
      * @brief Computes the proper G-load experienced by the spacecraft.
      *
-     * The G-load represents the acceleration felt by the lander, excluding
-     * the effect of gravity. It is expressed in units of Earth's standard
-     * gravity (g0 = 9.80665 m/s²). This function is suitable for both 1D
-     * and 3D acceleration vectors.
+     * This function calculates the acceleration actually felt by the spacecraft,
+     * excluding the effect of gravity. The result is expressed in multiples of
+     * Earth's standard gravity (g₀ = 9.80665 m/s²).
      *
-     * @param totalAcceleration The total acceleration acting on the spacecraft [m/s²].
-     *                          Typically includes thrust and gravity.
-     * @param gravityAcceleration The acceleration due to gravity [m/s²] at the
-     *                            spacecraft's current location (e.g., Moon gravity vector).
+     * As physics is now an orchestrator, this method is a **derived metric**
+     * based on the current total acceleration and the gravitational component
+     * provided by the active physics model. It does not modify the simulation state.
      *
-     * @return Proper G-load experienced by the spacecraft in units of g0.
+     * @param totalAcceleration   Total acceleration acting on the spacecraft [m/s²],
+     *                            typically including thrust and gravity.
+     * @param gravityAcceleration Gravitational acceleration vector [m/s²] at the
+     *                            spacecraft's current position.
      *
-     * @note This function calculates proper acceleration by subtracting the
-     *       gravitational component from the total acceleration. Only the
-     *       remaining acceleration contributes to the G-load.
-     * @note The function uses the Euclidean norm for vector inputs:
-     *       G = ||totalAcceleration - gravityAcceleration|| / g0
+     * @return Proper G-load in multiples of g₀.
+     *
+     * @note Proper acceleration is computed by subtracting gravity from the total acceleration:
+     *       \f$ G = \frac{||\vec{a}_\text{total} - \vec{a}_\text{gravity}||}{g_0} \f$
+     * @note This method is intended for telemetry, sensor simulation, or UI display.
+     *       It does not affect position, velocity, or any other physics state.
      * @see Vector3
      */
     double computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration);
-
 };
 
 #endif
