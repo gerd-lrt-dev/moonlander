@@ -1,6 +1,4 @@
-========================
 Moonlander – C++ Lunar Lander Simulation
-========================
 
 Updated from 07.02.2026
 
