@@ -25,7 +25,7 @@ std::vector<double> ThrustOptimizer::optimize(ThrustOptimizationProblem& problem
     nlopt_set_min_objective(opt, thrustCostFunction, &problem);
 
     // Initial guess
-    std::vector<double> u(problem.N, 0.5 * T_max);
+    std::vector<double> u(problem.N, 50.0);
 
     double minf;
 

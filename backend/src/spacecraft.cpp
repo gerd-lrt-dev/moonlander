@@ -249,16 +249,16 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     // -----------------------------
     // Horizon
     // -----------------------------
-    problem.dt = dt;
-    problem.N  = 120;
+    problem.dt = 0.1;
+    problem.N  = 200;
 
     // -----------------------------
     // Cost weights
     // -----------------------------
     problem.w_fuel        = 5.0;
-    problem.w_terminal    = 1e5;
-    problem.w_hf          = 1e5;
-    problem.w_vf          = 1e5;
+    problem.w_terminal    = 5000;
+    problem.w_hf          = 0.05;
+    problem.w_vf          = 50;
     problem.w_v_constraint= 30.0;
     problem.w_smooth      = 0.05;
     problem.w_descent     = 0.0;

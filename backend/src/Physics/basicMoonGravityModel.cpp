@@ -1,5 +1,5 @@
 #include "Physics/basicMoonGravityModel.h"
-
+#include <iostream>
 //******************************************************
 //************* PUBLIC *********************************
 //******************************************************
@@ -16,7 +16,9 @@ Vector3 BasicMoonGravityModel::computeAcceleration(const Vector3& pos, const Vec
 Vector3 BasicMoonGravityModel::calcAccelerationAlignedToCenterOfMoon(const Vector3& pos) const
 {
     Vector3 dir = pos.normalized();
-    double r = pos.norm();
+    double r = pos.norm() + configData.radiusMoon;
 
-    return -dir * (configData.moonGravity / r*r);
+    std::cout << "position.z: " << r << std::endl;
+
+    return -dir * (configData.gravitationalFactorMoon / (r*r));
 }
