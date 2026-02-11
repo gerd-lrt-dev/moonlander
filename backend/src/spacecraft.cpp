@@ -19,9 +19,9 @@ void spacecraft::setDefaultValues()
 
     // TODO just testing here optimization
 
-    double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
-    double v0 = landerMoon.I_initialVelocity.z; // vertikale Geschwindigkeit
-    double m0 = totalMass;
+    //double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
+    //double v0 = landerMoon.I_initialVelocity.z; // vertikale Geschwindigkeit
+    //double m0 = totalMass;
 
     //std::vector<double> thrust = compute_optimization(h0, v0, m0, 0.5);
 

@@ -16,9 +16,7 @@ Vector3 BasicMoonGravityModel::computeAcceleration(const Vector3& pos, const Vec
 Vector3 BasicMoonGravityModel::calcAccelerationAlignedToCenterOfMoon(const Vector3& pos) const
 {
     Vector3 dir = pos.normalized();
-    double r = pos.norm() + configData.radiusMoon;
-
-    std::cout << "position.z: " << r << std::endl;
+    double r = pos.norm();
 
     return -dir * (configData.gravitationalFactorMoon / (r*r));
 }
