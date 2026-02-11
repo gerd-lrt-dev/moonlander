@@ -4,18 +4,29 @@
 #include "spacecraft.h"
 #include "simDataStruct.h"
 #include "jsonConfigReader.h"
+#include "Control/inputArbiter.h"
 
 #include <memory>
 #include <nlopt.h>
 
 /**
  * @class simcontrol
- * @brief Main controller for the lunar lander simulation.
+ * @brief Central simulation orchestrator.
  *
- * This class coordinates the simulation loop, updating the physics
- * of the lander and handling output/visualization. It owns the
- * Physics and Output objects via smart pointers to ensure automatic
- * memory management.
+ * SimControl is responsible for coordinating all high-level control flow of the simulation.
+ * It does not perform physics calculations itself, but manages the interaction between
+ * the major subsystems.
+ *
+ * Responsibilities:
+ * - Collect and forward user input commands
+ * - Query and apply automation / autopilot commands
+ * - Resolve command priority (user vs. automation)
+ * - Trigger and sequence simulation time steps
+ * - Notify and update the UI / frontend state
+ *
+ * In short, SimControl decides *who controls the spacecraft* and *when the simulation advances*,
+ * while the actual physics and state changes are handled by the spacecraft and its subsystems.
+ *
  */
 class simcontrol
 {
@@ -24,6 +35,7 @@ private:
     //*************        Members                   ************
     //***********************************************************
     std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
+    std::unique_ptr<InputArbiter> inputArbiter_;    ///< Arbiter for input commands
     std::string jsonConfigString;                   ///< String with raw space config data provided by frontend
     customSpacecraft landerMoon1;                   ///< Config for used spacecraft provided by json config
     bool resetRequested;                            ///< Represents user desire to reset simulation
@@ -97,7 +109,7 @@ public:
      * @brief Sets target thrust
      * @param thrustPercent [%]
      */
-    void setTargetThrust(double thrustPercent);
+    void setTargetThrust(const double& thrustPercent = 0, const double& thrustInNewton = 0);
 
     /**
      * @brief Sets reset Boolean to true

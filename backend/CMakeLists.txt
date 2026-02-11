@@ -16,6 +16,9 @@ add_library(moonlander_backend
     src/Optimization/thrustOptimizer.cpp
     src/Physics/basicMoonGravityModel.cpp
     src/Sensory_Perception/sensorModel.cpp
+    src/Automation/iAutopilot.cpp
+    src/Automation/flightController.cpp
+    src/Control/inputArbiter.cpp
     include/Integrators/Dynamics.h
     include/Integrators/iIntegrator.h
     include/Integrators/eulerIntegrator.h
@@ -27,6 +30,9 @@ add_library(moonlander_backend
     include/Physics/basicMoonGravityModel.h
     include/Sensory_Perception/iSensor.h
     include/Sensory_Perception/sensorModel.h
+    include/Automation/iautopilot.h
+    include/Automation/flightController.h
+    include/Control/inputArbiter.h
 )
 
 target_include_directories(moonlander_backend

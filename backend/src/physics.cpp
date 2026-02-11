@@ -1,8 +1,6 @@
 #include "physics.h"
 #include <cmath>
 
-#include "environmentConfig.h"
-
 // constructor - destructor ---------------------------------------
 
 physics::~physics()

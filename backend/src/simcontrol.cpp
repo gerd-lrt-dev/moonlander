@@ -2,8 +2,6 @@
 #include "logger.h"
 
 #include <iostream>
-#include <thread>
-#include <chrono>
 #include <stdexcept>
 
 //***********************************************************
@@ -15,7 +13,6 @@ void simcontrol::buildSimulationEnvironment(double t)
     landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1);
 }
 
-// Function is needed when UI is working
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName)
 {
     nlohmann::json config;
@@ -78,6 +75,8 @@ void simcontrol::initialize(const std::string& jsonConfigStr)
     landerMoon1 = loadSpacecraftFromJsonString(jsonConfigStr, "MoonLander_Classic");
 
     buildSimulationEnvironment(initialTime);
+
+    inputArbiter_ = std::make_unique<InputArbiter>();
 }
 
 void simcontrol::instanceLoggingAction()
@@ -96,17 +95,13 @@ simData simcontrol::runSimulation(const double dt)
         logger.log("Simulation step started. dt = " + std::to_string(dt));
 
         // --- Update spacecraft time ---
-
-        landerSpacecraft->updateTime(dt);
+        landerSpacecraft->updateTime(dt);   ///< Updates Spacecraft & mainEngine time --> System are now on and running
 
         // --- Update spacecraft state (translation, velocity, etc.) ---
-        landerSpacecraft->updateStep(dt);
+        landerSpacecraft->updateStep(dt);   ///< Updates simulation steps
 
         // --- Retrieve full simulation data ---
-        simdata_ = landerSpacecraft->getFullSimulationData();
-
-        // --- Retrieve G-Load ---
-
+        simdata_ = landerSpacecraft->getFullSimulationData();   ///< SimData struct can be requested from frontend
 
         // --- Log results (adapt later to new state vector) ---
         /*
@@ -145,8 +140,16 @@ void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
     jsonConfigString = jsonConfigStr;
 }
 
-void simcontrol::setTargetThrust(double thrustPercent)
+void simcontrol::setTargetThrust(const double& thrustPercent, const double& thrustInNewton)
 {
+    /*
+    ControlCommand commandThrust;
+    commandThrust.thrustInPercentage    = thrustPercent;
+    commandThrust.thrustInNewton        = thrustInNewton;
+    // TODO: Hier geht es weiter  -->
+    inputArbiter_->chooseCommand(nullptr, nullptr);
+    */
+
     landerSpacecraft->setThrust(thrustPercent / 100.0);
 }
 

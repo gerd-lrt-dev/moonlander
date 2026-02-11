@@ -1,5 +1,4 @@
 #include "Thrust.h"
-#include <iostream>
 
 // ---Private-------------------------------------
 

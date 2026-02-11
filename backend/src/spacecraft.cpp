@@ -4,6 +4,7 @@
 #include "Physics/basicMoonGravityModel.h"
 #include "Integrators/eulerIntegrator.h"
 #include "Sensory_Perception/sensorModel.h"
+#include "Control/inputArbiter.h"
 
 // -------------------------------------------------------------------------
 // Private
@@ -222,7 +223,7 @@ void spacecraft::updateSpacecraftIntegrity()
 void spacecraft::setThrust(double targetThrustInPercentage)
 {
     // thrust in percentage = target thrust / maxiumum thrust <=>
-    double targetThrust = targetThrustInPercentage * landerMoon.maxT; // [m/s²]
+    double targetThrust = targetThrustInPercentage * landerMoon.maxT; ///< [N]
 
     mainEngine.setTarget(targetThrust);
 }
@@ -293,7 +294,6 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
 
 
 //TODO: Obsolete?
-//TODO:
 void spacecraft::updateTime(double dt)
 {
     time += dt;

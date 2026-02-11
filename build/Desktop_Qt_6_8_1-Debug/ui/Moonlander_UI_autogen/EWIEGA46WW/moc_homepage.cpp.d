@@ -1,5 +1,6 @@
 /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/EWIEGA46WW/moc_homepage.cpp: /home/gerd-lrt-dev/Code/codingForFun/moonlander/ui/homepage.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/build/Desktop_Qt_6_8_1-Debug/ui/Moonlander_UI_autogen/moc_predefs.h \
+  /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Control/inputArbiter.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Integrators/iIntegrator.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/modelParams.h \
   /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/optimizationStruct.h \
