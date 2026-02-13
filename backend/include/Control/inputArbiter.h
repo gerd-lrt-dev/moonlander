@@ -7,10 +7,10 @@ struct ControlCommand{
 
 class InputArbiter{
 public:
-    ControlCommand chooseCommand(const ControlCommand* userInput, const ControlCommand* automation);
+    ControlCommand chooseCommand(ControlCommand* userInput, ControlCommand* automation);
 
     void setAutomationActiveFlag(bool on);
 
 private:
-    bool automationActive;
+    bool automationActive = false;
 };

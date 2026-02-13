@@ -60,6 +60,12 @@ private:
      */
     customSpacecraft loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName);
 
+    /**
+     * @brief Sets target thrust
+     * @param thrustPercent [%]
+     */
+    void setTargetThrust(const double& thrustPercent = 0, const double& thrustInNewton = 0);
+
 public:
     //***********************************************************
     //*************    Memberfuctions                ************
@@ -98,18 +104,25 @@ public:
     simData runSimulation(const double dt);
 
     /**
+     * @brief Process commands
+     *
+     * This class accepts all commands from the front end. The commands are then sent
+     * to a control instance, which decides which commands are currently valid. This
+     * means that several commands from different sources can be sent to this method
+     * at the same time.
+     *
+     * @param userInput
+     * @param automation
+     */
+    void processCommands(ControlCommand* userInput, ControlCommand* automation);
+
+    /**
      * @brief set loaded json config str
      * @param jsonConfigStr with spacecraft configs
      *
      * transferd from qstring to std::string in frontend
      */
     void setJsonConfigStr(const std::string &jsonConfigStr);
-
-    /**
-     * @brief Sets target thrust
-     * @param thrustPercent [%]
-     */
-    void setTargetThrust(const double& thrustPercent = 0, const double& thrustInNewton = 0);
 
     /**
      * @brief Sets reset Boolean to true

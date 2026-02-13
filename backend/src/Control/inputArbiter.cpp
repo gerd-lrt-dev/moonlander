@@ -1,6 +1,6 @@
 #include "Control/inputArbiter.h"
 
-ControlCommand InputArbiter::chooseCommand(const ControlCommand* userInput, const ControlCommand* automation)
+ControlCommand InputArbiter::chooseCommand(ControlCommand* userInput, ControlCommand* automation)
 {
     return automationActive ? *automation : *userInput;
 }

@@ -138,7 +138,7 @@ spacecraft::spacecraft(customSpacecraft lMoon)
         FuelState(lMoon.fuelM, lMoon.fuelM, 0.0)
     )
     {
-        // initialize physics
+        // initialize
         std::shared_ptr<IPhysicsModel> model_       = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
         std::shared_ptr<IIntegrator> integrator_    = std::make_shared<EulerIntegrator>();
         std::shared_ptr<ISensor> sensor_            = std::make_shared<SensorModel>(environmentConfig_);

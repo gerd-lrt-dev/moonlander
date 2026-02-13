@@ -102,6 +102,7 @@ private:
      // Internal State
      // ==========================
     simData spacecraftData;
+    ControlCommand FEControlCommands_;
     std::string jsonConfig;     ///< String with spacecraft config data
     QTimer *simulationTimer;    ///< Drives simulation ticks
     bool running = false;       ///< Simulation running flag
@@ -110,6 +111,10 @@ private:
 
     QMutex mutex;               ///< Thread safety
     double requestedThrustPercent = 0.0; ///< Desired thrust in percentage
+
+    void collectControlCommands(const double &thrustInPercentage = 0.0, const double &thrustInNewton = 0.0);
+
+    void sendControlCommands();
 
     // Create the simulation controller using a smart pointer
     std::unique_ptr<simcontrol> controller;

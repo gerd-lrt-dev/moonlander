@@ -66,7 +66,7 @@ void SimulationWorker::receiveJsonConfig(const QString &json)
 void SimulationWorker::setTargetThrust(double percent)
 {
     QMutexLocker locker(&mutex);  // protect access
-    requestedThrustPercent = percent;
+    collectControlCommands(percent);
 }
 
 void SimulationWorker::stepSimulation()
@@ -85,7 +85,7 @@ void SimulationWorker::stepSimulation()
     spacecraftData = controller->runSimulation(dt);
 
     // Withdraw user input due to thrust
-    controller->setTargetThrust(requestedThrustPercent);
+    sendControlCommands();
 
     // signals
     emit stateUpdated(currentTime,
@@ -98,6 +98,19 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.fuelMass,
                       spacecraftData.fuelFlow
                       );
+}
+
+void SimulationWorker::collectControlCommands(const double &thrustInPercentage, const double &thrustInNewton)
+{
+    qDebug() << "Thrust in Percentage: " << thrustInPercentage;
+    qDebug() << "Thrust in Newton: " << thrustInNewton;
+    FEControlCommands_.thrustInPercentage   = thrustInPercentage;
+    FEControlCommands_.thrustInNewton       = thrustInNewton;
+}
+
+void SimulationWorker::sendControlCommands()
+{
+    controller->processCommands(&FEControlCommands_, nullptr);
 }
 
 

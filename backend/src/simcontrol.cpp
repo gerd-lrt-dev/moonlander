@@ -11,6 +11,7 @@ void simcontrol::buildSimulationEnvironment(double t)
 {
     // Instance classes
     landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1);
+    inputArbiter_ = std::make_unique<InputArbiter>();
 }
 
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName)
@@ -75,8 +76,6 @@ void simcontrol::initialize(const std::string& jsonConfigStr)
     landerMoon1 = loadSpacecraftFromJsonString(jsonConfigStr, "MoonLander_Classic");
 
     buildSimulationEnvironment(initialTime);
-
-    inputArbiter_ = std::make_unique<InputArbiter>();
 }
 
 void simcontrol::instanceLoggingAction()
@@ -134,6 +133,14 @@ simData simcontrol::runSimulation(const double dt)
     return simdata_;
 }
 
+void simcontrol::processCommands(ControlCommand* userInput, ControlCommand* automation)
+{
+    ControlCommand activeCommand = inputArbiter_->chooseCommand(userInput, automation);
+
+    std::cout << "Input thrust is: " << activeCommand.thrustInPercentage;
+
+    setTargetThrust(activeCommand.thrustInPercentage);
+}
 
 void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
 {
@@ -142,14 +149,6 @@ void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
 
 void simcontrol::setTargetThrust(const double& thrustPercent, const double& thrustInNewton)
 {
-    /*
-    ControlCommand commandThrust;
-    commandThrust.thrustInPercentage    = thrustPercent;
-    commandThrust.thrustInNewton        = thrustInNewton;
-    // TODO: Hier geht es weiter  -->
-    inputArbiter_->chooseCommand(nullptr, nullptr);
-    */
-
     landerSpacecraft->setThrust(thrustPercent / 100.0);
 }
 
