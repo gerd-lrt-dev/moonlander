@@ -62,6 +62,13 @@ customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jso
 
 }
 
+void simcontrol::processCommands(const std::optional<ControlCommand>& userCmd, const std::optional<ControlCommand>& autoCmd)
+{
+    ControlCommand activeCommand = inputArbiter_->chooseCommand(userCmd, autoCmd);
+
+    setTargetThrust(activeCommand.thrustInPercentage);
+}
+
 //***********************************************************
 //*************        Pubblic                   ************
 //***********************************************************
@@ -133,13 +140,14 @@ simData simcontrol::runSimulation(const double dt)
     return simdata_;
 }
 
-void simcontrol::processCommands(ControlCommand* userInput, ControlCommand* automation)
+void simcontrol::receiveCommandFromFrontEnd(const ControlCommand& userCmd)
 {
-    ControlCommand activeCommand = inputArbiter_->chooseCommand(userInput, automation);
+    processCommands(userCmd, std::nullopt);
+}
 
-    std::cout << "Input thrust is: " << activeCommand.thrustInPercentage;
-
-    setTargetThrust(activeCommand.thrustInPercentage);
+void simcontrol::receiveCommandFromAutopilot(const ControlCommand& autoCmd)
+{
+    processCommands(std::nullopt, autoCmd);
 }
 
 void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)

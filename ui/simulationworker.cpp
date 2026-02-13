@@ -9,6 +9,7 @@ SimulationWorker::SimulationWorker(QObject *parent)
 
     // connect timer with worker function
     connect(simulationTimer, &QTimer::timeout, this, &SimulationWorker::stepSimulation);
+
 }
 
 void SimulationWorker::start()
@@ -69,6 +70,12 @@ void SimulationWorker::setTargetThrust(double percent)
     collectControlCommands(percent);
 }
 
+void SimulationWorker::setAutopilotFlag(bool active)
+{
+    QMutexLocker locker(&mutex); // protect access
+    collectAutopilotCommand(active);
+}
+
 void SimulationWorker::stepSimulation()
 {
     double dt = 0.00;   ///< Initialized discrete timestep
@@ -102,15 +109,18 @@ void SimulationWorker::stepSimulation()
 
 void SimulationWorker::collectControlCommands(const double &thrustInPercentage, const double &thrustInNewton)
 {
-    qDebug() << "Thrust in Percentage: " << thrustInPercentage;
-    qDebug() << "Thrust in Newton: " << thrustInNewton;
     FEControlCommands_.thrustInPercentage   = thrustInPercentage;
     FEControlCommands_.thrustInNewton       = thrustInNewton;
 }
 
+void SimulationWorker::collectAutopilotCommand(bool autopilotActive)
+{
+    FEControlCommands_.autopilotActive      = autopilotActive;
+}
+
 void SimulationWorker::sendControlCommands()
 {
-    controller->processCommands(&FEControlCommands_, nullptr);
+    controller->receiveCommandFromFrontEnd(FEControlCommands_);
 }
 
 

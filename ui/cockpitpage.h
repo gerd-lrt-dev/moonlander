@@ -120,18 +120,70 @@ public:
      * Displays visual feedback whether the spacecraft hull
      * is still intact or has been damaged.
      *
-     * @param intact True if hull is intact, false if damaged.
+     * @param spacecraftState_ Current spacecraft state enum.
      */
     void updateHullStatus(SpacecraftState spacecraftState_);
 
+    /**
+     * @brief Updates the autopilot status indicator.
+     *
+     * Changes the visual label and/or indicator that shows
+     * whether the autopilot is currently active.
+     *
+     * @param active True if autopilot is enabled, false otherwise.
+     */
+    void updateAutopilotStatus(bool active);
+
 signals:
+    /**
+     * @brief Emitted when the user requests simulation start.
+     */
     void startRequested();
+
+    /**
+     * @brief Emitted when the user requests simulation pause.
+     */
     void pauseRequested();
+
+    /**
+     * @brief Emitted after the user confirmed a simulation stop/reset.
+     */
     void stopConfirmed();
+
+    /**
+     * @brief Emitted when the user requests a full simulation reset.
+     */
     void resetSimulationRequested();
+
+    /**
+     * @brief Emitted when the user changes the thrust slider.
+     * @param percent Target thrust in percent.
+     */
     void thrustTargetRequested(double percent);
 
+    /**
+     * @brief Emitted when the autopilot toggle button is pressed.
+     * @param acitve True if autopilot should be enabled.
+     */
+    void autopilotToggled(bool acitve);
+
 public slots:
+    /**
+     * @brief Slot receiving updated simulation state.
+     *
+     * Called by the simulation backend or controller to update
+     * all cockpit instruments and visualization elements.
+     *
+     * @param time Current simulation time in seconds.
+     * @param pos Current spacecraft position vector.
+     * @param vel Current spacecraft velocity vector.
+     * @param GLoad Current acceleration magnitude.
+     * @param spacecraftState_ Current spacecraft state enum.
+     * @param thrust Current thrust in Newton.
+     * @param targetThrust Target thrust in Newton.
+     * @param fuelMass Remaining fuel mass in kilograms.
+     * @param fuelFlow Current fuel flow in kilograms per second.
+     */
     void onStateUpdated(double time,
                         const Vector3& pos,
                         const Vector3& vel,
@@ -143,11 +195,22 @@ public slots:
                         double fuelFlow);
 
 private slots:
+    /**
+     * @brief Handles stop button click including confirmation dialog.
+     */
     void onStopClicked(); ///< Combining stop button with prompt
+
+    /**
+     * @brief Handles autopilot toggle button click.
+     *
+     * Toggles internal autopilot state and emits corresponding signal.
+     */
+    void onAutopilotClicked();
 
 private:
     // Members
-    double lastTimeDisplay;         ///< Intermediate storage of time to calm the display down
+    double lastTimeDisplay; ///< Intermediate storage of time to calm the display down
+
     // =====================================================
     // Internal Setup Functions
     // =====================================================
@@ -161,32 +224,32 @@ private:
     void setupUI();
 
     /**
-     * @brief Builds navigation elements
-     * @return Navigation Box as QGroupBox
+     * @brief Builds navigation elements.
+     * @return Navigation Box as QGroupBox.
      */
     QGroupBox *setupNavBox();
 
     /**
-     * @brief Builds engine Box elements
-     * @return Engine Box as QGroupBox
+     * @brief Builds engine box elements.
+     * @return Engine Box as QGroupBox.
      */
     QGroupBox *setupEngineBox();
 
     /**
-     * @brief Builds fuel elements
-     * @return Fuel Box as QGroupBox
+     * @brief Builds fuel elements.
+     * @return Fuel Box as QGroupBox.
      */
     QGroupBox *setupFuelBox();
 
     /**
-     * @brief Builds status elements
-     * @return Status Box as QGroupBox
+     * @brief Builds status elements.
+     * @return Status Box as QGroupBox.
      */
     QGroupBox *setupStatusBox();
 
     /**
-     * @brief Builds landing elements
-     * @return Landing Box as QGroupBox
+     * @brief Builds landing elements.
+     * @return Landing Box as QGroupBox.
      */
     QGroupBox *setupLandingBox();
 
@@ -226,25 +289,36 @@ private:
     // Status Indicators
     // =====================================================
 
-    QLabel *lblHullStatus; ///< Hull integrity indicator
+    QLabel *lblHullStatus;       ///< Hull integrity indicator
+    QLabel *lblAutopilotStatus;  ///< Status update when autopilot becomes activated
 
     // =====================================================
     // Visualization
     // =====================================================
-    LandingView *landingView;
+
+    LandingView *landingView; ///< 2D landing visualization widget
 
     // =====================================================
     // Buttons
     // =====================================================
-    QPushButton *btnSimStart;
-    QPushButton *btnSimPause;
-    QPushButton *btnSimStop;
+
+    QPushButton *btnSimStart; ///< Simulation start button
+    QPushButton *btnSimPause; ///< Simulation pause button
+    QPushButton *btnSimStop;  ///< Simulation stop button
 
     // =====================================================
     // Thrust Controle Console
     // =====================================================
-    QSlider* thrustSlider = nullptr;
-    QLabel* lblThrustCmd  = nullptr;
+
+    QSlider* thrustSlider = nullptr; ///< Thrust control slider
+    QLabel* lblThrustCmd  = nullptr; ///< Displays commanded thrust percentage
+
+    // =====================================================
+    // Autopilot
+    // =====================================================
+
+    QPushButton* btnAutopilot; ///< Autopilot toggle button
+    bool autopilotActive = false; ///< Internal autopilot state flag
 };
 
 #endif // COCKPITPAGE_H

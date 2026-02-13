@@ -62,6 +62,12 @@ public slots:
      */
     void receiveJsonConfig(const QString &json);
 
+    /**
+     * @brief Sets autopilot to activated
+     * @param Boolean active
+     */
+    void setAutopilotFlag(bool active);
+
 signals:
     /**
      * @brief Emitted after each simulation step.
@@ -103,6 +109,8 @@ private:
      // ==========================
     simData spacecraftData;
     ControlCommand FEControlCommands_;
+    std::unique_ptr<simcontrol> controller;
+
     std::string jsonConfig;     ///< String with spacecraft config data
     QTimer *simulationTimer;    ///< Drives simulation ticks
     bool running = false;       ///< Simulation running flag
@@ -112,12 +120,42 @@ private:
     QMutex mutex;               ///< Thread safety
     double requestedThrustPercent = 0.0; ///< Desired thrust in percentage
 
+    // ==========================
+    // Private Methods
+    // ==========================
+
+    /**
+     * @brief Collects a user-issued control command from the frontend.
+     *
+     * This function stores the thrust command values received from the user.
+     * Both parameters are optional and default to zero.
+     *
+     * @param thrustInPercentage Commanded thrust as a percentage of maximum thrust.
+     * @param thrustInNewton     Commanded thrust in Newtons.
+     */
     void collectControlCommands(const double &thrustInPercentage = 0.0, const double &thrustInNewton = 0.0);
 
+    /**
+     * @brief Collects an autopilot command from the automation system.
+     *
+     * This function updates the internal flag indicating whether the autopilot
+     * should be active. Only the automation system should call this.
+     *
+     * @param autopilotActive True if the autopilot is engaged, false otherwise.
+     */
+    void collectAutopilotCommand(bool autopilotActive);
+
+    /**
+     * @brief Sends the currently collected control commands to the backend.
+     *
+     * This function forwards the stored user and/or autopilot commands to the
+     * arbiter, which decides which commands are active. Ensures frontend cannot
+     * directly manipulate automation commands.
+     */
     void sendControlCommands();
 
-    // Create the simulation controller using a smart pointer
-    std::unique_ptr<simcontrol> controller;
+
+
 };
 
 #endif // SIMULATIONWORKER_H

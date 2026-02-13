@@ -156,9 +156,16 @@ QGroupBox *cockpitPage::setupStatusBox()
     QGroupBox *statusBox = new QGroupBox("STATUS");
     QVBoxLayout *statusLayout = new QVBoxLayout(statusBox);
 
+    // --- HULL ---
     lblHullStatus = new QLabel("HULL: OK");
     lblHullStatus->setStyleSheet("color: lime; font-weight: bold;");
     statusLayout->addWidget(lblHullStatus);
+
+    // --- Autopilot ---
+    lblAutopilotStatus = new QLabel("AUTOPILOT: OFF");
+    lblAutopilotStatus->setStyleSheet("color: gray; font-weight: bold;");
+    statusLayout->addWidget(lblAutopilotStatus);
+
     statusLayout->addStretch();
 
     return statusBox;
@@ -200,6 +207,17 @@ QGroupBox *cockpitPage::setupLandingBox()
     simControlLayout->addWidget(btnSimPause);
     simControlLayout->addWidget(btnSimStop);
 
+    // === Autopilot Toggle ===
+    btnAutopilot = new QPushButton("AUTOPILOT OFF");
+    btnAutopilot->setCheckable(true);
+    btnAutopilot->setStyleSheet(
+        "QPushButton { background-color: #333; color: #AAA; font-weight: bold; padding: 6px; }"
+        "QPushButton:checked { background-color: #00BCD4; color: black; }"
+        );
+
+    thrustLayout->addWidget(btnAutopilot);
+
+
     landingLayout->addLayout(simControlLayout);
 
     return landingBox;
@@ -219,6 +237,8 @@ void cockpitPage::setupConnections()
                 lblThrustCmd->setText(QString("Commanded Thrust: %1 %").arg(value));
                 emit thrustTargetRequested(static_cast<double>(value));
             });
+
+    connect(btnAutopilot, &QPushButton::clicked, this, &cockpitPage::onAutopilotClicked);
 }
 
 // ------------------------------------------------
@@ -255,6 +275,20 @@ void cockpitPage::updateHullStatus(SpacecraftState spacecraftState_)
     {
         lblHullStatus->setText("Destroyed");
         lblHullStatus->setStyleSheet("color: red; font-weight: bold;");
+    }
+}
+
+void cockpitPage::updateAutopilotStatus(bool active)
+{
+    if (active)
+    {
+        lblAutopilotStatus->setText("AUTOPILOT: ACTIVATED");
+        lblAutopilotStatus->setStyleSheet("color: cyan; font-weight: bold;");
+    }
+    else
+    {
+        lblAutopilotStatus->setText("AUTOPILOT: OFF");
+        lblAutopilotStatus->setStyleSheet("color: gray; font-weight: bold;");
     }
 }
 
@@ -299,5 +333,18 @@ void cockpitPage::onStopClicked()
     if (reply == QMessageBox::Yes) {
         emit stopConfirmed();
     }
+}
+
+void cockpitPage::onAutopilotClicked()
+{
+    autopilotActive = btnAutopilot->isChecked();
+
+    if (autopilotActive)
+        btnAutopilot->setText("AUTOPILOT ON");
+    else
+        btnAutopilot->setText("AUTOPILOT OFF");
+
+    updateAutopilotStatus(autopilotActive);
+    emit autopilotToggled(autopilotActive);
 }
 
