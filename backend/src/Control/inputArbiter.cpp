@@ -12,8 +12,6 @@ ControlCommand InputArbiter::chooseCommand(const std::optional<ControlCommand>& 
         setAutomationActiveFlag(false);
     }
 
-    std::cout << "Thrust percent: " << userCmd->thrustInPercentage << std::endl;
-
     if (automationActive && autoCmd.has_value())
     {
         return *autoCmd;

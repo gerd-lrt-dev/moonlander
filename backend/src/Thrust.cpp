@@ -14,6 +14,7 @@ void Thrust::calculateThrust(double dt)
     if(engineConfig.timeConstant != 0)
     {
         thrustState.current += (1 - exp(-dt / engineConfig.timeConstant)) * (thrustState.target - thrustState.current);
+        std::cout << "Thrust current: " << thrustState.current << std::endl;
     }
     else
     {

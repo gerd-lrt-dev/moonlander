@@ -17,7 +17,7 @@ add_library(moonlander_backend
     src/Physics/basicMoonGravityModel.cpp
     src/Sensory_Perception/sensorModel.cpp
     src/Automation/iAutopilot.cpp
-    src/Automation/flightController.cpp
+    src/Automation/adaptiveDescentController.cpp
     src/Control/inputArbiter.cpp
     include/Integrators/Dynamics.h
     include/Integrators/iIntegrator.h
@@ -31,7 +31,7 @@ add_library(moonlander_backend
     include/Sensory_Perception/iSensor.h
     include/Sensory_Perception/sensorModel.h
     include/Automation/iautopilot.h
-    include/Automation/flightController.h
+    include/Automation/adaptiveDescentController.h
     include/Control/inputArbiter.h
 )
 
