@@ -4,7 +4,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QGroupBox>
 #include <QLabel>
 #include <QSlider>
 #include <QtMath>
@@ -55,6 +54,33 @@ void cockpitPage::setupUI()
         );
 
     // ================= NAV =================
+    QGroupBox *navBox = setupNavBox();
+
+    // ================= ENGINE =================
+    QGroupBox *engineBox = setupEngineBox();
+
+    // ================= FUEL =================
+    QGroupBox *fuelBox = setupFuelBox();
+
+    // ================= STATUS =================
+    QGroupBox *statusBox = setupStatusBox();
+
+    // ================= LANDING VIEW =================
+    QGroupBox *landingBox = setupLandingBox();
+
+    // ================= GRID ASSEMBLY =================
+    mainLayout->addWidget(navBox,     0, 0);
+    mainLayout->addWidget(fuelBox,    1, 0);
+    mainLayout->addWidget(landingBox, 0, 1, 2, 1);
+    mainLayout->addWidget(engineBox,  0, 2);
+    mainLayout->addWidget(statusBox,  1, 2);
+
+    setLayout(mainLayout);
+}
+
+// ================= NAV =================
+QGroupBox *cockpitPage::setupNavBox()
+{
     QGroupBox *navBox = new QGroupBox("NAV");
     QGridLayout *navLayout = new QGridLayout(navBox);
 
@@ -77,7 +103,12 @@ void cockpitPage::setupUI()
     navLayout->addWidget(new QLabel("H-Speed [m/s]"), 3, 0);
     navLayout->addWidget(lcdHSpeed,                   3, 1);
 
-    // ================= ENGINE =================
+    return navBox;
+}
+
+// ================= ENGINE =================
+QGroupBox *cockpitPage::setupEngineBox()
+{
     QGroupBox *engineBox = new QGroupBox("ENGINE");
     QGridLayout *engineLayout = new QGridLayout(engineBox);
 
@@ -96,7 +127,12 @@ void cockpitPage::setupUI()
     engineLayout->addWidget(new QLabel("G-Load [m/s²]"),      2, 0);
     engineLayout->addWidget(lcdAcceleration,                 2, 1);
 
-    // ================= FUEL =================
+    return engineBox;
+}
+
+// ================= FUEL =================
+QGroupBox *cockpitPage::setupFuelBox()
+{
     QGroupBox *fuelBox = new QGroupBox("FUEL");
     QGridLayout *fuelLayout = new QGridLayout(fuelBox);
 
@@ -111,7 +147,12 @@ void cockpitPage::setupUI()
     fuelLayout->addWidget(new QLabel("Fuel Flow [kg/s]"), 1, 0);
     fuelLayout->addWidget(lcdFuelFlow,                    1, 1);
 
-    // ================= STATUS =================
+    return fuelBox;
+}
+
+// ================= STATUS =================
+QGroupBox *cockpitPage::setupStatusBox()
+{
     QGroupBox *statusBox = new QGroupBox("STATUS");
     QVBoxLayout *statusLayout = new QVBoxLayout(statusBox);
 
@@ -120,7 +161,12 @@ void cockpitPage::setupUI()
     statusLayout->addWidget(lblHullStatus);
     statusLayout->addStretch();
 
-    // ================= LANDING VIEW =================
+    return statusBox;
+}
+
+// ================= LANDING VIEW =================
+QGroupBox *cockpitPage::setupLandingBox()
+{
     QGroupBox *landingBox = new QGroupBox("LANDING VIEW");
     QVBoxLayout *landingLayout = new QVBoxLayout(landingBox);
 
@@ -156,14 +202,7 @@ void cockpitPage::setupUI()
 
     landingLayout->addLayout(simControlLayout);
 
-    // ================= GRID ASSEMBLY =================
-    mainLayout->addWidget(navBox,     0, 0);
-    mainLayout->addWidget(fuelBox,    1, 0);
-    mainLayout->addWidget(landingBox, 0, 1, 2, 1);
-    mainLayout->addWidget(engineBox,  0, 2);
-    mainLayout->addWidget(statusBox,  1, 2);
-
-    setLayout(mainLayout);
+    return landingBox;
 }
 
 // ------------------------------------------------

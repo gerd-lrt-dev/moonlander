@@ -10,6 +10,7 @@
 #ifndef COCKPITPAGE_H
 #define COCKPITPAGE_H
 
+#include <QGroupBox>
 #include <QWidget>
 #include <QLCDNumber>
 #include <QLabel>
@@ -158,6 +159,36 @@ private:
      * them to the cockpit layout.
      */
     void setupUI();
+
+    /**
+     * @brief Builds navigation elements
+     * @return Navigation Box as QGroupBox
+     */
+    QGroupBox *setupNavBox();
+
+    /**
+     * @brief Builds engine Box elements
+     * @return Engine Box as QGroupBox
+     */
+    QGroupBox *setupEngineBox();
+
+    /**
+     * @brief Builds fuel elements
+     * @return Fuel Box as QGroupBox
+     */
+    QGroupBox *setupFuelBox();
+
+    /**
+     * @brief Builds status elements
+     * @return Status Box as QGroupBox
+     */
+    QGroupBox *setupStatusBox();
+
+    /**
+     * @brief Builds landing elements
+     * @return Landing Box as QGroupBox
+     */
+    QGroupBox *setupLandingBox();
 
     /**
      * @brief Connects internal signals and slots.

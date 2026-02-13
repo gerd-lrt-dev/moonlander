@@ -219,6 +219,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qvectornd.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindow.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QGroupBox \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMainWindow \
@@ -235,6 +236,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgridlayout.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgroupbox.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayout.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlayoutitem.h \

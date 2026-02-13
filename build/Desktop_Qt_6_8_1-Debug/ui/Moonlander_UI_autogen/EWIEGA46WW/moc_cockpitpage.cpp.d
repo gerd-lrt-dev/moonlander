@@ -154,6 +154,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtguiglobal.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qtransform.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtGui/qwindowdefs.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QGroupBox \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLCDNumber \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QLabel \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/QMessageBox \
@@ -165,6 +166,7 @@
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qdialog.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qdialogbuttonbox.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qframe.h \
+  /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qgroupbox.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlabel.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qlcdnumber.h \
   /home/gerd-lrt-dev/Qt/6.8.1/gcc_64/include/QtWidgets/qmessagebox.h \
