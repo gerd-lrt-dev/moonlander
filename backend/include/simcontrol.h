@@ -35,10 +35,15 @@ private:
     //***********************************************************
     //*************        Members                   ************
     //***********************************************************
-    std::unique_ptr<spacecraft> landerSpacecraft;   ///< Spacecraft with specs and integrity
-    std::unique_ptr<InputArbiter> inputArbiter_;    ///< Arbiter for input commands
+    std::unique_ptr<spacecraft>     landerSpacecraft;   ///< Spacecraft with specs and integrity
+    std::unique_ptr<InputArbiter>   inputArbiter_;      ///< Arbiter for input commands
+    std::unique_ptr<IAutopilot>     autopilot_;         ///< Virtual autopilot instance
+    std::unique_ptr<IController>    controller_;        ///< Virtual controller instance
+
     std::string jsonConfigString;                   ///< String with raw space config data provided by frontend
     customSpacecraft landerMoon1;                   ///< Config for used spacecraft provided by json config
+    EnvironmentConfig config_;                      ///< Config struct for moon environment
+    ControlCommand cmd_;                            ///< Command structure for autopilot
     bool resetRequested;                            ///< Represents user desire to reset simulation
 
     // Inital data
@@ -75,10 +80,8 @@ private:
      * means that several commands from different sources can be sent to this method
      * at the same time.
      *
-     * @param userInput
-     * @param automation
      */
-    void processCommands(const std::optional<ControlCommand>& userCmd, const std::optional<ControlCommand>& autoCmd);
+    void processCommands();
 
 public:
     //***********************************************************
@@ -88,7 +91,7 @@ public:
      * @brief Constructor
      * @param t     ///< [s] Initial simulation time
      */
-    simcontrol(double t0) : initialTime(t0) {};
+    simcontrol(double t0);
 
     /**
      * @brief Destructor
@@ -161,6 +164,11 @@ public:
      * @brief Sets reset Boolean to true
      */
     void setResetBoolean();
+
+    /**
+     * @brief Takes over command from autopilot & convert them into command struct
+     */
+    void setAutoPilotCommand(const double &autoThrust);
 };
 
 #endif

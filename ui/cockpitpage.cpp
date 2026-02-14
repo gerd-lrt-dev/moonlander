@@ -182,7 +182,7 @@ QGroupBox *cockpitPage::setupLandingBox()
     landingLayout->addWidget(landingView, 1);
 
     // === Thrust Control Console ===
-    QGroupBox *thrustBox = new QGroupBox("THRUST CONTROL");
+    QGroupBox *thrustBox = new QGroupBox("CONTROL UNIT");
     QVBoxLayout *thrustLayout = new QVBoxLayout(thrustBox);
 
     thrustSlider = new QSlider(Qt::Horizontal);

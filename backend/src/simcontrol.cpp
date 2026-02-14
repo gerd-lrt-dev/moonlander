@@ -1,5 +1,7 @@
 #include "simcontrol.h"
 #include "logger.h"
+#include "Automation/adaptiveDescentController.h"
+#include "Controller/pd_controller.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -62,9 +64,9 @@ customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jso
 
 }
 
-void simcontrol::processCommands(const std::optional<ControlCommand>& userCmd, const std::optional<ControlCommand>& autoCmd)
+void simcontrol::processCommands()
 {
-    ControlCommand activeCommand = inputArbiter_->chooseCommand(userCmd, autoCmd);
+    ControlCommand activeCommand = inputArbiter_->chooseCommand();
 
     setTargetThrust(activeCommand.thrustInPercentage);
 }
@@ -72,6 +74,12 @@ void simcontrol::processCommands(const std::optional<ControlCommand>& userCmd, c
 //***********************************************************
 //*************        Pubblic                   ************
 //***********************************************************
+
+simcontrol::simcontrol(double t0) : initialTime(t0)
+{
+    autopilot_  = std::make_unique<AdaptiveDescentController>(landerMoon1.safeVelocity);
+    controller_ = std::make_unique<PD_Controller>();
+}
 
 simcontrol::~simcontrol()
 {
@@ -99,6 +107,14 @@ simData simcontrol::runSimulation(const double dt)
     try
     {
         logger.log("Simulation step started. dt = " + std::to_string(dt));
+
+        // --- Autopilot Control ---
+        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.maxT, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
+        double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.maxT);
+        ControlCommand autoCmd;
+        autoCmd.thrustInPercentage = autoThrustNormalized;
+        receiveCommandFromAutopilot(autoCmd);
+        processCommands();
 
         // --- Update spacecraft time ---
         landerSpacecraft->updateTime(dt);   ///< Updates Spacecraft & mainEngine time --> System are now on and running
@@ -142,12 +158,12 @@ simData simcontrol::runSimulation(const double dt)
 
 void simcontrol::receiveCommandFromFrontEnd(const ControlCommand& userCmd)
 {
-    processCommands(userCmd, std::nullopt);
+    inputArbiter_->receiveUserControlCommand(userCmd);
 }
 
 void simcontrol::receiveCommandFromAutopilot(const ControlCommand& autoCmd)
 {
-    processCommands(std::nullopt, autoCmd);
+    inputArbiter_->receiveAutoControlCommand(autoCmd);
 }
 
 void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
@@ -163,4 +179,11 @@ void simcontrol::setTargetThrust(const double& thrustPercent, const double& thru
 void simcontrol::setResetBoolean()
 {
     resetRequested = true;
+}
+
+void simcontrol::setAutoPilotCommand(const double &autoThrust)
+{
+    cmd_.thrustInNewton = autoThrust;
+
+    receiveCommandFromAutopilot(cmd_);
 }

@@ -1,29 +1,26 @@
 #include "Control/inputArbiter.h"
 #include <iostream>
 
-ControlCommand InputArbiter::chooseCommand(const std::optional<ControlCommand>& userCmd, const std::optional<ControlCommand>& autoCmd)
+ControlCommand InputArbiter::chooseCommand()
 {
-    if (userCmd.has_value())
+    if (!automationActive)
     {
-        setAutomationActiveFlag(userCmd->autopilotActive);
+        return usrCmd_;
     }
     else
     {
-        setAutomationActiveFlag(false);
+        return autoCmd_;
     }
+}
 
-    if (automationActive && autoCmd.has_value())
-    {
-        return *autoCmd;
-    }
-    else if (!automationActive && userCmd.has_value())
-    {
-        return *userCmd;
-    }
-    else
-    {
-        return ControlCommand{0, 0}; // Default fallback
-    }
+void InputArbiter::receiveUserControlCommand(const ControlCommand &userCmd)
+{
+    usrCmd_ = userCmd;
+    automationActive = userCmd.autopilotActive;
+}
+void InputArbiter::receiveAutoControlCommand(const ControlCommand &autoCmd)
+{
+    autoCmd_ = autoCmd;
 }
 
 void InputArbiter::setAutomationActiveFlag(bool on)

@@ -1,5 +1,7 @@
 Moonlander_UI_autogen/timestamp: \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Automation/iautopilot.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Control/inputArbiter.h \
+	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Controller/iController.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Integrators/iIntegrator.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/modelParams.h \
 	/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include/Optimization/optimizationStruct.h \

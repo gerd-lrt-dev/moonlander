@@ -4,8 +4,6 @@
 #include "Physics/basicMoonGravityModel.h"
 #include "Integrators/eulerIntegrator.h"
 #include "Sensory_Perception/sensorModel.h"
-#include "Control/inputArbiter.h"
-
 // -------------------------------------------------------------------------
 // Private
 // -------------------------------------------------------------------------

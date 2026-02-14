@@ -206,14 +206,6 @@ build backend/CMakeFiles/moonlander_backend.dir/src/Sensory_Perception/sensorMod
   OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
   OBJECT_FILE_DIR = backend/CMakeFiles/moonlander_backend.dir/src/Sensory_Perception
 
-build backend/CMakeFiles/moonlander_backend.dir/src/Automation/iAutopilot.cpp.o: CXX_COMPILER__moonlander_backend_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/src/Automation/iAutopilot.cpp || cmake_object_order_depends_target_moonlander_backend
-  DEFINES = -DNLOPT_DLL
-  DEP_FILE = backend/CMakeFiles/moonlander_backend.dir/src/Automation/iAutopilot.cpp.o.d
-  FLAGS = -DQT_QML_DEBUG -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include
-  OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
-  OBJECT_FILE_DIR = backend/CMakeFiles/moonlander_backend.dir/src/Automation
-
 build backend/CMakeFiles/moonlander_backend.dir/src/Automation/adaptiveDescentController.cpp.o: CXX_COMPILER__moonlander_backend_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/src/Automation/adaptiveDescentController.cpp || cmake_object_order_depends_target_moonlander_backend
   DEFINES = -DNLOPT_DLL
   DEP_FILE = backend/CMakeFiles/moonlander_backend.dir/src/Automation/adaptiveDescentController.cpp.o.d
@@ -230,6 +222,14 @@ build backend/CMakeFiles/moonlander_backend.dir/src/Control/inputArbiter.cpp.o: 
   OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
   OBJECT_FILE_DIR = backend/CMakeFiles/moonlander_backend.dir/src/Control
 
+build backend/CMakeFiles/moonlander_backend.dir/src/Controller/pd_controller.cpp.o: CXX_COMPILER__moonlander_backend_unscanned_Debug /home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/src/Controller/pd_controller.cpp || cmake_object_order_depends_target_moonlander_backend
+  DEFINES = -DNLOPT_DLL
+  DEP_FILE = backend/CMakeFiles/moonlander_backend.dir/src/Controller/pd_controller.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/gerd-lrt-dev/Code/codingForFun/moonlander/backend/include
+  OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
+  OBJECT_FILE_DIR = backend/CMakeFiles/moonlander_backend.dir/src/Controller
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target moonlander_backend
@@ -238,7 +238,7 @@ build backend/CMakeFiles/moonlander_backend.dir/src/Control/inputArbiter.cpp.o: 
 #############################################
 # Link the static library backend/libmoonlander_backend.a
 
-build backend/libmoonlander_backend.a: CXX_STATIC_LIBRARY_LINKER__moonlander_backend_Debug backend/CMakeFiles/moonlander_backend.dir/src/Thrust.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/logger.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/output.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/physics.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/quaternion.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/simcontrol.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacecraft.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Integrators/Dynamics.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Integrators/eulerIntegrator.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Optimization/thrustCostFunction.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Optimization/thrustOptimizer.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Physics/basicMoonGravityModel.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Sensory_Perception/sensorModel.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Automation/iAutopilot.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Automation/adaptiveDescentController.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Control/inputArbiter.cpp.o
+build backend/libmoonlander_backend.a: CXX_STATIC_LIBRARY_LINKER__moonlander_backend_Debug backend/CMakeFiles/moonlander_backend.dir/src/Thrust.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/jsonConfigReader.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/logger.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/main.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/output.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/physics.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/quaternion.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/simcontrol.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacecraft.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/spacemath.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Integrators/Dynamics.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Integrators/eulerIntegrator.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Optimization/thrustCostFunction.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Optimization/thrustOptimizer.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Physics/basicMoonGravityModel.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Sensory_Perception/sensorModel.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Automation/adaptiveDescentController.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Control/inputArbiter.cpp.o backend/CMakeFiles/moonlander_backend.dir/src/Controller/pd_controller.cpp.o
   LANGUAGE_COMPILE_FLAGS = -DQT_QML_DEBUG -g
   OBJECT_DIR = backend/CMakeFiles/moonlander_backend.dir
   POST_BUILD = :

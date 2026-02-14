@@ -9,9 +9,13 @@ struct ControlCommand{
 
 class InputArbiter{
 public:
-    ControlCommand chooseCommand(const std::optional<ControlCommand>& userCmd, const std::optional<ControlCommand>& autoCmd);
+    ControlCommand chooseCommand();
+    void receiveUserControlCommand(const ControlCommand &userCmd);
+    void receiveAutoControlCommand(const ControlCommand &autoCmd);
 
 private:
     void setAutomationActiveFlag(bool on);
     bool automationActive = false;
+    ControlCommand usrCmd_;
+    ControlCommand autoCmd_;
 };
