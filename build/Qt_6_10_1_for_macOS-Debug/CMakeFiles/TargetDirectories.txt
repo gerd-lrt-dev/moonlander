@@ -1,0 +1,10 @@
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/CMakeFiles/edit_cache.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/CMakeFiles/rebuild_cache.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/backend/CMakeFiles/moonlander_backend.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/backend/CMakeFiles/edit_cache.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/backend/CMakeFiles/rebuild_cache.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/ui/CMakeFiles/Moonlander_UI.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/ui/CMakeFiles/edit_cache.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/ui/CMakeFiles/rebuild_cache.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/ui/CMakeFiles/Moonlander_UI_autogen_timestamp_deps.dir
+/Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/ui/CMakeFiles/Moonlander_UI_autogen.dir

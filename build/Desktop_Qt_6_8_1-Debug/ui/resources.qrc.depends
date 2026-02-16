@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/new/logo">
-        <file>Resources/Images/logo.png</file>
-    </qresource>
-    <qresource prefix="/configs">
-        <file>Resources/configs/lander.json</file>
-    </qresource>
-</RCC>

@@ -67,7 +67,8 @@ void SimulationWorker::receiveJsonConfig(const QString &json)
 void SimulationWorker::setTargetThrust(double percent)
 {
     QMutexLocker locker(&mutex);  // protect access
-    collectControlCommands(percent);
+    double percentScaled = percent / 100.0;
+    collectControlCommands(percentScaled);
 }
 
 void SimulationWorker::setAutopilotFlag(bool active)

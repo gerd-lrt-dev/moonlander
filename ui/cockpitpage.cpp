@@ -235,7 +235,7 @@ void cockpitPage::setupConnections()
     connect(thrustSlider, &QSlider::valueChanged, this, [this](int value)
             {
                 lblThrustCmd->setText(QString("Commanded Thrust: %1 %").arg(value));
-                emit thrustTargetRequested(static_cast<double>(value));
+                emit thrustTargetRequested(static_cast<double>((value)));
             });
 
     connect(btnAutopilot, &QPushButton::clicked, this, &cockpitPage::onAutopilotClicked);
