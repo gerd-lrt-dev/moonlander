@@ -1,4 +1,0 @@
-set(__QT_DEPLOY_TARGET_moonlander_backend_FILE /Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/backend/libmoonlander_backend.a)
-set(__QT_DEPLOY_TARGET_moonlander_backend_TYPE STATIC_LIBRARY)
-set(__QT_DEPLOY_TARGET_Moonlander_UI_FILE /Users/gerd/CODE/Projekte/QT/moonlander/build/Qt_6_10_1_for_macOS-Debug/ui/Moonlander_UI)
-set(__QT_DEPLOY_TARGET_Moonlander_UI_TYPE EXECUTABLE)
