@@ -134,6 +134,22 @@ private:
     double calcHoverThrottle(const double &m, const double &g, const double &T_max) const;
 
     /**
+     * @brief Calculates the total thrust command in Newtons for the lander.
+     *
+     * This function combines the hover thrust, which counteracts gravity,
+     * with an additional control acceleration provided by a controller.
+     *
+     * @param T_hover The hover thrust [N] required to balance the gravitational force.
+     * @param a_controlled The desired additional acceleration [m/s²], e.g., from a PD controller.
+     * @param m The mass of the lander [kg].
+     *
+     * @return The total thrust command in Newtons [N], before any saturation or limits.
+     *
+     * @note The resulting thrust can be used directly to compute actuator commands.
+     */
+    double calcThrustCommand(const double &T_hover, const double &a_controlled, const double &m) const;
+
+    /**
      * @brief Saturates thrust command to allowed range [0, T_max].
      *
      * @param T_cmd Thrust command [N]

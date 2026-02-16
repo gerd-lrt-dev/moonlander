@@ -7,7 +7,7 @@
       "fuelM": 500.0,
       "maxFuelM": 1200.0,
 
-      "maxT": 5000.0,
+      "maxT": 7000.0,
       "Isp": 320.0,
       "timeConstant": 0.6,
       "responseRate": 1.0,

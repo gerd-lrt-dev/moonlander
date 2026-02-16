@@ -1,4 +1,5 @@
 #include "Controller/pd_controller.h"
+#include <iostream>
 
 // ------------------------------------------------
 // Public:
@@ -9,7 +10,16 @@ double PD_Controller::control(const double &targetValue, const double &measuredV
 
     double differential = calcDifferential(error, error_old_, dt);
 
-    return error * K_p + differential * K_d;
+    double P_term = error * K_p;
+
+    double D_term = differential * K_d;
+
+    double controlValue = P_term * D_term;
+
+    std::cout << "P_term: " << P_term << std::endl;
+    std::cout << "D_term: " << D_term << std::endl;
+
+    return controlValue;
 }
 
 // ------------------------------------------------

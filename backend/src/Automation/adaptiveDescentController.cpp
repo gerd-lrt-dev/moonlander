@@ -32,13 +32,19 @@ double AdaptiveDescentController::setAutoThrustInNewton(IController *useControll
 
     double v_target = calcTargetVelocity(a_max, h, k_r, vel, dt);
 
+    std::cout << "v_target: " << v_target << std::endl;
+
     double T_hover = calcHoverThrust(m, g);
 
-    double T_cmd_ctrl = - useController->control(v_target, vel, K_p, K_d, dt);
+    std::cout << "T_hover: " << T_hover << std::endl;
 
-    double T_cmd_row = T_cmd_ctrl;
+    double a_cmd_ctrl = useController->control(v_target, vel, K_p, K_d, dt);
 
-    double T_cmd_Saturated = calcSaturation(T_cmd_row, T_max);
+    double T_cmd_ctrl = calcThrustCommand(T_hover, a_cmd_ctrl, m);
+
+    //std::cout << "T_cmd_ctrl: " << T_cmd_ctrl << std::endl;
+
+    double T_cmd_Saturated = calcSaturation(T_cmd_ctrl, T_max);
 
     T_cmd = T_cmd_Saturated;
 
@@ -89,21 +95,35 @@ double AdaptiveDescentController::calcBrakeRatio(const double& h, const double &
     // Epsilon preserves division by zero
     const double epsilon = 1e-6;
 
-    return h / (d_brake + epsilon); // R_brake
+    double R_brake = 0.0;
+
+    if (h > 0)
+    {
+        R_brake = h / (d_brake + epsilon);
+    }
+    else
+    {
+        R_brake = 0.0;
+    }
+
+    //std::cout << "R_brake: " << R_brake << std::endl;
+
+    return R_brake; // R_brake
 }
 
-double AdaptiveDescentController::calcTargetVelocity(
-    const double &a_max,    // maximale Bremsbeschleunigung [m/s²]
-    const double &h,        // Höhe über der Mondoberfläche [m]
-    const double k_r,       // Reservefaktor (>0 = sanfter)
-    const double &vel,      // aktuelle Geschwindigkeit (negativ = fallend)
-    const double &dt        // Zeitschritt [s]
-    ) const
+double AdaptiveDescentController::calcTargetVelocity(const double &a_max, const double &h, const double k_r, const double &vel, const double &dt) const
 {
-    return 0.0;
+    double term = 2 * k_r * a_max * h;
+
+    if (term > 0)
+    {
+        return -sqrt(term);
+    }
+    else
+    {
+        return 0.0;
+    }
 }
-
-
 
 double AdaptiveDescentController::calcHoverThrust(const double &m, const double &g) const
 {
@@ -115,8 +135,25 @@ double AdaptiveDescentController::calcHoverThrottle(const double &m, const doubl
     return (m * g) / T_max;
 }
 
+double AdaptiveDescentController::calcThrustCommand(const double &T_hover, const double &a_controlled, const double &m) const
+{
+    double T_cmd = T_hover + (a_controlled * m);
+
+    std::cout << "Tcmd ohne hover: " << a_controlled / m << std::endl;
+
+    if (T_cmd > 0)
+    {
+        return T_cmd;
+    }
+    else
+    {
+        return 0.0;
+    }
+}
+
 double AdaptiveDescentController::calcSaturation(const double &T_cmd, const double &T_max) const
 {
+    std::cout << "T_max: " << T_max << std::endl;
     double T_cmdPreSaturation = (T_cmd > 0) ? T_cmd : 0;
 
     return (T_cmdPreSaturation < T_max) ? T_cmdPreSaturation : T_max;
@@ -124,15 +161,17 @@ double AdaptiveDescentController::calcSaturation(const double &T_cmd, const doub
 
 double AdaptiveDescentController::calcNormalizedThrust(const double &T_cmd, const double &T_max) const
 {
+    std::cout << "[CONTROLLER]: T_cmd - " << T_cmd << std::endl;
+    std::cout << "[CONTROLLER]: T_max - " << T_max << std::endl;
     return T_cmd / T_max;
 }
 
 double AdaptiveDescentController::interpolate_k_r(double R_brake) const
 {
     // Define typical k_r per mode
-    constexpr double kA = 1.2; // Energy Dissipation
-    constexpr double kB = 1.5; // Controlled Descent
-    constexpr double kC = 2.0; // Terminal Approach
+    constexpr double kA = 0.25; // Energy Dissipation
+    constexpr double kB = 0.15; // Controlled Descent
+    constexpr double kC = 0.05; // Terminal Approach
     constexpr double kD = 2.5; // Critical Braking
 
     if (R_brake >= 3.0) return kA;
@@ -150,41 +189,58 @@ double AdaptiveDescentController::interpolate_k_r(double R_brake) const
     return kD;
 }
 
+/**
+ * @brief Interpolates the proportional gain Kp based on the brake ratio.
+ *
+ * The gain increases smoothly for large R_brake, ensuring sufficient control authority
+ * at the start of descent while remaining moderate during terminal braking.
+ *
+ * @param R_brake The brake ratio (h / d_brake)
+ * @return The proportional gain Kp
+ */
 double AdaptiveDescentController::interpolate_Kp(double R_brake) const
 {
-    constexpr double KpA = 0.8;
-    constexpr double KpB = 1.2;
-    constexpr double KpC = 2.0;
-    constexpr double KpD = 3.0;
+    constexpr double Kp_min = 0.8;   // minimal gain (far from ground)
+    constexpr double Kp_max = 50.0;  // maximal gain (start of descent)
+    constexpr double R_ref  = 3.0;   // reference ratio where min gain applies
 
-    if (R_brake >= 3.0) return KpA;
-    if (R_brake >= 1.5) {
-        double alpha = (R_brake - 1.5) / (3.0 - 1.5);
-        return KpB * (1.0 - alpha) + KpA * alpha;
-    }
-    if (R_brake >= 1.0) {
-        double alpha = (R_brake - 1.0) / (1.5 - 1.0);
-        return KpC * (1.0 - alpha) + KpB * alpha;
-    }
-    return KpD;
+    if (R_brake <= R_ref)
+        return Kp_min;
+
+    // Linear scaling beyond R_ref
+    double scale = 0.1; // adjust to tune aggressiveness
+    double Kp = Kp_min + (R_brake - R_ref) * scale;
+
+    // Clamp to Kp_max
+    if (Kp > Kp_max) Kp = Kp_max;
+
+    return Kp;
 }
 
+/**
+ * @brief Interpolates the derivative gain Kd based on the brake ratio.
+ *
+ * The derivative gain also scales with R_brake to damp velocity error
+ * at high altitude while staying small during terminal descent.
+ *
+ * @param R_brake The brake ratio (h / d_brake)
+ * @return The derivative gain Kd
+ */
 double AdaptiveDescentController::interpolate_Kd(double R_brake) const
 {
-    constexpr double KdA = 0.05;
-    constexpr double KdB = 0.1;
-    constexpr double KdC = 0.2;
-    constexpr double KdD = 0.3;
+    constexpr double Kd_min = 0.05;   // minimal gain (terminal phase)
+    constexpr double Kd_max = 10.0;   // maximal gain (start of descent)
+    constexpr double R_ref  = 3.0;    // reference ratio where min gain applies
 
-    if (R_brake >= 3.0) return KdA;
-    if (R_brake >= 1.5) {
-        double alpha = (R_brake - 1.5) / (3.0 - 1.5);
-        return KdB * (1.0 - alpha) + KdA * alpha;
-    }
-    if (R_brake >= 1.0) {
-        double alpha = (R_brake - 1.0) / (1.5 - 1.0);
-        return KdC * (1.0 - alpha) + KdB * alpha;
-    }
-    return KdD;
+    if (R_brake <= R_ref)
+        return Kd_min;
+
+    double scale = 0.05; // adjust to tune damping
+    double Kd = Kd_min + (R_brake - R_ref) * scale;
+
+    if (Kd > Kd_max) Kd = Kd_max;
+
+    return Kd;
 }
+
 

@@ -109,7 +109,7 @@ simData simcontrol::runSimulation(const double dt)
         logger.log("Simulation step started. dt = " + std::to_string(dt));
 
         // --- Autopilot Control ---
-        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.maxT, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
+        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.maxT, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z - config_.radiusMoon, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
         double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.maxT);
         ControlCommand autoCmd;
         autoCmd.thrustInPercentage = autoThrustNormalized;
@@ -173,7 +173,7 @@ void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
 
 void simcontrol::setTargetThrust(const double& thrustPercent, const double& thrustInNewton)
 {
-    landerSpacecraft->setThrust(thrustPercent / 100.0);
+    landerSpacecraft->setThrust(thrustPercent);
 }
 
 void simcontrol::setResetBoolean()
