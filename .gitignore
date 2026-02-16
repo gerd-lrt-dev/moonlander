@@ -1,0 +1,16 @@
+# Build-Ordner
+build/
+
+# Mac OS Systemdateien
+.DS_Store
+
+# Qt Creator
+*.user
+.qtcreator/
+
+# CMake Cache und temporäre Dateien
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
