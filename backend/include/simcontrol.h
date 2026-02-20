@@ -83,6 +83,12 @@ private:
      */
     void processCommands();
 
+    /**
+     * @brief orchestrate autopilot
+     * @param Current Spacecraft state. Autopilot is only active, when spacecraft state is operational
+     */
+    void runAutopilot(const SpacecraftState& currentSpacecraftstate, const double& dt);
+
 public:
     //***********************************************************
     //*************    Memberfuctions                ************

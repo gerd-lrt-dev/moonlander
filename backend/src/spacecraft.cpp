@@ -223,7 +223,11 @@ void spacecraft::setThrust(double targetThrustInPercentage)
     // thrust in percentage = target thrust / maxiumum thrust <=>
     double targetThrust = targetThrustInPercentage * landerMoon.maxT; ///< [N]
 
-    mainEngine.setTarget(targetThrust);
+    SpacecraftState currentSpacecraftState = getSpacecraftState();
+
+    (currentSpacecraftState == SpacecraftState::Operational) ? mainEngine.setTarget(targetThrust) : mainEngine.setTarget(0.0);
+
+    //mainEngine.setTarget(targetThrust);
 }
 
 std::vector<double> spacecraft::compute_optimization(double h0, double v0, double m0, double dt)

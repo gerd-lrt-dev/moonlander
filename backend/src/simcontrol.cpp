@@ -71,6 +71,29 @@ void simcontrol::processCommands()
     setTargetThrust(activeCommand.thrustInPercentage);
 }
 
+void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, const double& dt)
+{
+    // --- Autopilot Control ---
+    if(currentSpacecraftstate == SpacecraftState::Operational)
+    {
+        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.maxT, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z - config_.radiusMoon, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
+        double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.maxT);
+        ControlCommand autoCmd;
+        autoCmd.thrustInPercentage = autoThrustNormalized;
+        receiveCommandFromAutopilot(autoCmd);
+        processCommands();
+    }
+    else if (currentSpacecraftstate == SpacecraftState::Landed)
+    {
+        ControlCommand cmd;
+        cmd.thrustInPercentage  = 0.0;
+        cmd.thrustInNewton      = 0.0;
+        cmd.autopilotActive     = false;
+        receiveCommandFromAutopilot(cmd);
+        processCommands();
+    }
+}
+
 //***********************************************************
 //*************        Pubblic                   ************
 //***********************************************************
@@ -109,12 +132,7 @@ simData simcontrol::runSimulation(const double dt)
         logger.log("Simulation step started. dt = " + std::to_string(dt));
 
         // --- Autopilot Control ---
-        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.maxT, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z - config_.radiusMoon, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
-        double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.maxT);
-        ControlCommand autoCmd;
-        autoCmd.thrustInPercentage = autoThrustNormalized;
-        receiveCommandFromAutopilot(autoCmd);
-        processCommands();
+        runAutopilot(landerSpacecraft->getSpacecraftState(), dt);
 
         // --- Update spacecraft time ---
         landerSpacecraft->updateTime(dt);   ///< Updates Spacecraft & mainEngine time --> System are now on and running

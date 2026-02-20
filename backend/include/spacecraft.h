@@ -163,12 +163,6 @@ private:
     // Private getter functions
     // -------------------------------------------------------------------------
 
-    /**
-     * @brief Getter for spacecraft state
-     * @return Current spacecraft state
-     */
-    SpacecraftState getSpacecraftState() const;
-
     // -------------------------------------------------------------------------
     // Apply functions
     // -------------------------------------------------------------------------
@@ -433,6 +427,12 @@ public:
      * @return GLoad [m/s²]
      */
     double getGload() const;
+
+    /**
+     * @brief Getter for spacecraft state
+     * @return Current spacecraft state
+     */
+    SpacecraftState getSpacecraftState() const;
 };
 
 #endif

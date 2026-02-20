@@ -1,5 +1,5 @@
 #pragma once
-#include <optional>
+#include "spacecraftStateStruct.h"
 
 struct ControlCommand{
     double thrustInPercentage = 0.0;

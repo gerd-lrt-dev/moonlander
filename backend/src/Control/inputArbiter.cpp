@@ -1,5 +1,4 @@
 #include "Control/inputArbiter.h"
-#include <iostream>
 
 ControlCommand InputArbiter::chooseCommand()
 {
