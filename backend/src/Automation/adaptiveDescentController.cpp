@@ -147,14 +147,14 @@ double AdaptiveDescentController::calcThrustCommand(const double &T_hover, const
     }
     else
     {
+        std::cerr << "Thrust zero due to zero controlled thrust!!!" << std::endl;
         return 0.0;
     }
 }
 
 double AdaptiveDescentController::calcSaturation(const double &T_cmd, const double &T_max) const
 {
-    std::cout << "T_max: " << T_max << std::endl;
-    double T_cmdPreSaturation = (T_cmd > 0) ? T_cmd : 0;
+    double T_cmdPreSaturation = (T_cmd > 0.0) ? T_cmd : 0.0;
 
     return (T_cmdPreSaturation < T_max) ? T_cmdPreSaturation : T_max;
 }
