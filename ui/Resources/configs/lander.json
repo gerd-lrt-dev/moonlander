@@ -4,7 +4,7 @@
       "name": "MoonLander_Classic",
 
       "emptyMass": 1500.0,
-      "fuelM": 500.0,
+      "fuelM": 120.0,
       "maxFuelM": 1200.0,
 
       "maxT": 7000.0,
@@ -19,7 +19,7 @@
       "Iyy": 910.0,
       "Izz": 720.0,
 
-      "I_initialPos": { "x": 0.0, "y": 0.0, "z": 1740400.0 },
+      "I_initialPos": { "x": 0.0, "y": 0.0, "z": 1738900.0 },
       "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
       "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.2 },
 

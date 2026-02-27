@@ -16,9 +16,6 @@ double PD_Controller::control(const double &targetValue, const double &measuredV
 
     double controlValue = P_term + D_term;
 
-    std::cout << "P_term: " << P_term << std::endl;
-    std::cout << "D_term: " << D_term << std::endl;
-
     return controlValue;
 }
 

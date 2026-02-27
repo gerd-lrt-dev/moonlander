@@ -94,28 +94,40 @@ public:
     /**
      * @brief Computes the proper G-load experienced by the spacecraft.
      *
-     * This function calculates the acceleration actually felt by the spacecraft,
-     * excluding the effect of gravity. The result is expressed in multiples of
-     * Earth's standard gravity (g₀ = 9.80665 m/s²).
+     * This function calculates the proper acceleration (felt acceleration)
+     * excluding the gravitational component. The result is expressed in
+     * multiples of Earth's standard gravity (g₀ = 9.80665 m/s²).
      *
-     * As physics is now an orchestrator, this method is a **derived metric**
-     * based on the current total acceleration and the gravitational component
-     * provided by the active physics model. It does not modify the simulation state.
+     * The G-load corresponds to what an ideal accelerometer would measure.
+     * It reflects all non-gravitational forces acting on the spacecraft,
+     * such as thrust or ground reaction forces.
+     *
+     * If the spacecraft is landed, the ground reaction force compensates
+     * gravitational acceleration, resulting in a non-zero proper G-load
+     * even though the total acceleration may be zero (static equilibrium).
      *
      * @param totalAcceleration   Total acceleration acting on the spacecraft [m/s²],
-     *                            typically including thrust and gravity.
-     * @param gravityAcceleration Gravitational acceleration vector [m/s²] at the
-     *                            spacecraft's current position.
+     *                            typically including thrust, gravity, and
+     *                            contact forces.
+     * @param gravityAcceleration Gravitational acceleration vector [m/s²]
+     *                            at the spacecraft's current position.
+     * @param isLanded            Indicates whether the spacecraft is in
+     *                            ground contact. This may be used to handle
+     *                            numerical stabilization or special landing logic.
      *
      * @return Proper G-load in multiples of g₀.
      *
-     * @note Proper acceleration is computed by subtracting gravity from the total acceleration:
+     * @note Proper acceleration is computed as:
      *       \f$ G = \frac{||\vec{a}_\text{total} - \vec{a}_\text{gravity}||}{g_0} \f$
-     * @note This method is intended for telemetry, sensor simulation, or UI display.
-     *       It does not affect position, velocity, or any other physics state.
+     *
+     * @note In free fall: totalAcceleration ≈ gravityAcceleration → G ≈ 0.
+     * @note In static equilibrium on a surface: totalAcceleration = 0,
+     *       but proper acceleration equals the ground reaction force,
+     *       resulting in a non-zero G-load (e.g., ~0.166 g on the Moon).
+     *
      * @see Vector3
      */
-    double computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration);
+    double computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration, bool isLanded);
 };
 
 #endif

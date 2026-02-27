@@ -1,9 +1,10 @@
 #include "spacecraft.h"
-
 #include "spacemath.h"
 #include "Physics/basicMoonGravityModel.h"
 #include "Integrators/eulerIntegrator.h"
 #include "Sensory_Perception/sensorModel.h"
+
+#include <iostream>
 // -------------------------------------------------------------------------
 // Private
 // -------------------------------------------------------------------------
@@ -31,8 +32,6 @@ void spacecraft::updateTotalMassOnFuelReduction(double emptyMass, double fuelMas
     state_.totalMass = emptyMass + fuelMass;
 }
 
-#include <iostream>
-
 void spacecraft::updateMovementData(double dt)
 {
     // --- Pre-Checks ---
@@ -41,9 +40,6 @@ void spacecraft::updateMovementData(double dt)
         std::cerr << "[CRASH] physics_ pointer is null!" << std::endl;
         return;
     }
-
-    // --- Thrust ---
-    Vector3 thrustDir = requestThrustDirection();
 
     // --- Compute acceleration ---
     Vector3 acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), requestThrust(), requestThrustDirection());
@@ -70,13 +66,19 @@ void spacecraft::updateMovementData(double dt)
 
 void spacecraft::updateMovementDataToZero(double dt)
 {
+    Vector3 zeroVector = {0.0, 0.0, 0.0};
     // --- Commit to state vector ---
-    setVelocity({0.0, 0.0, 0.0});
+    setVelocity(zeroVector);
+    updateGLoad(zeroVector, environmentConfig_.moonGravityVec);
 }
 
 void spacecraft::updateGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)
 {
-    GLoad = physics_->computeGLoad(totalAcceleration, environmentConfig_.moonGravityVec);
+    bool isLanded = false;
+
+    if (spacecraftState_ == SpacecraftState::Landed) isLanded = true;
+
+    GLoad = physics_->computeGLoad(totalAcceleration, environmentConfig_.moonGravityVec, isLanded);
 }
 
 void spacecraft::setSpacecraftState(SpacecraftState newState)
@@ -154,6 +156,10 @@ void spacecraft::updateStep(double dt)
 {
     // Update mass data
     updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
+    mainEngine.updateThrust(dt);
+
+    // Update time systems are running
+    time += dt;
 
     // Apply landing damage
     if (state_.I_Position.z <= environmentConfig_.radiusMoon)
@@ -173,6 +179,7 @@ void spacecraft::updateStep(double dt)
     case SpacecraftState::Landed:
         // Translation disabled, rotation optional
         updateMovementDataToZero(dt);
+        setThrust(0.0);
         break;
 
     case SpacecraftState::Crashed:
@@ -292,16 +299,6 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     // -----------------------------
     ThrustOptimizer optimizer;
     return optimizer.optimize(problem, landerMoon.maxT);
-}
-
-
-//TODO: Obsolete?
-void spacecraft::updateTime(double dt)
-{
-    time += dt;
-
-    // Start updating time for main engine 
-    mainEngine.updateThrust(dt);
 }
 
 double spacecraft::requestTargetThrust() const

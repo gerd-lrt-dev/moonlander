@@ -59,8 +59,8 @@ void Thrust::setTarget(double tThrust)
 
 void Thrust::updateThrust(double dt)
 {
-    // TODO: 
-    if (fuelstate.massCurrent > 0.0 && thrustState.target != 0)
+    // TODO:
+    if (fuelstate.massCurrent > 0.0)
     {
         // Initiate vars
         double newFuelMass(0.0), massFlow(0.0);

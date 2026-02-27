@@ -23,8 +23,8 @@ Vector3 physics::computePos(const Vector3& pos, const Vector3& vel, const Vector
     return integrator_->integratePos(pos, vel, acc, dt);
 }
 
-double physics::computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration)
+double physics::computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration, bool isLanded)
 {
-    return sensor_->computeGLoad(totalAcceleration, gravityAcceleration);
+    return sensor_->computeGLoad(totalAcceleration, gravityAcceleration, isLanded);
 }
 

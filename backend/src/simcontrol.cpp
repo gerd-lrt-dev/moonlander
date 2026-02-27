@@ -134,9 +134,6 @@ simData simcontrol::runSimulation(const double dt)
         // --- Autopilot Control ---
         runAutopilot(landerSpacecraft->getSpacecraftState(), dt);
 
-        // --- Update spacecraft time ---
-        landerSpacecraft->updateTime(dt);   ///< Updates Spacecraft & mainEngine time --> System are now on and running
-
         // --- Update spacecraft state (translation, velocity, etc.) ---
         landerSpacecraft->updateStep(dt);   ///< Updates simulation steps
 

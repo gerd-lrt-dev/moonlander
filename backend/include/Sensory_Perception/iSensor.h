@@ -35,5 +35,5 @@ public:
      * @param gravityAcceleration Gravitational acceleration vector.
      * @return Scalar g-load value in multiples of Earth gravity.
      */
-    virtual double computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration) const = 0;
+    virtual double computeGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration, bool isLanded) const = 0;
 };

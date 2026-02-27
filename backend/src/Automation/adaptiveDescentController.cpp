@@ -32,17 +32,11 @@ double AdaptiveDescentController::setAutoThrustInNewton(IController *useControll
 
     double v_target = calcTargetVelocity(a_max, h, k_r, vel, dt);
 
-    std::cout << "v_target: " << v_target << std::endl;
-
     double T_hover = calcHoverThrust(m, g);
-
-    std::cout << "T_hover: " << T_hover << std::endl;
 
     double a_cmd_ctrl = useController->control(v_target, vel, K_p, K_d, dt);
 
     double T_cmd_ctrl = calcThrustCommand(T_hover, a_cmd_ctrl, m);
-
-    //std::cout << "T_cmd_ctrl: " << T_cmd_ctrl << std::endl;
 
     double T_cmd_Saturated = calcSaturation(T_cmd_ctrl, T_max);
 
@@ -106,8 +100,6 @@ double AdaptiveDescentController::calcBrakeRatio(const double& h, const double &
         R_brake = 0.0;
     }
 
-    //std::cout << "R_brake: " << R_brake << std::endl;
-
     return R_brake; // R_brake
 }
 
@@ -139,15 +131,12 @@ double AdaptiveDescentController::calcThrustCommand(const double &T_hover, const
 {
     double T_cmd = T_hover + (a_controlled * m);
 
-    std::cout << "Tcmd ohne hover: " << a_controlled / m << std::endl;
-
     if (T_cmd > 0)
     {
         return T_cmd;
     }
     else
     {
-        std::cerr << "Thrust zero due to zero controlled thrust!!!" << std::endl;
         return 0.0;
     }
 }
@@ -161,8 +150,6 @@ double AdaptiveDescentController::calcSaturation(const double &T_cmd, const doub
 
 double AdaptiveDescentController::calcNormalizedThrust(const double &T_cmd, const double &T_max) const
 {
-    std::cout << "[CONTROLLER]: T_cmd - " << T_cmd << std::endl;
-    std::cout << "[CONTROLLER]: T_max - " << T_max << std::endl;
     return T_cmd / T_max;
 }
 

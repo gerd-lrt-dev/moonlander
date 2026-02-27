@@ -290,14 +290,6 @@ public:
     void updateSpacecraftIntegrity();
 
     /**
-     * @brief Updates time
-     * @param dt timestep [s]
-     *
-     * Single source of thruth for time is frontend simulation worker via simcontrol!
-     */
-    void updateTime(double dt);
-
-    /**
      * @brief Set thrust up to specific level
      * @param targetThrust Thrust clamped to [0, 1] where 1 is 100% of max thrust
      * 
