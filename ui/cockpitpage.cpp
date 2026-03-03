@@ -167,6 +167,10 @@ QGroupBox *cockpitPage::setupStatusBox()
     lblAutopilotStatus->setStyleSheet("color: gray; font-weight: bold;");
     statusLayout->addWidget(lblAutopilotStatus);
 
+    lblControllerOutput = new QLabel("Controller Output: OK");
+    lblControllerOutput->setStyleSheet("Color: white; font-weight: bold;");
+    statusLayout->addWidget(lblControllerOutput);
+
     statusLayout->addStretch();
 
     return statusBox;
@@ -305,7 +309,7 @@ void cockpitPage::onStateUpdated(double time,
                                  double targetThrust,
                                  double fuelMass,
                                  double fuelFlow,
-                                 QString consoleOutput)
+                                 QString consoleOutput_)
 {
     updateTime(time);
     updateAltitude(qRound(pos.z * 10.0) / 10.0);
@@ -321,6 +325,10 @@ void cockpitPage::onStateUpdated(double time,
     landingView->setAltitude(pos.z);
     landingView->setThrust(thrust);
     landingView->setHullIntact(spacecraftState_);
+
+    //qDebug() << "Console Output: " << consoleOutput_;
+
+    consoleOutput(consoleOutput_);
 }
 
 void cockpitPage::onStopClicked()
@@ -348,5 +356,10 @@ void cockpitPage::onAutopilotClicked()
 
     updateAutopilotStatus(autopilotActive);
     emit autopilotToggled(autopilotActive);
+}
+
+void cockpitPage::consoleOutput(const QString& output)
+{
+    lblControllerOutput->setText(output);
 }
 

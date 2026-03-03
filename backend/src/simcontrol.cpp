@@ -133,7 +133,7 @@ simData simcontrol::runSimulation(const double dt)
 
         // --- Autopilot Control ---
         runAutopilot(landerSpacecraft->getSpacecraftState(), dt);
-        simdata_.output = autopilot_->getDescentMode();
+        landerSpacecraft->setConsoleText(autopilot_->getDescentMode());
 
         // --- Update spacecraft state (translation, velocity, etc.) ---
         landerSpacecraft->updateStep(dt);   ///< Updates simulation steps

@@ -237,6 +237,11 @@ void spacecraft::setThrust(double targetThrustInPercentage)
     //mainEngine.setTarget(targetThrust);
 }
 
+void spacecraft::setConsoleText(const std::string &txt)
+{
+    consoleTxt = txt;
+}
+
 std::vector<double> spacecraft::compute_optimization(double h0, double v0, double m0, double dt)
 {
     ThrustOptimizationProblem problem;
@@ -353,6 +358,8 @@ simData spacecraft::getFullSimulationData() const
 
     simData_.GLoad = getGload();
 
+    simData_.output = getConsoleTxt();
+
     return simData_;
 }
 
@@ -399,4 +406,9 @@ double spacecraft::getfuelMass() const
 double spacecraft::getGload() const
 {
     return GLoad;
+}
+
+std::string spacecraft::getConsoleTxt() const
+{
+    return consoleTxt;
 }

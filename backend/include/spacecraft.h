@@ -54,6 +54,9 @@ private:
     double GLoad = 0;               ///< [m/s²] GLoad of spacecraft
 
     double spacecraftIntegrity;     ///< [%] Current integrity of the spacecraft.
+
+    std::string consoleTxt;
+
     ///@}
 
     /**
@@ -299,6 +302,12 @@ public:
     void setThrust(double targetThrustInPercentage);
 
     /**
+     * @brief Set Console Text for output in cockpit page
+     * @param txt as std string
+     */
+    void setConsoleText(const std::string &txt);
+
+    /**
      * @brief compute optimization
      * @return vector with optimized thrust controls
      */
@@ -419,6 +428,8 @@ public:
      * @return GLoad [m/s²]
      */
     double getGload() const;
+
+    std::string getConsoleTxt() const;
 
     /**
      * @brief Getter for spacecraft state

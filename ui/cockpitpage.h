@@ -212,7 +212,7 @@ private slots:
      * @brief Display console Output
      * @param output
      */
-    //void consoleOutput(const std::string &output);
+    void consoleOutput(const QString &output);
 
 private:
     // Members

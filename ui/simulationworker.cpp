@@ -100,6 +100,9 @@ void SimulationWorker::stepSimulation()
     // Change data type for console output
     QString consoleOutput = QString::fromStdString(spacecraftData.output);
 
+    qDebug() << "[SimulationWorker] Console Output: " << consoleOutput;
+    qDebug() << "[SimulationWorker] Console Output: " << spacecraftData.output;
+
     // signals
     emit stateUpdated(currentTime,
                       spacecraftData.statevector_.I_Position,
