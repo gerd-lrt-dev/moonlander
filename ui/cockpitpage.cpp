@@ -167,6 +167,12 @@ QGroupBox *cockpitPage::setupStatusBox()
     lblAutopilotStatus->setStyleSheet("color: gray; font-weight: bold;");
     statusLayout->addWidget(lblAutopilotStatus);
 
+    // --- Autopilot blink timer ---
+    autopilotBlinkTimer = new QTimer(this);
+    autopilotBlinkTimer->setInterval(500); // ms
+    autopilotBlinkOn = false;
+
+    // --- Controller output ---
     lblControllerOutput = new QLabel("Controller Output: OK");
     lblControllerOutput->setStyleSheet("Color: white; font-weight: bold;");
     statusLayout->addWidget(lblControllerOutput);
@@ -244,6 +250,8 @@ void cockpitPage::setupConnections()
             });
 
     connect(btnAutopilot, &QPushButton::clicked, this, &cockpitPage::onAutopilotClicked);
+
+    connect(autopilotBlinkTimer, &QTimer::timeout, this, &cockpitPage::onAutopilotBlinkTimeout);
 }
 
 // ------------------------------------------------
@@ -348,12 +356,36 @@ void cockpitPage::onAutopilotClicked()
     autopilotActive = btnAutopilot->isChecked();
 
     if (autopilotActive)
+    {
         btnAutopilot->setText("AUTOPILOT ON");
+        autopilotBlinkTimer->start();
+    }
     else
+    {
         btnAutopilot->setText("AUTOPILOT OFF");
+        autopilotBlinkTimer->stop();
+        lblAutopilotStatus->setStyleSheet("color: gray; font-weight: bold;");
+    }
 
     updateAutopilotStatus(autopilotActive);
     emit autopilotToggled(autopilotActive);
+}
+
+void cockpitPage::onAutopilotBlinkTimeout()
+{
+    if (!autopilotActive)
+    {
+        autopilotBlinkTimer->stop();
+        lblAutopilotStatus->setStyleSheet("color: gray; font-weight: bold;");
+        return;
+    }
+
+    autopilotBlinkOn = !autopilotBlinkOn;
+
+    if (autopilotBlinkOn)
+        lblAutopilotStatus->setStyleSheet("color: cyan; font-weight: bold;");
+    else
+        lblAutopilotStatus->setStyleSheet("color: black; font-weight: bold;");
 }
 
 void cockpitPage::consoleOutput(const QString& output)

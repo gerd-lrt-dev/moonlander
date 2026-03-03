@@ -209,6 +209,11 @@ private slots:
     void onAutopilotClicked();
 
     /**
+     * @brief Slot for autopilot blink event
+     */
+    void onAutopilotBlinkTimeout();
+
+    /**
      * @brief Display console Output
      * @param output
      */
