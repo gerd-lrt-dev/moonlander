@@ -326,9 +326,7 @@ void cockpitPage::onStateUpdated(double time,
     landingView->setThrust(thrust);
     landingView->setHullIntact(spacecraftState_);
 
-    //qDebug() << "Console Output: " << consoleOutput_;
-
-    consoleOutput(consoleOutput_);
+    (autopilotActive) ? consoleOutput(consoleOutput_) : consoleOutput("No controlling active");
 }
 
 void cockpitPage::onStopClicked()
