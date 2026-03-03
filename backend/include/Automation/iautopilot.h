@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Controller/iController.h"
+#include <string>
 
 /**
  * @brief Descent control phases of the Energy-Guided Descent Controller.
@@ -63,4 +64,6 @@ public:
     virtual double setAutoThrustInNewton(IController *useController, const double &T_max, const double &vel, const double &h, const double &dt, const double &m, const double &g) const = 0;
 
     virtual double normalizAutoThrust(const double &thrustInNewton, const double &T_max) const = 0;
+
+    virtual std::string getDescentMode() const = 0;
 };

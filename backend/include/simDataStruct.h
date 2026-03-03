@@ -2,8 +2,9 @@
 #define SIMDATASTRUCT_H
 
 #include "stateVectorStruct.h"
-
 #include "spacecraftStateStruct.h"
+
+#include <string>
 
 /**
  * @brief This data will be return to UI by runSimulation
@@ -24,6 +25,9 @@ struct simData
     // Spacecraft Integrity
     bool spacecraftIntegrity;
     SpacecraftState spacecraftState_;
+
+    // Console output
+    std::string output;
 
     // Engine data
     double thrust;

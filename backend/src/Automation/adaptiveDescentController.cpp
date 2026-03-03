@@ -42,12 +42,26 @@ double AdaptiveDescentController::setAutoThrustInNewton(IController *useControll
 
     T_cmd = T_cmd_Saturated;
 
+    descentMode_ = determineMode(R_brake);
+
     return T_cmd;
 }
 
 double AdaptiveDescentController::normalizAutoThrust(const double &thrustInNewton, const double &T_max) const
 {
     return calcNormalizedThrust(thrustInNewton, T_max);
+}
+
+std::string AdaptiveDescentController::getDescentMode() const
+{
+    switch (descentMode_)
+    {
+    case DescentMode::MODE_A: return "MODE_A - Energy Dissipation";
+    case DescentMode::MODE_B: return "MODE_B - Controlled Descent";
+    case DescentMode::MODE_C: return "MODE_C - Terminal Approach";
+    case DescentMode::MODE_D: return "MODE_D - Critical Braking";
+    default: return "UNKNOWN";
+    }
 }
 
 // ------------------------------------------------
@@ -228,6 +242,17 @@ double AdaptiveDescentController::interpolate_Kd(double R_brake) const
     if (Kd > Kd_max) Kd = Kd_max;
 
     return Kd;
+}
+
+DescentMode AdaptiveDescentController::determineMode(double R_brake) const
+{
+    DescentMode descentmode_;
+    if (R_brake > 3.0) descentmode_ = DescentMode::MODE_A;
+    else if (R_brake < 3.0) descentmode_ = DescentMode::MODE_B;
+    else if (R_brake < 1.5) descentmode_ = DescentMode::MODE_C;
+    else descentmode_ = DescentMode::MODE_D;
+
+    return descentmode_;
 }
 
 

@@ -50,6 +50,12 @@ public:
      */
     double normalizAutoThrust(const double &thrustInNewton, const double &T_max) const override;
 
+    /**
+     * @brief Getter for Descent Mode
+     * @return Descent Mode
+     */
+    std::string getDescentMode() const override;
+
 private:
     //***********************************************************
     //*************        Members                   ************
@@ -68,7 +74,7 @@ private:
     /**
      * @brief Current descent mode determined from brake ratio
      */
-    DescentMode descentMode_;
+    mutable DescentMode descentMode_;
 
     //***********************************************************
     //*************    Memberfunctions                ************
@@ -190,4 +196,11 @@ private:
      * @return Interpolated K_d
      */
     double interpolate_Kd(double R_brake) const;
+
+    /**
+     * @brief Determine Braking Mode due to R_brake factor
+     * @param R_brake brake ratio (h / d_brake)
+     * @return Current descent mode
+     */
+    DescentMode determineMode(double R_brake) const;
 };

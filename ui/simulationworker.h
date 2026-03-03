@@ -88,7 +88,8 @@ signals:
                       double thrust,
                       double targetThrust,
                       double fuelMass,
-                      double fuelFlow
+                      double fuelFlow,
+                      QString consoleOutput
                       );
 
     /**

@@ -13,7 +13,7 @@ void simcontrol::buildSimulationEnvironment(double t)
 {
     // Instance classes
     landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1);
-    inputArbiter_ = std::make_unique<InputArbiter>();
+    inputArbiter_       = std::make_unique<InputArbiter>();
 }
 
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName)
@@ -95,7 +95,7 @@ void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, con
 }
 
 //***********************************************************
-//*************        Pubblic                   ************
+//*************        Public                   ************
 //***********************************************************
 
 simcontrol::simcontrol(double t0) : initialTime(t0)
@@ -133,6 +133,7 @@ simData simcontrol::runSimulation(const double dt)
 
         // --- Autopilot Control ---
         runAutopilot(landerSpacecraft->getSpacecraftState(), dt);
+        simdata_.output = autopilot_->getDescentMode();
 
         // --- Update spacecraft state (translation, velocity, etc.) ---
         landerSpacecraft->updateStep(dt);   ///< Updates simulation steps

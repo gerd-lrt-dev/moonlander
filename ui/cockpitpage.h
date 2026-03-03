@@ -192,7 +192,8 @@ public slots:
                         double thrust,
                         double targetThrust,
                         double fuelMass,
-                        double fuelFlow);
+                        double fuelFlow,
+                        QString consoleOutput);
 
 private slots:
     /**
@@ -206,6 +207,12 @@ private slots:
      * Toggles internal autopilot state and emits corresponding signal.
      */
     void onAutopilotClicked();
+
+    /**
+     * @brief Display console Output
+     * @param output
+     */
+    //void consoleOutput(const std::string &output);
 
 private:
     // Members
@@ -289,8 +296,9 @@ private:
     // Status Indicators
     // =====================================================
 
-    QLabel *lblHullStatus;       ///< Hull integrity indicator
-    QLabel *lblAutopilotStatus;  ///< Status update when autopilot becomes activated
+    QLabel* lblHullStatus;        ///< Displays the hull integrity status
+    QLabel* lblControllerOutput;  ///< Displays the controller or console output in the cockpit UI
+
 
     // =====================================================
     // Visualization
@@ -318,7 +326,10 @@ private:
     // =====================================================
 
     QPushButton* btnAutopilot; ///< Autopilot toggle button
+    QTimer* autopilotBlinkTimer;  ///< Timer used to blink the autopilot status indicator
+    QLabel* lblAutopilotStatus;   ///< Displays the current autopilot state
     bool autopilotActive = false; ///< Internal autopilot state flag
+    bool autopilotBlinkOn;        ///< Internal flag to track the blink state of the autopilot indicator
 };
 
 #endif // COCKPITPAGE_H

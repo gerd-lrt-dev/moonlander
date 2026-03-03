@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QSlider>
+#include <QString>
 #include <QtMath>
 
 // ------------------------------------------------
@@ -303,7 +304,8 @@ void cockpitPage::onStateUpdated(double time,
                                  double thrust,
                                  double targetThrust,
                                  double fuelMass,
-                                 double fuelFlow)
+                                 double fuelFlow,
+                                 QString consoleOutput)
 {
     updateTime(time);
     updateAltitude(qRound(pos.z * 10.0) / 10.0);

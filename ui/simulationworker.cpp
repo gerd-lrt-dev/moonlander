@@ -1,5 +1,7 @@
 #include "simulationworker.h"
 
+#include <QString>
+
 SimulationWorker::SimulationWorker(QObject *parent)
     : QObject(parent)
 {
@@ -50,8 +52,8 @@ void SimulationWorker::stop()
                       0.0,
                       0.0,
                       0.0,
-                      0.0
-                      );
+                      0.0,
+                      "");
 
     controller->setResetBoolean();
 }
@@ -95,6 +97,9 @@ void SimulationWorker::stepSimulation()
     // Withdraw user input due to thrust
     sendControlCommands();
 
+    // Change data type for console output
+    QString consoleOutput = QString::fromStdString(spacecraftData.output);
+
     // signals
     emit stateUpdated(currentTime,
                       spacecraftData.statevector_.I_Position,
@@ -104,7 +109,8 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.thrust,
                       spacecraftData.targetThrust,
                       spacecraftData.fuelMass,
-                      spacecraftData.fuelFlow
+                      spacecraftData.fuelFlow,
+                      consoleOutput
                       );
 }
 
