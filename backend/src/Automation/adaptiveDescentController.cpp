@@ -248,8 +248,8 @@ DescentMode AdaptiveDescentController::determineMode(double R_brake) const
 {
     DescentMode descentmode_;
     if (R_brake > 3.0) descentmode_ = DescentMode::MODE_A;
-    else if (R_brake < 3.0) descentmode_ = DescentMode::MODE_B;
-    else if (R_brake < 1.5) descentmode_ = DescentMode::MODE_C;
+    else if (R_brake > 1.5) descentmode_ = DescentMode::MODE_B;
+    else if (R_brake < 1.0) descentmode_ = DescentMode::MODE_C;
     else descentmode_ = DescentMode::MODE_D;
 
     return descentmode_;
