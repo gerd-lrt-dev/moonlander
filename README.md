@@ -1,6 +1,14 @@
 Moonlander – C++ Lunar Lander Simulation
 
-Updated from 07.02.2026
+Updated from 06.03.2026
+
+Recent Updates
+--------------
+- Implemented an **Adaptive Descent Controller** for automated landing.
+- The controller uses an **energy-based guidance law** to compute a safe descent trajectory.
+- Introduced **brake ratio based descent mode switching** for adaptive control behavior.
+- Added **PD velocity control with gravity compensation and thrust saturation handling**.
+- Implemented **phase-based descent logic** enabling stable landing across multiple descent regimes.
 
 Overview
 --------
@@ -17,7 +25,7 @@ The Logger class allows the backend to report debug messages without Qt dependen
 
 Frontend Components
 -------------------
-cockpitPage        - Qt widget displaying telemetry (time, altitude, speed, thrust, fuel, hull status)
+cockpitPage        - Qt widget displaying telemetry (time, altitude, speed, thrust, fuel, hull status, information about autopilot)
 landingView        - Visual representation of the spacecraft and lunar surface
 homepage           - Main UI container, manages resource loading, configuration, and signals to worker
 SimulationWorker   - Worker running the simulation loop in a separate thread, sends state updates via signals
@@ -25,6 +33,14 @@ UIBuilder          - Helper class to build consistent Qt UI elements across page
 
 Backend Components
 ------------------
+Automation:
+  - iautopilot                   - Abstract interface for spacecraft autopilot controllers
+  - adaptiveDescentController    - Energy-based landing controller that computes thrust commands using brake ratio guidance
+Control:
+  - inputArbiter         - Testing authority and decision-maker on whether manual thrust commands or autopilot are in control
+Controller:
+  - iController          - Abstract interface for spacecraft velocity controller
+  - pd_controller        - Proportional Derivative controller for supporting autopilot
 Integrators:
   - IIntegrator          - Interface for all integrators
   - EulerIntegrator      - Example concrete integrator for 1D/ND Euler integration
@@ -32,13 +48,13 @@ Integrators:
 
 Optimization:
   - OptimizationModelParams    - Physical model parameters (gravity, Isp, thrust limits)
-  - OptimizationStruct          - Base optimization data structure (state, horizon, weights)
+  - OptimizationStruct         - Base optimization data structure (state, horizon, weights)
   - ThrustOptimizationProblem  - Struct encapsulating optimization problem (initial state, constraints, cost weights)
   - ThrustOptimizer            - Executes NLopt optimization over thrust profile
 
 Physics:
-  - IPhysicsModel        - Abstract interface for physics models
-  - BasicMoonGravity     - Implements lunar gravity, inherits IPhysicsModel
+  - IPhysicsModel          - Abstract interface for physics models
+  - BasicMoonGravity       - Implements lunar gravity, inherits IPhysicsModel
   - Physics (orchestrator) - Delegates physics calls to active physics model and integrator
 
 Sensor & Perception:
@@ -90,6 +106,70 @@ Current Features
 - Spacecraft is the sole owner of state and dynamics
 - Backend supports testing spacecraft controllers independently of UI
 - Legacy variables removed; state vector integrated into `SimDataStruct` for frontend
+- Adaptive Descent Controller for automated landing
+
+Adaptive Descent Controller
+---------------------------
+A modular **energy-based landing controller** has been implemented to guide the spacecraft safely during the final descent phase.
+
+The controller evaluates the current spacecraft state and continuously adjusts the thrust command using a combination of
+kinematic prediction and feedback control.
+
+Core concepts:
+
+Brake Ratio
+-----------
+The controller computes the ratio between remaining altitude and required braking distance:
+
+    R_brake = h / d_brake
+
+where
+
+    d_brake = v² / (2 * a_max)
+
+This ratio determines how aggressively the spacecraft must decelerate.
+
+Descent Phases
+--------------
+Based on the brake ratio the controller switches between several descent regimes:
+
+  MODE_A  - Energy Dissipation (high altitude)
+  MODE_B  - Controlled Descent
+  MODE_C  - Terminal Approach
+  MODE_D  - Critical Braking
+
+Each phase uses different controller parameters to maintain stability and efficiency.
+
+Guidance Law
+------------
+The target descent velocity is computed using an energy-based guidance equation:
+
+    v_target = -sqrt(2 * k_r * a_max * h)
+
+where `k_r` is a safety reserve factor.
+
+Control Law
+-----------
+Velocity tracking is implemented using a PD controller:
+
+    a_cmd = Kp (v_target - v) + Kd (dv/dt)
+
+The commanded acceleration is converted into thrust while compensating gravity:
+
+    T = m (a_cmd + g)
+
+Finally the thrust command is limited to the available engine capability.
+
+Key Characteristics
+-------------------
+- Energy-based descent planning
+- Adaptive gain scheduling
+- Gravity compensation
+- Thrust saturation handling
+- Stable landing behavior across multiple descent regimes
+
+This controller provides a robust framework for testing autonomous landing strategies and serves as a baseline
+for future advanced guidance algorithms.
 
 Thrust Optimization (Experimental)
 ---------------------------------
