@@ -64,7 +64,7 @@ private:
      *
      * Working jsonconfig together with frontend!
      */
-    customSpacecraft loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName);
+    customSpacecraft loadSpacecraftFromJsonString(const std::string& jsonString);
 
     /**
      * @brief Sets target thrust

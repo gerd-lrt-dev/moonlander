@@ -16,7 +16,7 @@ void simcontrol::buildSimulationEnvironment(double t)
     inputArbiter_       = std::make_unique<InputArbiter>();
 }
 
-customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString, const std::string& spacecraftName)
+customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString)
 {
     nlohmann::json config;
 
@@ -27,41 +27,19 @@ customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jso
     catch (const nlohmann::json::parse_error& e)
     {
         throw std::runtime_error(
-            std::string("JSON parse error: ") + e.what()
-            );
+            std::string("JSON parse error: ") + e.what());
     }
 
     // Validate root structure
-    if (!config.contains("spacecraft") || !config["spacecraft"].is_array())
+    if (!config.is_object())
     {
-        throw std::runtime_error("Invalid JSON: missing 'spacecraft' array");
+        throw std::runtime_error("Invalid JSON: expected spacecraft object");
     }
 
-    const auto& spacecraftArray = config["spacecraft"];
+    std::cout << "simcontrol[loadSpacecraftFromJsonString]: Successfully parsed config string"
+              << std::endl;
 
-    std::cout << "Spacecraft array size: " << spacecraftArray.size() << std::endl;
-    for (size_t i = 0; i < spacecraftArray.size(); ++i)
-    {
-        std::cout << "Entry " << i << ": " << spacecraftArray[i].dump() << std::endl;
-    }
-
-    // Search spacecraft
-    for (const auto& sc : spacecraftArray)
-    {
-        if (!sc.contains("name"))
-            continue;
-
-        if (sc["name"].get<std::string>() == spacecraftName)
-        {
-            std::cout << "simcontrol[loadSpacecraftFromJsonString]: Succesfully parsed config string" << std::endl;
-            return jsonConfigReader::parseLander(sc);
-        }
-    }
-
-    throw std::runtime_error(
-        "Spacecraft '" + spacecraftName + "' not found in provided JSON"
-        );
-
+    return jsonConfigReader::parseLander(config);
 }
 
 void simcontrol::processCommands()
@@ -111,7 +89,7 @@ simcontrol::~simcontrol()
 
 void simcontrol::initialize(const std::string& jsonConfigStr)
 {
-    landerMoon1 = loadSpacecraftFromJsonString(jsonConfigStr, "MoonLander_Classic");
+    landerMoon1 = loadSpacecraftFromJsonString(jsonConfigStr);
 
     buildSimulationEnvironment(initialTime);
 }

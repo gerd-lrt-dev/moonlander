@@ -4,11 +4,13 @@
 Homepage::Homepage(QWidget *parent) :
     QMainWindow(parent)
 {
-    jsonConfigStr = loadJsonResource(":/configs/Resources/configs/lander.json");
     setupStackedWidget();
     setupThread();
     setupConnections();
 
+    bool jsonLoaded = configManager_.loadConfig(":/configs/Resources/configs/lander.json");
+    //emit sendJsonToSpacecraftSelectPage(jsonLoaded);
+    //jsonConfigStr = loadJsonResource(":/configs/Resources/configs/lander.json");
 }
 
 Homepage::~Homepage()
@@ -49,6 +51,8 @@ QString Homepage::loadJsonResource(const QString& path)
     qDebug() << "JSON resource loaded successfully, size:"
              << data.size() << "bytes";
 
+
+
     return QString::fromUtf8(data);
 }
 
@@ -68,9 +72,12 @@ void Homepage::setupStackedWidget()
     QWidget *homepage = createHomePage(stackedWidget);
     cockpit = new cockpitPage(this);
 
+    spacecraftSelectionPage_ = new SpacecraftSelectionPage(configManager_, this);
+
     // Add pages to stacked widget
     stackedWidget->addWidget(homepage);
     stackedWidget->addWidget(cockpit);
+    stackedWidget->addWidget(spacecraftSelectionPage_);
 
     // Add stackedwidget to Layout
     layout->addWidget(stackedWidget);
@@ -128,6 +135,7 @@ void Homepage::setupConnections()
 {
     connect(startSimulationButton, &QPushButton::clicked, this, [this]
             {
+                handleJsonConfig(jsonConfigStr);
                 stackedWidget->setCurrentWidget(cockpit);
             });
 
@@ -138,6 +146,23 @@ void Homepage::setupConnections()
 
     connect(cockpit, &cockpitPage::autopilotToggled, simulationWorker, &SimulationWorker::setAutopilotFlag);
 
+    connect(selectSpacecraftButton, &QPushButton::clicked, this, [this]
+            {
+                stackedWidget->setCurrentWidget(spacecraftSelectionPage_);
+            });
+
+    connect(spacecraftSelectionPage_, &SpacecraftSelectionPage::backRequested, this, [this]
+            {
+                stackedWidget->setCurrentIndex(0);
+            });
+
+    connect(spacecraftSelectionPage_, &SpacecraftSelectionPage::spacecraftSelected, this, [this](QString spacecraft)
+            {
+                selectedJsonConfigStr = spacecraft;
+                handleJsonConfig(jsonConfigStr);
+                stackedWidget->setCurrentWidget(cockpit);
+            });
+    connect(this, &Homepage::sendJsonToSpacecraftSelectPage, spacecraftSelectionPage_, &SpacecraftSelectionPage::receiveJsonConfigStr);
 }
 
 void Homepage::setupThread()
@@ -173,7 +198,20 @@ void Homepage::setupThread()
 
     // Start simulation
     simulationThread->start();
+}
 
-    emit sendJsonToWorker(jsonConfigStr);
+//TODO: Das wird ausgeführt bevor ein spacecraft ausgewählt werden kann. Programm stürzt jetzt nach stop ab
+void Homepage::handleJsonConfig(const QString &jsonConfigStr_)
+{
+// Fehler leere config abfangen
+    if (selectedJsonConfigStr.isEmpty())
+    {
+        QString jsonConfigDefault = configManager_.defaultSpacecraftJson();
+        emit sendJsonToWorker(jsonConfigDefault);
+    }
+    else
+    {
+        emit sendJsonToWorker(selectedJsonConfigStr);
+    }
 }
 

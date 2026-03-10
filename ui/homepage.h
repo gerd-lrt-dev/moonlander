@@ -21,6 +21,8 @@
 
 #include "cockpitpage.h"
 #include "simulationworker.h"
+#include "spacecraftselectionpage.h"
+#include "configmanager.h"
 
 /**
  * @class Homepage
@@ -54,15 +56,24 @@ signals:
      */
     void sendJsonToWorker(const QString &json);
 
+    /**
+     * @brief Send Json to spacecraftSelectPage
+     * @param json
+     */
+    void sendJsonToSpacecraftSelectPage(const QString &json);
+
 private:
     // ==========================================
     // Member Variables
     // ==========================================
     // Recources
     QString jsonConfigStr;
+    QString selectedJsonConfigStr = {};
+    ConfigManager configManager_;
 
     // Pages
     cockpitPage *cockpit;
+    SpacecraftSelectionPage *spacecraftSelectionPage_;
 
     // Widgets
     QWidget         *centralWidget;
@@ -84,9 +95,11 @@ private:
     // ==========================================
 
     QString loadJsonResource(const QString& path); ///< Loads json config with spacecraft specifications
-    void setupStackedWidget(); ///< Sets up stacked widget and build homepage as central widget
-    void setupConnections(); ///< Connects signals and slots for the GUI
-    void setupThread();
+    void setupStackedWidget();  ///< Sets up stacked widget and build homepage as central widget
+    void setupConnections();    ///< Connects signals and slots for the GUI
+    void setupThread();         ///< setup safe thread connection
+
+    void handleJsonConfig(const QString &jsonConfigStr);    ///< Handle all json config related mechanism
 
     /**
     * @brief createHomePage & Sets up UI elements and layouts for the homepage
