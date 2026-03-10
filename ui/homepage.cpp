@@ -19,44 +19,6 @@ Homepage::~Homepage()
     simulationThread->wait();
 }
 
-QString Homepage::loadJsonResource(const QString& path)
-{
-    // 1) Check if file exists
-    bool exists = QFile::exists(path);
-    qDebug() << "JSON resource exists:" << exists << "| path:" << path;
-
-    if (!exists)
-    {
-        qCritical() << "JSON resource NOT found:" << path;
-        return {};
-    }
-
-    // 2) open file
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qCritical() << "Could not open JSON resource:" << path
-                    << "| error:" << file.errorString();
-        return {};
-    }
-
-    // 3) read content
-    QByteArray data = file.readAll();
-    if (data.isEmpty())
-    {
-        qCritical() << "JSON resource is empty:" << path;
-        return {};
-    }
-
-    qDebug() << "JSON resource loaded successfully, size:"
-             << data.size() << "bytes";
-
-
-
-    return QString::fromUtf8(data);
-}
-
-
 void Homepage::setupStackedWidget()
 {
     // Build central QWidget

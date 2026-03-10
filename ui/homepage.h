@@ -94,7 +94,6 @@ private:
     // Member Functions
     // ==========================================
 
-    QString loadJsonResource(const QString& path); ///< Loads json config with spacecraft specifications
     void setupStackedWidget();  ///< Sets up stacked widget and build homepage as central widget
     void setupConnections();    ///< Connects signals and slots for the GUI
     void setupThread();         ///< setup safe thread connection
