@@ -8,6 +8,10 @@ build/
 *.user
 .qtcreator/
 
+# Qt / CMake user files
+CMakeLists.txt.user
+*.user
+
 # CMake Cache und temporäre Dateien
 CMakeCache.txt
 CMakeFiles/
