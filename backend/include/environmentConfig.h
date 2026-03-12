@@ -38,7 +38,7 @@ struct EnvironmentConfig {
     const double radiusMoon       = 1.7374e6;   ///< [m] Middle moon radius 
 
     // Multiplied factors
-    const double gravitationalFactorMoon = moonGravity * radiusMoon * radiusMoon;
+    const double muMoon = moonGravity * radiusMoon * radiusMoon; ///< [m³/s²], Moon gravitational factor
 
     // Vector constants
     const Vector3 moonGravityVec  = {0, 0, -1.635};  ///< [m/s²], Moon gravity
