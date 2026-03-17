@@ -33,12 +33,7 @@ Telemetry includes:
 
 The landing view visualizes the spacecraft approaching the lunar surface.
 
-📸 *Screenshots or GIFs of the cockpit and landing view should be placed here.*
-
-Example image paths:
-
-docs/images/cockpit.png  
-docs/images/landing_view.png
+![Moonlander Cockpit](docs/images/cockpit.png)
 
 ---
 
