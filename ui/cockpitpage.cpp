@@ -86,23 +86,38 @@ QGroupBox *cockpitPage::setupNavBox()
     QGridLayout *navLayout = new QGridLayout(navBox);
 
     lcdTime     = new QLCDNumber();
-    lcdAltitude = new QLCDNumber();
+    lcdPosX     = new QLCDNumber();
+    lcdPosY     = new QLCDNumber();
+    lcdPosZ     = new QLCDNumber();
     lcdVSpeed   = new QLCDNumber();
     lcdHSpeed   = new QLCDNumber();
 
-    configureLCD(lcdTime,     7);
-    configureLCD(lcdAltitude, 7);
-    configureLCD(lcdVSpeed,   6);
-    configureLCD(lcdHSpeed,   6);
+    configureLCD(lcdTime,     12);
+    configureLCD(lcdPosX,     12);
+    configureLCD(lcdPosY,     12);
+    configureLCD(lcdPosZ,     12);
+    configureLCD(lcdVSpeed,   12);
+    configureLCD(lcdHSpeed,   12);
 
     navLayout->addWidget(new QLabel("Time [s]"),      0, 0);
     navLayout->addWidget(lcdTime,                     0, 1);
-    navLayout->addWidget(new QLabel("Altitude [m]"),  1, 0);
-    navLayout->addWidget(lcdAltitude,                 1, 1);
-    navLayout->addWidget(new QLabel("V-Speed [m/s]"), 2, 0);
-    navLayout->addWidget(lcdVSpeed,                   2, 1);
-    navLayout->addWidget(new QLabel("H-Speed [m/s]"), 3, 0);
-    navLayout->addWidget(lcdHSpeed,                   3, 1);
+
+    // --- Position ---
+    navLayout->addWidget(new QLabel("X Pos [m]"),     1, 0);
+    navLayout->addWidget(lcdPosX,                     1, 1);
+
+    navLayout->addWidget(new QLabel("Y Pos [m]"),     2, 0);
+    navLayout->addWidget(lcdPosY,                     2, 1);
+
+    navLayout->addWidget(new QLabel("Z Pos [m]"),     3, 0);
+    navLayout->addWidget(lcdPosZ,                     3, 1);
+
+    // --- Velocity ---
+    navLayout->addWidget(new QLabel("Vertical Vel [m/s]"),   4, 0);
+    navLayout->addWidget(lcdVSpeed,                          4, 1);
+
+    navLayout->addWidget(new QLabel("Horizontal Vel [m/s]"), 5, 0);
+    navLayout->addWidget(lcdHSpeed,                          5, 1);
 
     return navBox;
 }
@@ -125,7 +140,7 @@ QGroupBox *cockpitPage::setupEngineBox()
     engineLayout->addWidget(lcdThrust,                       0, 1);
     engineLayout->addWidget(new QLabel("Target Thrust [N]"), 1, 0);
     engineLayout->addWidget(lcdTargetThrust,                 1, 1);
-    engineLayout->addWidget(new QLabel("G-Load [m/s²]"),      2, 0);
+    engineLayout->addWidget(new QLabel("G-Load [m/s²]"),     2, 0);
     engineLayout->addWidget(lcdAcceleration,                 2, 1);
 
     return engineBox;
@@ -258,7 +273,12 @@ void cockpitPage::setupConnections()
 // Update Interface
 // ------------------------------------------------
 void cockpitPage::updateTime(double t)               { lcdTime->display(QString::number(t, 'f', 2)); }
-void cockpitPage::updateAltitude(double a)           { lcdAltitude->display(QString::number(a, 'f', 1)); }
+void cockpitPage::updatePosition(Vector3 pos)
+{
+    lcdPosX->display(QString::number(pos.x, 'f', 1));
+    lcdPosY->display(QString::number(pos.y, 'f', 1));
+    lcdPosZ->display(QString::number(pos.z, 'f', 1));
+}
 void cockpitPage::updateVerticalVelocity(double v)   { lcdVSpeed->display(QString::number(v, 'f', 1)); }
 void cockpitPage::updateHorizontalVelocity(double h) { lcdHSpeed->display(QString::number(h, 'f', 1)); }
 void cockpitPage::updateAcceleration(double a)       { lcdAcceleration->display(QString::number(a, 'f', 2)); }
@@ -320,7 +340,7 @@ void cockpitPage::onStateUpdated(double time,
                                  QString consoleOutput_)
 {
     updateTime(time);
-    updateAltitude(qRound(pos.z * 10.0) / 10.0);
+    updatePosition(pos);
     updateVerticalVelocity(qRound(vel.z * 10.0) / 10.0);
     updateHorizontalVelocity(qRound(vel.x * 10.0) / 10.0);
     updateAcceleration(qRound(GLoad * 100.0) / 100.0);

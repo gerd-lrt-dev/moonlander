@@ -67,10 +67,10 @@ public:
     void updateTime(double t);
 
     /**
-     * @brief Updates the current altitude display.
-     * @param altitude Altitude above surface in meters.
+     * @brief Updates the current position display.
+     * @param position in all dimensions in meters.
      */
-    void updateAltitude(double altitude);
+    void updatePosition(Vector3 position);
 
     /**
      * @brief Updates the vertical velocity display.
@@ -278,7 +278,9 @@ private:
     // =====================================================
 
     QLCDNumber *lcdTime;        ///< Simulation time display [s]
-    QLCDNumber *lcdAltitude;    ///< Altitude above surface [m]
+    QLCDNumber *lcdPosX;        ///< Position in x [m]
+    QLCDNumber *lcdPosY;        ///< Position in y [m]
+    QLCDNumber *lcdPosZ;        ///< Position in z [m]
     QLCDNumber *lcdVSpeed;      ///< Vertical velocity [m/s]
     QLCDNumber *lcdHSpeed;      ///< Horizontal velocity [m/s]
 
