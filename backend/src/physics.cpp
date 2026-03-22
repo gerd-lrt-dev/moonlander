@@ -8,9 +8,9 @@ physics::~physics()
 }
 
 // public  ---------------------------------------------------------
-Vector3 physics::computeAcc(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const
+Vector3 physics::computeAcc(const Vector3& pos, const Vector3& vel, double mass, const Vector3& thrust) const
 {
-    return model_->computeAcceleration(pos, vel, mass, thrust, thrustDir);
+    return model_->computeAcceleration(pos, vel, mass, thrust);
 }
 
 Vector3 physics::computeVel(const Vector3& vel, const Vector3& acc, double dt) const

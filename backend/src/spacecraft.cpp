@@ -17,6 +17,9 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
+    thrustOrchestration.initializeEngines(landerMoon.Isp, landerMoon.timeConstant, landerMoon.responseRate, landerMoon.B_mainThrustPosition, {landerMoon.fuelM});
+
+
     // TODO just testing here optimization
 
     //double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
@@ -42,7 +45,8 @@ void spacecraft::updateMovementData(double dt)
     }
 
     // --- Compute acceleration ---
-    Vector3 acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), requestThrust(), requestThrustDirection());
+    //TODO: eliminate minus with request thrust when coordinate transformation class is written
+    Vector3 acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), -requestThrust());
 
     // --- Compute velocity ---
     Vector3 velocity = physics_->computeVel(getVelocity(), acceleration, dt);
@@ -126,17 +130,7 @@ void spacecraft::setAngularVelocity(const Vector3& angVel)
 // -------------------------------------------------------------------------
 // Public
 // -------------------------------------------------------------------------
-spacecraft::spacecraft(customSpacecraft lMoon)
-    : landerMoon(lMoon),
-    mainEngine(
-        EngineConfig::Create(
-            lMoon.Isp,
-            lMoon.timeConstant,
-            lMoon.responseRate,
-            lMoon.B_mainThrustDirection
-        ),
-        FuelState(lMoon.fuelM, lMoon.fuelM, 0.0)
-    )
+spacecraft::spacecraft(customSpacecraft lMoon) : landerMoon(lMoon)
     {
         // initialize
         std::shared_ptr<IPhysicsModel> model_       = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
@@ -156,7 +150,7 @@ void spacecraft::updateStep(double dt)
 {
     // Update mass data
     updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
-    mainEngine.updateThrust(dt);
+    thrustOrchestration.updateThrust(dt);
 
     // Update time systems are running
     time += dt;
@@ -198,7 +192,6 @@ void spacecraft::updateSpacecraftIntegrity()
     if(spacecraftIntegrity < 0.0) spacecraftIntegrity = 0.0;
 
     // --- Update spacecraft state ---
-    //TODO: set thrust to zero when landed etc.
 
     // 1. Completely destroyed (terminal)
     if (spacecraftIntegrity <= 0.0)
@@ -232,9 +225,9 @@ void spacecraft::setThrust(double targetThrustInPercentage)
 
     SpacecraftState currentSpacecraftState = getSpacecraftState();
 
-    (currentSpacecraftState == SpacecraftState::Operational) ? mainEngine.setTarget(targetThrust) : mainEngine.setTarget(0.0);
+    (currentSpacecraftState == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrust(targetThrust, 0) : thrustOrchestration.setTargetThrust(0.0, 0);
 
-    //mainEngine.setTarget(targetThrust);
+    thrustOrchestration.setTargetThrust(targetThrust, 0);
 }
 
 void spacecraft::setConsoleText(const std::string &txt)
@@ -309,23 +302,18 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
 double spacecraft::requestTargetThrust() const
 {
     
-    return mainEngine.getTargetThrust();
+    return thrustOrchestration.getTargetThrust();
 }
 
-double spacecraft::requestThrust() const
+Vector3 spacecraft::requestThrust() const
 {
     
-    return mainEngine.getCurrentThrust();
-}
-
-Vector3 spacecraft::requestThrustDirection() const
-{
-    return mainEngine.getDirectionOfThrust();
+    return thrustOrchestration.getCurrentThrust();
 }
 
 double spacecraft::requestLiveFuelConsumption() const
 {
-    return mainEngine.getFuelConsumption();
+    return thrustOrchestration.getFuelConsumption();
 }
 
 void spacecraft::setInitalPosition(const Vector3& position)
@@ -400,7 +388,7 @@ double spacecraft::getTotalMass()
 
 double spacecraft::getfuelMass() const
 {
-    return mainEngine.getCurrentFuelMass();
+    return thrustOrchestration.getCurrentFuelMass();
 }
 
 double spacecraft::getGload() const

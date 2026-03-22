@@ -3,10 +3,10 @@
 //******************************************************
 //************* PUBLIC *********************************
 //******************************************************
-Vector3 BasicMoonGravityModel::computeAcceleration(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const
+Vector3 BasicMoonGravityModel::computeAcceleration(const Vector3& pos, const Vector3& vel, double mass, const Vector3& thrust) const
 {
     Vector3 gravity = calcAccelerationAlignedToCenterOfMoon(pos);
-    Vector3 thrustAcc = thrustDir *(thrust/mass);
+    Vector3 thrustAcc = thrust/mass;
     return gravity + thrustAcc;
 }
 

@@ -7,9 +7,9 @@ public:
 
     virtual ~IThrustModel() = default;
 
-    virtual void updateThrust(const double &dt);
+    virtual void updateThrust(const double &dt) = 0;
 
-    virtual void setTarget(const double &tThrust);
+    virtual void setTarget(const double &tThrust) = 0;
 
     virtual double getTargetThrust() const = 0;
 

@@ -85,7 +85,7 @@ signals:
                       Vector3 vel,
                       double GLoad,
                       SpacecraftState spacecraftState_,
-                      double thrust,
+                      Vector3 thrust,
                       double targetThrust,
                       double fuelMass,
                       double fuelFlow,

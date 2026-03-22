@@ -7,7 +7,10 @@
 
 #include "vector3.h"
 #include "Thrust/iThrust.h"
+#include "Thrust/BasicMainEngineModel.h"
 #include "Thrust/FuelStateStruct.h"
+#include "Thrust/thrustState.h"
+#include "Thrust/EngineConfig.h"
 
 /**
  * @class Thrust
@@ -52,10 +55,20 @@ public:
     // Public setter functions
     // -------------------------------------------------------------------------
     /**
-     * @brief Set a new target thrust
-     * @param tThrust ///<  [N] Target thrust
+     * @brief Set Engine Config
+     * @param Isp - Specific Impulse [s]
+     * @param timeConstant tau [s]
+     * @param Response Rate [Hz]
+     * @param thrust Direction direction of thrust due to spacecraft in EastNorthUp (ENU Coordinates)
      */
-    void setTargetThrust(const double &tThrust);
+    void initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const Vector3 &thrustDirection, const std::vector<double> &tanks);
+
+    /**
+     * @brief Set a new target thrust
+     * @param tThrust   ///< [N] Target thrust
+     * @param engineNr  ///< Number of engine, zero is always main Engine!
+     */
+    void setTargetThrust(const double &tThrust, const size_t &engineNr);
 
     // -------------------------------------------------------------------------
     // Public getter functions
@@ -68,9 +81,9 @@ public:
 
     /**
      * @brief Get the current thrust
-     * @return ///< [N] Current thrust 
+     * @return ///< [N] Current thrust vector
      */
-    double getCurrentThrust() const;
+    Vector3 getCurrentThrust() const;
 
     /**
      * @brief Getter function for fuel live fuel consumption
@@ -84,25 +97,19 @@ public:
      */
     double getCurrentFuelMass() const;
 
-    /**
-     * @brief Getter function for thrust direction
-     * @return ///< [-] Vector with direction of thrust
-     * 
-     * The vector is aligned with the static coordinate system of the spacecraft
-     */
-    Vector3 getDirectionOfThrust() const;
-
 private:
     std::vector<std::unique_ptr<IThrustModel>> models_;
     std::vector<double> tanks_;
 
     FuelState fuelState_;
-
-    void addModel(std::unique_ptr<IThrustModel> model);
+    EngineConfig engineConfig_;
+    ThrustState thrustState_;
 
     void addFuelTank(double tank);
 
-    const double getFuelMassOfAllTanks();
+    double getFuelMassOfAllTanks() const;
+
+    void addModel(std::unique_ptr<IThrustModel> model);
 };
 
 #endif

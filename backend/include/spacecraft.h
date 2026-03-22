@@ -13,6 +13,7 @@
 #include "Optimization/thrustOptimizer.h"
 #include "Automation/iautopilot.h"
 #include "Controller/iController.h"
+#include "Thrust/EngineConfig.h"
 
 #include <memory>
 
@@ -41,7 +42,7 @@ private:
      */
     ///@{
     std::unique_ptr<physics> physics_;          ///< Physics engine handling lander motion
-    Thrust mainEngine;                          ///< [] Dynamic state of the engine thrust.
+    Thrust thrustOrchestration;                 ///< Orchestrator class for engine simulation
 
     StateVector state_;                     ///< Encapsulates the complete translational and rotational state of the spacecraft and is single source of thruth
     EnvironmentConfig environmentConfig_;   ///< [-] Environment config struct with constant parameters.
@@ -120,6 +121,10 @@ private:
      * @return GLoad
      */
     void updateGLoad(const Vector3& totalAcceleration, const Vector3& gravityAcceleration);
+
+    // -------------------------------------------------------------------------
+    // Private intializer functions
+    // -------------------------------------------------------------------------
 
     // -------------------------------------------------------------------------
     // Private setter functions
@@ -326,18 +331,12 @@ public:
 
     /**
      * @brief Request current thrust of Spacecraft
-     * @return current thrust
+     * @return current thrust vector
      * 
      * Function queries the thrust class for the thrust of the spacecraft. 
      * Not to be confused with the target thrust!
      */
-    double requestThrust() const;
-
-    /**
-     * @brief Request direction of thrust
-     * @return ///< [-] Vector with direction of thrust
-     */
-    Vector3 requestThrustDirection() const;
+    Vector3 requestThrust() const;
 
     /**
      * @brief Request live fuel consumption from thrust class

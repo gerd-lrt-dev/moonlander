@@ -40,7 +40,7 @@ public:
      * @param thrustDir  Normalized thrust direction vector.
      * @return Total acceleration vector in world space.
      */
-    Vector3 computeAcceleration(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const override;
+    Vector3 computeAcceleration(const Vector3& pos, const Vector3& vel, double mass, const Vector3& thrust) const override;
 
 private:
 

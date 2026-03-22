@@ -40,6 +40,35 @@ void basicMainEngineModel::setTarget(const double &tThrust)
 }
 
 // -------------------------------------------------------------------------
+// Public getter override functions
+// -------------------------------------------------------------------------
+
+double basicMainEngineModel::getTargetThrust() const
+{
+    return thrustState_.target;
+}
+
+double basicMainEngineModel::getCurrentThrust() const
+{
+    return thrustState_.current;
+}
+
+double basicMainEngineModel::getFuelConsumption() const
+{
+    return fuelstate_.consumptionRate;
+}
+
+double basicMainEngineModel::getCurrentFuelMass() const
+{
+    return fuelstate_.massCurrent;
+}
+
+Vector3 basicMainEngineModel::getDirectionOfThrust() const
+{
+    return engineConfig_.direction;
+}
+
+// -------------------------------------------------------------------------
 // Private setter functions
 // -------------------------------------------------------------------------
 void basicMainEngineModel::setDefaultValues()

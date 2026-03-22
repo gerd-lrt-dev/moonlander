@@ -30,7 +30,7 @@ struct simData
     std::string output;
 
     // Engine data
-    double thrust;
+    Vector3 thrust;
     double targetThrust;
 
     // Fuel data

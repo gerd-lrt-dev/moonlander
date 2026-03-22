@@ -94,7 +94,7 @@ public:
      * @brief Updates the current engine thrust.
      * @param thrust Current thrust value (percentage or normalized).
      */
-    void updateThrust(double thrust);
+    void updateThrust(Vector3 thrust);
 
     /**
      * @brief Updates the target thrust setpoint.
@@ -189,7 +189,7 @@ public slots:
                         const Vector3& vel,
                         const double& GLoad,
                         SpacecraftState spacecraftState_,
-                        double thrust,
+                        Vector3 thrust,
                         double targetThrust,
                         double fuelMass,
                         double fuelFlow,
@@ -288,7 +288,9 @@ private:
     // Engine Instruments
     // =====================================================
 
-    QLCDNumber *lcdThrust;       ///< Current engine thrust
+    QLCDNumber *lcdThrust_BX;    ///< Current engine thrust in body frame of spacecraft x direction
+    QLCDNumber *lcdThrust_BY;    ///< Current engine thrust in body frame of spacecraft y direction
+    QLCDNumber *lcdThrust_BZ;    ///< Current engine thrust in body frame of spacecraft z direction
     QLCDNumber *lcdTargetThrust; ///< Target thrust setpoint
     QLCDNumber *lcdAcceleration; ///< Current acceleration [m/s²]
 

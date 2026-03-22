@@ -39,6 +39,8 @@ add_library(moonlander_backend
     include/Thrust/iThrust.h
     include/Thrust/BasicMainEngineModel.h
     include/Thrust/FuelStateStruct.h
+    include/Thrust/EngineConfig.h
+    include/Thrust/thrustState.h
 )
 
 target_include_directories(moonlander_backend
