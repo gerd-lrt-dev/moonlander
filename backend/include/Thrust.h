@@ -27,7 +27,6 @@ public:
     Thrust();
     ~Thrust();
 
-
     /**
      * @brief Update the current thrust based on the time delta
      * @param dt    ///< [s] Time step since last update 
@@ -59,9 +58,10 @@ public:
      * @param Isp - Specific Impulse [s]
      * @param timeConstant tau [s]
      * @param Response Rate [Hz]
+     * @param Maximum Thrust [N]
      * @param thrust Direction direction of thrust due to spacecraft in EastNorthUp (ENU Coordinates)
      */
-    void initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const Vector3 &thrustDirection, const std::vector<double> &tanks);
+    void initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const double &maxThrust, const Vector3 &thrustDirection, const std::vector<double> &tanks);
 
     /**
      * @brief Set a new target thrust
@@ -86,6 +86,12 @@ public:
     Vector3 getCurrentThrust() const;
 
     /**
+     * @brief Get the current thrust in percentage
+     * @return ///< [] Current thrust vector with percentage value
+     */
+    Vector3 getCurrentThrustInPercentage() const;
+
+    /**
      * @brief Getter function for fuel live fuel consumption
      * @return ///< [kg / dt] Real-time fuel consumption
      */
@@ -100,6 +106,7 @@ public:
 private:
     std::vector<std::unique_ptr<IThrustModel>> models_;
     std::vector<double> tanks_;
+    double tmpFullFuelMass = 0.0;
 
     FuelState fuelState_;
     EngineConfig engineConfig_;

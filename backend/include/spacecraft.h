@@ -339,6 +339,12 @@ public:
     Vector3 requestThrust() const;
 
     /**
+     * @brief Request current thrust of spacecraft in percentage
+     * @return thrust vector with percentage of thrust in relation to maximum thrust
+     */
+    double requestThrustInPercentage() const;
+
+    /**
      * @brief Request live fuel consumption from thrust class
      * @return fuel consumption
      */

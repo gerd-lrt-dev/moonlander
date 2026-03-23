@@ -88,6 +88,16 @@ public:
      */
     Vector3 getDirectionOfThrust() const override;
 
+    /**
+     * @brief Calculate fuel cunsomption
+     * @param fuelMass      ///< [kg] Mass of fuel
+     * @param massflowFuel  ///< [kg/s] Mass flow of fuel
+     * @param dt            ///< [s] discrete time step and update parameter
+     *
+     * Reduces fuel supply depending on fuel consumption through the thrust provision process
+     */
+    double calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) override;
+
 private:
     EngineConfig engineConfig_;      ///< [-] Configuration parameters for a spacecraft engine.
     ThrustState thrustState_;        ///< [-] Dynamic state of the engine thrust.
@@ -104,15 +114,5 @@ private:
     // -------------------------------------------------------------------------
     // Private calculation methods
     // -------------------------------------------------------------------------
-    /**
-     * @brief Calculate fuel cunsomption
-     * @param fuelMass      ///< [kg] Mass of fuel
-     * @param massflowFuel  ///< [kg/s] Mass flow of fuel
-     * @param dt            ///< [s] discrete time step and update parameter
-     *
-     * Reduces fuel supply depending on fuel consumption through the thrust provision process
-     */
-    double calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt);
-
     double calcMassFlow(const double &currenThrust, const double &Isp, const double &earthGravity);
 };

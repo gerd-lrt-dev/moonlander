@@ -17,7 +17,7 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
-    thrustOrchestration.initializeEngines(landerMoon.Isp, landerMoon.timeConstant, landerMoon.responseRate, landerMoon.B_mainThrustPosition, {landerMoon.fuelM});
+    thrustOrchestration.initializeEngines(landerMoon.Isp, landerMoon.timeConstant, landerMoon.responseRate, landerMoon.maxT, landerMoon.B_mainThrustPosition, {landerMoon.fuelM});
 
 
     // TODO just testing here optimization
@@ -311,6 +311,11 @@ Vector3 spacecraft::requestThrust() const
     return thrustOrchestration.getCurrentThrust();
 }
 
+double spacecraft::requestThrustInPercentage() const
+{
+    return 0.0;//thrustOrchestration.getCurrentThrustInPercentage();
+}
+
 double spacecraft::requestLiveFuelConsumption() const
 {
     return thrustOrchestration.getFuelConsumption();
@@ -340,6 +345,7 @@ simData spacecraft::getFullSimulationData() const
 
     simData_.thrust = requestThrust();
     simData_.targetThrust = requestTargetThrust();
+    simData_.thrustInPercentage = requestThrustInPercentage();
 
     simData_.fuelMass = getfuelMass();
     simData_.fuelFlow = requestLiveFuelConsumption();

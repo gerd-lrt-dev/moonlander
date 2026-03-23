@@ -24,6 +24,12 @@ struct ThrustState
      * Represents the current thrust output of the engine after
      * applying the engine response model.
      */
+
+    int percentage;
+    /**<
+     * @brief Percentage of current thrust in relation to maximum thrust
+     * @unit no unit
+     */
 };
 
 #endif // THRUSTSTATE_H

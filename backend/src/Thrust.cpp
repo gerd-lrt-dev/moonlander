@@ -28,7 +28,7 @@ void Thrust::setTargetThrust(const double &tThrust, const size_t &engineNr)
     models_[engineNr]->setTarget(tThrust);
 }
 
-void Thrust::initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const Vector3 &thrustDirection, const std::vector<double> &tanks)
+void Thrust::initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const double &maxThrust, const Vector3 &thrustDirection, const std::vector<double> &tanks)
 {
     EngineConfig tmpConfig;
     FuelState tmpState;
@@ -37,6 +37,7 @@ void Thrust::initializeEngines(const double &Isp, const double &timeConstant, co
     {// TODO: Add tank not only with information about capacity but also with information about who is authorized to use the tank
         addFuelTank(tank);
     }
+    tmpFullFuelMass = getFuelMassOfAllTanks(); //TODO: ELIMINATE WHEN USING DIFFERENT TANKS IS IMPLEMENTED!!!
     std::cout << "[Thrust] Added -" << tanks.size() << "- tanks to spacecraft structure" << std::endl;
 
     tmpConfig.Isp           = Isp;
@@ -58,6 +59,7 @@ void Thrust::updateThrust(double dt)
         {
 
             model->updateThrust(dt);
+            tmpFullFuelMass = model->calcFuelReduction(tmpFullFuelMass, model->getFuelConsumption(), dt);
         }
     }
     else
@@ -96,6 +98,15 @@ Vector3 Thrust::getCurrentThrust() const
     return total;
 }
 
+Vector3 Thrust::getCurrentThrustInPercentage() const
+{
+    for (const auto& model: models_)
+    {
+        //model->
+    }
+
+}
+
 double Thrust::getFuelConsumption() const
 {
     double sum = 0.0;
@@ -110,7 +121,7 @@ double Thrust::getFuelConsumption() const
 
 double Thrust::getCurrentFuelMass() const
 {
-    return getFuelMassOfAllTanks();
+    return tmpFullFuelMass;
 }
 
 void Thrust::addModel(std::unique_ptr<IThrustModel> model)

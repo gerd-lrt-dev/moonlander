@@ -39,6 +39,12 @@ struct EngineConfig
      * to new setpoints (i.e., response speed of the engine controller).
      */
 
+    double maxThrust;
+    /**<
+     * @brief Maximum amount of thrust
+     * @unit Newton [N]
+     */
+
     Vector3 direction;
     /**<
      * @brief Normalized thrust direction in the spacecraft body frame.
@@ -46,7 +52,9 @@ struct EngineConfig
      * Specifies the direction in which thrust is applied.
      */
 
-    static EngineConfig Create(double Isp, double timeConstant, double responseRate, Vector3 direction)
+
+
+    static EngineConfig Create(double Isp, double timeConstant, double responseRate, double maxThrust, Vector3 direction)
     {
 
         /**
@@ -104,6 +112,49 @@ struct EngineConfig
         }
 
         /**
+         * @brief Maximum thrust the engine can generate.
+         *
+         * This parameter defines the upper bound of the thrust force that
+         * the engine model is able to produce.
+         *
+         * @unit Newtons [N]
+         *
+         * The value is used by the thrust model to clamp commanded thrust levels.
+         * If the configured value is invalid (≤ 0), it is automatically reset
+         * to a safe default to prevent undefined simulation behaviour.
+         *
+         * Typical thrust ranges depending on engine type:
+         *
+         * Main landing engines:
+         * - Small lunar lander main engine: ~4,000 – 10,000 N
+         * - Medium descent engine: ~10,000 – 45,000 N
+         * - Example: Apollo LM descent engine ≈ 45,000 N (throttleable)
+         *
+         * Attitude control thrusters (RCS):
+         * - Small control jets: ~10 – 50 N
+         * - Medium RCS thrusters: ~50 – 500 N
+         * - Large translation thrusters: ~500 – 1000 N
+         *
+         * Example configuration:
+         * @code
+         * EngineConfig mainEngine;
+         * mainEngine.maxThrust = 7000.0; // main descent engine
+         *
+         * EngineConfig rcsThruster;
+         * rcsThruster.maxThrust = 50.0;  // attitude control thruster
+         * @endcode
+         *
+         * Safety check:
+         * If the configured value is less than or equal to zero,
+         * the engine thrust will be reset to a default value of 100 N.
+         */
+        if (maxThrust <= 0)
+        {
+            std::cerr << "[EngineConfig] Warning: Maximum thrust is zero or less (" << maxThrust << "), resetting to default 100 [N]." << std::endl;
+            maxThrust = 100.0;
+        }
+
+        /**
          * @param Thrust direction of engine
          */
         if (direction.norm() == 0)
@@ -116,7 +167,7 @@ struct EngineConfig
             direction = direction.normalized();
         }
 
-        return {Isp, timeConstant, responseRate, direction};
+        return {Isp, timeConstant, responseRate, maxThrust, direction};
     }
 };
 

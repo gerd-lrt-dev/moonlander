@@ -53,6 +53,7 @@ void SimulationWorker::stop()
                       0.0,
                       0.0,
                       0.0,
+                      0.0,
                       "");
 
     controller->setResetBoolean();
@@ -108,6 +109,7 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.spacecraftState_,
                       spacecraftData.thrust,
                       spacecraftData.targetThrust,
+                      spacecraftData.thrustInPercentage,
                       spacecraftData.fuelMass,
                       spacecraftData.fuelFlow,
                       consoleOutput

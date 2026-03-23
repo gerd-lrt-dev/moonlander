@@ -348,6 +348,7 @@ void cockpitPage::onStateUpdated(double time,
                                  SpacecraftState spacecraftState_,
                                  Vector3 thrust,
                                  double targetThrust,
+                                 double thrustInPercentage,
                                  double fuelMass,
                                  double fuelFlow,
                                  QString consoleOutput_)
@@ -364,7 +365,7 @@ void cockpitPage::onStateUpdated(double time,
     updateHullStatus(spacecraftState_);
 
     landingView->setAltitude(pos.z);
-    landingView->setThrust(thrust.z);
+    landingView->setThrust(thrustInPercentage);
     landingView->setHullIntact(spacecraftState_);
 
     (autopilotActive) ? consoleOutput(consoleOutput_) : consoleOutput("No controlling active");

@@ -7,6 +7,7 @@ basicMainEngineModel::basicMainEngineModel(const EngineConfig& eConfig, FuelStat
     : engineConfig_(EngineConfig::Create(eConfig.Isp,
                                          eConfig.timeConstant,
                                          eConfig.responseRate,
+                                         eConfig.maxThrust,
                                          eConfig.direction)
                     ),
     fuelstate_(fState)

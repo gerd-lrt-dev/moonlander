@@ -191,6 +191,7 @@ public slots:
                         SpacecraftState spacecraftState_,
                         Vector3 thrust,
                         double targetThrust,
+                        double thrustInPercentage,
                         double fuelMass,
                         double fuelFlow,
                         QString consoleOutput);

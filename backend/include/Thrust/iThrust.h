@@ -9,6 +9,8 @@ public:
 
     virtual void updateThrust(const double &dt) = 0;
 
+    virtual double calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) = 0;
+
     virtual void setTarget(const double &tThrust) = 0;
 
     virtual double getTargetThrust() const = 0;
