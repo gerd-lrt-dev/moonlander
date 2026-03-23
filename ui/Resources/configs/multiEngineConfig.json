@@ -1,0 +1,30 @@
+{
+  "name": "MoonLander_Classic",
+  "emptyMass": 1500.0,
+  "fuelM": 120.0,
+  "Ixx": 850.0,
+  "Iyy": 910.0,
+  "Izz": 720.0,
+  "I_initialPos": { "x": 0.0, "y": 0.0, "z": 1938900.0 },
+  "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
+  "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.2 },
+  "initialVelocity": { "x": 0.0, "y": 1234.0, "z": 0.0 },
+  "structuralIntegrity": 0.25,
+  "safeVelocity": 5.0,
+  "engines": [
+    {
+      "id": 0,
+      "name": "MainEngine",
+      "type": "main",
+      "direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+      "position": { "x": 0.0, "y": 0.0, "z": -0.5 }
+    },
+    {
+      "id": 1,
+      "name": "AttitudeThruster",
+      "type": "attitude",
+      "direction": { "x": 1.0, "y": 0.0, "z": 0.0 },
+      "position": { "x": 0.2, "y": 0.0, "z": 0.0 }
+    }
+  ]
+}

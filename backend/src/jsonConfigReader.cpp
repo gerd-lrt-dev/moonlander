@@ -36,30 +36,46 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
 {
     customSpacecraft lander;
 
+    // -------------------------
+    // Base lander properties
+    // -------------------------
     lander.emptyMass    = j.at("emptyMass").get<double>();
     lander.fuelM        = j.at("fuelM").get<double>();
-    lander.maxFuelM     = j.at("maxFuelM").get<double>();
-
-    lander.maxT         = j.at("maxT").get<double>();
-    lander.Isp          = j.at("Isp").get<double>();
-    lander.timeConstant = j.at("timeConstant").get<double>();
-    lander.responseRate = j.at("responseRate").get<double>();
-
-    lander.B_mainThrustDirection    = j.at("B_mainThrustDirection").get<Vector3>();
-    lander.B_mainThrustPosition     = j.at("B_mainThrustPosition").get<Vector3>();
 
     lander.Ixx          = j.at("Ixx").get<double>();
     lander.Iyy          = j.at("Iyy").get<double>();
     lander.Izz          = j.at("Izz").get<double>();
-    
+
     lander.I_initialPos = j.at("I_initialPos").get<Vector3>();
     lander.B_initialRot = j.at("B_initialRot").get<Vector3>();
     lander.B_initialCenterOfMass = j.at("B_initialCenterOfMass").get<Vector3>();
 
-    lander.I_initialVelocity      = j.at("initialVelocity").get<Vector3>();
+    lander.I_initialVelocity = j.at("initialVelocity").get<Vector3>();
 
-    lander.structuralIntegrity  = j.at("structuralIntegrity").get<double>();
-    lander.safeVelocity         = j.at("safeVelocity").get<double>();
+    lander.structuralIntegrity = j.at("structuralIntegrity").get<double>();
+    lander.safeVelocity        = j.at("safeVelocity").get<double>();
+
+    // -------------------------
+    // Engines
+    // -------------------------
+    const auto& engines = j.at("engines");
+    for (const auto& e : engines)
+    {
+        EngineConfig engine;
+
+        engine.Isp          = e.at("Isp").get<double>();
+        engine.timeConstant = e.at("timeConstant").get<double>();
+        engine.responseRate = e.at("responseRate").get<double>();
+        engine.maxThrust    = e.at("maxThrust").get<double>();
+        engine.direction    = e.at("direction").get<Vector3>();
+        engine.position     = e.at("position").get<Vector3>();
+
+        engine.id           = e.at("id").get<int>();
+        engine.name         = e.at("name").get<std::string>();
+        engine.type         = e.at("type").get<std::string>();
+
+        lander.engines_.push_back(engine);
+    }
 
     return lander;
 }

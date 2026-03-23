@@ -2,172 +2,160 @@
 #define ENGINECONFIG_H
 #include "vector3.h"
 #include <iostream>
+#include <string>
 
 /**
- * @brief Configuration parameters for a spacecraft engine.
+ * @brief Configuration parameters for a single spacecraft engine.
  *
- * This structure contains all static (time-invariant) parameters describing
- * the physical behavior of the engine, including thrust direction, response
- * dynamics, and specific impulse.
+ * This structure contains both identifying metadata and static physical
+ * parameters describing an engine's performance, orientation, and position.
  *
- * All values are checked for physical plausibility. If there are values
- * that prevent the simulation from running correctly, default values
- * are automatically set.
+ * Typical use:
+ * - Main descent engines
+ * - Attitude control thrusters (RCS)
+ *
+ * Engines can be stored in a vector inside a spacecraft struct
+ * to support multi-engine configurations.
  */
 struct EngineConfig
 {
+    // -------------------
+    // Metadata
+    // -------------------
+    bool engineActivated = false;
+    /**<
+     * @brief Switch to activate engine
+     *
+     * if engine is deactivated no thrust will be provided from this engine
+    */
+
+    int id;
+    /**<
+     * @brief Unique engine identifier
+     * @unit none
+     * Used to distinguish engines programmatically.
+     */
+
+    std::string name;
+    /**<
+     * @brief Human-readable engine name
+     * Example: "Main Descent Engine", "RCS Port Thruster"
+     */
+
+    std::string type;
+    /**<
+     * @brief Engine type category
+     * Example: "Main", "RCS", "Vernier", "AttitudeControl"
+     */
+
+    int tankID;
+    /**<
+     * @brief Specifies which tank the engine uses
+     */
+
+    // -------------------
+    // Physical Parameters
+    // -------------------
     double Isp;
     /**<
-     * @brief Specific impulse of the engine.
-     * @unit seconds [s]
-     * Determines how efficiently the engine converts propellant into thrust.
+     * @brief Specific impulse of the engine [s]
+     * Determines propellant efficiency.
+     * Typical ranges:
+     * - Cold Gas: 40–80
+     * - Hydrazine: 200–230
+     * - Bipropellant: 280–320
+     * - Lunar Lander main engine: ~311
      */
 
     double timeConstant;
     /**<
-     * @brief Time constant of the thrust response model.
-     * @unit seconds [s]
-     * Used in a first-order engine dynamics model describing how quickly
-     * the current thrust approaches the target thrust.
+     * @brief Engine dynamic response time (τ) [s]
+     * Recommended: 0.3–0.8 s for lunar landing engines.
      */
 
     double responseRate;
     /**<
-     * @brief Maximum rate of thrust change.
-     * @unit Hertz [Hz]
-     * Defines the maximum frequency at which the thrust can adjust
-     * to new setpoints (i.e., response speed of the engine controller).
+     * @brief Maximum rate of thrust change [Hz]
+     * Typical: 2–10 Hz for main engines, higher for RCS thrusters.
      */
 
     double maxThrust;
     /**<
-     * @brief Maximum amount of thrust
-     * @unit Newton [N]
+     * @brief Maximum thrust the engine can provide [N]
+     * Main engines: 4,000–45,000 N
+     * RCS thrusters: 10–500 N
      */
 
     Vector3 direction;
     /**<
-     * @brief Normalized thrust direction in the spacecraft body frame.
-     * @unit unit vector [-]
-     * Specifies the direction in which thrust is applied.
+     * @brief Normalized thrust direction in spacecraft body frame [-]
+     * Should never be zero; normalized automatically.
      */
 
+    Vector3 position;
+    /**<
+     * @brief Engine position relative to spacecraft body frame [m]
+     * For point-mass lander this can be nominal; used in multi-engine
+     * torque calculations if moment arms are considered.
+     */
 
-
-    static EngineConfig Create(double Isp, double timeConstant, double responseRate, double maxThrust, Vector3 direction)
+    /**
+     * @brief Creates a validated EngineConfig instance with metadata.
+     *
+     * Checks physical parameters for plausibility and sets defaults if out of range.
+     *
+     * @param id Unique engine identifier
+     * @param name Human-readable engine name
+     * @param type Engine type/category
+     * @param Isp Specific impulse [s]
+     * @param timeConstant Engine response time [s]
+     * @param responseRate Maximum thrust change rate [Hz]
+     * @param maxThrust Maximum thrust [N]
+     * @param direction Thrust vector (body frame)
+     * @param position Engine position in body frame
+     *
+     * @return EngineConfig struct with validated fields
+     */
+    static EngineConfig Create(bool engineActivated,
+                               int id,
+                               const std::string& name,
+                               const std::string& type,
+                               double tankID,
+                               double Isp,
+                               double timeConstant,
+                               double responseRate,
+                               double maxThrust,
+                               Vector3 direction,
+                               Vector3 position)
     {
-
-        /**
-         * @param Isp Specific impulse of the engine
-         *
-         * Engine Type	Isp (vacuum)
-            - Cold Gas Thruster	                        40–80 [s]
-            - Monopropellant (hydrazine)	            200–230 [s]
-            - Bipropellant (MMH/N₂O₄)	                280–320 [s]
-            - Lunar Lander Descent Engine (Apollo LM)	~311 [s]
-            - Modern Cryogenic	                        350–460 [s]
-            - Nuclear Thermal	                        600–900 [s]
-         */
-        if (Isp < 40.0 || Isp > 900.0)
-        {
-            std::cerr << "[EngineConfig] Warning: Isp out of range (" << Isp << "), resetting to default 300 [s]." << std::endl;
+        if(Isp < 40.0 || Isp > 900.0) {
+            std::cerr << "[EngineConfig] Warning: Isp out of range (" << Isp << "), resetting to default 300 [s].\n";
             Isp = 300.0;
         }
 
-        /**
-         * @param timeConstant Engine response time (τ)
-         *
-         * Engine    τ (seconds)
-            - Cold gas                                      < 0.1 [s]
-            - Hydrazine thruster                            0.1–0.3 [s]
-            - Main lander engines (LM, Blue Moon, etc.)     0.3–1.5 [s]
-            - Extremely sluggish systems                    > 2 [s]
-            - Min: 0.05 (below 0.05 s it becomes numerically unstable)
-            - Max: 3.0 (anything above 3s reacts too slowly for a landing)
-            - Ideal for landing simulation: 0.3-0.8 [s]
-         */
-        if (timeConstant < 0.05 || timeConstant > 3.0)
-        {
-            std::cerr << "[EngineConfig] Warning: time constant tau out of range (" << timeConstant << "), resetting to default 0.5 [s]." << std::endl;
-            timeConstant = 0.05;
+        if(timeConstant < 0.05 || timeConstant > 3.0) {
+            std::cerr << "[EngineConfig] Warning: timeConstant out of range (" << timeConstant << "), resetting to default 0.5 [s].\n";
+            timeConstant = 0.5;
         }
 
-        /**
-         * @param responseRate Maximum thrust change rate
-         *
-         * Small hydrazine thrusters: very fast (10–30 Hz)
-
-         * Response Rate (Hz)
-            - Main engines: 2–10 [Hz]
-            - SpaceX Merlin at TVC: ~2–5 [Hz]
-            - Apollo LM DES: ~3 [Hz] Controllability
-            - Min: 0.5 Hz (any slower is completely useless)
-            - Max: 50 Hz (above this, controlled flying is pointless)
-            - Realistic Lander: 2-10 [Hz]
-         */
-        if (responseRate < 2.0 || responseRate > 10.0)
-        {
-            std::cerr << "[EngineConfig] Warning: response rate out of range (" << responseRate << "), resetting to default 8.0 [Hz]." << std::endl;
+        if(responseRate < 2.0 || responseRate > 50.0) {
+            std::cerr << "[EngineConfig] Warning: responseRate out of range (" << responseRate << "), resetting to default 8.0 [Hz].\n";
             responseRate = 8.0;
         }
 
-        /**
-         * @brief Maximum thrust the engine can generate.
-         *
-         * This parameter defines the upper bound of the thrust force that
-         * the engine model is able to produce.
-         *
-         * @unit Newtons [N]
-         *
-         * The value is used by the thrust model to clamp commanded thrust levels.
-         * If the configured value is invalid (≤ 0), it is automatically reset
-         * to a safe default to prevent undefined simulation behaviour.
-         *
-         * Typical thrust ranges depending on engine type:
-         *
-         * Main landing engines:
-         * - Small lunar lander main engine: ~4,000 – 10,000 N
-         * - Medium descent engine: ~10,000 – 45,000 N
-         * - Example: Apollo LM descent engine ≈ 45,000 N (throttleable)
-         *
-         * Attitude control thrusters (RCS):
-         * - Small control jets: ~10 – 50 N
-         * - Medium RCS thrusters: ~50 – 500 N
-         * - Large translation thrusters: ~500 – 1000 N
-         *
-         * Example configuration:
-         * @code
-         * EngineConfig mainEngine;
-         * mainEngine.maxThrust = 7000.0; // main descent engine
-         *
-         * EngineConfig rcsThruster;
-         * rcsThruster.maxThrust = 50.0;  // attitude control thruster
-         * @endcode
-         *
-         * Safety check:
-         * If the configured value is less than or equal to zero,
-         * the engine thrust will be reset to a default value of 100 N.
-         */
-        if (maxThrust <= 0)
-        {
-            std::cerr << "[EngineConfig] Warning: Maximum thrust is zero or less (" << maxThrust << "), resetting to default 100 [N]." << std::endl;
+        if(maxThrust <= 0.0) {
+            std::cerr << "[EngineConfig] Warning: maxThrust <= 0, resetting to 100 [N].\n";
             maxThrust = 100.0;
         }
 
-        /**
-         * @param Thrust direction of engine
-         */
-        if (direction.norm() == 0)
-        {
-            std::cerr << "[EngineConfig] Warning: Thrust direction cannot be zero! Resetting to (0,0,1)";
-            direction = {0.0, 0.0, 1.0};
-        }
-        else
-        {
+        if(direction.norm() == 0.0) {
+            std::cerr << "[EngineConfig] Warning: thrust direction zero, resetting to (0,0,1).\n";
+            direction = {0.0,0.0,1.0};
+        } else {
             direction = direction.normalized();
         }
 
-        return {Isp, timeConstant, responseRate, maxThrust, direction};
+        return {engineActivated, id, name, type, tankID, Isp, timeConstant, responseRate, maxThrust, direction, position};
     }
 };
 

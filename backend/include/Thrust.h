@@ -11,6 +11,7 @@
 #include "Thrust/FuelStateStruct.h"
 #include "Thrust/thrustState.h"
 #include "Thrust/EngineConfig.h"
+#include "Thrust/FueltankStruct.h"
 
 /**
  * @class Thrust
@@ -61,7 +62,24 @@ public:
      * @param Maximum Thrust [N]
      * @param thrust Direction direction of thrust due to spacecraft in EastNorthUp (ENU Coordinates)
      */
-    void initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const double &maxThrust, const Vector3 &thrustDirection, const std::vector<double> &tanks);
+    void initializeEngines(std::vector<EngineConfig> &engines, const std::vector<double> &tanks);
+
+    /**
+     * @brief Activates Engine
+     * @param engineNr Number of engine that should be activated
+     */
+    void activateEngine(const size_t &engineNr);
+
+    /**
+     * @brief Deactivates Engine
+     * @param engineNr Number of engine that should be activated
+     */
+    void deactivateEngine(const size_t &engineNr);
+
+    /**
+     * @brief Deactivates all engines
+     */
+    void turnOffAllEngines();
 
     /**
      * @brief Set a new target thrust
@@ -69,6 +87,20 @@ public:
      * @param engineNr  ///< Number of engine, zero is always main Engine!
      */
     void setTargetThrust(const double &tThrust, const size_t &engineNr);
+
+    /**
+     * @brief Set a new target thrust in percentage
+     * @param tThrust   ///< [%] 0...1 Target thrust
+     * @param engineNr  ///< Number of engine, zero is always main Engine!
+     */
+    void setTargetThrustInPercentage(const double &tThrustInPercentage, const size_t &engineNr);
+
+    /**
+     * @brief Set target thrust to zero for all engines
+     *
+     * Can be used when Spacecraft is landed or in case of emergency etc.
+     */
+    void shutDownAllEngines() const;
 
     // -------------------------------------------------------------------------
     // Public getter functions
@@ -105,14 +137,14 @@ public:
 
 private:
     std::vector<std::unique_ptr<IThrustModel>> models_;
-    std::vector<double> tanks_;
+    std::vector<FuelTank> tanks_;
     double tmpFullFuelMass = 0.0;
 
     FuelState fuelState_;
     EngineConfig engineConfig_;
     ThrustState thrustState_;
 
-    void addFuelTank(double tank);
+    void addFuelTank(const std::vector<double> &tanks);
 
     double getFuelMassOfAllTanks() const;
 

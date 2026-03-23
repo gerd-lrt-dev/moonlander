@@ -47,11 +47,28 @@ public:
     // -------------------------------------------------------------------------
     // Public setter override functions
     // -------------------------------------------------------------------------
+
+    /**
+     * @brief Activates specific engine
+     * @param engineNr
+     *
+     * Only thrust orchestrator is authorized to activate engine (to use this function)
+     */
+    void setEnginePowerSwitch(bool activateEngine) override;
+
     /**
      * @brief Set a new target thrust
      * @param tThrust ///<  [N] Target thrust
      */
     void setTarget(const double &tThrust) override;
+
+    /**
+     * @brief Set a new target thrust in percentage
+     * @param tThrust ///<  [%] Target thrust 0.0 ... 1.0
+     *
+     * thrust in percentage is going to tranformed in function
+     */
+    void setTargetInPercentage(const double &tThrustInPercentage) override;
 
     // -------------------------------------------------------------------------
     // Public getter override functions
@@ -79,6 +96,14 @@ public:
      * @return ///< [kg] fuel mass
      */
     double getCurrentFuelMass() const override;
+
+    /**
+     * @brief Getter function for tank ID
+     * @return tank id as integer
+     *
+     * The tank ID specifies which tank is connected to the engine system
+     */
+    double getTankID() const override;
 
     /**
      * @brief Getter function for thrust direction

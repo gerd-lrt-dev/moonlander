@@ -304,7 +304,7 @@ public:
      * This function initiates the main engine and provide thrust for spacecraft. It 
      * provides thrust until the setted target thrust is reached.
      */
-    void setThrust(double targetThrustInPercentage);
+    void setThrust(const double &targetThrustInPercentage, const int &engineNumber);
 
     /**
      * @brief Set Console Text for output in cockpit page

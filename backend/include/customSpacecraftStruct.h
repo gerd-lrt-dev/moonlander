@@ -2,6 +2,8 @@
 #define CUSTOMSPACECRAFTSTRUCT_H
 
 #include "vector3.h"
+#include "Thrust/EngineConfig.h"
+#include <vector>
 
 /**
  * @struct customSpacecraft
@@ -31,26 +33,26 @@ struct customSpacecraft
     // Propulsion System
     // -------------------------------------------------------------------------
 
-    double maxT;
-    ///< [N] Maximum thrust produced by the main engine at full throttle.
-
-    double Isp;
-    ///< [s] Specific impulse of the main engine (constant exhaust efficiency).
-
-    double timeConstant;
-    ///< [s] Engine throttle response time (first-order system time constant).
-
-    double responseRate;
-    ///< [s] Maximum rate of thrust change.
-
-    Vector3 B_mainThrustDirection;
-    ///< [unit] Normalized thrust direction vector in body frame (B-frame).
-    ///< Convention: +Z axis typically points "down" along the engine nozzle.
-
-    Vector3 B_mainThrustPosition;
-    ///< [m] Position of the main engine's thrust application point in B-frame.
-    ///< This produces torque if offset from the spacecraft's center of mass.
-
+    /**
+     * @brief List of engine configurations for the spacecraft.
+     *
+     * Each element in this vector represents a single engine of the spacecraft,
+     * including its thrust capabilities, specific impulse, orientation, and
+     * dynamic response properties.
+     *
+     * Examples of engine types:
+     * - Main descent engine
+     * - Attitude control thrusters (RCS)
+     *
+     * Access example:
+     * @code
+     * for(const auto& eng : spacecraft.engines_) {
+     *     double thrust = eng.maxThrust;
+     *     Vector3 dir = eng.direction;
+     * }
+     * @endcode
+     */
+    std::vector<EngineConfig> engines_;
 
     // -------------------------------------------------------------------------
     // Attitude Dynamics (Rigid Body Inertia)

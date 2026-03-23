@@ -28,38 +28,72 @@ void Thrust::setTargetThrust(const double &tThrust, const size_t &engineNr)
     models_[engineNr]->setTarget(tThrust);
 }
 
-void Thrust::initializeEngines(const double &Isp, const double &timeConstant, const double &responseRate, const double &maxThrust, const Vector3 &thrustDirection, const std::vector<double> &tanks)
+void Thrust::setTargetThrustInPercentage(const double &tThrustInPercentage, const size_t &engineNr)
 {
-    EngineConfig tmpConfig;
-    FuelState tmpState;
-
-    for (const auto& tank : tanks)
-    {// TODO: Add tank not only with information about capacity but also with information about who is authorized to use the tank
-        addFuelTank(tank);
+    if (engineNr >= models_.size())
+    {
+        std::cerr << "Engine index out of range!" << std::endl;
+        return;
     }
-    tmpFullFuelMass = getFuelMassOfAllTanks(); //TODO: ELIMINATE WHEN USING DIFFERENT TANKS IS IMPLEMENTED!!!
-    std::cout << "[Thrust] Added -" << tanks.size() << "- tanks to spacecraft structure" << std::endl;
 
-    tmpConfig.Isp           = Isp;
-    tmpConfig.timeConstant  = timeConstant;
-    tmpConfig.responseRate  = responseRate;
-    tmpConfig.direction     = thrustDirection;
-    fuelState_.massStart    = getFuelMassOfAllTanks();
-    tmpState.consumptionRate= 0.0;
-
-    addModel(std::make_unique<basicMainEngineModel>(tmpConfig, tmpState));
+    models_[engineNr]->setTargetInPercentage(tThrustInPercentage);
 }
 
+void Thrust::shutDownAllEngines() const
+{
+    for (const auto& model : models_)
+    {
+        model->setTarget(0.0);
+    }
+}
+
+void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const std::vector<double> &tanks)
+{
+    // -----------------------------------------
+    // Initialize tanks
+    // -----------------------------------------
+    addFuelTank(tanks);
+
+    // -----------------------------------------
+    // Initialize engine configs
+    // -----------------------------------------
+
+    for (const auto &cfg_ : engineConfigs)
+    {
+        FuelState state;
+        state.consumptionRate = 0.0;
+        addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
+        std::cout << "[Thrust] Added engine: " << cfg_.name << std::endl;
+    }
+}
+
+void Thrust::activateEngine(const size_t &engineNr)
+{
+    models_[engineNr]->setEnginePowerSwitch(true);
+}
+
+void Thrust::deactivateEngine(const size_t &engineNr)
+{
+    models_[engineNr]->setEnginePowerSwitch(false);
+}
+
+void Thrust::turnOffAllEngines()
+{
+    for (auto& model : models_)
+    {
+        model->setEnginePowerSwitch(false);
+    }
+}
 void Thrust::updateThrust(double dt)
 {
     if (getFuelMassOfAllTanks() > 0.0)
     {
         // Update thrust for all engines
-        for (auto& model : models_)
+        for (int i = 0; i < models_.size(); ++i)
         {
 
-            model->updateThrust(dt);
-            tmpFullFuelMass = model->calcFuelReduction(tmpFullFuelMass, model->getFuelConsumption(), dt);
+            models_[i]->updateThrust(dt);
+            tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tmpFullFuelMass, models_[i]->getFuelConsumption(), dt);
         }
     }
     else
@@ -129,15 +163,32 @@ void Thrust::addModel(std::unique_ptr<IThrustModel> model)
     models_.push_back(std::move(model));
 }
 
-void Thrust::addFuelTank(double tank)
+void Thrust::addFuelTank(const std::vector<double> &tanks)
 {
-    tanks_.push_back(tank);
+    for (size_t i = 0; i < tanks.size(); ++i)
+    {
+        FuelTank tank;
+        tank.id = i;
+        tank.mass = tanks[i];
+        tank.capacity = tanks[i];
+
+        tanks_.push_back(tank);
+    }
+
+    std::cout << "[Thrust] Added " << tanks.size() << " tanks" << std::endl;
 }
 
 double Thrust::getFuelMassOfAllTanks() const
 {
-    double fuelMass = std::accumulate(tanks_.begin(), tanks_.end(), 0.0);
-    return fuelMass;
+    FuelTank tmpTank;
+    double fuelMassOfAllTanks = 0.0;
+
+    for (auto &tmpTank : tanks_)
+    {
+        fuelMassOfAllTanks += tmpTank.mass;
+    }
+
+    return fuelMassOfAllTanks;
 }
 
 

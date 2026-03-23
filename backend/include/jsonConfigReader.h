@@ -54,37 +54,53 @@ public:
     static nlohmann::json loadConfig(const std::string& filename);
 
     /**
-     * @brief Parses a JSON object containing spacecraft configuration data.
+     * @brief Parses a JSON object containing spacecraft configuration with multiple engines.
      *
-     * This function extracts all required lander parameters from the JSON object
-     * and constructs a fully initialized @ref customSpacecraft instance.
+     * This function reads all basic lander parameters and constructs
+     * a vector of engines from the JSON array "engines".
      *
-     * Example of the expected JSON structure:
+     * Each engine in JSON should provide:
+     * - id        : unique integer identifier
+     * - name      : descriptive engine name
+     * - type      : type string, e.g. "main", "attitude"
+     * - maxThrust : maximum thrust in Newtons
+     * - Isp       : specific impulse in seconds
+     * - timeConstant : engine response time in seconds
+     * - responseRate : maximum thrust change rate in Hz
+     * - direction : unit vector of thrust direction
+     * - position  : engine position in body frame (Vector3)
+     *
+     * Example JSON snippet:
      * @code
-     * {
-     *   "m": 1100.0,
-     *   "fuelM": 800.0,
-     *   "maxFuelM": 800.0,
-     *   "maxT": 15000.0,
-     *   "Isp": 300.0,
-     *   "timeConstant": 0.15,
-     *   "B_mainThrustDirection": { "x": 0, "y": 0, "z": -1 },
-     *   "B_mainThrustPosition":  { "x": 0, "y": 0, "z": 0.5 },
-     *   "Ixx": 250.0,
-     *   "Iyy": 250.0,
-     *   "Izz": 450.0,
-     *   "B_initialPos": { "x": 0, "y": 0, "z": 1200 },
-     *   "B_initialRot": { "x": 0, "y": 0, "z": 0   },
-     *   "B_centerOfMass": { "x": 0, "y": 0, "z": -0.2 }
-     * }
+     * "engines": [
+     *   {
+     *     "id": 0,
+     *     "name": "MainEngine",
+     *     "type": "main",
+     *     "maxThrust": 7000.0,
+     *     "Isp": 300.0,
+     *     "timeConstant": 0.15,
+     *     "responseRate": 8.0,
+     *     "direction": { "x": 0, "y": 0, "z": 1 },
+     *     "position":  { "x": 0, "y": 0, "z": 0.5 }
+     *   },
+     *   {
+     *     "id": 1,
+     *     "name": "AttitudeThruster",
+     *     "type": "attitude",
+     *     "maxThrust": 50.0,
+     *     "Isp": 80.0,
+     *     "timeConstant": 0.05,
+     *     "responseRate": 20.0,
+     *     "direction": { "x": 1, "y": 0, "z": 0 },
+     *     "position": { "x": 0.2, "y": 0, "z": 0.3 }
+     *   }
+     * ]
      * @endcode
      *
-     * @param j JSON object containing spacecraft configuration data.
-     *
-     * @return A fully initialized @ref customSpacecraft instance.
-     *
-     * @throws nlohmann::json::exception  
-     *         If required fields are missing or have incorrect types.
+     * @param j JSON object containing spacecraft and engine configuration.
+     * @return Fully initialized customSpacecraft instance with engine vector filled.
+     * @throws nlohmann::json::exception if required fields are missing or have wrong type.
      */
     static customSpacecraft parseLander(const nlohmann::json& j);
 };

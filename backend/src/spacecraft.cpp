@@ -17,7 +17,7 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
-    thrustOrchestration.initializeEngines(landerMoon.Isp, landerMoon.timeConstant, landerMoon.responseRate, landerMoon.maxT, landerMoon.B_mainThrustPosition, {landerMoon.fuelM});
+    thrustOrchestration.initializeEngines(landerMoon.engines_, {landerMoon.fuelM});
 
 
     // TODO just testing here optimization
@@ -173,7 +173,7 @@ void spacecraft::updateStep(double dt)
     case SpacecraftState::Landed:
         // Translation disabled, rotation optional
         updateMovementDataToZero(dt);
-        setThrust(0.0);
+        thrustOrchestration.shutDownAllEngines();
         break;
 
     case SpacecraftState::Crashed:
@@ -218,16 +218,11 @@ void spacecraft::updateSpacecraftIntegrity()
     spacecraftState_ = SpacecraftState::Operational;
 }
 
-void spacecraft::setThrust(double targetThrustInPercentage)
+void spacecraft::setThrust(const double &targetThrustInPercentage, const int &engineNumber)
 {
-    // thrust in percentage = target thrust / maxiumum thrust <=>
-    double targetThrust = targetThrustInPercentage * landerMoon.maxT; ///< [N]
-
     SpacecraftState currentSpacecraftState = getSpacecraftState();
 
-    (currentSpacecraftState == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrust(targetThrust, 0) : thrustOrchestration.setTargetThrust(0.0, 0);
-
-    thrustOrchestration.setTargetThrust(targetThrust, 0);
+    (currentSpacecraftState == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(targetThrustInPercentage, 0) : thrustOrchestration.setTargetThrust(0.0, 0);
 }
 
 void spacecraft::setConsoleText(const std::string &txt)
@@ -277,7 +272,7 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     problem.h_ref = std::max(1.0, std::abs(h0 - environmentConfig_.radiusMoon));
     problem.v_safe = 2.5;                    // [m/s] touchdown safe speed
     problem.m_ref = m0;
-    problem.T_ref = landerMoon.maxT;
+    problem.T_ref = 7000.0;
 
     // -----------------------------
     // Constraints
@@ -296,7 +291,7 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     // Optimize
     // -----------------------------
     ThrustOptimizer optimizer;
-    return optimizer.optimize(problem, landerMoon.maxT);
+    return optimizer.optimize(problem, 7000.0);
 }
 
 double spacecraft::requestTargetThrust() const

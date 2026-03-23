@@ -4,11 +4,17 @@
 // Public class methods
 // -------------------------------------------------------------------------
 basicMainEngineModel::basicMainEngineModel(const EngineConfig& eConfig, FuelState fState)
-    : engineConfig_(EngineConfig::Create(eConfig.Isp,
+    : engineConfig_(EngineConfig::Create(eConfig.engineActivated,
+                                         eConfig.id,
+                                         eConfig.name,
+                                         eConfig.type,
+                                         eConfig.tankID,
+                                         eConfig.Isp,
                                          eConfig.timeConstant,
                                          eConfig.responseRate,
                                          eConfig.maxThrust,
-                                         eConfig.direction)
+                                         eConfig.direction,
+                                         eConfig.position)
                     ),
     fuelstate_(fState)
 {
@@ -35,9 +41,19 @@ void basicMainEngineModel::updateThrust(const double &dt)
 // -------------------------------------------------------------------------
 // Public setter override functions
 // -------------------------------------------------------------------------
+void basicMainEngineModel::setEnginePowerSwitch(bool activateEngine)
+{
+    engineConfig_.engineActivated = activateEngine;
+}
+
 void basicMainEngineModel::setTarget(const double &tThrust)
 {
-    thrustState_.target = tThrust;
+    engineConfig_.engineActivated ? thrustState_.target = tThrust : thrustState_.target = 0.0;
+}
+
+void basicMainEngineModel::setTargetInPercentage(const double &tThrustInPercentage)
+{
+    engineConfig_.engineActivated ? thrustState_.target = tThrustInPercentage * engineConfig_.maxThrust : thrustState_.target = 0.0;
 }
 
 // -------------------------------------------------------------------------
@@ -62,6 +78,11 @@ double basicMainEngineModel::getFuelConsumption() const
 double basicMainEngineModel::getCurrentFuelMass() const
 {
     return fuelstate_.massCurrent;
+}
+
+double basicMainEngineModel::getTankID() const
+{
+    return engineConfig_.tankID;
 }
 
 Vector3 basicMainEngineModel::getDirectionOfThrust() const
