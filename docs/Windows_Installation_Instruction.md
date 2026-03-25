@@ -74,9 +74,10 @@ This is an instruction how to install the project under Windows 11. Caution the 
 - execute .\vcpkg.exe install nlopt:x64-windows
 
 ## 10. Clone the Moonlander Repository
+- Fork the repository into your git profil
 - Go to powershell
 - type cd <your_project_folder>
-- type git clone https://github.com/gerd-lrt-dev/moonlander.git
+- type git clone https://github.com/<your-username>/moonlander.git
 
 ## 11. Integrate vcpkg with the System
 - Go to powershell
