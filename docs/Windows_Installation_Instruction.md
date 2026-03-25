@@ -67,33 +67,32 @@ This is an instruction how to install the project under Windows 11. Caution the 
 - Move it to `C:\vcpkg\downloads\`
 
 ## 9. Install NLOPT with vcpkg
-```powershell
-git clone https://github.com/microsoft/vcpkg C:\vcpkg
-cd C:\vcpkg
-.\bootstrap-vcpkg.bat
-.\vcpkg.exe install nlopt:x64-windows
+- Go to powershell
+- Type "git clone https://github.com/microsoft/vcpkg C:\vcpkg"
+- type cd C:\vcpkg
+- execute .\bootstrap-vcpkg.bat
+- execute .\vcpkg.exe install nlopt:x64-windows
 
 ## 10. Clone the Moonlander Repository
-```powershell
-cd <your_project_folder>
-git clone https://github.com/gerd-lrt-dev/moonlander.git
+- Go to powershell
+- type cd <your_project_folder>
+- type git clone https://github.com/gerd-lrt-dev/moonlander.git
 
 ## 11. Integrate vcpkg with the System
-```powershell
-cd C:\vcpkg
-.\vcpkg integrate install
+- Go to powershell
+- type cd C:\vcpkg
+- execute .\vcpkg integrate install
 
 ## 12. Install nlohmann JSON for Config Parsing
 - Download `nlohmann-json-v3.12.0.tar.gz` from [nlohmann/json](https://github.com/nlohmann/json/archive/v3.12.0.tar.gz)
 - Move it to `C:\vcpkg\downloads\`
-```powershell
-.\vcpkg.exe install nlohmann-json:x64-windows
+- Go to powershell
+- execute .\vcpkg.exe install nlohmann-json:x64-windows
 
 ## 13. Adapt Qt Kit Settings for NLOPT
 1. Open **Qt Creator → Tools → Options → Kits**
 2. Select `Desktop Qt MSVC2022 64-bit`
 3. Add the following to CMake configuration:  
-```text
 -DCMAKE_TOOLCHAIN_FILE:FILEPATH=C:/vcpkg/scripts/buildsystems/vcpkg.cmake
 
 ## 14. Configure the Project
