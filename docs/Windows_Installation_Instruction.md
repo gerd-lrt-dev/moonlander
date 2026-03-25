@@ -47,9 +47,7 @@ This is an instruction how to install the project under Windows 11. Caution the 
 ## 4. Install CMake
 - Download: [CMake](https://cmake.org/download/)
 - Installer: **Windows x64 Installer**
-- Verify installation:  
-```powershell
-cmake --version
+- Verify installation: In powershell type "cmake --version"
 
 ## 5. Install PowerShell Core
 - Download: [PowerShell 7.5.4](https://github.com/PowerShell/PowerShell/releases/tag/v7.5.4)
