@@ -54,6 +54,8 @@ The landing view visualizes the spacecraft approaching the lunar surface.
 
 # ⚙️ Quick Start
 
+You can find a detailled installation guideline for windows and ubuntu in the folder /docs!
+
 ## Requirements
 
 - C++20
