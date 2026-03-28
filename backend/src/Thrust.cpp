@@ -93,8 +93,15 @@ void Thrust::updateThrust(double dt)
         {
 
             models_[i]->updateThrust(dt);
-            tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tmpFullFuelMass, models_[i]->getFuelConsumption(), dt);
+            std::cout << "[Thrust]-updateThrust-: Got " << models_.size() << " engines" << std::endl;
+            std::cout << "[Thrust]-updateThrust-: Try to access engine with number: " << i << std::endl;
+            //std::cout << tanks_[models_[i]->getTankID()].mass << std::endl;
+            std::cout << "[Thrust]-updateThrust-: Tank ID: " << tanks_[1].id << std::endl;
+            std::cout << "[Thrust]-updateThrust-: Size of Tanks: " << tanks_.size() << std::endl;
+            double newfuel = models_[i]->calcFuelReduction(tmpFullFuelMass, models_[i]->getFuelConsumption(), dt);
+            std::cout << "[Thrust]-updateThrust-: All engines updated with time. New fuel: " << newfuel << std::endl;
         }
+
     }
     else
     {
@@ -167,8 +174,10 @@ void Thrust::addFuelTank(const std::vector<double> &tanks)
 {
     for (size_t i = 0; i < tanks.size(); ++i)
     {
+        std::cout << "[Thrust]-addFuelTank-: Tanks.size() " << tanks.size() << std::endl;
         FuelTank tank;
         tank.id = i;
+
         tank.mass = tanks[i];
         tank.capacity = tanks[i];
 

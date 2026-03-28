@@ -150,7 +150,10 @@ void spacecraft::updateStep(double dt)
 {
     // Update mass data
     updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
+
     thrustOrchestration.updateThrust(dt);
+
+    std::cout << "[spacecraft]-updateStep-: thrust orchestration completed" << std::endl;
 
     // Update time systems are running
     time += dt;

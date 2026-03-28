@@ -105,6 +105,7 @@ void basicMainEngineModel::setDefaultValues()
 double basicMainEngineModel::calcFuelReduction(const double &fuelMass, const double &massFlowFuel, const double &dt)
 {
     double newFuelMass = fuelMass - (massFlowFuel * dt);
+    std::cout << "[basicMainEngineModel]-calcFuelReduction-: Calculating fuel reduction completed: "<< newFuelMass << std::endl;
 
     return newFuelMass;
 }

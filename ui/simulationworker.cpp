@@ -29,7 +29,7 @@ void SimulationWorker::start()
     running = true;
     simulationTimer->start();
 
-    qDebug("simulationworker[constructor]: Simulation started successfully");
+    qDebug("[simulationworker]-constructor-: Simulation started successfully");
 }
 
 void SimulationWorker::pause()
@@ -94,6 +94,8 @@ void SimulationWorker::stepSimulation()
 
     // Calling backend simulator
     spacecraftData = controller->runSimulation(dt);
+
+    qDebug("[simulationworker]- stepSimulation-: runSimulation is running");
 
     // Withdraw user input due to thrust
     sendControlCommands();

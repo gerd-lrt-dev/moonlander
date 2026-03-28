@@ -14,6 +14,8 @@ void simcontrol::buildSimulationEnvironment(double t)
     // Instance classes
     landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1);
     inputArbiter_       = std::make_unique<InputArbiter>();
+
+    std::cout << "[simcontrol]-buildSimulationEnvironment-: class spacecraft & inputArbiter instanced" << std::endl;
 }
 
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString)
@@ -116,6 +118,8 @@ simData simcontrol::runSimulation(const double dt)
 
         // --- Update spacecraft state (translation, velocity, etc.) ---
         landerSpacecraft->updateStep(dt);   ///< Updates simulation steps
+
+        std::cout << "[simcontrol]-runSimulation-: steps are updated" << std::endl;
 
         // --- Retrieve full simulation data ---
         simdata_ = landerSpacecraft->getFullSimulationData();   ///< SimData struct can be requested from frontend
