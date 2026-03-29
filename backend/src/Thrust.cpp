@@ -36,6 +36,7 @@ void Thrust::setTargetThrustInPercentage(const double &tThrustInPercentage, cons
         return;
     }
 
+    std::cout << "[Thrust] Received engine thrust " << tThrustInPercentage << std::endl;
     models_[engineNr]->setTargetInPercentage(tThrustInPercentage);
 }
 
@@ -63,7 +64,6 @@ void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const s
         FuelState state;
         state.consumptionRate = 0.0;
         addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
-        std::cout << "[Thrust] Added engine: " << cfg_.name << std::endl;
     }
 }
 
@@ -86,26 +86,19 @@ void Thrust::turnOffAllEngines()
 }
 void Thrust::updateThrust(double dt)
 {
+    std::cout << "[Thrust] Fuel Mass of all tanks: " << getFuelMassOfAllTanks() << std::endl;
     if (getFuelMassOfAllTanks() > 0.0)
     {
         // Update thrust for all engines
         for (int i = 0; i < models_.size(); ++i)
         {
-
             models_[i]->updateThrust(dt);
-            std::cout << "[Thrust]-updateThrust-: Got " << models_.size() << " engines" << std::endl;
-            std::cout << "[Thrust]-updateThrust-: Try to access engine with number: " << i << std::endl;
-            //std::cout << tanks_[models_[i]->getTankID()].mass << std::endl;
-            std::cout << "[Thrust]-updateThrust-: Tank ID: " << tanks_[1].id << std::endl;
-            std::cout << "[Thrust]-updateThrust-: Size of Tanks: " << tanks_.size() << std::endl;
-            double newfuel = models_[i]->calcFuelReduction(tmpFullFuelMass, models_[i]->getFuelConsumption(), dt);
-            std::cout << "[Thrust]-updateThrust-: All engines updated with time. New fuel: " << newfuel << std::endl;
+            //tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tmpFullFuelMass, models_[i]->getFuelConsumption(), dt);
         }
 
     }
     else
     {
-        std::cout << "[Thrust]: Update thrust called..." << std::endl;
         return;
     }
 }
@@ -131,6 +124,7 @@ Vector3 Thrust::getCurrentThrust() const
     for (const auto& model : models_)
     {
         Vector3 dir = model->getDirectionOfThrust();
+        std::cout << "[Thrust] Direction auf Thrust: " << model->getDirectionOfThrust().z << std::endl;
         double thrust = model->getCurrentThrust();
 
         total += dir * thrust;
@@ -145,6 +139,8 @@ Vector3 Thrust::getCurrentThrustInPercentage() const
     {
         //model->
     }
+
+    return {0.0, 0.0, 0.0};
 
 }
 
@@ -174,12 +170,14 @@ void Thrust::addFuelTank(const std::vector<double> &tanks)
 {
     for (size_t i = 0; i < tanks.size(); ++i)
     {
-        std::cout << "[Thrust]-addFuelTank-: Tanks.size() " << tanks.size() << std::endl;
         FuelTank tank;
         tank.id = i;
 
         tank.mass = tanks[i];
+        std::cout << "[Thrust] Add tank with mass: " << tank.mass << std::endl;
+
         tank.capacity = tanks[i];
+        std::cout << "[Thrust] Add tank with capacity: " << tank.capacity << std::endl;
 
         tanks_.push_back(tank);
     }
@@ -195,6 +193,7 @@ double Thrust::getFuelMassOfAllTanks() const
     for (auto &tmpTank : tanks_)
     {
         fuelMassOfAllTanks += tmpTank.mass;
+        std::cout << "....::::[Thrust]::::.... Summed tank mass: " << fuelMassOfAllTanks << std::endl;
     }
 
     return fuelMassOfAllTanks;

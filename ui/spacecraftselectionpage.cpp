@@ -112,6 +112,5 @@ void SpacecraftSelectionPage::onSelectClicked()
 
 void SpacecraftSelectionPage::receiveJsonConfigStr()
 {
-    qDebug() << "receiveJsonConfigStr wird aufgerufen";
     populateList();
 }

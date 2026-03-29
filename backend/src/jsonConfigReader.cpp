@@ -73,6 +73,7 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
         engine.id           = e.at("id").get<int>();
         engine.name         = e.at("name").get<std::string>();
         engine.type         = e.at("type").get<std::string>();
+        engine.tankID       = e.at("tankID").get<int>();
 
         lander.engines_.push_back(engine);
     }

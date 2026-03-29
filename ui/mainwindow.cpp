@@ -14,8 +14,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUI()
 {
-    qDebug() << "Setup UI...";
-
     // Build central Widget
     QWidget *centralWidget = new QWidget(this);
 

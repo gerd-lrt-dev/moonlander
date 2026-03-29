@@ -120,7 +120,7 @@ struct EngineConfig
                                int id,
                                const std::string& name,
                                const std::string& type,
-                               double tankID,
+                               int tankID,
                                double Isp,
                                double timeConstant,
                                double responseRate,

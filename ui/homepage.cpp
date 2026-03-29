@@ -9,8 +9,7 @@ Homepage::Homepage(QWidget *parent) :
     setupConnections();
 
     bool jsonLoaded = configManager_.loadConfig(":/configs/Resources/configs/lander.json");
-    //emit sendJsonToSpacecraftSelectPage(jsonLoaded);
-    //jsonConfigStr = loadJsonResource(":/configs/Resources/configs/lander.json");
+    qDebug() << "[homepage] constructor: Json config file successfully loaded";
 }
 
 Homepage::~Homepage()
@@ -162,10 +161,9 @@ void Homepage::setupThread()
     simulationThread->start();
 }
 
-//TODO: Das wird ausgeführt bevor ein spacecraft ausgewählt werden kann. Programm stürzt jetzt nach stop ab
 void Homepage::handleJsonConfig(const QString &jsonConfigStr_)
 {
-// Fehler leere config abfangen
+// Catch failure when config file is empty
     if (selectedJsonConfigStr.isEmpty())
     {
         QString jsonConfigDefault = configManager_.defaultSpacecraftJson();

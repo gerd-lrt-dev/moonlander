@@ -95,8 +95,6 @@ void SimulationWorker::stepSimulation()
     // Calling backend simulator
     spacecraftData = controller->runSimulation(dt);
 
-    qDebug("[simulationworker]- stepSimulation-: runSimulation is running");
-
     // Withdraw user input due to thrust
     sendControlCommands();
 

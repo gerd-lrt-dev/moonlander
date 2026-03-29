@@ -119,8 +119,6 @@ simData simcontrol::runSimulation(const double dt)
         // --- Update spacecraft state (translation, velocity, etc.) ---
         landerSpacecraft->updateStep(dt);   ///< Updates simulation steps
 
-        std::cout << "[simcontrol]-runSimulation-: steps are updated" << std::endl;
-
         // --- Retrieve full simulation data ---
         simdata_ = landerSpacecraft->getFullSimulationData();   ///< SimData struct can be requested from frontend
 
@@ -158,6 +156,7 @@ simData simcontrol::runSimulation(const double dt)
 void simcontrol::receiveCommandFromFrontEnd(const ControlCommand& userCmd)
 {
     inputArbiter_->receiveUserControlCommand(userCmd);
+    std::cout << "[simcontrol] Received control command: " << userCmd.thrustInPercentage << std::endl;
 }
 
 void simcontrol::receiveCommandFromAutopilot(const ControlCommand& autoCmd)
