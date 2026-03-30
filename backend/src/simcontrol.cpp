@@ -156,7 +156,6 @@ simData simcontrol::runSimulation(const double dt)
 void simcontrol::receiveCommandFromFrontEnd(const ControlCommand& userCmd)
 {
     inputArbiter_->receiveUserControlCommand(userCmd);
-    std::cout << "[simcontrol] Received control command: " << userCmd.thrustInPercentage << std::endl;
 }
 
 void simcontrol::receiveCommandFromAutopilot(const ControlCommand& autoCmd)
@@ -173,6 +172,7 @@ void simcontrol::setTargetThrust(const double& thrustPercent, const double& thru
 {
     // Using main engine with index number zero
     landerSpacecraft->setThrust(thrustPercent, 0);
+    landerSpacecraft->setThrust(0.21, 1);
 }
 
 void simcontrol::setResetBoolean()

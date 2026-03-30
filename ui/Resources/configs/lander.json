@@ -8,11 +8,11 @@
       "Iyy": 910.0,
       "Izz": 720.0,
 
-      "I_initialPos": { "x": 0.0, "y": 0.0, "z": 1938900.0 },
+      "I_initialPos": { "x": 0.0, "y": 0.0, "z": 1738900.0 },
       "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
       "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.2 },
 
-      "initialVelocity": { "x": 0.0, "y": 1234.0, "z": 0.0 },
+      "initialVelocity": { "x": 10.0, "y": 12.0, "z": 0.0 },
 
       "structuralIntegrity": 0.25,
       "safeVelocity": 5.0,
@@ -29,7 +29,7 @@
           "responseRate": 5.0,
           "maxThrust": 7000.0,
 
-          "direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
+          "direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
           "position":  { "x": 0.0, "y": 0.0, "z": -0.5 }
         },
         {

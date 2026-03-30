@@ -17,9 +17,6 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
-    std::cout << "[spacecraft] Found engine with tank ID: " << landerMoon.engines_[0].tankID << std::endl;
-    std::cout << "[spacecraft] Found engine with tank ID: " << landerMoon.engines_[1].tankID << std::endl;
-
     thrustOrchestration.initializeEngines(landerMoon.engines_, {landerMoon.fuelM});
 
 
@@ -226,9 +223,7 @@ void spacecraft::setThrust(const double &targetThrustInPercentage, const int &en
 {
     SpacecraftState currentSpacecraftState = getSpacecraftState();
 
-    std::cout << "[spacecraft] Sets thrust: " << targetThrustInPercentage << std::endl;
-
-    (currentSpacecraftState == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(targetThrustInPercentage, 0) : thrustOrchestration.setTargetThrust(0.0, 0);
+    (currentSpacecraftState == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(targetThrustInPercentage, engineNumber) : thrustOrchestration.setTargetThrust(0.0, engineNumber);
 }
 
 void spacecraft::setConsoleText(const std::string &txt)

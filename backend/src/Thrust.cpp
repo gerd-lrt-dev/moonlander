@@ -35,8 +35,6 @@ void Thrust::setTargetThrustInPercentage(const double &tThrustInPercentage, cons
         std::cerr << "Engine index out of range!" << std::endl;
         return;
     }
-
-    std::cout << "[Thrust] Received engine thrust " << tThrustInPercentage << std::endl;
     models_[engineNr]->setTargetInPercentage(tThrustInPercentage);
 }
 
@@ -86,16 +84,14 @@ void Thrust::turnOffAllEngines()
 }
 void Thrust::updateThrust(double dt)
 {
-    std::cout << "[Thrust] Fuel Mass of all tanks: " << getFuelMassOfAllTanks() << std::endl;
     if (getFuelMassOfAllTanks() > 0.0)
     {
         // Update thrust for all engines
         for (int i = 0; i < models_.size(); ++i)
         {
             models_[i]->updateThrust(dt);
-            //tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tmpFullFuelMass, models_[i]->getFuelConsumption(), dt);
+            tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tanks_[models_[i]->getTankID()].mass, models_[i]->getFuelConsumption(), dt);
         }
-
     }
     else
     {
@@ -124,7 +120,6 @@ Vector3 Thrust::getCurrentThrust() const
     for (const auto& model : models_)
     {
         Vector3 dir = model->getDirectionOfThrust();
-        std::cout << "[Thrust] Direction auf Thrust: " << model->getDirectionOfThrust().z << std::endl;
         double thrust = model->getCurrentThrust();
 
         total += dir * thrust;
@@ -158,7 +153,8 @@ double Thrust::getFuelConsumption() const
 
 double Thrust::getCurrentFuelMass() const
 {
-    return tmpFullFuelMass;
+    // TODO: Change it to requesting fuel mass of specific tanks, when UI is adapted
+    return getFuelMassOfAllTanks();
 }
 
 void Thrust::addModel(std::unique_ptr<IThrustModel> model)
@@ -174,11 +170,7 @@ void Thrust::addFuelTank(const std::vector<double> &tanks)
         tank.id = i;
 
         tank.mass = tanks[i];
-        std::cout << "[Thrust] Add tank with mass: " << tank.mass << std::endl;
-
         tank.capacity = tanks[i];
-        std::cout << "[Thrust] Add tank with capacity: " << tank.capacity << std::endl;
-
         tanks_.push_back(tank);
     }
 
@@ -193,7 +185,6 @@ double Thrust::getFuelMassOfAllTanks() const
     for (auto &tmpTank : tanks_)
     {
         fuelMassOfAllTanks += tmpTank.mass;
-        std::cout << "....::::[Thrust]::::.... Summed tank mass: " << fuelMassOfAllTanks << std::endl;
     }
 
     return fuelMassOfAllTanks;

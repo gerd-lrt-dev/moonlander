@@ -23,7 +23,6 @@ basicMainEngineModel::basicMainEngineModel(const EngineConfig& eConfig, FuelStat
 
 void basicMainEngineModel::updateThrust(const double &dt)
 {
-    std::cout << "[basicMainEngineModel] Current desired thrust: " << thrustState_.target << std::endl;
     if(engineConfig_.timeConstant != 0)
     {
         thrustState_.current += (1 - exp(-dt / engineConfig_.timeConstant)) * (thrustState_.target - thrustState_.current);
@@ -54,8 +53,6 @@ void basicMainEngineModel::setTarget(const double &tThrust)
 
 void basicMainEngineModel::setTargetInPercentage(const double &tThrustInPercentage)
 {
-    std::cout << "[basicMainEngineModel] Received thrust: " << tThrustInPercentage << std::endl;
-    std::cout << "[basicMainEngineModel] Engine is activated = " << engineConfig_.engineActivated << std::endl;
     engineConfig_.engineActivated ? thrustState_.target = tThrustInPercentage * engineConfig_.maxThrust : thrustState_.target = 0.0;
 }
 
@@ -85,7 +82,6 @@ double basicMainEngineModel::getCurrentFuelMass() const
 
 double basicMainEngineModel::getTankID() const
 {
-    std::cout << "[basicMainEngineModel] Return tank ID: " << engineConfig_.tankID << std::endl;
     return engineConfig_.tankID;
 }
 
@@ -109,7 +105,6 @@ void basicMainEngineModel::setDefaultValues()
 double basicMainEngineModel::calcFuelReduction(const double &fuelMass, const double &massFlowFuel, const double &dt)
 {
     double newFuelMass = fuelMass - (massFlowFuel * dt);
-    std::cout << "[basicMainEngineModel]-calcFuelReduction-: Calculating fuel reduction completed: "<< newFuelMass << std::endl;
 
     return newFuelMass;
 }

@@ -138,7 +138,6 @@ public:
 private:
     std::vector<std::unique_ptr<IThrustModel>> models_;
     std::vector<FuelTank> tanks_;
-    double tmpFullFuelMass = 0.0;
 
     FuelState fuelState_;
     EngineConfig engineConfig_;
