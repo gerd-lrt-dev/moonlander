@@ -31,7 +31,7 @@ struct simData
 
     // Engine data
     Vector3 thrust;
-    double targetThrust;
+    Vector3 targetThrust;
     double thrustInPercentage;
 
     // Fuel data

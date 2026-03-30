@@ -190,7 +190,7 @@ public slots:
                         const double& GLoad,
                         SpacecraftState spacecraftState_,
                         Vector3 thrust,
-                        double targetThrust,
+                        Vector3 targetThrust,
                         double thrustInPercentage,
                         double fuelMass,
                         double fuelFlow,

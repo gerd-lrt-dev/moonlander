@@ -50,7 +50,7 @@ void SimulationWorker::stop()
                       0.0,
                       SpacecraftState::Operational,
                       {0.0, 0.0, 0.0},
-                      0.0,
+                      {0.0, 0.0, 0.0},
                       0.0,
                       0.0,
                       0.0,

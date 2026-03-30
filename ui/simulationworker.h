@@ -72,13 +72,26 @@ signals:
     /**
      * @brief Emitted after each simulation step.
      *
+     * This signal provides the complete spacecraft state required by the UI.
+     * It reflects the current simulation results after one discrete time step.
+     *
      * @param time Simulation time [s]
-     * @param altitude Current altitude [m]
-     * @param vSpeed Vertical speed [m/s]
-     * @param hSpeed Horizontal speed [m/s]
-     * @param thrust Current thrust [%]
-     * @param fuel Fuel mass [kg]
-     * @param intact Hull integrity flag
+     *
+     * @param pos Current spacecraft position in inertial frame [m]
+     * @param vel Current spacecraft velocity in inertial frame [m/s]
+     *
+     * @param GLoad Current experienced load factor [-]
+     *
+     * @param spacecraftState_ Current spacecraft state (e.g. operational, landed, crashed)
+     *
+     * @param thrust Current aggregated thrust vector of all engines [N]
+     * @param targetThrust Commanded target thrust vector [N]
+     * @param thrustInPercentage Normalized thrust level relative to maximum available thrust [0..1]
+     *
+     * @param fuelMass Total remaining propellant mass [kg]
+     * @param fuelFlow Current total propellant consumption rate [kg/s]
+     *
+     * @param consoleOutput Formatted debug / telemetry output string
      */
     void stateUpdated(double time,
                       Vector3 pos,
@@ -86,7 +99,7 @@ signals:
                       double GLoad,
                       SpacecraftState spacecraftState_,
                       Vector3 thrust,
-                      double targetThrust,
+                      Vector3 targetThrust,
                       double thrustInPercentage,
                       double fuelMass,
                       double fuelFlow,

@@ -327,7 +327,7 @@ public:
      * 
      * Function queries the thrust class for thrust what the user has setted. 
      */
-    double requestTargetThrust() const;
+    Vector3 requestTargetThrust() const;
 
     /**
      * @brief Request current thrust of Spacecraft

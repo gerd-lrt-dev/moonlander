@@ -101,16 +101,19 @@ void Thrust::updateThrust(double dt)
 
 // --- Getter functions ---------------------------------------------
 
-double Thrust::getTargetThrust() const
+Vector3 Thrust::getTargetThrust() const
 {
-    double sum = 0.0;
+    Vector3 total{0.0, 0.0, 0.0};
 
     for (const auto& model : models_)
     {
-        sum += model->getTargetThrust();
+        Vector3 dir = model->getDirectionOfThrust();
+        double thrust = model->getTargetThrust();
+
+        total += dir * thrust;
     }
 
-    return sum;
+    return total;
 }
 
 Vector3 Thrust::getCurrentThrust() const

@@ -140,16 +140,16 @@ QGroupBox *cockpitPage::setupEngineBox()
     configureLCD(lcdTargetThrust, 7);
     configureLCD(lcdAcceleration, 6);
 
-    engineLayout->addWidget(new QLabel("Thrust [N] BX:"),     0, 0);
-    engineLayout->addWidget(lcdThrust_BX,                     0, 1);
-    engineLayout->addWidget(new QLabel("Thrust [N] BY:"),     1, 0);
-    engineLayout->addWidget(lcdThrust_BY,                     1, 1);
-    engineLayout->addWidget(new QLabel("Thrust [N] BZ:"),     2, 0);
-    engineLayout->addWidget(lcdThrust_BZ,                     2, 1);
-    engineLayout->addWidget(new QLabel("Target Thrust [N]"),  3, 0);
-    engineLayout->addWidget(lcdTargetThrust,                  3, 1);
-    engineLayout->addWidget(new QLabel("G-Load [m/s²]"),      4, 0);
-    engineLayout->addWidget(lcdAcceleration,                  4, 1);
+    engineLayout->addWidget(new QLabel("Thrust [N] BX:"),       0, 0);
+    engineLayout->addWidget(lcdThrust_BX,                       0, 1);
+    engineLayout->addWidget(new QLabel("Thrust [N] BY:"),       1, 0);
+    engineLayout->addWidget(lcdThrust_BY,                       1, 1);
+    engineLayout->addWidget(new QLabel("Thrust [N] BZ:"),       2, 0);
+    engineLayout->addWidget(lcdThrust_BZ,                       2, 1);
+    engineLayout->addWidget(new QLabel("Target Thrust [N] BZ"), 3, 0);
+    engineLayout->addWidget(lcdTargetThrust,                    3, 1);
+    engineLayout->addWidget(new QLabel("G-Load [m/s²]"),        4, 0);
+    engineLayout->addWidget(lcdAcceleration,                    4, 1);
 
     return engineBox;
 }
@@ -347,7 +347,7 @@ void cockpitPage::onStateUpdated(double time,
                                  const double& GLoad,
                                  SpacecraftState spacecraftState_,
                                  Vector3 thrust,
-                                 double targetThrust,
+                                 Vector3 targetThrust,
                                  double thrustInPercentage,
                                  double fuelMass,
                                  double fuelFlow,
@@ -359,7 +359,7 @@ void cockpitPage::onStateUpdated(double time,
     updateHorizontalVelocity(qRound(vel.x * 10.0) / 10.0);
     updateAcceleration(qRound(GLoad * 100.0) / 100.0);
     updateThrust({qRound(thrust.x * 10.0) / 10.0, qRound(thrust.y * 10.0) / 10.0, qRound(-thrust.z * 10.0) / 10.0}); //TODO: Eliminate minus when coordinate transform class is build
-    updateTargetThrust(qRound(targetThrust * 10.0) / 10.0);
+    updateTargetThrust(qRound(-targetThrust.z * 10.0) / 10.0); //TODO: Eliminate minus when coordinate transform class is build
     updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
     updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
     updateHullStatus(spacecraftState_);

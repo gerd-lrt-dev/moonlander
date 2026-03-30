@@ -295,7 +295,7 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     return optimizer.optimize(problem, 7000.0);
 }
 
-double spacecraft::requestTargetThrust() const
+Vector3 spacecraft::requestTargetThrust() const
 {
     
     return thrustOrchestration.getTargetThrust();
