@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(MoonLanderUI)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

@@ -1,50 +1,12 @@
 #include "Thrust.h"
-
+#include <iostream>
 // ---Private-------------------------------------
 
-double Thrust::calcFuelReduction(double fuelMass, double massFlowFuel, double dt)
-{
-    fuelMass -= massFlowFuel * dt;
 
-    return fuelMass;
-}
-
-void Thrust::calculateThrust(double dt)
-{
-    if(engineConfig.timeConstant != 0)
-    {
-        thrustState.current += (1 - exp(-dt / engineConfig.timeConstant)) * (thrustState.target - thrustState.current);
-    }
-    else
-    {
-        throw std::runtime_error("time constant tau is zero!");
-    }
-}
-
-
-void Thrust::setThrustDirection()
-{
-    // TODO: On construction...
-}
-
-void Thrust::setDefaultValues()
-{
-    // Initialize target & current thrust with 0.0 as start condition
-    thrustState.current = 0.0;
-    thrustState.target = 0.0;
-}
 
 // ---Public--------------------------------------
-Thrust::Thrust(const EngineConfig& eConfig, FuelState fState) 
-    : engineConfig(EngineConfig::Create(
-        eConfig.Isp,
-        eConfig.timeConstant,
-        eConfig.responseRate,
-        eConfig.direction)
-    ),
-     fuelstate(fState)
+Thrust::Thrust()
 {
-    setDefaultValues();
 }
 
 Thrust::~Thrust()
@@ -52,61 +14,183 @@ Thrust::~Thrust()
 
 }
 
-void Thrust::setTarget(double tThrust)
+// -------------------------------------------------------------------------
+// Public setter functions
+// -------------------------------------------------------------------------
+void Thrust::setTargetThrust(const double &tThrust, const size_t &engineNr)
 {
-    thrustState.target = tThrust;
+    if (engineNr >= models_.size())
+    {
+        std::cerr << "Engine index out of range!" << std::endl;
+        return;
+    }
+
+    models_[engineNr]->setTarget(tThrust);
 }
 
+void Thrust::setTargetThrustInPercentage(const double &tThrustInPercentage, const size_t &engineNr)
+{
+    if (engineNr >= models_.size())
+    {
+        std::cerr << "Engine index out of range!" << std::endl;
+        return;
+    }
+    models_[engineNr]->setTargetInPercentage(tThrustInPercentage);
+}
+
+void Thrust::shutDownAllEngines() const
+{
+    for (const auto& model : models_)
+    {
+        model->setTarget(0.0);
+    }
+}
+
+void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const std::vector<double> &tanks)
+{
+    // -----------------------------------------
+    // Initialize tanks
+    // -----------------------------------------
+    addFuelTank(tanks);
+
+    // -----------------------------------------
+    // Initialize engine configs
+    // -----------------------------------------
+
+    for (const auto &cfg_ : engineConfigs)
+    {
+        FuelState state;
+        state.consumptionRate = 0.0;
+        addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
+    }
+}
+
+void Thrust::activateEngine(const size_t &engineNr)
+{
+    models_[engineNr]->setEnginePowerSwitch(true);
+}
+
+void Thrust::deactivateEngine(const size_t &engineNr)
+{
+    models_[engineNr]->setEnginePowerSwitch(false);
+}
+
+void Thrust::turnOffAllEngines()
+{
+    for (auto& model : models_)
+    {
+        model->setEnginePowerSwitch(false);
+    }
+}
 void Thrust::updateThrust(double dt)
 {
-    // TODO:
-    if (fuelstate.massCurrent > 0.0)
+    if (getFuelMassOfAllTanks() > 0.0)
     {
-        // Initiate vars
-        double newFuelMass(0.0), massFlow(0.0);
-
-        // Calculate & Update thrust
-        calculateThrust(dt);
-
-        // Calculate massFlow for fuel consumption calculation
-        massFlow = math.calcMassFlowBasedOnThrust(thrustState.current, engineConfig.Isp, envConfig.earthGravity);
-        
-        // Withdraw massflow to liveconsumption to display the current fuel consumption
-        fuelstate.consumptionRate = massFlow;
-
-        // Calculate fuel mass based on fuel consumption
-        fuelstate.massCurrent = calcFuelReduction(fuelstate.massCurrent, massFlow, dt);
+        // Update thrust for all engines
+        for (int i = 0; i < models_.size(); ++i)
+        {
+            models_[i]->updateThrust(dt);
+            tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tanks_[models_[i]->getTankID()].mass, models_[i]->getFuelConsumption(), dt);
+        }
     }
     else
     {
-        thrustState.current = 0.0;
+        return;
     }
 }
 
 // --- Getter functions ---------------------------------------------
 
-double Thrust::getTargetThrust() const
+Vector3 Thrust::getTargetThrust() const
 {
-    return thrustState.target;
+    Vector3 total{0.0, 0.0, 0.0};
+
+    for (const auto& model : models_)
+    {
+        Vector3 dir = model->getDirectionOfThrust();
+        double thrust = model->getTargetThrust();
+
+        total += dir * thrust;
+    }
+
+    return total;
 }
 
-double Thrust::getCurrentThrust() const
+Vector3 Thrust::getCurrentThrust() const
 {
-    return thrustState.current;
+    Vector3 total{0.0, 0.0, 0.0};
+
+    for (const auto& model : models_)
+    {
+        Vector3 dir = model->getDirectionOfThrust();
+        double thrust = model->getCurrentThrust();
+
+        total += dir * thrust;
+    }
+
+    return total;
+}
+
+Vector3 Thrust::getCurrentThrustInPercentage() const
+{
+    for (const auto& model: models_)
+    {
+        //model->
+    }
+
+    return {0.0, 0.0, 0.0};
+
 }
 
 double Thrust::getFuelConsumption() const
 {
-    return fuelstate.consumptionRate;
+    double sum = 0.0;
+
+    for (const auto& model : models_)
+    {
+        sum += model->getFuelConsumption();
+    }
+
+    return sum;
 }
 
 double Thrust::getCurrentFuelMass() const
 {
-    return fuelstate.massCurrent;
+    // TODO: Change it to requesting fuel mass of specific tanks, when UI is adapted
+    return getFuelMassOfAllTanks();
 }
 
-Vector3 Thrust::getDirectionOfThrust() const
+void Thrust::addModel(std::unique_ptr<IThrustModel> model)
 {
-    return engineConfig.direction;
+    models_.push_back(std::move(model));
 }
+
+void Thrust::addFuelTank(const std::vector<double> &tanks)
+{
+    for (size_t i = 0; i < tanks.size(); ++i)
+    {
+        FuelTank tank;
+        tank.id = i;
+
+        tank.mass = tanks[i];
+        tank.capacity = tanks[i];
+        tanks_.push_back(tank);
+    }
+
+    std::cout << "[Thrust] Added " << tanks.size() << " tanks" << std::endl;
+}
+
+double Thrust::getFuelMassOfAllTanks() const
+{
+    FuelTank tmpTank;
+    double fuelMassOfAllTanks = 0.0;
+
+    for (auto &tmpTank : tanks_)
+    {
+        fuelMassOfAllTanks += tmpTank.mass;
+    }
+
+    return fuelMassOfAllTanks;
+}
+
 

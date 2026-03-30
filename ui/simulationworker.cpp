@@ -29,7 +29,7 @@ void SimulationWorker::start()
     running = true;
     simulationTimer->start();
 
-    qDebug("simulationworker[constructor]: Simulation started successfully");
+    qDebug("[simulationworker]-constructor-: Simulation started successfully");
 }
 
 void SimulationWorker::pause()
@@ -49,7 +49,8 @@ void SimulationWorker::stop()
                       {0.0, 0.0, 0.0},
                       0.0,
                       SpacecraftState::Operational,
-                      0.0,
+                      {0.0, 0.0, 0.0},
+                      {0.0, 0.0, 0.0},
                       0.0,
                       0.0,
                       0.0,
@@ -108,6 +109,7 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.spacecraftState_,
                       spacecraftData.thrust,
                       spacecraftData.targetThrust,
+                      spacecraftData.thrustInPercentage,
                       spacecraftData.fuelMass,
                       spacecraftData.fuelFlow,
                       consoleOutput

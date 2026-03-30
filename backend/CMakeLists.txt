@@ -19,6 +19,7 @@ add_library(moonlander_backend
     src/Automation/adaptiveDescentController.cpp
     src/Control/inputArbiter.cpp
     src/Controller/pd_controller.cpp
+    src/Thrust/BasicMainEngineModel.cpp
     include/Integrators/Dynamics.h
     include/Integrators/iIntegrator.h
     include/Integrators/eulerIntegrator.h
@@ -35,6 +36,11 @@ add_library(moonlander_backend
     include/Control/inputArbiter.h
     include/Controller/iController.h
     include/Controller/pd_controller.h
+    include/Thrust/iThrust.h
+    include/Thrust/BasicMainEngineModel.h
+    include/Thrust/FuelStateStruct.h
+    include/Thrust/EngineConfig.h
+    include/Thrust/thrustState.h
 )
 
 target_include_directories(moonlander_backend

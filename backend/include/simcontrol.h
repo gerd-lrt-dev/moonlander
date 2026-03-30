@@ -86,8 +86,10 @@ private:
     /**
      * @brief orchestrate autopilot
      * @param Current Spacecraft state. Autopilot is only active, when spacecraft state is operational
+     * @param engineNr [-] Number of engine that will be controlled automatically
+     * @param dt [s] Discrete timestep
      */
-    void runAutopilot(const SpacecraftState& currentSpacecraftstate, const double& dt);
+    void runAutopilot(const SpacecraftState& currentSpacecraftstate, const int &engineNr, const double& dt);
 
 public:
     //***********************************************************

@@ -29,6 +29,14 @@ struct Vector3 {
         return { -x, -y, -z };
     }
 
+    // Sum
+    Vector3& operator+=(const Vector3& other) {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        return *this;
+    }
+
     // Further vector operations
     double norm() const {
         return std::sqrt(x*x + y*y + z*z);

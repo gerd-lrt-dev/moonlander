@@ -14,6 +14,8 @@ void simcontrol::buildSimulationEnvironment(double t)
     // Instance classes
     landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1);
     inputArbiter_       = std::make_unique<InputArbiter>();
+
+    std::cout << "[simcontrol]-buildSimulationEnvironment-: class spacecraft & inputArbiter instanced" << std::endl;
 }
 
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString)
@@ -49,13 +51,14 @@ void simcontrol::processCommands()
     setTargetThrust(activeCommand.thrustInPercentage);
 }
 
-void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, const double& dt)
+void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, const int &engineNr, const double& dt)
 {
     // --- Autopilot Control ---
     if(currentSpacecraftstate == SpacecraftState::Operational)
     {
-        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.maxT, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z - config_.radiusMoon, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
-        double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.maxT);
+        // Autopilot is used for main engine of spacecraft with index number 0!
+        double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.engines_[0].maxThrust, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z - config_.radiusMoon, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
+        double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.engines_[0].maxThrust);
         ControlCommand autoCmd;
         autoCmd.thrustInPercentage = autoThrustNormalized;
         receiveCommandFromAutopilot(autoCmd);
@@ -110,7 +113,7 @@ simData simcontrol::runSimulation(const double dt)
         logger.log("Simulation step started. dt = " + std::to_string(dt));
 
         // --- Autopilot Control ---
-        runAutopilot(landerSpacecraft->getSpacecraftState(), dt);
+        runAutopilot(landerSpacecraft->getSpacecraftState(), 0, dt);
         landerSpacecraft->setConsoleText(autopilot_->getDescentMode());
 
         // --- Update spacecraft state (translation, velocity, etc.) ---
@@ -167,7 +170,9 @@ void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
 
 void simcontrol::setTargetThrust(const double& thrustPercent, const double& thrustInNewton)
 {
-    landerSpacecraft->setThrust(thrustPercent);
+    // Using main engine with index number zero
+    landerSpacecraft->setThrust(thrustPercent, 0);
+    landerSpacecraft->setThrust(0.21, 1);
 }
 
 void simcontrol::setResetBoolean()

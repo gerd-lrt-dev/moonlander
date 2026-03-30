@@ -35,5 +35,5 @@ public:
      * @param thrustDir Normalized thrust direction vector.
      * @return Resulting acceleration vector.
      */
-    virtual Vector3 computeAcceleration(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const = 0;
+    virtual Vector3 computeAcceleration(const Vector3& pos, const Vector3& vel, double mass, const Vector3& thrust) const = 0;
 };

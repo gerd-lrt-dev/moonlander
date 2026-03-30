@@ -123,6 +123,8 @@ void LandingView::drawThrust(QPainter &p, const QRect &landerRect)
 
     int flameHeight = static_cast<int>((thrustPercent / 100.0) * 40.0);
 
+    qDebug() << "Draw thrust with flameHeight: " << flameHeight;
+    qDebug() << "Thrust percentage: " << thrustPercent;
     QRect flameRect(
         landerRect.center().x() - 5,
         landerRect.bottom(),

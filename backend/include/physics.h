@@ -64,7 +64,7 @@ public:
      * @param pos       Current position vector.
      * @return Resulting acceleration vector.
      */
-    Vector3 computeAcc(const Vector3& pos, const Vector3& vel, double mass, double thrust, const Vector3& thrustDir) const;
+    Vector3 computeAcc(const Vector3& pos, const Vector3& vel, double mass, const Vector3& thrust) const;
 
     /**
      * @brief Integrates velocity using the configured integrator.

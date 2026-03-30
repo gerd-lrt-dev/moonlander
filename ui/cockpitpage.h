@@ -67,10 +67,10 @@ public:
     void updateTime(double t);
 
     /**
-     * @brief Updates the current altitude display.
-     * @param altitude Altitude above surface in meters.
+     * @brief Updates the current position display.
+     * @param position in all dimensions in meters.
      */
-    void updateAltitude(double altitude);
+    void updatePosition(Vector3 position);
 
     /**
      * @brief Updates the vertical velocity display.
@@ -94,7 +94,7 @@ public:
      * @brief Updates the current engine thrust.
      * @param thrust Current thrust value (percentage or normalized).
      */
-    void updateThrust(double thrust);
+    void updateThrust(Vector3 thrust);
 
     /**
      * @brief Updates the target thrust setpoint.
@@ -189,8 +189,9 @@ public slots:
                         const Vector3& vel,
                         const double& GLoad,
                         SpacecraftState spacecraftState_,
-                        double thrust,
-                        double targetThrust,
+                        Vector3 thrust,
+                        Vector3 targetThrust,
+                        double thrustInPercentage,
                         double fuelMass,
                         double fuelFlow,
                         QString consoleOutput);
@@ -278,7 +279,9 @@ private:
     // =====================================================
 
     QLCDNumber *lcdTime;        ///< Simulation time display [s]
-    QLCDNumber *lcdAltitude;    ///< Altitude above surface [m]
+    QLCDNumber *lcdPosX;        ///< Position in x [m]
+    QLCDNumber *lcdPosY;        ///< Position in y [m]
+    QLCDNumber *lcdPosZ;        ///< Position in z [m]
     QLCDNumber *lcdVSpeed;      ///< Vertical velocity [m/s]
     QLCDNumber *lcdHSpeed;      ///< Horizontal velocity [m/s]
 
@@ -286,7 +289,9 @@ private:
     // Engine Instruments
     // =====================================================
 
-    QLCDNumber *lcdThrust;       ///< Current engine thrust
+    QLCDNumber *lcdThrust_BX;    ///< Current engine thrust in body frame of spacecraft x direction
+    QLCDNumber *lcdThrust_BY;    ///< Current engine thrust in body frame of spacecraft y direction
+    QLCDNumber *lcdThrust_BZ;    ///< Current engine thrust in body frame of spacecraft z direction
     QLCDNumber *lcdTargetThrust; ///< Target thrust setpoint
     QLCDNumber *lcdAcceleration; ///< Current acceleration [m/s²]
 

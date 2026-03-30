@@ -27,8 +27,9 @@ bool ConfigManager::loadConfig(const QString& path)
     {
         spacecraftList.append(val.toObject());
     }
-    qDebug() << "Json loaded signal is going to emit";
+
     emit jsonLoaded();
+
     return true;
 }
 
