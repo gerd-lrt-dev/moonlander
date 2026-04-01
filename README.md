@@ -19,7 +19,7 @@ https://aerospace-simulation.dev
 ---
 
 # 🚀 Demo
-For a detailed demonstration, visit the [project website](https://www.aerospace-simulation.dev/simulation/demo/).
+For a detailed demonstration, visit the [project website demo](https://www.aerospace-simulation.dev/simulation/demo/).
 
 Moonlander provides a cockpit-style interface displaying spacecraft telemetry during descent.
 
@@ -91,7 +91,7 @@ make
 
 # 🧠 Architecture Overview
 
-Detailed architecture with flow diagrams on [project website](https://www.aerospace-simulation.dev/simulation/demo/](https://www.aerospace-simulation.dev/simulation/architecture/).
+Detailed architecture with flow diagrams on [project website architecture](https://www.aerospace-simulation.dev/simulation/architecture/).
 
 Moonlander follows a **modular simulation architecture** where physics, control systems, sensors, and visualization are separated.
 
@@ -185,7 +185,7 @@ Configurations are loaded at runtime using the `ConfigManager`.
 
 # 🤝 Contributing
 
-Have a look on the [project website](https://www.aerospace-simulation.dev/recruiting)
+Have a look on the [project website contributing](https://www.aerospace-simulation.dev/recruiting)
 
 Contributions are welcome.
 
@@ -215,7 +215,7 @@ If you're looking for a starting point, check issues labeled:
 
 Additional technical documentation can be found in the `docs` directory. 
 
-Detailed Documentation, including mathmateical derivations, is available on the [project website](https://www.aerospace-simulation.dev/docs)
+Detailed Documentation, including mathmateical derivations, is available on the [project website mathmatics](https://www.aerospace-simulation.dev/docs)
 
 Example documentation files:
 
