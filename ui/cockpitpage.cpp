@@ -138,7 +138,7 @@ QWidget *cockpitPage::setupNavDetailBox_absolutePos()
     mainLayout->setContentsMargins(6, 6, 6, 6);
     mainLayout->setSpacing(4);
 
-    QLabel *title = new QLabel("POSITION");
+    QLabel *title = new QLabel("MCI_POSITION");
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
 
@@ -162,7 +162,7 @@ QWidget *cockpitPage::setupNavDetailBox_absoluteRot()
     mainLayout->setContentsMargins(6, 6, 6, 6);
     mainLayout->setSpacing(4);
 
-    QLabel *title = new QLabel("ROTATION");
+    QLabel *title = new QLabel("LNF_ROTATION");
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
 
@@ -186,7 +186,7 @@ QWidget *cockpitPage::setupNavDetailBox_absoluteTransVel()
     mainLayout->setContentsMargins(6, 6, 6, 6);
     mainLayout->setSpacing(4);
 
-    QLabel *title = new QLabel("VELOCITY");
+    QLabel *title = new QLabel("LNF_VELOCITY");
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
 
@@ -210,7 +210,7 @@ QWidget *cockpitPage::setupNavDetailBox_absoluteAngVel()
     mainLayout->setContentsMargins(6, 6, 6, 6);
     mainLayout->setSpacing(4);
 
-    QLabel *title = new QLabel("ANGULAR VEL");
+    QLabel *title = new QLabel("LNF_ANGULAR VEL");
     title->setAlignment(Qt::AlignCenter);
     title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
 
