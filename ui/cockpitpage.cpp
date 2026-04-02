@@ -29,6 +29,27 @@ static void configureLCD(QLCDNumber* lcd, int digits)
     lcd->setSmallDecimalPoint(false);
 }
 
+QWidget* cockpitPage::createLcdField(const QString& title, QLCDNumber*& lcd, int digits)
+{
+    QWidget *field = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout(field);
+
+    layout->setContentsMargins(2, 2, 2, 2);
+    layout->setSpacing(2);
+
+    QLabel *label = new QLabel(title);
+    label->setAlignment(Qt::AlignCenter);
+    label->setStyleSheet("color: #AFC7DF; font-size: 10px;");
+
+    lcd = new QLCDNumber();
+    configureLCD(lcd, digits);
+
+    layout->addWidget(label);
+    layout->addWidget(lcd);
+
+    return field;
+}
+
 // ------------------------------------------------
 // UI Setup
 // ------------------------------------------------
@@ -85,41 +106,123 @@ QGroupBox *cockpitPage::setupNavBox()
     QGroupBox *navBox = new QGroupBox("NAV");
     QGridLayout *navLayout = new QGridLayout(navBox);
 
+    QWidget *absolutePos    = setupNavDetailBox_absolutePos();
+    QWidget *absoluteRot    = setupNavDetailBox_absoluteRot();
+    QWidget *absoluteVel    = setupNavDetailBox_absoluteTransVel();
+    QWidget *absoluteAngVel = setupNavDetailBox_absoluteAngVel();
+
     lcdTime     = new QLCDNumber();
-    lcdPosX     = new QLCDNumber();
-    lcdPosY     = new QLCDNumber();
-    lcdPosZ     = new QLCDNumber();
-    lcdVSpeed   = new QLCDNumber();
-    lcdHSpeed   = new QLCDNumber();
 
     configureLCD(lcdTime,     12);
-    configureLCD(lcdPosX,     12);
-    configureLCD(lcdPosY,     12);
-    configureLCD(lcdPosZ,     12);
-    configureLCD(lcdVSpeed,   12);
-    configureLCD(lcdHSpeed,   12);
 
     navLayout->addWidget(new QLabel("Time [s]"),      0, 0);
     navLayout->addWidget(lcdTime,                     0, 1);
 
     // --- Position ---
-    navLayout->addWidget(new QLabel("X Pos [m]"),     1, 0);
-    navLayout->addWidget(lcdPosX,                     1, 1);
-
-    navLayout->addWidget(new QLabel("Y Pos [m]"),     2, 0);
-    navLayout->addWidget(lcdPosY,                     2, 1);
-
-    navLayout->addWidget(new QLabel("Z Pos [m]"),     3, 0);
-    navLayout->addWidget(lcdPosZ,                     3, 1);
+    navLayout->addWidget(absolutePos,   1, 0, Qt::AlignCenter);
+    navLayout->addWidget(absoluteRot,   1, 1, Qt::AlignCenter);
 
     // --- Velocity ---
-    navLayout->addWidget(new QLabel("Vertical Vel [m/s]"),   4, 0);
-    navLayout->addWidget(lcdVSpeed,                          4, 1);
-
-    navLayout->addWidget(new QLabel("Horizontal Vel [m/s]"), 5, 0);
-    navLayout->addWidget(lcdHSpeed,                          5, 1);
+    navLayout->addWidget(absoluteVel,   2, 0, Qt::AlignCenter);
+    navLayout->addWidget(absoluteAngVel,2, 1, Qt::AlignCenter);
 
     return navBox;
+}
+
+QWidget *cockpitPage::setupNavDetailBox_absolutePos()
+{
+    QFrame *box = new QFrame();
+    box->setFrameShape(QFrame::StyledPanel);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(box);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
+    mainLayout->setSpacing(4);
+
+    QLabel *title = new QLabel("POSITION");
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
+
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(createLcdField("X [m]", MCI_lcdPosX, 8), 0, 0);
+    grid->addWidget(createLcdField("Y [m]", MCI_lcdPosY, 8), 0, 1);
+    grid->addWidget(createLcdField("Z [m]", MCI_lcdPosZ, 8), 0, 2);
+
+    mainLayout->addWidget(title);
+    mainLayout->addLayout(grid);
+
+    return box;
+}
+
+QWidget *cockpitPage::setupNavDetailBox_absoluteRot()
+{
+    QFrame *box = new QFrame();
+    box->setFrameShape(QFrame::StyledPanel);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(box);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
+    mainLayout->setSpacing(4);
+
+    QLabel *title = new QLabel("ROTATION");
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
+
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(createLcdField("LAT [°]", LNF_lcdLat, 8), 0, 0);
+    grid->addWidget(createLcdField("LON [°]", LNF_lcdLon, 8), 0, 1);
+    grid->addWidget(createLcdField("ROT [°]", LNF_lcdRot, 8), 0, 2);
+
+    mainLayout->addWidget(title);
+    mainLayout->addLayout(grid);
+
+    return box;
+}
+
+QWidget *cockpitPage::setupNavDetailBox_absoluteTransVel()
+{
+    QFrame *box = new QFrame();
+    box->setFrameShape(QFrame::StyledPanel);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(box);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
+    mainLayout->setSpacing(4);
+
+    QLabel *title = new QLabel("VELOCITY");
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
+
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(createLcdField("VX [m/s]", LNF_lcdVelX, 8), 0, 0);
+    grid->addWidget(createLcdField("VY [m/s]", LNF_lcdVelY, 8), 0, 1);
+    grid->addWidget(createLcdField("VZ [m/s]", LNF_lcdVelZ, 8), 0, 2);
+
+    mainLayout->addWidget(title);
+    mainLayout->addLayout(grid);
+
+    return box;
+}
+
+QWidget *cockpitPage::setupNavDetailBox_absoluteAngVel()
+{
+    QFrame *box = new QFrame();
+    box->setFrameShape(QFrame::StyledPanel);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(box);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
+    mainLayout->setSpacing(4);
+
+    QLabel *title = new QLabel("ANGULAR VEL");
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
+
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(createLcdField("ROLL [°/s]",    LNF_lcdRoll, 8), 0, 0);
+    grid->addWidget(createLcdField("PITCH [°/s]",   LNF_lcdPitch, 8), 0, 1);
+    grid->addWidget(createLcdField("YAW [°/s]",     LNF_lcdYaw, 8), 0, 2);
+
+    mainLayout->addWidget(title);
+    mainLayout->addLayout(grid);
+
+    return box;
 }
 
 // ================= ENGINE =================
@@ -283,12 +386,34 @@ void cockpitPage::setupConnections()
 void cockpitPage::updateTime(double t)               { lcdTime->display(QString::number(t, 'f', 2)); }
 void cockpitPage::updatePosition(Vector3 pos)
 {
-    lcdPosX->display(QString::number(pos.x, 'f', 1));
-    lcdPosY->display(QString::number(pos.y, 'f', 1));
-    lcdPosZ->display(QString::number(pos.z, 'f', 1));
+    MCI_lcdPosX->display(QString::number(pos.x, 'f', 1));
+    MCI_lcdPosY->display(QString::number(pos.y, 'f', 1));
+    MCI_lcdPosZ->display(QString::number(pos.z, 'f', 1));
 }
-void cockpitPage::updateVerticalVelocity(double v)   { lcdVSpeed->display(QString::number(v, 'f', 1)); }
-void cockpitPage::updateHorizontalVelocity(double h) { lcdHSpeed->display(QString::number(h, 'f', 1)); }
+
+void cockpitPage::updateRotation(Vector3 rot)
+{
+    // TODO: Build own data type for rotational parameters
+    LNF_lcdLat->display(QString::number(rot.x, 'f', 1));
+    LNF_lcdLon->display(QString::number(rot.y, 'f', 1));
+    LNF_lcdRot->display(QString::number(rot.z, 'f', 1));
+}
+
+void cockpitPage::updateVelocity(Vector3 v)
+{
+    LNF_lcdVelX->display(QString::number(v.x, 'f', 1));
+    LNF_lcdVelY->display(QString::number(v.y, 'f', 1));
+    LNF_lcdVelZ->display(QString::number(v.z, 'f', 1));
+}
+
+void cockpitPage::updateAngularVelocity(Vector3 angV)
+{
+    // TODO: Build own data type for rotational parameters
+    LNF_lcdRoll->display(QString::number(angV.x, 'f', 1));
+    LNF_lcdPitch->display(QString::number(angV.y, 'f', 1));
+    LNF_lcdYaw->display(QString::number(angV.z, 'f', 1));
+}
+
 void cockpitPage::updateAcceleration(double a)       { lcdAcceleration->display(QString::number(a, 'f', 2)); }
 void cockpitPage::updateThrust(Vector3 t)
 {
@@ -355,8 +480,9 @@ void cockpitPage::onStateUpdated(double time,
 {
     updateTime(time);
     updatePosition(pos);
-    updateVerticalVelocity(qRound(vel.z * 10.0) / 10.0);
-    updateHorizontalVelocity(qRound(vel.x * 10.0) / 10.0);
+    updateRotation({0.0, 0.0, 0.0});
+    updateVelocity(vel);
+    updateAngularVelocity({0.0, 0.0, 0.0});
     updateAcceleration(qRound(GLoad * 100.0) / 100.0);
     updateThrust({qRound(thrust.x * 10.0) / 10.0, qRound(thrust.y * 10.0) / 10.0, qRound(-thrust.z * 10.0) / 10.0}); //TODO: Eliminate minus when coordinate transform class is build
     updateTargetThrust(qRound(-targetThrust.z * 10.0) / 10.0); //TODO: Eliminate minus when coordinate transform class is build

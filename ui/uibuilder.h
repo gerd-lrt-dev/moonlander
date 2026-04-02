@@ -30,6 +30,16 @@ public:
     UIBuilder();
 
     /**
+     * @brief Rad to degree helper function
+     * @param rad
+     * @return degree
+     */
+    constexpr double rad2deg(double rad)
+    {
+        return rad * 180.0 / M_PI;
+    }
+
+    /**
      * @brief Creates a QPushButton with consistent styling.
      * @param buttonName Text displayed on the button.
      * @param parent Optional parent widget.

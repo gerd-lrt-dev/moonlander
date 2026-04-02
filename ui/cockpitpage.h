@@ -73,16 +73,22 @@ public:
     void updatePosition(Vector3 position);
 
     /**
-     * @brief Updates the vertical velocity display.
-     * @param vSpeed Vertical velocity in meters per second.
+     * @brief Updates the rotational displays.
+     * @param Vector with Latitude, Longitude and Roation in degree.
      */
-    void updateVerticalVelocity(double vSpeed);
+    void updateRotation(Vector3 rotation);
 
     /**
-     * @brief Updates the horizontal velocity display.
-     * @param hSpeed Horizontal velocity in meters per second.
+     * @brief Updates the velocity displays.
+     * @param Vector with velocity in meters per second.
      */
-    void updateHorizontalVelocity(double hSpeed);
+    void updateVelocity(Vector3 velocity);
+
+    /**
+     * @brief Updates the angular velocity displays.
+     * @param Vector with Pitch, Roll and Yaw in degrees per second.
+     */
+    void updateAngularVelocity(Vector3 angularVelocity);
 
     /**
      * @brief Updates the current spacecraft acceleration.
@@ -237,10 +243,52 @@ private:
     void setupUI();
 
     /**
+     * @brief Helper class for LCD Fields
+     * @return QWidget with LCD field
+     */
+    QWidget *createLcdField(const QString& title, QLCDNumber*& lcd, int digits);
+
+    /**
      * @brief Builds navigation elements.
      * @return Navigation Box as QGroupBox.
      */
     QGroupBox *setupNavBox();
+
+    /**
+     * @brief Builds navigational detail element with
+     * PosX
+     * PosY
+     * PosZ
+     * @return QWidget as a box
+     */
+    QWidget *setupNavDetailBox_absolutePos();
+
+    /**
+    * @brief Builds navigational detail element with
+    * Latitude
+    * Longitude
+    * Radius
+    * @return QWidget as a box
+    */
+    QWidget *setupNavDetailBox_absoluteRot();
+
+    /**
+     * @brief Builds navigational detail element with
+     * VelX
+     * VelY
+     * VelZ
+     * @return QWidget as a box
+     */
+    QWidget *setupNavDetailBox_absoluteTransVel();
+
+    /**
+    * @brief Builds navigational detail element with
+    * Roll
+    * Pitch
+    * Yaw
+    * @return QWidget as a box
+    */
+    QWidget *setupNavDetailBox_absoluteAngVel();
 
     /**
      * @brief Builds engine box elements.
@@ -278,12 +326,27 @@ private:
     // Navigation Instruments
     // =====================================================
 
-    QLCDNumber *lcdTime;        ///< Simulation time display [s]
-    QLCDNumber *lcdPosX;        ///< Position in x [m]
-    QLCDNumber *lcdPosY;        ///< Position in y [m]
-    QLCDNumber *lcdPosZ;        ///< Position in z [m]
-    QLCDNumber *lcdVSpeed;      ///< Vertical velocity [m/s]
-    QLCDNumber *lcdHSpeed;      ///< Horizontal velocity [m/s]
+    QLCDNumber *lcdTime;            ///< Simulation time display [s]
+
+    // Moon Centered Inertial (physical truth)
+    QLCDNumber *MCI_lcdPosX;        ///< Position in x [m]
+    QLCDNumber *MCI_lcdPosY;        ///< Position in y [m]
+    QLCDNumber *MCI_lcdPosZ;        ///< Position in z [m]
+
+    // Local Navigation Frame
+    QLCDNumber *LNF_lcdLat;         ///< Latitude [°]
+    QLCDNumber *LNF_lcdLon;         ///< Longitude [°]
+    QLCDNumber *LNF_lcdRot;         ///< Rotation [°]
+
+    QLCDNumber *LNF_lcdVelX;        ///< Velocity in x -> North [m/s]
+    QLCDNumber *LNF_lcdVelY;        ///< Velocity in y -> East [m/s]
+    QLCDNumber *LNF_lcdVelZ;        ///< Velocity in z -> Up [m/s]
+
+    QLCDNumber *LNF_lcdRoll;         ///< Roll [°/s]
+    QLCDNumber *LNF_lcdPitch;        ///< Pitch [°/s]
+    QLCDNumber *LNF_lcdYaw;          ///< Yaw [°/s]
+
+    QLCDNumber *LNF_totalVel;       ///< Total velocity [m/s]
 
     // =====================================================
     // Engine Instruments
