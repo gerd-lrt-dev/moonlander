@@ -21,6 +21,7 @@
 #include <spacecraftStateStruct.h>
 
 #include "landingview.h"
+#include "uibuilder.h"
 
 /**
  * @class cockpitPage
@@ -229,6 +230,7 @@ private slots:
 private:
     // Members
     double lastTimeDisplay; ///< Intermediate storage of time to calm the display down
+    UIBuilder uibuilder;
 
     // =====================================================
     // Internal Setup Functions
@@ -253,6 +255,13 @@ private:
      * @return Navigation Box as QGroupBox.
      */
     QGroupBox *setupNavBox();
+
+    /**
+     * @brief Builds navigational detail element with time sections
+     * This can be extended by further time informations later
+     * @return QWidget as a box
+     */
+    QWidget *setupNavDetailBox_time();
 
     /**
      * @brief Builds navigational detail element with
@@ -301,6 +310,12 @@ private:
      * @return Fuel Box as QGroupBox.
      */
     QGroupBox *setupFuelBox();
+
+    /**
+     * @brief setupFuelDetailBox
+     * @return
+     */
+    QWidget *setupFuelDetailBox();
 
     /**
      * @brief Builds status elements.

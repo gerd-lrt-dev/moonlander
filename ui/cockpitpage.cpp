@@ -106,27 +106,47 @@ QGroupBox *cockpitPage::setupNavBox()
     QGroupBox *navBox = new QGroupBox("NAV");
     QGridLayout *navLayout = new QGridLayout(navBox);
 
+    QWidget *time           = setupNavDetailBox_time();
     QWidget *absolutePos    = setupNavDetailBox_absolutePos();
     QWidget *absoluteRot    = setupNavDetailBox_absoluteRot();
     QWidget *absoluteVel    = setupNavDetailBox_absoluteTransVel();
     QWidget *absoluteAngVel = setupNavDetailBox_absoluteAngVel();
 
-    lcdTime     = new QLCDNumber();
-
-    configureLCD(lcdTime,     12);
-
-    navLayout->addWidget(new QLabel("Time [s]"),      0, 0);
-    navLayout->addWidget(lcdTime,                     0, 1);
+    // --- Time ---
+    navLayout->addWidget(time, 0, 0, Qt::AlignLeft);
 
     // --- Position ---
     navLayout->addWidget(absolutePos,   1, 0, Qt::AlignCenter);
     navLayout->addWidget(absoluteRot,   1, 1, Qt::AlignCenter);
+    navLayout->setSpacing(5);
 
     // --- Velocity ---
     navLayout->addWidget(absoluteVel,   2, 0, Qt::AlignCenter);
     navLayout->addWidget(absoluteAngVel,2, 1, Qt::AlignCenter);
 
     return navBox;
+}
+
+QWidget *cockpitPage::setupNavDetailBox_time()
+{
+    QFrame *box = new QFrame();
+    box->setFrameShape(QFrame::StyledPanel);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(box);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
+    mainLayout->setSpacing(4);
+
+    QLabel *title = new QLabel("TIME");
+    title->setAlignment(Qt::AlignCenter);
+    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
+
+    QGridLayout *grid = new QGridLayout();
+    grid->addWidget(createLcdField("Time [s]", lcdTime, 8), 0, 0);
+
+    mainLayout->addWidget(title);
+    mainLayout->addLayout(grid);
+
+    return box;
 }
 
 QWidget *cockpitPage::setupNavDetailBox_absolutePos()
@@ -263,16 +283,18 @@ QGroupBox *cockpitPage::setupFuelBox()
     QGroupBox *fuelBox = new QGroupBox("FUEL");
     QGridLayout *fuelLayout = new QGridLayout(fuelBox);
 
-    lcdFuelMass = new QLCDNumber();
-    lcdFuelFlow = new QLCDNumber();
+    QVector<QLCDNumber> fuelPanels;
+    QVector<QString> nameOfFuelPanels;
 
-    configureLCD(lcdFuelMass, 7);
-    configureLCD(lcdFuelFlow, 6);
+    fuelPanels.push_back(lcdFuelMass);
+    fuelPanels.push_back(lcdFuelFlow);
 
-    fuelLayout->addWidget(new QLabel("Fuel Mass [kg]"),   0, 0);
-    fuelLayout->addWidget(lcdFuelMass,                    0, 1);
-    fuelLayout->addWidget(new QLabel("Fuel Flow [kg/s]"), 1, 0);
-    fuelLayout->addWidget(lcdFuelFlow,                    1, 1);
+    nameOfFuelPanels.push_back("Fuel Mass [kg]");
+    nameOfFuelPanels.push_back("Fuel Flow [kg/s]");
+
+    QWidget *fuelDetailBox = uibuilder.setupDetailBox(fuelPanels, nameOfFuelPanels);
+
+    fuelLayout->addWidget(fuelDetailBox, 0, 0);
 
     return fuelBox;
 }
