@@ -11,7 +11,6 @@ SimulationWorker::SimulationWorker(QObject *parent)
 
     // connect timer with worker function
     connect(simulationTimer, &QTimer::timeout, this, &SimulationWorker::stepSimulation);
-
 }
 
 void SimulationWorker::start()
@@ -29,7 +28,7 @@ void SimulationWorker::start()
     running = true;
     simulationTimer->start();
 
-    qDebug("[simulationworker]-constructor-: Simulation started successfully");
+    qDebug("[simulationworker]-start-: Simulation started successfully");
 }
 
 void SimulationWorker::pause()
@@ -80,8 +79,10 @@ void SimulationWorker::setAutopilotFlag(bool active)
     collectAutopilotCommand(active);
 }
 
+int counter(0);
 void SimulationWorker::stepSimulation()
 {
+    qDebug() << "[SimulationWorker]-stepSimulation- Function called: " << counter;
     double dt = 0.00;   ///< Initialized discrete timestep
 
     // Return if not running
@@ -114,6 +115,7 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.fuelFlow,
                       consoleOutput
                       );
+    qDebug() << "[simulationworker]-stepSimulation- Step of simulation completed" ;
 }
 
 void SimulationWorker::collectControlCommands(const double &thrustInPercentage, const double &thrustInNewton)

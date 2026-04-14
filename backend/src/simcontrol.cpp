@@ -14,8 +14,6 @@ void simcontrol::buildSimulationEnvironment(double t)
     // Instance classes
     landerSpacecraft    = std::make_unique<spacecraft>(landerMoon1);
     inputArbiter_       = std::make_unique<InputArbiter>();
-
-    std::cout << "[simcontrol]-buildSimulationEnvironment-: class spacecraft & inputArbiter instanced" << std::endl;
 }
 
 customSpacecraft simcontrol::loadSpacecraftFromJsonString(const std::string& jsonString)
@@ -150,6 +148,9 @@ simData simcontrol::runSimulation(const double dt)
         logger.log("Unknown exception in runSimulation.");
         throw;
     }
+
+    std::cout << "[simcontrol]-runSimulation- run of simulation completed" << std::endl;
+
     return simdata_;
 }
 

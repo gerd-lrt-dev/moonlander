@@ -72,9 +72,10 @@ public:
      * @param lcdPanels Vector with QLCDNumber given by reference
      * @param namesOfWidget Name of panels. The name must be given equal to lcdPanels
      * @param nameOfTitle Title for Widget
+     * @param columns Defines how many elements should be in a row
      * @return Detail box as QWidget
      */
-    QWidget *setupDetailBox(const QVector<QLCDNumber*> &lcdPanels, const QVector<QString> &namesOfPanels, const QString &nameOfTitle);
+    QWidget *setupDetailBox(const QVector<QLCDNumber*> &lcdPanels, const QVector<QString> &namesOfPanels, const QString &nameOfTitle, int columns);
 
 private:
     // ==========================================
@@ -87,7 +88,7 @@ private:
         static const int buttonHeight    = 50;  ///< Standard button height
     };
 
-    QWidget* createLcdField(const QString& title, QLCDNumber*& lcd, int digits);
+    QWidget* createLcdField(const QString& title, QLCDNumber* lcd, int digits);
 };
 
 #endif // UIBUILDER_H

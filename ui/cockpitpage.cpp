@@ -8,13 +8,38 @@
 #include <QSlider>
 #include <QString>
 #include <QtMath>
+#include <QThread>
 
 // ------------------------------------------------
 // Constructor
 // ------------------------------------------------
 cockpitPage::cockpitPage(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+    lcdTime(nullptr),
+    MCI_lcdPosX(nullptr),
+    MCI_lcdPosY(nullptr),
+    MCI_lcdPosZ(nullptr),
+    LNF_lcdLat(nullptr),
+    LNF_lcdLon(nullptr),
+    LNF_lcdRot(nullptr),
+    LNF_lcdVelX(nullptr),
+    LNF_lcdVelY(nullptr),
+    LNF_lcdVelZ(nullptr),
+    LNF_lcdRoll(nullptr),
+    LNF_lcdPitch(nullptr),
+    LNF_lcdYaw(nullptr),
+    LNF_totalVel(nullptr),
+    LNF_lcdThrust_BX(nullptr),
+    LNF_lcdThrust_BY(nullptr),
+    LNF_lcdThrust_BZ(nullptr),
+    LNF_lcdTargetThrust_BX(nullptr),
+    LNF_lcdTargetThrust_BY(nullptr),
+    LNF_lcdTargetThrust_BZ(nullptr),
+    lcdGLoad(nullptr),
+    lcdFuelMass(nullptr),
+    lcdFuelFlow(nullptr)
 {
+    initializeQTObjects();
     setupUI();
     setupConnections();
 }
@@ -29,7 +54,7 @@ static void configureLCD(QLCDNumber* lcd, int digits)
     lcd->setSmallDecimalPoint(false);
 }
 
-QWidget* cockpitPage::createLcdField(const QString& title, QLCDNumber*& lcd, int digits)
+QWidget* cockpitPage::createLcdField(const QString& title, QLCDNumber* lcd, int digits)
 {
     QWidget *field = new QWidget();
     QVBoxLayout *layout = new QVBoxLayout(field);
@@ -55,6 +80,7 @@ QWidget* cockpitPage::createLcdField(const QString& title, QLCDNumber*& lcd, int
 // ------------------------------------------------
 void cockpitPage::setupUI()
 {
+    qDebug() << "setupUI called on:" << this;
     QGridLayout *mainLayout = new QGridLayout(this);
     mainLayout->setSpacing(12);
     mainLayout->setContentsMargins(10, 10, 10, 10);
@@ -96,8 +122,58 @@ void cockpitPage::setupUI()
     mainLayout->addWidget(landingBox, 0, 1, 2, 1);
     mainLayout->addWidget(engineBox,  0, 2);
     mainLayout->addWidget(statusBox,  1, 2);
+}
 
-    setLayout(mainLayout);
+void cockpitPage::initializeQTObjects()
+{
+    // *********** LCD OBJECTS *************
+
+    // =====================================================
+    // Navigation Instruments
+    // =====================================================
+
+    lcdTime = new QLCDNumber();
+
+    // Moon Centered Inertial (physical truth)
+    MCI_lcdPosX = new QLCDNumber();
+    MCI_lcdPosY = new QLCDNumber();
+    MCI_lcdPosZ = new QLCDNumber();
+
+    // Local Navigation Frame
+    LNF_lcdLat = new QLCDNumber();
+    LNF_lcdLon = new QLCDNumber();
+    LNF_lcdRot = new QLCDNumber();
+
+    LNF_lcdVelX = new QLCDNumber();
+    LNF_lcdVelY = new QLCDNumber();
+    LNF_lcdVelZ = new QLCDNumber();
+
+    LNF_lcdRoll = new QLCDNumber();
+    LNF_lcdPitch = new QLCDNumber();
+    LNF_lcdYaw = new QLCDNumber();
+
+    LNF_totalVel = new QLCDNumber();
+
+    // =====================================================
+    // Engine Instruments
+    // =====================================================
+
+    LNF_lcdThrust_BX = new QLCDNumber();
+    LNF_lcdThrust_BY = new QLCDNumber();
+    LNF_lcdThrust_BZ = new QLCDNumber();
+
+    LNF_lcdTargetThrust_BX = new QLCDNumber();
+    LNF_lcdTargetThrust_BY = new QLCDNumber();
+    LNF_lcdTargetThrust_BZ = new QLCDNumber();
+
+    lcdGLoad = new QLCDNumber();
+
+    // =====================================================
+    // Fuel Instruments
+    // =====================================================
+
+    lcdFuelMass = new QLCDNumber();
+    lcdFuelFlow = new QLCDNumber();
 }
 
 // ================= NAV =================
@@ -106,143 +182,50 @@ QGroupBox *cockpitPage::setupNavBox()
     QGroupBox *navBox = new QGroupBox("NAV");
     QGridLayout *navLayout = new QGridLayout(navBox);
 
-    QWidget *time           = setupNavDetailBox_time();
-    QWidget *absolutePos    = setupNavDetailBox_absolutePos();
-    QWidget *absoluteRot    = setupNavDetailBox_absoluteRot();
-    QWidget *absoluteVel    = setupNavDetailBox_absoluteTransVel();
-    QWidget *absoluteAngVel = setupNavDetailBox_absoluteAngVel();
+    QVector<QLCDNumber*> timePanel;
+    QVector<QLCDNumber*> absolutePosPanel;
+    QVector<QLCDNumber*> absoluteRotPanel;
+    QVector<QLCDNumber*> absoluteTransVelPanel;
+    QVector<QLCDNumber*> absoluteAngVelPanel;
 
-    // --- Time ---
-    navLayout->addWidget(time, 0, 0, Qt::AlignLeft);
+    timePanel.push_back(lcdTime);
 
-    // --- Position ---
-    navLayout->addWidget(absolutePos,   1, 0, Qt::AlignCenter);
-    navLayout->addWidget(absoluteRot,   1, 1, Qt::AlignCenter);
-    navLayout->setSpacing(5);
+    absolutePosPanel.push_back(MCI_lcdPosX);
+    absolutePosPanel.push_back(MCI_lcdPosY);
+    absolutePosPanel.push_back(MCI_lcdPosZ);
 
-    // --- Velocity ---
-    navLayout->addWidget(absoluteVel,   2, 0, Qt::AlignCenter);
-    navLayout->addWidget(absoluteAngVel,2, 1, Qt::AlignCenter);
+    absoluteRotPanel.push_back(LNF_lcdLat);
+    absoluteRotPanel.push_back(LNF_lcdLon);
+    absoluteRotPanel.push_back(LNF_lcdRot);
+
+    absoluteTransVelPanel.push_back(LNF_lcdVelX);
+    absoluteTransVelPanel.push_back(LNF_lcdVelY);
+    absoluteTransVelPanel.push_back(LNF_lcdVelZ);
+
+    absoluteAngVelPanel.push_back(LNF_lcdRoll);
+    absoluteAngVelPanel.push_back(LNF_lcdPitch);
+    absoluteAngVelPanel.push_back(LNF_lcdYaw);
+
+    QWidget *timeDetailBox = uibuilder.setupDetailBox(timePanel, {"TIME [s]"}, "SIMULATION TIME DATA", 1);
+    QWidget *absPosDetailBox = uibuilder.setupDetailBox(absolutePosPanel, {"X [m]", "Y [m]", "Z [m]"}, "MCI_POSITION", 3);
+    QWidget *absRotDetailBox = uibuilder.setupDetailBox(absoluteRotPanel, {"LAT [°]", "LON [°]", "ROT [°]"}, "LNF_ROTATION", 3);
+    QWidget *absTransVelDetailBox = uibuilder.setupDetailBox(absoluteTransVelPanel, {"VX [m/s]", "VY [m/s]", "VZ [m/s]"}, "LNF_VELOCITY", 3);
+    QWidget *absAngVelDetailBox = uibuilder.setupDetailBox(absoluteAngVelPanel, {"ROLL [°/s]", "PITCH [°/s]", "YAW [°/s]"}, "LNF_ANGULAR VEL", 3);
+
+    navLayout->addWidget(timeDetailBox, 0, 0, 1, 2);
+    navLayout->addWidget(absPosDetailBox, 1, 0);
+    navLayout->addWidget(absRotDetailBox, 1, 1);
+    navLayout->addWidget(absTransVelDetailBox, 2, 0);
+    navLayout->addWidget(absAngVelDetailBox, 2, 1);
+
+    navLayout->setColumnStretch(0, 1);
+    navLayout->setColumnStretch(1, 1);
+
+    navLayout->setRowStretch(0, 1);
+    navLayout->setRowStretch(1, 1);
+    navLayout->setRowStretch(2, 1);
 
     return navBox;
-}
-
-QWidget *cockpitPage::setupNavDetailBox_time()
-{
-    QFrame *box = new QFrame();
-    box->setFrameShape(QFrame::StyledPanel);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(box);
-    mainLayout->setContentsMargins(6, 6, 6, 6);
-    mainLayout->setSpacing(4);
-
-    QLabel *title = new QLabel("TIME");
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
-
-    QGridLayout *grid = new QGridLayout();
-    grid->addWidget(createLcdField("Time [s]", lcdTime, 8), 0, 0);
-
-    mainLayout->addWidget(title);
-    mainLayout->addLayout(grid);
-
-    return box;
-}
-
-QWidget *cockpitPage::setupNavDetailBox_absolutePos()
-{
-    QFrame *box = new QFrame();
-    box->setFrameShape(QFrame::StyledPanel);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(box);
-    mainLayout->setContentsMargins(6, 6, 6, 6);
-    mainLayout->setSpacing(4);
-
-    QLabel *title = new QLabel("MCI_POSITION");
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
-
-    QGridLayout *grid = new QGridLayout();
-    grid->addWidget(createLcdField("X [m]", MCI_lcdPosX, 8), 0, 0);
-    grid->addWidget(createLcdField("Y [m]", MCI_lcdPosY, 8), 0, 1);
-    grid->addWidget(createLcdField("Z [m]", MCI_lcdPosZ, 8), 0, 2);
-
-    mainLayout->addWidget(title);
-    mainLayout->addLayout(grid);
-
-    return box;
-}
-
-QWidget *cockpitPage::setupNavDetailBox_absoluteRot()
-{
-    QFrame *box = new QFrame();
-    box->setFrameShape(QFrame::StyledPanel);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(box);
-    mainLayout->setContentsMargins(6, 6, 6, 6);
-    mainLayout->setSpacing(4);
-
-    QLabel *title = new QLabel("LNF_ROTATION");
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
-
-    QGridLayout *grid = new QGridLayout();
-    grid->addWidget(createLcdField("LAT [°]", LNF_lcdLat, 8), 0, 0);
-    grid->addWidget(createLcdField("LON [°]", LNF_lcdLon, 8), 0, 1);
-    grid->addWidget(createLcdField("ROT [°]", LNF_lcdRot, 8), 0, 2);
-
-    mainLayout->addWidget(title);
-    mainLayout->addLayout(grid);
-
-    return box;
-}
-
-QWidget *cockpitPage::setupNavDetailBox_absoluteTransVel()
-{
-    QFrame *box = new QFrame();
-    box->setFrameShape(QFrame::StyledPanel);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(box);
-    mainLayout->setContentsMargins(6, 6, 6, 6);
-    mainLayout->setSpacing(4);
-
-    QLabel *title = new QLabel("LNF_VELOCITY");
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
-
-    QGridLayout *grid = new QGridLayout();
-    grid->addWidget(createLcdField("VX [m/s]", LNF_lcdVelX, 8), 0, 0);
-    grid->addWidget(createLcdField("VY [m/s]", LNF_lcdVelY, 8), 0, 1);
-    grid->addWidget(createLcdField("VZ [m/s]", LNF_lcdVelZ, 8), 0, 2);
-
-    mainLayout->addWidget(title);
-    mainLayout->addLayout(grid);
-
-    return box;
-}
-
-QWidget *cockpitPage::setupNavDetailBox_absoluteAngVel()
-{
-    QFrame *box = new QFrame();
-    box->setFrameShape(QFrame::StyledPanel);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout(box);
-    mainLayout->setContentsMargins(6, 6, 6, 6);
-    mainLayout->setSpacing(4);
-
-    QLabel *title = new QLabel("LNF_ANGULAR VEL");
-    title->setAlignment(Qt::AlignCenter);
-    title->setStyleSheet("color: #4FC3F7; font-weight: bold;");
-
-    QGridLayout *grid = new QGridLayout();
-    grid->addWidget(createLcdField("ROLL [°/s]",    LNF_lcdRoll, 8), 0, 0);
-    grid->addWidget(createLcdField("PITCH [°/s]",   LNF_lcdPitch, 8), 0, 1);
-    grid->addWidget(createLcdField("YAW [°/s]",     LNF_lcdYaw, 8), 0, 2);
-
-    mainLayout->addWidget(title);
-    mainLayout->addLayout(grid);
-
-    return box;
 }
 
 // ================= ENGINE =================
@@ -251,28 +234,29 @@ QGroupBox *cockpitPage::setupEngineBox()
     QGroupBox *engineBox = new QGroupBox("ENGINE");
     QGridLayout *engineLayout = new QGridLayout(engineBox);
 
-    lcdThrust_BX    = new QLCDNumber();
-    lcdThrust_BY    = new QLCDNumber();
-    lcdThrust_BZ    = new QLCDNumber();
-    lcdTargetThrust = new QLCDNumber();
-    lcdAcceleration = new QLCDNumber();
+    QVector<QLCDNumber*> currentThrustPanel;
+    QVector<QLCDNumber*> targetThrustPanel;
 
-    configureLCD(lcdThrust_BX,    7);
-    configureLCD(lcdThrust_BY,    7);
-    configureLCD(lcdThrust_BZ,    7);
-    configureLCD(lcdTargetThrust, 7);
-    configureLCD(lcdAcceleration, 6);
+    currentThrustPanel.push_back(LNF_lcdThrust_BX);
+    currentThrustPanel.push_back(LNF_lcdThrust_BY);
+    currentThrustPanel.push_back(LNF_lcdThrust_BZ);
+    targetThrustPanel.push_back(LNF_lcdTargetThrust_BX);
+    targetThrustPanel.push_back(LNF_lcdTargetThrust_BY);
+    targetThrustPanel.push_back(LNF_lcdTargetThrust_BZ);
 
-    engineLayout->addWidget(new QLabel("Thrust [N] BX:"),       0, 0);
-    engineLayout->addWidget(lcdThrust_BX,                       0, 1);
-    engineLayout->addWidget(new QLabel("Thrust [N] BY:"),       1, 0);
-    engineLayout->addWidget(lcdThrust_BY,                       1, 1);
-    engineLayout->addWidget(new QLabel("Thrust [N] BZ:"),       2, 0);
-    engineLayout->addWidget(lcdThrust_BZ,                       2, 1);
-    engineLayout->addWidget(new QLabel("Target Thrust [N] BZ"), 3, 0);
-    engineLayout->addWidget(lcdTargetThrust,                    3, 1);
-    engineLayout->addWidget(new QLabel("G-Load [m/s²]"),        4, 0);
-    engineLayout->addWidget(lcdAcceleration,                    4, 1);
+    QWidget *currentThrustDetailBox = uibuilder.setupDetailBox(currentThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "LNF_CURRENT THRUST", 3);
+    QWidget *targetThrustDetailBox  = uibuilder.setupDetailBox(targetThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "LNF_TARGET THRUST", 3);
+    QWidget *GLoadDetailBox         = uibuilder.setupDetailBox({lcdGLoad}, {"GLoad [m/s²]"}, "ACCELERATION", 1);
+
+    engineLayout->addWidget(currentThrustDetailBox, 0, 0);
+    engineLayout->addWidget(targetThrustDetailBox, 0, 1);
+    engineLayout->addWidget(GLoadDetailBox, 1, 0, 1, 2);
+
+    engineLayout->setColumnStretch(0, 1);
+    engineLayout->setColumnStretch(1, 1);
+
+    engineLayout->setRowStretch(0, 1);
+    engineLayout->setRowStretch(1, 1);
 
     return engineBox;
 }
@@ -283,7 +267,7 @@ QGroupBox *cockpitPage::setupFuelBox()
     QGroupBox *fuelBox = new QGroupBox("FUEL");
     QGridLayout *fuelLayout = new QGridLayout(fuelBox);
 
-    QVector<QLCDNumber> fuelPanels;
+    QVector<QLCDNumber*> fuelPanels;
     QVector<QString> nameOfFuelPanels;
 
     fuelPanels.push_back(lcdFuelMass);
@@ -292,9 +276,11 @@ QGroupBox *cockpitPage::setupFuelBox()
     nameOfFuelPanels.push_back("Fuel Mass [kg]");
     nameOfFuelPanels.push_back("Fuel Flow [kg/s]");
 
-    QWidget *fuelDetailBox = uibuilder.setupDetailBox(fuelPanels, nameOfFuelPanels);
+    QWidget *fuelDetailBox = uibuilder.setupDetailBox(fuelPanels, nameOfFuelPanels, "FUEL METRICS", 2);
 
     fuelLayout->addWidget(fuelDetailBox, 0, 0);
+    fuelLayout->setRowStretch(0, 0);
+    fuelLayout->setColumnStretch(0, 0);
 
     return fuelBox;
 }
@@ -405,7 +391,18 @@ void cockpitPage::setupConnections()
 // ------------------------------------------------
 // Update Interface
 // ------------------------------------------------
-void cockpitPage::updateTime(double t)               { lcdTime->display(QString::number(t, 'f', 2)); }
+void cockpitPage::updateTime(double t)
+{
+    qDebug() << "updateTime called";
+    qDebug() << "lcdTime =" << lcdTime;
+
+    if (!lcdTime)
+    {
+        qDebug() << "lcdTime is nullptr!";
+        return;
+    }
+    lcdTime->display(QString::number(t, 'f', 2));
+}
 void cockpitPage::updatePosition(Vector3 pos)
 {
     MCI_lcdPosX->display(QString::number(pos.x, 'f', 1));
@@ -436,16 +433,43 @@ void cockpitPage::updateAngularVelocity(Vector3 angV)
     LNF_lcdYaw->display(QString::number(angV.z, 'f', 1));
 }
 
-void cockpitPage::updateAcceleration(double a)       { lcdAcceleration->display(QString::number(a, 'f', 2)); }
+void cockpitPage::updateAcceleration(double a)
+{
+    lcdGLoad->display(QString::number(a, 'f', 2));
+}
+
 void cockpitPage::updateThrust(Vector3 t)
 {
-    lcdThrust_BX->display(QString::number(t.x, 'f', 1));
-    lcdThrust_BY->display(QString::number(t.y, 'f', 1));
-    lcdThrust_BZ->display(QString::number(t.z, 'f', 1));
+    LNF_lcdThrust_BX->display(QString::number(t.x, 'f', 1));
+    LNF_lcdThrust_BY->display(QString::number(t.y, 'f', 1));
+    LNF_lcdThrust_BZ->display(QString::number(t.z, 'f', 1));
 }
-void cockpitPage::updateTargetThrust(double t)       { lcdTargetThrust->display(QString::number(t, 'f', 1)); }
-void cockpitPage::updateFuelMass(double f)           { lcdFuelMass->display(QString::number(f, 'f', 1)); }
-void cockpitPage::updateFuelFlow(double f)           { lcdFuelFlow->display(QString::number(f, 'f', 2)); }
+void cockpitPage::updateTargetThrust(double t)
+{
+    LNF_lcdTargetThrust_BZ->display(QString::number(t, 'f', 1));
+}
+
+void cockpitPage::updateFuelMass(double f)
+{
+    if (!lcdFuelMass)
+    {
+        qDebug() << "lcdFuelMass is nullptr!";
+        return;
+    }
+
+    lcdFuelMass->display(QString::number(f, 'f', 1));
+}
+
+void cockpitPage::updateFuelFlow(double f)
+{
+    if (!lcdFuelFlow)
+    {
+        qDebug() << "lcdFuelFlow is nulltpr!";
+        return;
+    }
+
+    lcdFuelFlow->display(QString::number(f, 'f', 2));
+}
 
 void cockpitPage::updateHullStatus(SpacecraftState spacecraftState_)
 {
@@ -500,6 +524,8 @@ void cockpitPage::onStateUpdated(double time,
                                  double fuelFlow,
                                  QString consoleOutput_)
 {
+    qDebug() << "[CockpitPage]-onStateUpdated- current thread:" << QThread::currentThread();
+    qDebug() << "[CockpitPage]-onStateUpdated- page thread   :" << this->thread();
     updateTime(time);
     updatePosition(pos);
     updateRotation({0.0, 0.0, 0.0});
@@ -508,6 +534,7 @@ void cockpitPage::onStateUpdated(double time,
     updateAcceleration(qRound(GLoad * 100.0) / 100.0);
     updateThrust({qRound(thrust.x * 10.0) / 10.0, qRound(thrust.y * 10.0) / 10.0, qRound(-thrust.z * 10.0) / 10.0}); //TODO: Eliminate minus when coordinate transform class is build
     updateTargetThrust(qRound(-targetThrust.z * 10.0) / 10.0); //TODO: Eliminate minus when coordinate transform class is build
+
     updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
     updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
     updateHullStatus(spacecraftState_);
@@ -517,6 +544,7 @@ void cockpitPage::onStateUpdated(double time,
     landingView->setHullIntact(spacecraftState_);
 
     (autopilotActive) ? consoleOutput(consoleOutput_) : consoleOutput("No controlling active");
+
 }
 
 void cockpitPage::onStopClicked()

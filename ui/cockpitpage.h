@@ -245,59 +245,22 @@ private:
     void setupUI();
 
     /**
+     * @brief Function for dynamic storage and pointer allocation
+     * Declaration of objects can be found as private members of this class
+     */
+    void initializeQTObjects();
+
+    /**
      * @brief Helper class for LCD Fields
      * @return QWidget with LCD field
      */
-    QWidget *createLcdField(const QString& title, QLCDNumber*& lcd, int digits);
+    QWidget *createLcdField(const QString& title, QLCDNumber* lcd, int digits);
 
     /**
      * @brief Builds navigation elements.
      * @return Navigation Box as QGroupBox.
      */
     QGroupBox *setupNavBox();
-
-    /**
-     * @brief Builds navigational detail element with time sections
-     * This can be extended by further time informations later
-     * @return QWidget as a box
-     */
-    QWidget *setupNavDetailBox_time();
-
-    /**
-     * @brief Builds navigational detail element with
-     * PosX
-     * PosY
-     * PosZ
-     * @return QWidget as a box
-     */
-    QWidget *setupNavDetailBox_absolutePos();
-
-    /**
-    * @brief Builds navigational detail element with
-    * Latitude
-    * Longitude
-    * Radius
-    * @return QWidget as a box
-    */
-    QWidget *setupNavDetailBox_absoluteRot();
-
-    /**
-     * @brief Builds navigational detail element with
-     * VelX
-     * VelY
-     * VelZ
-     * @return QWidget as a box
-     */
-    QWidget *setupNavDetailBox_absoluteTransVel();
-
-    /**
-    * @brief Builds navigational detail element with
-    * Roll
-    * Pitch
-    * Yaw
-    * @return QWidget as a box
-    */
-    QWidget *setupNavDetailBox_absoluteAngVel();
 
     /**
      * @brief Builds engine box elements.
@@ -367,11 +330,13 @@ private:
     // Engine Instruments
     // =====================================================
 
-    QLCDNumber *lcdThrust_BX;    ///< Current engine thrust in body frame of spacecraft x direction
-    QLCDNumber *lcdThrust_BY;    ///< Current engine thrust in body frame of spacecraft y direction
-    QLCDNumber *lcdThrust_BZ;    ///< Current engine thrust in body frame of spacecraft z direction
-    QLCDNumber *lcdTargetThrust; ///< Target thrust setpoint
-    QLCDNumber *lcdAcceleration; ///< Current acceleration [m/s²]
+    QLCDNumber *LNF_lcdThrust_BX;       ///< Current engine thrust in body frame of spacecraft x direction
+    QLCDNumber *LNF_lcdThrust_BY;       ///< Current engine thrust in body frame of spacecraft y direction
+    QLCDNumber *LNF_lcdThrust_BZ;       ///< Current engine thrust in body frame of spacecraft z direction
+    QLCDNumber *LNF_lcdTargetThrust_BX; ///< Target thrust setpoint in body frame of spacecraft x direction
+    QLCDNumber *LNF_lcdTargetThrust_BY; ///< Target thrust setpoint in body frame of spacecraft y direction
+    QLCDNumber *LNF_lcdTargetThrust_BZ; ///< Target thrust setpoint in body frame of spacecraft z direction
+    QLCDNumber *lcdGLoad;        ///< Current acceleration [m/s²]
 
     // =====================================================
     // Fuel Instruments
