@@ -149,8 +149,6 @@ simData simcontrol::runSimulation(const double dt)
         throw;
     }
 
-    std::cout << "[simcontrol]-runSimulation- run of simulation completed" << std::endl;
-
     return simdata_;
 }
 

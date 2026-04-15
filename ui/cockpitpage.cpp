@@ -393,9 +393,6 @@ void cockpitPage::setupConnections()
 // ------------------------------------------------
 void cockpitPage::updateTime(double t)
 {
-    qDebug() << "updateTime called";
-    qDebug() << "lcdTime =" << lcdTime;
-
     if (!lcdTime)
     {
         qDebug() << "lcdTime is nullptr!";
@@ -444,9 +441,11 @@ void cockpitPage::updateThrust(Vector3 t)
     LNF_lcdThrust_BY->display(QString::number(t.y, 'f', 1));
     LNF_lcdThrust_BZ->display(QString::number(t.z, 'f', 1));
 }
-void cockpitPage::updateTargetThrust(double t)
+void cockpitPage::updateTargetThrust(Vector3 t)
 {
-    LNF_lcdTargetThrust_BZ->display(QString::number(t, 'f', 1));
+    LNF_lcdTargetThrust_BX->display(QString::number(t.x, 'f', 1));
+    LNF_lcdTargetThrust_BY->display(QString::number(t.y, 'f', 1));
+    LNF_lcdTargetThrust_BZ->display(QString::number(t.z, 'f', 1));
 }
 
 void cockpitPage::updateFuelMass(double f)
@@ -524,16 +523,14 @@ void cockpitPage::onStateUpdated(double time,
                                  double fuelFlow,
                                  QString consoleOutput_)
 {
-    qDebug() << "[CockpitPage]-onStateUpdated- current thread:" << QThread::currentThread();
-    qDebug() << "[CockpitPage]-onStateUpdated- page thread   :" << this->thread();
     updateTime(time);
     updatePosition(pos);
     updateRotation({0.0, 0.0, 0.0});
     updateVelocity(vel);
     updateAngularVelocity({0.0, 0.0, 0.0});
     updateAcceleration(qRound(GLoad * 100.0) / 100.0);
-    updateThrust({qRound(thrust.x * 10.0) / 10.0, qRound(thrust.y * 10.0) / 10.0, qRound(-thrust.z * 10.0) / 10.0}); //TODO: Eliminate minus when coordinate transform class is build
-    updateTargetThrust(qRound(-targetThrust.z * 10.0) / 10.0); //TODO: Eliminate minus when coordinate transform class is build
+    updateThrust({qRound(thrust.x * 10.0) / 10.0, qRound(thrust.y * 10.0) / 10.0, qRound(-thrust.z * 10.0) / 10.0}); // TODO: Elimnate minus when coordinate transformation class is ready
+    updateTargetThrust({qRound(targetThrust.x * 10.0) / 10.0, qRound(targetThrust.y * 10.0) / 10.0, qRound(-targetThrust.z * 10.0) / 10.0}); // TODO: Elimnate minus when coordinate transformation class is ready
 
     updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
     updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);

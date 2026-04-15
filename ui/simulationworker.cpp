@@ -79,10 +79,8 @@ void SimulationWorker::setAutopilotFlag(bool active)
     collectAutopilotCommand(active);
 }
 
-int counter(0);
 void SimulationWorker::stepSimulation()
 {
-    qDebug() << "[SimulationWorker]-stepSimulation- Function called: " << counter;
     double dt = 0.00;   ///< Initialized discrete timestep
 
     // Return if not running
@@ -115,7 +113,6 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.fuelFlow,
                       consoleOutput
                       );
-    qDebug() << "[simulationworker]-stepSimulation- Step of simulation completed" ;
 }
 
 void SimulationWorker::collectControlCommands(const double &thrustInPercentage, const double &thrustInNewton)

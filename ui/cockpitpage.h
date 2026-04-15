@@ -107,7 +107,7 @@ public:
      * @brief Updates the target thrust setpoint.
      * @param target Target thrust value.
      */
-    void updateTargetThrust(double target);
+    void updateTargetThrust(Vector3 target);
 
     /**
      * @brief Updates the remaining fuel mass.
