@@ -27,5 +27,7 @@ public:
 
     virtual double  getCurrentFuelMass() const = 0;
 
-    virtual double getTankID() const = 0;
+    virtual double  getTankID() const = 0;
+
+    virtual double getMaxThrust() const = 0;
 };

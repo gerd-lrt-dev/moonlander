@@ -50,7 +50,7 @@ void SimulationWorker::stop()
                       SpacecraftState::Operational,
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
-                      0.0,
+                      {0.0, 0.0, 0.0},
                       0.0,
                       0.0,
                       "");
@@ -93,6 +93,8 @@ void SimulationWorker::stepSimulation()
 
     // Calling backend simulator
     spacecraftData = controller->runSimulation(dt);
+
+    qDebug() << "[simulationworker]-stepSimulation- thrust in %: " << spacecraftData.thrustInPercentage.z;
 
     // Withdraw user input due to thrust
     sendControlCommands();

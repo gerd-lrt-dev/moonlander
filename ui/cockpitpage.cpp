@@ -518,7 +518,7 @@ void cockpitPage::onStateUpdated(double time,
                                  SpacecraftState spacecraftState_,
                                  Vector3 thrust,
                                  Vector3 targetThrust,
-                                 double thrustInPercentage,
+                                 Vector3 thrustInPercentage,
                                  double fuelMass,
                                  double fuelFlow,
                                  QString consoleOutput_)
@@ -540,7 +540,9 @@ void cockpitPage::onStateUpdated(double time,
     landingView->setVelocityENU(vel);
     landingView->setYawDeg(0.0);          // vorerst 0 oder später aus Quaternion/Euler
     landingView->setTargetENU({0,0,0});   // oder echter Zielpunkt
-    landingView->setThrust(thrustInPercentage);
+    qDebug() << "[cockpitpage]-onStateUpdated- Thrust in %: " << thrustInPercentage.z;
+    landingView->setThrust(-thrustInPercentage.z);
+    landingView->setRCSActive(thrust);
     landingView->setHullIntact(spacecraftState_);
 
     (autopilotActive) ? consoleOutput(consoleOutput_) : consoleOutput("No controlling active");

@@ -54,8 +54,21 @@ void LandingView::setTargetENU(const Vector3& target)
 
 void LandingView::setThrust(double percent)
 {
+    percent *= 100;
     thrustPercent = qBound(0.0, percent, 100.0);
     update();
+}
+
+void LandingView::setRCSActive(Vector3 thrust)
+{
+    if (thrust.x != 0 || thrust.y != 0 || thrust.z < 0)
+    {
+        RCSActive = true;
+    }
+    else
+    {
+        RCSActive = false;
+    }
 }
 
 void LandingView::setHullIntact(SpacecraftState spacecraftState_)
@@ -321,7 +334,8 @@ void LandingView::drawStatusBox(QPainter& p, const QRect& r)
           << QString("VU : %1 m/s").arg(velocityENU.z, 0, 'f', 1)
           << QString("Vlat: %1 m/s").arg(lateralSpeed, 0, 'f', 1)
           << QString("Yaw : %1 deg").arg(yawDeg, 0, 'f', 1)
-          << QString("Thrust: %1 %").arg(thrustPercent, 0, 'f', 0)
+          << QString("Main Throttle [%]: %1 %").arg(thrustPercent, 0, 'f', 0)
+          << QString("RCS : %1").arg(RCSActive ? "ACTIVE" : "INACTIVE")
           << QString("Frame : LOCAL ENU")
           << QString("Ref   : MCI")
           << QString("Axes  : X=E  Y=N  Z=U");

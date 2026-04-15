@@ -123,6 +123,12 @@ public:
      */
     double calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) override;
 
+    /**
+     * @brief Getter function for maximum thrust given by engine config
+     * @return ///< [N] Maximum Thrust
+     */
+    double getMaxThrust() const override;
+
 private:
     EngineConfig engineConfig_;      ///< [-] Configuration parameters for a spacecraft engine.
     ThrustState thrustState_;        ///< [-] Dynamic state of the engine thrust.

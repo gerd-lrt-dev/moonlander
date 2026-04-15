@@ -90,6 +90,11 @@ Vector3 basicMainEngineModel::getDirectionOfThrust() const
     return engineConfig_.direction;
 }
 
+double basicMainEngineModel::getMaxThrust() const
+{
+    return engineConfig_.maxThrust;
+}
+
 // -------------------------------------------------------------------------
 // Private setter functions
 // -------------------------------------------------------------------------

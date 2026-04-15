@@ -128,6 +128,16 @@ public:
     void setThrust(double percent);
 
     /**
+     * @brief Updates RCS active switch
+     * @param current thrust vector
+     * - x → East thrust [N]
+     * - y → North thrust [N]
+     * - z → Vertical thrust [N]
+     * @param thrust
+     */
+    void setRCSActive(Vector3 thrust);
+
+    /**
      * @brief Updates hull integrity state.
      *
      * @param spacecraftState_ Current spacecraft state enum.
@@ -153,7 +163,9 @@ private:
     Vector3 velocityENU {0.0, 0.0, 0.0}; ///< Current velocity (ENU)
     Vector3 targetENU   {0.0, 0.0, 0.0}; ///< Target position (ENU)
 
-    double thrustPercent = 0.0; ///< Engine thrust [%]
+    double thrustPercent = 0.0; ///< Main Engine thrust [%]
+    bool RCSActive = false;     ///< Switch that represents if RCS engines are active [0,1]
+    int activeThruster = 0.0;   ///< Amount of engine which are active
     double yawDeg = 0.0;        ///< Yaw angle [deg]
 
     bool hullIntact = true;     ///< Hull integrity state

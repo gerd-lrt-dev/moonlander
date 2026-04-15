@@ -133,12 +133,17 @@ Vector3 Thrust::getCurrentThrust() const
 
 Vector3 Thrust::getCurrentThrustInPercentage() const
 {
+    Vector3 total{0.0, 0.0, 0.0};
+
     for (const auto& model: models_)
     {
-        //model->
+        Vector3 dir = model->getDirectionOfThrust();
+        double thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
+
+        total += dir * thrustInPercentage;
     }
 
-    return {0.0, 0.0, 0.0};
+    return total;
 
 }
 

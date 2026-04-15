@@ -307,9 +307,9 @@ Vector3 spacecraft::requestThrust() const
     return thrustOrchestration.getCurrentThrust();
 }
 
-double spacecraft::requestThrustInPercentage() const
+Vector3 spacecraft::requestThrustInPercentage() const
 {
-    return 0.0;//thrustOrchestration.getCurrentThrustInPercentage();
+    return thrustOrchestration.getCurrentThrustInPercentage();
 }
 
 double spacecraft::requestLiveFuelConsumption() const
