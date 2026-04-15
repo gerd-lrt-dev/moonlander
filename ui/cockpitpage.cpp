@@ -536,7 +536,10 @@ void cockpitPage::onStateUpdated(double time,
     updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
     updateHullStatus(spacecraftState_);
 
-    landingView->setAltitude(pos.z);
+    landingView->setPositionENU(pos);
+    landingView->setVelocityENU(vel);
+    landingView->setYawDeg(0.0);          // vorerst 0 oder später aus Quaternion/Euler
+    landingView->setTargetENU({0,0,0});   // oder echter Zielpunkt
     landingView->setThrust(thrustInPercentage);
     landingView->setHullIntact(spacecraftState_);
 
