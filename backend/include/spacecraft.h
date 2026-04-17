@@ -421,12 +421,26 @@ public:
     double getTotalMass();
 
     /**
+     * @brief Return current total mass
+     * Considers mass of all tanks for physical calculation
+     * @return total mass of fuel [kg]
+     */
+    double getTotalFuelMass() const;
+
+    /**
+     * @brief Return Fuel tank information for all installed tanks
+     *
+     * @return Vector with Fuel Tank Struct
+     */
+    std::vector<FuelTank> getFuelTanks() const;
+
+    /**
      * @brief Return current fuel mass
      * @return fuel mass
      * 
      * Fuel mass is updated by update thrust
      */
-    double getfuelMass() const;
+    const std::vector<FuelTank> getfuelMass() const;
 
     /**
      * @brief Return GLoad

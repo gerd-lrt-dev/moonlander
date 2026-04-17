@@ -17,11 +17,20 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QSlider>
+#include <QProgressBar>
+#include <QScrollArea>
+#include <QVBoxLayout>
+#include <QMap>
+#include <QVector>
+
 #include <vector3.h>
 #include <spacecraftStateStruct.h>
 
+
 #include "landingview.h"
 #include "uibuilder.h"
+#include "inputmapper.h"
+#include "Thrust/FueltankStruct.h"
 
 /**
  * @class cockpitPage
@@ -199,6 +208,7 @@ public slots:
                         Vector3 thrust,
                         Vector3 targetThrust,
                         Vector3 thrustInPercentage,
+                        QVector<FuelTank> tanks,
                         double fuelMass,
                         double fuelFlow,
                         QString consoleOutput);
@@ -229,8 +239,9 @@ private slots:
 
 private:
     // Members
-    double lastTimeDisplay; ///< Intermediate storage of time to calm the display down
-    UIBuilder uibuilder;
+    double lastTimeDisplay;     ///< Intermediate storage of time to calm the display down
+    UIBuilder uibuilder;        ///< UI Building helper class
+    inputmapper *m_inputMapper; ///< Keyboard and controller input class
 
     // =====================================================
     // Internal Setup Functions
@@ -249,6 +260,11 @@ private:
      * Declaration of objects can be found as private members of this class
      */
     void initializeQTObjects();
+
+    /**
+     * @brief Initialize all relevant object for keyboard and controller input
+     */
+    void initializeControlInput();
 
     /**
      * @brief Helper class for LCD Fields
@@ -281,6 +297,30 @@ private:
     QWidget *setupFuelDetailBox();
 
     /**
+     * @brief Rebuilds the dynamic fuel tank UI from a tank list.
+     *
+     * Creates one row per tank including:
+     * - tank name
+     * - tank role
+     * - remaining mass LCD
+     * - fill level progress bar
+     *
+     * Existing widgets are removed and recreated.
+     *
+     * @param tanks Current list of tanks.
+     */
+    void rebuildFuelTankPanel(const QVector<FuelTank>& tanks);
+
+    /**
+     * @brief Updates dynamic fuel tank values.
+     *
+     * Assumes that the UI was already built for the same tank count/order.
+     *
+     * @param tanks Current list of tanks.
+     */
+    void updateFuelTanks(const QVector<FuelTank>& tanks);
+
+    /**
      * @brief Builds status elements.
      * @return Status Box as QGroupBox.
      */
@@ -299,6 +339,26 @@ private:
      * or debug interactions.
      */
     void setupConnections();
+
+    /**
+     * @brief Handles key press events.
+     *
+     * This function is called by Qt when a key is pressed while this widget has focus.
+     * The event is forwarded to the input mapper for processing (e.g., thrust control).
+     *
+     * @param event Pointer to the key press event.
+     */
+    void keyPressEvent(QKeyEvent* event);
+
+        /**
+     * @brief Handles key release events.
+     *
+     * This function is called by Qt when a key is released while this widget has focus.
+     * The event is forwarded to the input mapper for processing.
+     *
+     * @param event Pointer to the key release event.
+     */
+    void keyReleaseEvent(QKeyEvent* event);
 
     // =====================================================
     // Navigation Instruments
@@ -320,9 +380,9 @@ private:
     QLCDNumber *LNF_lcdVelY;        ///< Velocity in y -> East [m/s]
     QLCDNumber *LNF_lcdVelZ;        ///< Velocity in z -> Up [m/s]
 
-    QLCDNumber *LNF_lcdRoll;         ///< Roll [°/s]
-    QLCDNumber *LNF_lcdPitch;        ///< Pitch [°/s]
-    QLCDNumber *LNF_lcdYaw;          ///< Yaw [°/s]
+    QLCDNumber *LNF_lcdRoll;        ///< Roll [°/s]
+    QLCDNumber *LNF_lcdPitch;       ///< Pitch [°/s]
+    QLCDNumber *LNF_lcdYaw;         ///< Yaw [°/s]
 
     QLCDNumber *LNF_totalVel;       ///< Total velocity [m/s]
 
@@ -336,7 +396,7 @@ private:
     QLCDNumber *LNF_lcdTargetThrust_BX; ///< Target thrust setpoint in body frame of spacecraft x direction
     QLCDNumber *LNF_lcdTargetThrust_BY; ///< Target thrust setpoint in body frame of spacecraft y direction
     QLCDNumber *LNF_lcdTargetThrust_BZ; ///< Target thrust setpoint in body frame of spacecraft z direction
-    QLCDNumber *lcdGLoad;        ///< Current acceleration [m/s²]
+    QLCDNumber *lcdGLoad;               ///< Current acceleration [m/s²]
 
     // =====================================================
     // Fuel Instruments
@@ -344,6 +404,18 @@ private:
 
     QLCDNumber *lcdFuelMass; ///< Remaining fuel mass [kg]
     QLCDNumber *lcdFuelFlow; ///< Fuel consumption rate [kg/s]
+
+    // =====================================================
+    // Fuel Tank UI
+    // =====================================================
+
+    QWidget *fuelTankContainer = nullptr;          ///< Container widget for dynamic tank list
+    QVBoxLayout *fuelTankLayout = nullptr;         ///< Layout for dynamic tank rows
+
+    QVector<QLCDNumber*> lcdTankMasses;            ///< One LCD per tank
+    QVector<QProgressBar*> barTankFillLevels;      ///< One fill bar per tank
+    QVector<QLabel*> lblTankNames;                 ///< One label per tank name
+    QVector<QLabel*> lblTankRoles;                 ///< One label per tank role
 
     // =====================================================
     // Status Indicators

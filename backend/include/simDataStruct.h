@@ -3,8 +3,10 @@
 
 #include "stateVectorStruct.h"
 #include "spacecraftStateStruct.h"
+#include "Thrust/FueltankStruct.h"
 
 #include <string>
+#include <vector>
 
 /**
  * @brief This data will be return to UI by runSimulation
@@ -35,7 +37,8 @@ struct simData
     Vector3 thrustInPercentage;
 
     // Fuel data
-    double fuelMass;
+    std::vector<FuelTank> tanks;
+    double fuelMass; ///< Fuel Mass summed by all installed tanks[kg]
     double fuelFlow;
 
     // Forces

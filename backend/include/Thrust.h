@@ -121,7 +121,7 @@ public:
      * @param engines Vector of engine configurations
      * @param tanks Vector of tank masses / capacities [kg]
      */
-    void initializeEngines(std::vector<EngineConfig> &engines, const std::vector<double> &tanks);
+    void initializeEngines(std::vector<EngineConfig> &engines, const std::vector<FuelTank> &tanks);
 
     /**
      * @brief Activates a specific engine.
@@ -201,6 +201,13 @@ public:
     Vector3 getCurrentThrustInPercentage() const;
 
     /**
+     * @brief Computes the total remaining fuel mass over all tanks.
+     *
+     * @return Sum of all tank masses [kg]
+     */
+    double getFuelMassOfAllTanks() const;
+
+    /**
      * @brief Returns the total current fuel consumption of all engines.
      *
      * @return Total propellant mass flow rate [kg/s]
@@ -208,11 +215,32 @@ public:
     double getFuelConsumption() const;
 
     /**
-     * @brief Returns the total remaining propellant mass of all tanks.
+     * @brief Returns access to all fuel tanks of the spacecraft.
      *
-     * @return Total fuel mass [kg]
+     * Provides a read-only reference to the internal list of fuel tanks.
+     * Each tank contains its own state information, such as current mass,
+     * capacity, and usage.
+     *
+     * This replaces the previous aggregated fuel mass interface, allowing
+     * more flexible handling of multiple tank systems (e.g., main tank,
+     * RCS tank, or future crossfeed configurations).
+     *
+     * The caller can iterate over all tanks to compute derived values such as:
+     * - total remaining propellant mass
+     * - per-system fuel usage
+     * - UI display of individual tank states
+     *
+     * Access example:
+     * @code
+     * double totalFuel = 0.0;
+     * for(const auto& tank : spacecraft.getFuelTanks()) {
+     *     totalFuel += tank.mass;
+     * }
+     * @endcode
+     *
+     * @return Constant reference to the vector of fuel tanks.
      */
-    double getCurrentFuelMass() const;
+    const std::vector<FuelTank>& getFuelTanks() const;
 
 private:
     /**
@@ -261,14 +289,7 @@ private:
      *
      * @param tanks Vector of tank masses [kg]
      */
-    void addFuelTank(const std::vector<double> &tanks);
-
-    /**
-     * @brief Computes the total remaining fuel mass over all tanks.
-     *
-     * @return Sum of all tank masses [kg]
-     */
-    double getFuelMassOfAllTanks() const;
+    void addFuelTank(const std::vector<FuelTank> &tanks);
 
     /**
      * @brief Adds a single engine model to the propulsion system.

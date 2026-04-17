@@ -1,4 +1,5 @@
 #include "cockpitpage.h"
+#include "Thrust/FueltankStruct.h"
 
 #include <QGridLayout>
 #include <QPushButton>
@@ -42,6 +43,9 @@ cockpitPage::cockpitPage(QWidget *parent)
     initializeQTObjects();
     setupUI();
     setupConnections();
+
+    // Prepare for keyboard input
+    initializeControlInput();
 }
 
 // ------------------------------------------------
@@ -176,6 +180,13 @@ void cockpitPage::initializeQTObjects()
     lcdFuelFlow = new QLCDNumber();
 }
 
+void cockpitPage::initializeControlInput()
+{
+    m_inputMapper = new inputmapper(thrustSlider, lblThrustCmd, this);
+    setFocusPolicy(Qt::StrongFocus);
+    setFocus();
+}
+
 // ================= NAV =================
 QGroupBox *cockpitPage::setupNavBox()
 {
@@ -265,22 +276,46 @@ QGroupBox *cockpitPage::setupEngineBox()
 QGroupBox *cockpitPage::setupFuelBox()
 {
     QGroupBox *fuelBox = new QGroupBox("FUEL");
-    QGridLayout *fuelLayout = new QGridLayout(fuelBox);
+    QVBoxLayout *fuelMainLayout = new QVBoxLayout(fuelBox);
 
-    QVector<QLCDNumber*> fuelPanels;
-    QVector<QString> nameOfFuelPanels;
+    // -------------------------
+    // General fuel metrics
+    // -------------------------
+    QGridLayout *fuelMetricsLayout = new QGridLayout();
 
-    fuelPanels.push_back(lcdFuelMass);
-    fuelPanels.push_back(lcdFuelFlow);
+    lcdFuelMass = new QLCDNumber();
+    lcdFuelFlow = new QLCDNumber();
 
-    nameOfFuelPanels.push_back("Fuel Mass [kg]");
-    nameOfFuelPanels.push_back("Fuel Flow [kg/s]");
+    configureLCD(lcdFuelMass, 8);
+    configureLCD(lcdFuelFlow, 8);
 
-    QWidget *fuelDetailBox = uibuilder.setupDetailBox(fuelPanels, nameOfFuelPanels, "FUEL METRICS", 2);
+    fuelMetricsLayout->addWidget(new QLabel("Total Fuel Mass [kg]"), 0, 0);
+    fuelMetricsLayout->addWidget(lcdFuelMass,                       0, 1);
 
-    fuelLayout->addWidget(fuelDetailBox, 0, 0);
-    fuelLayout->setRowStretch(0, 0);
-    fuelLayout->setColumnStretch(0, 0);
+    fuelMetricsLayout->addWidget(new QLabel("Fuel Flow [kg/s]"),    1, 0);
+    fuelMetricsLayout->addWidget(lcdFuelFlow,                       1, 1);
+
+    fuelMainLayout->addLayout(fuelMetricsLayout);
+
+    // -------------------------
+    // Dynamic tank section
+    // -------------------------
+    QLabel *tankSectionTitle = new QLabel("TANK STATUS");
+    tankSectionTitle->setStyleSheet("color: #4FC3F7; font-weight: bold;");
+    fuelMainLayout->addWidget(tankSectionTitle);
+
+    fuelTankContainer = new QWidget();
+    fuelTankLayout = new QVBoxLayout(fuelTankContainer);
+    fuelTankLayout->setContentsMargins(0, 0, 0, 0);
+    fuelTankLayout->setSpacing(8);
+
+    QScrollArea *scrollArea = new QScrollArea();
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setFrameShape(QFrame::NoFrame);
+    scrollArea->setWidget(fuelTankContainer);
+    scrollArea->setMinimumHeight(180);
+
+    fuelMainLayout->addWidget(scrollArea);
 
     return fuelBox;
 }
@@ -430,6 +465,158 @@ void cockpitPage::updateAngularVelocity(Vector3 angV)
     LNF_lcdYaw->display(QString::number(angV.z, 'f', 1));
 }
 
+void cockpitPage::rebuildFuelTankPanel(const QVector<FuelTank>& tanks)
+{
+    if (!fuelTankLayout)
+        return;
+
+    // Alte Widgets entfernen
+    QLayoutItem *item;
+    while ((item = fuelTankLayout->takeAt(0)) != nullptr)
+    {
+        if (item->widget())
+            delete item->widget();
+        delete item;
+    }
+
+    lcdTankMasses.clear();
+    barTankFillLevels.clear();
+    lblTankNames.clear();
+    lblTankRoles.clear();
+
+    for (const FuelTank& tank : tanks)
+    {
+        QGroupBox *tankBox = new QGroupBox();
+        QVBoxLayout *tankBoxLayout = new QVBoxLayout(tankBox);
+        tankBoxLayout->setContentsMargins(8, 8, 8, 8);
+        tankBoxLayout->setSpacing(4);
+
+        // Header
+        QLabel *lblName = new QLabel(QString::fromStdString(tank.name));
+        lblName->setStyleSheet("color: #D6E1F0; font-weight: bold;");
+
+        QLabel *lblRole = new QLabel(QString("Role: %1").arg(QString::fromStdString(tank.role)));
+        lblRole->setStyleSheet("color: #AFC7DF; font-size: 10px;");
+
+        tankBoxLayout->addWidget(lblName);
+        tankBoxLayout->addWidget(lblRole);
+
+        // Metrics row
+        QGridLayout *metricsLayout = new QGridLayout();
+
+        QLCDNumber *lcdMass = new QLCDNumber();
+        configureLCD(lcdMass, 8);
+        lcdMass->display(QString::number(tank.mass, 'f', 1));
+
+        QProgressBar *barFill = new QProgressBar();
+        barFill->setRange(0, 100);
+        barFill->setValue(static_cast<int>(tank.fillRatio() * 100.0));
+        barFill->setTextVisible(true);
+        barFill->setFormat("%p%");
+
+        barFill->setStyleSheet(
+            "QProgressBar {"
+            "  border: 1px solid #2F4A72;"
+            "  border-radius: 4px;"
+            "  background-color: #09111B;"
+            "  color: #D6E1F0;"
+            "  text-align: center;"
+            "}"
+            "QProgressBar::chunk {"
+            "  background-color: #4FC3F7;"
+            "  border-radius: 3px;"
+            "}"
+            );
+
+        QLabel *lblMass = new QLabel("Remaining [kg]");
+        QLabel *lblFill = new QLabel(
+            QString("Fill Level [%]  (%1 / %2 kg)")
+                .arg(tank.mass, 0, 'f', 1)
+                .arg(tank.capacity, 0, 'f', 1)
+            );
+
+        lblMass->setStyleSheet("color: #AFC7DF;");
+        lblFill->setStyleSheet("color: #AFC7DF;");
+
+        metricsLayout->addWidget(lblMass, 0, 0);
+        metricsLayout->addWidget(lblFill, 0, 1);
+
+        metricsLayout->addWidget(lcdMass, 1, 0);
+        metricsLayout->addWidget(barFill, 1, 1);
+
+        metricsLayout->setColumnStretch(0, 1);
+        metricsLayout->setColumnStretch(1, 2);
+
+        tankBoxLayout->addLayout(metricsLayout);
+
+        fuelTankLayout->addWidget(tankBox);
+
+        lcdTankMasses.push_back(lcdMass);
+        barTankFillLevels.push_back(barFill);
+        lblTankNames.push_back(lblName);
+        lblTankRoles.push_back(lblRole);
+    }
+
+    fuelTankLayout->addStretch();
+}
+
+void cockpitPage::updateFuelTanks(const QVector<FuelTank>& tanks)
+{
+    if (tanks.size() != lcdTankMasses.size())
+    {
+        rebuildFuelTankPanel(tanks);
+    }
+
+    const int count = qMin(tanks.size(), lcdTankMasses.size());
+
+    for (int i = 0; i < count; ++i)
+    {
+        const FuelTank& tank = tanks[i];
+
+        lcdTankMasses[i]->display(QString::number(tank.mass, 'f', 1));
+
+        int fillPercent = static_cast<int>(qBound(0.0, tank.fillRatio() * 100.0, 100.0));
+        barTankFillLevels[i]->setValue(fillPercent);
+
+        lblTankNames[i]->setText(QString::fromStdString(tank.name));
+        lblTankRoles[i]->setText(QString("Role: %1").arg(QString::fromStdString(tank.role)));
+
+        // Optional: leere Tanks rot markieren
+        if (tank.empty())
+        {
+            barTankFillLevels[i]->setStyleSheet(
+                "QProgressBar {"
+                "  border: 1px solid #7A2B2B;"
+                "  border-radius: 4px;"
+                "  background-color: #09111B;"
+                "  color: #D6E1F0;"
+                "  text-align: center;"
+                "}"
+                "QProgressBar::chunk {"
+                "  background-color: #E53935;"
+                "  border-radius: 3px;"
+                "}"
+                );
+        }
+        else
+        {
+            barTankFillLevels[i]->setStyleSheet(
+                "QProgressBar {"
+                "  border: 1px solid #2F4A72;"
+                "  border-radius: 4px;"
+                "  background-color: #09111B;"
+                "  color: #D6E1F0;"
+                "  text-align: center;"
+                "}"
+                "QProgressBar::chunk {"
+                "  background-color: #4FC3F7;"
+                "  border-radius: 3px;"
+                "}"
+                );
+        }
+    }
+}
+
 void cockpitPage::updateAcceleration(double a)
 {
     lcdGLoad->display(QString::number(a, 'f', 2));
@@ -508,6 +695,18 @@ void cockpitPage::updateAutopilotStatus(bool active)
     }
 }
 
+void cockpitPage::keyPressEvent(QKeyEvent* event)
+{
+    m_inputMapper->handleKeyPress(event);
+    QWidget::keyPressEvent(event);
+}
+
+void cockpitPage::keyReleaseEvent(QKeyEvent* event)
+{
+    m_inputMapper->handleKeyRelease(event);
+    QWidget::keyReleaseEvent(event);
+}
+
 // ------------------------------------------------
 // Slots
 // ------------------------------------------------
@@ -519,6 +718,7 @@ void cockpitPage::onStateUpdated(double time,
                                  Vector3 thrust,
                                  Vector3 targetThrust,
                                  Vector3 thrustInPercentage,
+                                 QVector<FuelTank> tanks,
                                  double fuelMass,
                                  double fuelFlow,
                                  QString consoleOutput_)
@@ -532,6 +732,7 @@ void cockpitPage::onStateUpdated(double time,
     updateThrust({qRound(thrust.x * 10.0) / 10.0, qRound(thrust.y * 10.0) / 10.0, qRound(-thrust.z * 10.0) / 10.0}); // TODO: Elimnate minus when coordinate transformation class is ready
     updateTargetThrust({qRound(targetThrust.x * 10.0) / 10.0, qRound(targetThrust.y * 10.0) / 10.0, qRound(-targetThrust.z * 10.0) / 10.0}); // TODO: Elimnate minus when coordinate transformation class is ready
 
+    updateFuelTanks(tanks);
     updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
     updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
     updateHullStatus(spacecraftState_);
@@ -540,7 +741,6 @@ void cockpitPage::onStateUpdated(double time,
     landingView->setVelocityENU(vel);
     landingView->setYawDeg(0.0);          // vorerst 0 oder später aus Quaternion/Euler
     landingView->setTargetENU({0,0,0});   // oder echter Zielpunkt
-    qDebug() << "[cockpitpage]-onStateUpdated- Thrust in %: " << thrustInPercentage.z;
     landingView->setThrust(-thrustInPercentage.z);
     landingView->setRCSActive(thrust);
     landingView->setHullIntact(spacecraftState_);

@@ -46,7 +46,7 @@ void Thrust::shutDownAllEngines() const
     }
 }
 
-void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const std::vector<double> &tanks)
+void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const std::vector<FuelTank> &tanks)
 {
     // -----------------------------------------
     // Initialize tanks
@@ -144,7 +144,6 @@ Vector3 Thrust::getCurrentThrustInPercentage() const
     }
 
     return total;
-
 }
 
 double Thrust::getFuelConsumption() const
@@ -159,10 +158,9 @@ double Thrust::getFuelConsumption() const
     return sum;
 }
 
-double Thrust::getCurrentFuelMass() const
+const std::vector<FuelTank>& Thrust::getFuelTanks() const
 {
-    // TODO: Change it to requesting fuel mass of specific tanks, when UI is adapted
-    return getFuelMassOfAllTanks();
+    return tanks_;
 }
 
 void Thrust::addModel(std::unique_ptr<IThrustModel> model)
@@ -170,16 +168,14 @@ void Thrust::addModel(std::unique_ptr<IThrustModel> model)
     models_.push_back(std::move(model));
 }
 
-void Thrust::addFuelTank(const std::vector<double> &tanks)
+void Thrust::addFuelTank(const std::vector<FuelTank> &tanks)
 {
+    tanks_ = tanks;
+
     for (size_t i = 0; i < tanks.size(); ++i)
     {
-        FuelTank tank;
-        tank.id = i;
 
-        tank.mass = tanks[i];
-        tank.capacity = tanks[i];
-        tanks_.push_back(tank);
+        //std::cout << "[Thrust]-addFuelTank- Add Tank " << tanks[i].
     }
 
     std::cout << "[Thrust] Added " << tanks.size() << " tanks" << std::endl;

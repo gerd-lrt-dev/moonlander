@@ -13,6 +13,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <QMutexLocker>
+#include <QVector>
 
 #include "simcontrol.h"
 
@@ -101,6 +102,7 @@ signals:
                       Vector3 thrust,
                       Vector3 targetThrust,
                       Vector3 thrustInPercentage,
+                      QVector<FuelTank> fuelTanks,
                       double fuelMass,
                       double fuelFlow,
                       QString consoleOutput

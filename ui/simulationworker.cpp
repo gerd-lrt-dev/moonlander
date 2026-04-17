@@ -51,6 +51,7 @@ void SimulationWorker::stop()
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
+                      QVector<FuelTank>{},
                       0.0,
                       0.0,
                       "");
@@ -94,13 +95,14 @@ void SimulationWorker::stepSimulation()
     // Calling backend simulator
     spacecraftData = controller->runSimulation(dt);
 
-    qDebug() << "[simulationworker]-stepSimulation- thrust in %: " << spacecraftData.thrustInPercentage.z;
-
     // Withdraw user input due to thrust
     sendControlCommands();
 
     // Change data type for console output
     QString consoleOutput = QString::fromStdString(spacecraftData.output);
+
+    // Change vector type for fuel tanks information
+    QVector<FuelTank> fuelTanksQVec(spacecraftData.tanks.begin(), spacecraftData.tanks.end());
 
     // signals
     emit stateUpdated(currentTime,
@@ -111,6 +113,7 @@ void SimulationWorker::stepSimulation()
                       spacecraftData.thrust,
                       spacecraftData.targetThrust,
                       spacecraftData.thrustInPercentage,
+                      fuelTanksQVec,
                       spacecraftData.fuelMass,
                       spacecraftData.fuelFlow,
                       consoleOutput

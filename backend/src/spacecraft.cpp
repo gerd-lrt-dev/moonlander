@@ -17,7 +17,7 @@ void spacecraft::setDefaultValues()
     state_.I_Position = landerMoon.I_initialPos;
     state_.I_Velocity = landerMoon.I_initialVelocity;
 
-    thrustOrchestration.initializeEngines(landerMoon.engines_, {landerMoon.fuelM});
+    thrustOrchestration.initializeEngines(landerMoon.engines_, landerMoon.tanks_);
 
 
     // TODO just testing here optimization
@@ -149,7 +149,7 @@ spacecraft::~spacecraft()
 void spacecraft::updateStep(double dt)
 {
     // Update mass data
-    updateTotalMassOnFuelReduction(landerMoon.emptyMass, getfuelMass());
+    updateTotalMassOnFuelReduction(landerMoon.emptyMass, getTotalFuelMass());
 
     thrustOrchestration.updateThrust(dt);
 
@@ -343,7 +343,8 @@ simData spacecraft::getFullSimulationData() const
     simData_.targetThrust = requestTargetThrust();
     simData_.thrustInPercentage = requestThrustInPercentage();
 
-    simData_.fuelMass = getfuelMass();
+    simData_.tanks    = getFuelTanks();
+    simData_.fuelMass = getTotalFuelMass();
     simData_.fuelFlow = requestLiveFuelConsumption();
 
     simData_.GLoad = getGload();
@@ -388,9 +389,14 @@ double spacecraft::getTotalMass()
     return state_.totalMass;
 }
 
-double spacecraft::getfuelMass() const
+double spacecraft::getTotalFuelMass() const
 {
-    return thrustOrchestration.getCurrentFuelMass();
+    return thrustOrchestration.getFuelMassOfAllTanks();
+}
+
+std::vector<FuelTank> spacecraft::getFuelTanks() const
+{
+    return thrustOrchestration.getFuelTanks();
 }
 
 double spacecraft::getGload() const
