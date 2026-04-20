@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QSlider>
 
+#include "flightcommandstruct.h"
+
 class QKeyEvent;
 
 /**
@@ -94,6 +96,16 @@ signals:
      */
     void ME_thrustTargetRequested(double value);
 
+    /**
+     * @brief Emitted when a new RCS control command is requested.
+     *
+     * This signal provides the current RCS command state, including
+     * translational inputs derived from user interaction.
+     *
+     * @param cmdSignal Flight command containing RCS input state.
+     */
+    void RCS_cmdRequested(const FlightCommand& cmdSignal);
+
 private:
     /**
      * @brief Updates the thrust command label text.
@@ -103,6 +115,11 @@ private:
      * @param value Current main engine thrust command in percent.
      */
     void updateLabel(int value);
+
+    /**
+     * @brief Update FlightCommand Struct with input from user
+     */
+    void updateFlightCommand();
 
     /**
      * @brief Pointer to the main engine thrust slider.
@@ -115,4 +132,15 @@ private:
      * @brief Pointer to the label showing the commanded thrust.
      */
     QLabel* m_label = nullptr;
+
+    // =====================================================
+    // Translation controlling conditions
+    // =====================================================
+
+    bool ENU_PosX = false;
+    bool ENU_NegX = false;
+    bool ENU_PosY = false;
+    bool ENU_NegY = false;
+    bool ENU_PosZ = false;
+    bool ENU_NegZ = false;
 };

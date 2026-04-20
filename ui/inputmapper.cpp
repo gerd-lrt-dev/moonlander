@@ -3,17 +3,6 @@
 #include <QKeyEvent>
 #include <QString>
 
-/**
- * @brief Constructs the input mapper and connects the slider to UI/state updates.
- *
- * The slider remains the single source of truth for main engine thrust.
- * Any value change, whether caused by mouse interaction or keyboard input,
- * updates the label and emits the requested thrust target signal.
- *
- * @param mainEngineSlider Pointer to the main engine slider.
- * @param label Pointer to the UI label showing the commanded thrust.
- * @param parent Optional Qt parent object.
- */
 inputmapper::inputmapper(QSlider* mainEngineSlider, QLabel* label, QObject* parent)
     : QObject(parent),
     mE_Slider(mainEngineSlider),
@@ -30,17 +19,6 @@ inputmapper::inputmapper(QSlider* mainEngineSlider, QLabel* label, QObject* pare
     updateLabel(mE_Slider->value());
 }
 
-/**
- * @brief Handles relevant key press events and updates the slider.
- *
- * Arrow Up increases the slider value by one step.
- * Arrow Down decreases the slider value by one step.
- *
- * Since QSlider::setValue() is used, the slider automatically enforces
- * its configured minimum and maximum range.
- *
- * @param event Pointer to the incoming key press event.
- */
 void inputmapper::handleKeyPress(QKeyEvent* event)
 {
     if (event == nullptr || mE_Slider == nullptr)
@@ -63,22 +41,36 @@ void inputmapper::handleKeyPress(QKeyEvent* event)
         mE_Slider->setValue(mE_Slider->value() - 1);
         break;
 
+    case Qt::Key_D:
+        ENU_PosX = true;
+        break;
+
+    case Qt::Key_A:
+        ENU_NegX = true;
+        break;
+
+    case Qt::Key_W:
+        ENU_PosY = true;
+        break;
+
+    case Qt::Key_S:
+        ENU_NegY = true;
+        break;
+
+    case Qt::Key_E:
+        ENU_PosZ = true;
+        break;
+
+    case Qt::Key_Q:
+        ENU_NegZ = true;
+        break;
+
     default:
         break;
     }
+    updateFlightCommand();
 }
 
-/**
- * @brief Handles key release events.
- *
- * This implementation currently performs no action on key release,
- * because main engine throttle is updated discretely on key press.
- *
- * The method is retained to support future extensions, for example
- * continuous throttle input or additional mapped controls.
- *
- * @param event Pointer to the incoming key release event.
- */
 void inputmapper::handleKeyRelease(QKeyEvent* event)
 {
     if (event == nullptr)
@@ -98,20 +90,60 @@ void inputmapper::handleKeyRelease(QKeyEvent* event)
         // No action required at the moment.
         break;
 
+    case Qt::Key_D:
+        ENU_PosX = false;
+        break;
+
+    case Qt::Key_A:
+        ENU_NegX = false;
+        break;
+
+    case Qt::Key_W:
+        ENU_PosY = false;
+        break;
+
+    case Qt::Key_S:
+        ENU_NegY = false;
+        break;
+
+    case Qt::Key_E:
+        ENU_PosZ = false;
+        break;
+
+    case Qt::Key_Q:
+        ENU_NegZ = false;
+        break;
+
     default:
         break;
     }
+    updateFlightCommand();
 }
 
-/**
- * @brief Updates the thrust label with the current commanded thrust value.
- *
- * @param value Current slider value in percent.
- */
 void inputmapper::updateLabel(int value)
 {
     if (m_label != nullptr)
     {
         m_label->setText(QString("Commanded Thrust: %1 %").arg(value));
     }
+}
+
+void inputmapper::updateFlightCommand()
+{
+    FlightCommand cmd;
+
+    cmd.translation.x = 0.0;
+    cmd.translation.y = 0.0;
+    cmd.translation.z = 0.0;
+
+    if (ENU_PosX) cmd.translation.x += 1.0;
+    if (ENU_NegX) cmd.translation.x -= 1.0;
+
+    if (ENU_PosY) cmd.translation.y += 1.0;
+    if (ENU_NegY) cmd.translation.y -= 1.0;
+
+    if (ENU_PosZ) cmd.translation.z += 1.0;
+    if (ENU_NegZ) cmd.translation.z -= 1.0;
+
+    emit RCS_cmdRequested(cmd);
 }

@@ -40,12 +40,16 @@ cockpitPage::cockpitPage(QWidget *parent)
     lcdFuelMass(nullptr),
     lcdFuelFlow(nullptr)
 {
+
     initializeQTObjects();
     setupUI();
-    setupConnections();
 
     // Prepare for keyboard input
     initializeControlInput();
+
+    setupConnections();
+
+
 }
 
 // ------------------------------------------------
@@ -421,6 +425,8 @@ void cockpitPage::setupConnections()
     connect(btnAutopilot, &QPushButton::clicked, this, &cockpitPage::onAutopilotClicked);
 
     connect(autopilotBlinkTimer, &QTimer::timeout, this, &cockpitPage::onAutopilotBlinkTimeout);
+
+    connect(m_inputMapper, &inputmapper::RCS_cmdRequested, this, &cockpitPage::onRCScmd);
 }
 
 // ------------------------------------------------
@@ -739,8 +745,8 @@ void cockpitPage::onStateUpdated(double time,
 
     landingView->setPositionENU(pos);
     landingView->setVelocityENU(vel);
-    landingView->setYawDeg(0.0);          // vorerst 0 oder später aus Quaternion/Euler
-    landingView->setTargetENU({0,0,0});   // oder echter Zielpunkt
+    landingView->setYawDeg(0.0);          // DUMMY later from Quaternion/Euler
+    landingView->setTargetENU({0,0,0});   // DUMMY
     landingView->setThrust(-thrustInPercentage.z);
     landingView->setRCSActive(thrust);
     landingView->setHullIntact(spacecraftState_);
@@ -805,3 +811,12 @@ void cockpitPage::consoleOutput(const QString& output)
     lblControllerOutput->setText(output);
 }
 
+void cockpitPage::onRCScmd(const FlightCommand& RCS_cmd_)
+{
+    RCS_cmd = RCS_cmd_;
+
+    qDebug() << "[RCS]"
+             << "X:" << RCS_cmd.translation.x
+             << "Y:" << RCS_cmd.translation.y
+             << "Z:" << RCS_cmd.translation.z;
+}

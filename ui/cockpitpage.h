@@ -237,11 +237,18 @@ private slots:
      */
     void consoleOutput(const QString &output);
 
+    /**
+     * @brief Slot for RCS command
+     * @param Flight command Struct for translational and rotational control
+     */
+    void onRCScmd(const FlightCommand& RCS_cmd_);
+
 private:
     // Members
     double lastTimeDisplay;     ///< Intermediate storage of time to calm the display down
     UIBuilder uibuilder;        ///< UI Building helper class
     inputmapper *m_inputMapper; ///< Keyboard and controller input class
+    FlightCommand RCS_cmd;      ///< Reaction Control System input
 
     // =====================================================
     // Internal Setup Functions
