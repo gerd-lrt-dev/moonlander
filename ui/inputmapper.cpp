@@ -9,14 +9,6 @@ inputmapper::inputmapper(QSlider* mainEngineSlider, QLabel* label, QObject* pare
     m_label(label)
 {
     Q_ASSERT(mE_Slider != nullptr);
-
-    connect(mE_Slider, &QSlider::valueChanged, this, [this](int value)
-            {
-                updateLabel(value);
-                emit ME_thrustTargetRequested(static_cast<double>(value));
-            });
-
-    updateLabel(mE_Slider->value());
 }
 
 void inputmapper::handleKeyPress(QKeyEvent* event)
@@ -35,34 +27,34 @@ void inputmapper::handleKeyPress(QKeyEvent* event)
     {
     case Qt::Key_Up:
         mE_Slider->setValue(mE_Slider->value() + 1);
-        break;
+        return;
 
     case Qt::Key_Down:
         mE_Slider->setValue(mE_Slider->value() - 1);
-        break;
+        return;
 
     case Qt::Key_D:
-        ENU_PosX = true;
+        ENU_RCS_PosX = true;
         break;
 
     case Qt::Key_A:
-        ENU_NegX = true;
+        ENU_RCS_NegX = true;
         break;
 
     case Qt::Key_W:
-        ENU_PosY = true;
+        ENU_RCS_PosY = true;
         break;
 
     case Qt::Key_S:
-        ENU_NegY = true;
+        ENU_RCS_NegY = true;
         break;
 
     case Qt::Key_E:
-        ENU_PosZ = true;
+        ENU_RCS_PosZ = true;
         break;
 
     case Qt::Key_Q:
-        ENU_NegZ = true;
+        ENU_RCS_NegZ = true;
         break;
 
     default:
@@ -85,33 +77,28 @@ void inputmapper::handleKeyRelease(QKeyEvent* event)
 
     switch (event->key())
     {
-    case Qt::Key_Up:
-    case Qt::Key_Down:
-        // No action required at the moment.
-        break;
-
     case Qt::Key_D:
-        ENU_PosX = false;
+        ENU_RCS_PosX = false;
         break;
 
     case Qt::Key_A:
-        ENU_NegX = false;
+        ENU_RCS_NegX = false;
         break;
 
     case Qt::Key_W:
-        ENU_PosY = false;
+        ENU_RCS_PosY = false;
         break;
 
     case Qt::Key_S:
-        ENU_NegY = false;
+        ENU_RCS_NegY = false;
         break;
 
     case Qt::Key_E:
-        ENU_PosZ = false;
+        ENU_RCS_PosZ = false;
         break;
 
     case Qt::Key_Q:
-        ENU_NegZ = false;
+        ENU_RCS_NegZ = false;
         break;
 
     default:
@@ -130,20 +117,23 @@ void inputmapper::updateLabel(int value)
 
 void inputmapper::updateFlightCommand()
 {
-    FlightCommand cmd;
+    FlightCommand cmd{};
 
-    cmd.translation.x = 0.0;
-    cmd.translation.y = 0.0;
-    cmd.translation.z = 0.0;
+    if (ENU_RCS_PosX) cmd.translation.x += 1.0;
+    if (ENU_RCS_NegX) cmd.translation.x -= 1.0;
 
-    if (ENU_PosX) cmd.translation.x += 1.0;
-    if (ENU_NegX) cmd.translation.x -= 1.0;
+    if (ENU_RCS_PosY) cmd.translation.y += 1.0;
+    if (ENU_RCS_NegY) cmd.translation.y -= 1.0;
 
-    if (ENU_PosY) cmd.translation.y += 1.0;
-    if (ENU_NegY) cmd.translation.y -= 1.0;
+    if (ENU_RCS_PosZ) cmd.translation.z += 1.0;
+    if (ENU_RCS_NegZ) cmd.translation.z -= 1.0;
 
-    if (ENU_PosZ) cmd.translation.z += 1.0;
-    if (ENU_NegZ) cmd.translation.z -= 1.0;
+    if (cmd.translation.x == 0.0 &&
+        cmd.translation.y == 0.0 &&
+        cmd.translation.z == 0.0)
+    {
+        return;
+    }
 
     emit RCS_cmdRequested(cmd);
 }

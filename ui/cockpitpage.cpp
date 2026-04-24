@@ -40,7 +40,6 @@ cockpitPage::cockpitPage(QWidget *parent)
     lcdFuelMass(nullptr),
     lcdFuelFlow(nullptr)
 {
-
     initializeQTObjects();
     setupUI();
 
@@ -48,8 +47,6 @@ cockpitPage::cockpitPage(QWidget *parent)
     initializeControlInput();
 
     setupConnections();
-
-
 }
 
 // ------------------------------------------------
@@ -417,16 +414,24 @@ void cockpitPage::setupConnections()
     connect(btnSimStop,  &QPushButton::clicked, this, &cockpitPage::onStopClicked);     ///< Combined with private slot
 
     connect(thrustSlider, &QSlider::valueChanged, this, [this](int value)
-            {
-                lblThrustCmd->setText(QString("Commanded Thrust: %1 %").arg(value));
-                emit thrustTargetRequested(static_cast<double>((value)));
-            });
+    {
+        lblThrustCmd->setText(QString("Commanded Thrust: %1 %").arg(value));
+        collectedCmd.mainEngine = static_cast<float>(value) / 100.0;
+        sendFlightCmd();
+    });
 
     connect(btnAutopilot, &QPushButton::clicked, this, &cockpitPage::onAutopilotClicked);
 
     connect(autopilotBlinkTimer, &QTimer::timeout, this, &cockpitPage::onAutopilotBlinkTimeout);
 
-    connect(m_inputMapper, &inputmapper::RCS_cmdRequested, this, &cockpitPage::onRCScmd);
+    connect(m_inputMapper, &inputmapper::RCS_cmdRequested, this, [this](FlightCommand cmd)
+    {
+        collectedCmd.translation = cmd.translation;
+        collectedCmd.rotation    = cmd.rotation;
+        collectedCmd.stabilize   = cmd.stabilize;
+        collectedCmd.killRotation = cmd.killRotation;
+        sendFlightCmd();
+    });
 }
 
 // ------------------------------------------------
@@ -476,7 +481,6 @@ void cockpitPage::rebuildFuelTankPanel(const QVector<FuelTank>& tanks)
     if (!fuelTankLayout)
         return;
 
-    // Alte Widgets entfernen
     QLayoutItem *item;
     while ((item = fuelTankLayout->takeAt(0)) != nullptr)
     {
@@ -713,6 +717,11 @@ void cockpitPage::keyReleaseEvent(QKeyEvent* event)
     QWidget::keyReleaseEvent(event);
 }
 
+void cockpitPage::sendFlightCmd()
+{
+    emit flightCmdRequested(collectedCmd);
+}
+
 // ------------------------------------------------
 // Slots
 // ------------------------------------------------
@@ -809,14 +818,4 @@ void cockpitPage::onAutopilotBlinkTimeout()
 void cockpitPage::consoleOutput(const QString& output)
 {
     lblControllerOutput->setText(output);
-}
-
-void cockpitPage::onRCScmd(const FlightCommand& RCS_cmd_)
-{
-    RCS_cmd = RCS_cmd_;
-
-    qDebug() << "[RCS]"
-             << "X:" << RCS_cmd.translation.x
-             << "Y:" << RCS_cmd.translation.y
-             << "Z:" << RCS_cmd.translation.z;
 }

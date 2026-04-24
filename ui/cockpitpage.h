@@ -178,6 +178,12 @@ signals:
     void thrustTargetRequested(double percent);
 
     /**
+     * @brief Emitted when the user provide flight command input
+     * @param FlightCommand struct
+     */
+    void flightCmdRequested(FlightCommand cmd);
+
+    /**
      * @brief Emitted when the autopilot toggle button is pressed.
      * @param acitve True if autopilot should be enabled.
      */
@@ -237,18 +243,12 @@ private slots:
      */
     void consoleOutput(const QString &output);
 
-    /**
-     * @brief Slot for RCS command
-     * @param Flight command Struct for translational and rotational control
-     */
-    void onRCScmd(const FlightCommand& RCS_cmd_);
-
 private:
     // Members
     double lastTimeDisplay;     ///< Intermediate storage of time to calm the display down
     UIBuilder uibuilder;        ///< UI Building helper class
     inputmapper *m_inputMapper; ///< Keyboard and controller input class
-    FlightCommand RCS_cmd;      ///< Reaction Control System input
+    FlightCommand collectedCmd; ///< Collected flight command. This command will be send to worker thread
 
     // =====================================================
     // Internal Setup Functions
@@ -366,6 +366,12 @@ private:
      * @param event Pointer to the key release event.
      */
     void keyReleaseEvent(QKeyEvent* event);
+
+    /**
+     * @brief Collect and send flight command to worker thread
+     *
+     */
+    void sendFlightCmd();
 
     // =====================================================
     // Navigation Instruments

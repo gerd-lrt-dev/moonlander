@@ -37,6 +37,7 @@
           "id": 0,
           "name": "MainEngine",
           "type": "main",
+          "axis": "-z",
           "tankID": 0,
 
           "Isp": 311.0,

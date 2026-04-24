@@ -16,6 +16,7 @@
 #include <QVector>
 
 #include "simcontrol.h"
+#include "flightcommandstruct.h"
 
 /**
  * @class SimulationWorker
@@ -54,9 +55,9 @@ public slots:
 
     /**
      * @brief Sets the desired thrust lvl
-     * @param percent Target thrust in percent
+     * @param FlightCommand Struct with translational and rotational commands
      */
-    void setTargetThrust(double percent);
+    void setFlightCommand(FlightCommand cmd);
 
     /**
      * @brief Receives QString with json config data
@@ -147,10 +148,11 @@ private:
      * This function stores the thrust command values received from the user.
      * Both parameters are optional and default to zero.
      *
+     * @param FlightCommand Struct with translational and rotational input
      * @param thrustInPercentage Commanded thrust as a percentage of maximum thrust.
      * @param thrustInNewton     Commanded thrust in Newtons.
      */
-    void collectControlCommands(const double &thrustInPercentage = 0.0, const double &thrustInNewton = 0.0);
+    void collectControlCommands(const FlightCommand &cmd, const double &thrustInPercentage = 0.0, const double &thrustInNewton = 0.0);
 
     /**
      * @brief Collects an autopilot command from the automation system.

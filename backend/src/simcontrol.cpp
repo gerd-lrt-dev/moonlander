@@ -46,7 +46,8 @@ void simcontrol::processCommands()
 {
     ControlCommand activeCommand = inputArbiter_->chooseCommand();
 
-    setTargetThrust(activeCommand.thrustInPercentage);
+    setTargetMainEngineThrust(activeCommand.mainEngine);
+    setRCSThrust(activeCommand.translation);
 }
 
 void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, const int &engineNr, const double& dt)
@@ -58,15 +59,14 @@ void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, con
         double autoThrust = autopilot_->setAutoThrustInNewton(controller_.get(), landerMoon1.engines_[0].maxThrust, landerSpacecraft->getVelocity().z, landerSpacecraft->getPosition().z - config_.radiusMoon, dt, landerMoon1.emptyMass + landerMoon1.fuelM, config_.moonGravity);
         double autoThrustNormalized = autopilot_->normalizAutoThrust(autoThrust, landerMoon1.engines_[0].maxThrust);
         ControlCommand autoCmd;
-        autoCmd.thrustInPercentage = autoThrustNormalized;
+        autoCmd.mainEngine = autoThrustNormalized;
         receiveCommandFromAutopilot(autoCmd);
         processCommands();
     }
     else if (currentSpacecraftstate == SpacecraftState::Landed)
     {
         ControlCommand cmd;
-        cmd.thrustInPercentage  = 0.0;
-        cmd.thrustInNewton      = 0.0;
+        cmd.mainEngine          = 0.0;
         cmd.autopilotActive     = false;
         receiveCommandFromAutopilot(cmd);
         processCommands();
@@ -167,11 +167,42 @@ void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
     jsonConfigString = jsonConfigStr;
 }
 
-void simcontrol::setTargetThrust(const double& thrustPercent, const double& thrustInNewton)
+void simcontrol::setTargetMainEngineThrust(const double& thrustPercent, const double& thrustInNewton)
 {
     // Using main engine with index number zero
     landerSpacecraft->setThrust(thrustPercent, 0);
-    landerSpacecraft->setThrust(0.21, 1);
+}
+
+// Function is going to get obsolet when RCS model is introduced
+
+void simcontrol::setRCSThrust(const Vector3 &ENU_translation)
+{
+    if (ENU_translation.x >= 0.0)
+    {
+        landerSpacecraft->setThrust(ENU_translation.x, 1);
+    }
+    if (ENU_translation.x <= 0.0)
+    {
+        landerSpacecraft->setThrust(ENU_translation.x, 2);
+    }
+
+    if (ENU_translation.y >= 0.0)
+    {
+        landerSpacecraft->setThrust(ENU_translation.y, 3);
+    }
+    if (ENU_translation.y <= 0.0)
+    {
+        landerSpacecraft->setThrust(ENU_translation.y, 4);
+    }
+
+    if (ENU_translation.z >= 0.0)
+    {
+        landerSpacecraft->setThrust(ENU_translation.z, 5);
+    }
+    if (ENU_translation.z <= 0.0)
+    {
+        landerSpacecraft->setThrust(ENU_translation.z, 6);
+    }
 }
 
 void simcontrol::setResetBoolean()
@@ -181,7 +212,5 @@ void simcontrol::setResetBoolean()
 
 void simcontrol::setAutoPilotCommand(const double &autoThrust)
 {
-    cmd_.thrustInNewton = autoThrust;
-
     receiveCommandFromAutopilot(cmd_);
 }

@@ -46,7 +46,7 @@ void spacecraft::updateMovementData(double dt)
 
     // --- Compute acceleration ---
     //TODO: eliminate minus with request thrust when coordinate transformation class is written
-    Vector3 acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), -requestThrust());
+    Vector3 acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), -requestTotalThrust());
 
     // --- Compute velocity ---
     Vector3 velocity = physics_->computeVel(getVelocity(), acceleration, dt);
@@ -295,26 +295,36 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
     return optimizer.optimize(problem, 7000.0);
 }
 
-Vector3 spacecraft::requestTargetThrust() const
+Vector3 spacecraft::requestTotalThrust() const
 {
-    
-    return thrustOrchestration.getTargetThrust();
-}
-
-Vector3 spacecraft::requestThrust() const
-{
-    
     return thrustOrchestration.getCurrentThrust();
 }
 
-Vector3 spacecraft::requestThrustInPercentage() const
+Vector3 spacecraft::requestMainEngineTargetThrust() const
 {
-    return thrustOrchestration.getCurrentThrustInPercentage();
+    
+    return thrustOrchestration.getTargetThrust(EngineType::MainEngine);
 }
 
-double spacecraft::requestLiveFuelConsumption() const
+Vector3 spacecraft::requestMainEngineThrust() const
 {
-    return thrustOrchestration.getFuelConsumption();
+    
+    return thrustOrchestration.getCurrentThrust(EngineType::MainEngine);
+}
+
+Vector3 spacecraft::requestMainEngineThrustInPercentage() const
+{
+    return thrustOrchestration.getCurrentThrustInPercentage(EngineType::MainEngine);
+}
+
+Vector3 spacecraft::requestMainEngineDirection() const
+{
+    return thrustOrchestration.getDirectionOfThrust(EngineType::MainEngine);
+}
+
+double spacecraft::requestMainEngineLiveFuelConsumption() const
+{
+    return thrustOrchestration.getFuelConsumption(EngineType::MainEngine);
 }
 
 void spacecraft::setInitalPosition(const Vector3& position)
@@ -339,13 +349,15 @@ simData spacecraft::getFullSimulationData() const
     // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;
 
-    simData_.thrust = requestThrust();
-    simData_.targetThrust = requestTargetThrust();
-    simData_.thrustInPercentage = requestThrustInPercentage();
+
+    simData_.ME_ThrustState_.current            = requestMainEngineThrust().dot(requestMainEngineDirection());
+    simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());
+    simData_.ME_ThrustState_.targetPercentage   = requestMainEngineThrustInPercentage().dot(requestMainEngineDirection());
+    simData_.ME_ThrustState_.direction          = requestMainEngineDirection();
 
     simData_.tanks    = getFuelTanks();
     simData_.fuelMass = getTotalFuelMass();
-    simData_.fuelFlow = requestLiveFuelConsumption();
+    simData_.fuelFlow = requestMainEngineLiveFuelConsumption();
 
     simData_.GLoad = getGload();
 

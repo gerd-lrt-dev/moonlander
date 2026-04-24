@@ -10,33 +10,36 @@ class QKeyEvent;
 
 /**
  * @file inputmapper.h
- * @brief Declares the inputmapper class used to map keyboard input to UI-based thrust control.
+ * @brief Declares the inputmapper class used to map keyboard input to spacecraft control commands.
  */
 
 /**
  * @class inputmapper
- * @brief Maps keyboard input to the main engine thrust slider and emits thrust commands.
+ * @brief Maps keyboard input to main engine slider interaction and RCS translation commands.
  *
- * This class provides a small Qt-based input adapter that augments an existing
- * main engine throttle slider with keyboard interaction.
+ * This class is a Qt-based input adapter used by the cockpit UI.
  *
- * The current use case is limited to manual control of the main engine command:
- * - Arrow Up increases the commanded thrust
- * - Arrow Down decreases the commanded thrust
+ * It supports two different input paths:
+ * - Main engine control via keyboard by modifying the associated QSlider
+ * - RCS translation control via discrete key press and release states
  *
- * Internally, the keyboard does not emit thrust values directly. Instead, it modifies
- * the associated QSlider value. This ensures that all UI updates remain consistent,
- * because the slider stays the single source of truth for the commanded main engine thrust.
+ * For main engine control, the keyboard does not emit thrust commands directly.
+ * Instead, it changes the value of the externally managed thrust slider.
+ * This keeps the slider as the single source of truth for the main engine command.
  *
- * Whenever the slider value changes:
- * - the command label is updated
- * - the signal ME_thrustTargetRequested() is emitted
+ * For RCS control, the class tracks pressed keys and emits a FlightCommand
+ * containing the currently requested translational RCS input.
  *
- * This class is intended to be owned and used by the UI layer, e.g. the cockpit page.
+ * Current keyboard mapping:
+ * - Arrow Up / Arrow Down: increase / decrease main engine slider value
+ * - D / A: +X / -X translation
+ * - W / S: +Y / -Y translation
+ * - E / Q: +Z / -Z translation
  *
- * @note The widget receiving the keyboard events must have keyboard focus.
- * @note This class currently handles only main engine throttle input.
- *       It can later be extended for additional control axes such as RCS commands.
+ * This class is intended to be owned by the UI layer, e.g. cockpitPage.
+ *
+ * @note The receiving widget must have keyboard focus in order for key events
+ *       to reach this mapper.
  */
 class inputmapper : public QObject
 {
@@ -44,43 +47,52 @@ class inputmapper : public QObject
 
 public:
     /**
-     * @brief Constructs the input mapper for main engine throttle control.
+     * @brief Constructs the input mapper.
      *
-     * Creates an input helper that connects a given slider and label to keyboard-based
-     * throttle changes.
+     * Creates a keyboard input helper for spacecraft control.
      *
-     * The slider represents the current commanded main engine thrust.
-     * The label displays the currently commanded thrust as text.
+     * The provided slider is used as the externally managed UI control for
+     * main engine thrust. The label pointer may be used by the owning UI
+     * layer for thrust display, but is not required for RCS command generation.
      *
-     * @param mainEngineSlider Pointer to the slider representing the main engine thrust command.
-     * @param label Pointer to the label displaying the current commanded thrust.
+     * @param mainEngineSlider Pointer to the main engine thrust slider.
+     * @param label Pointer to the label associated with thrust display.
      * @param parent Optional Qt parent object.
      */
     explicit inputmapper(QSlider* mainEngineSlider, QLabel* label, QObject* parent = nullptr);
 
     /**
-     * @brief Handles a key press event for thrust input.
+     * @brief Handles keyboard press events.
      *
-     * Processes relevant keyboard input and updates the main engine slider accordingly.
+     * Processes relevant user input and updates either:
+     * - the main engine slider value, or
+     * - the internal RCS translation state
      *
-     * Current mapping:
-     * - Qt::Key_Up   -> increase main engine thrust
-     * - Qt::Key_Down -> decrease main engine thrust
+     * Main engine keys:
+     * - Qt::Key_Up
+     * - Qt::Key_Down
      *
-     * @param event Pointer to the Qt key event.
+     * RCS translation keys:
+     * - Qt::Key_D / Qt::Key_A
+     * - Qt::Key_W / Qt::Key_S
+     * - Qt::Key_E / Qt::Key_Q
+     *
+     * @param event Pointer to the key press event.
      *
      * @note Auto-repeat key press events are ignored.
      */
     void handleKeyPress(QKeyEvent* event);
 
     /**
-     * @brief Handles a key release event for thrust input.
+     * @brief Handles keyboard release events.
      *
-     * This method is currently present for completeness and future extensibility.
-     * At the moment, no persistent pressed/released state is stored for main engine
-     * throttle control, so key releases do not trigger any action.
+     * Updates the internal pressed/released state of RCS control keys and emits
+     * an updated translational command if required.
      *
-     * @param event Pointer to the Qt key event.
+     * Key releases for main engine slider input do not directly trigger thrust
+     * changes, because the slider value itself is the authoritative state.
+     *
+     * @param event Pointer to the key release event.
      *
      * @note Auto-repeat key release events are ignored.
      */
@@ -90,19 +102,26 @@ signals:
     /**
      * @brief Emitted when a new main engine thrust target is requested.
      *
-     * The emitted value corresponds to the current slider value after user input.
+     * The emitted value corresponds to the currently commanded main engine thrust
+     * in percent.
      *
-     * @param value Commanded main engine thrust in percent.
+     * @param value Main engine thrust command in percent.
+     *
+     * @note This signal is currently optional and may be unused if the owning UI
+     *       layer handles slider changes directly.
      */
     void ME_thrustTargetRequested(double value);
 
     /**
-     * @brief Emitted when a new RCS control command is requested.
+     * @brief Emitted when a new translational RCS command is requested.
      *
-     * This signal provides the current RCS command state, including
-     * translational inputs derived from user interaction.
+     * The emitted FlightCommand contains the currently requested translational
+     * control state derived from keyboard input.
      *
-     * @param cmdSignal Flight command containing RCS input state.
+     * Only the RCS-relevant fields are expected to be meaningful when emitted
+     * by this class.
+     *
+     * @param cmdSignal Flight command containing translational RCS input.
      */
     void RCS_cmdRequested(const FlightCommand& cmdSignal);
 
@@ -110,37 +129,64 @@ private:
     /**
      * @brief Updates the thrust command label text.
      *
-     * Formats and writes the current commanded thrust value to the associated label.
+     * Formats and writes the current commanded main engine thrust value to the
+     * associated label.
      *
-     * @param value Current main engine thrust command in percent.
+     * @param value Current thrust command in percent.
+     *
+     * @note This helper is only relevant if thrust label updates are handled
+     *       inside this class.
      */
     void updateLabel(int value);
 
     /**
-     * @brief Update FlightCommand Struct with input from user
+     * @brief Builds and emits the current translational RCS command.
+     *
+     * Evaluates the internal key state flags and constructs a FlightCommand
+     * representing the currently requested translational RCS input.
      */
     void updateFlightCommand();
 
     /**
      * @brief Pointer to the main engine thrust slider.
      *
-     * This slider acts as the central UI state for the commanded thrust value.
+     * The slider is externally managed by the UI and serves as the main engine
+     * command source.
      */
     QSlider* mE_Slider = nullptr;
 
     /**
-     * @brief Pointer to the label showing the commanded thrust.
+     * @brief Pointer to the thrust command label.
      */
     QLabel* m_label = nullptr;
 
-    // =====================================================
-    // Translation controlling conditions
-    // =====================================================
+    /**
+     * @brief Internal RCS translation state for positive X.
+     */
+    bool ENU_RCS_PosX = false;
 
-    bool ENU_PosX = false;
-    bool ENU_NegX = false;
-    bool ENU_PosY = false;
-    bool ENU_NegY = false;
-    bool ENU_PosZ = false;
-    bool ENU_NegZ = false;
+    /**
+     * @brief Internal RCS translation state for negative X.
+     */
+    bool ENU_RCS_NegX = false;
+
+    /**
+     * @brief Internal RCS translation state for positive Y.
+     */
+    bool ENU_RCS_PosY = false;
+
+    /**
+     * @brief Internal RCS translation state for negative Y.
+     */
+    bool ENU_RCS_NegY = false;
+
+    /**
+     * @brief Internal RCS translation state for positive Z.
+     */
+    bool ENU_RCS_PosZ = false;
+
+    /**
+     * @brief Internal RCS translation state for negative Z.
+     */
+    bool ENU_RCS_NegZ = false;
 };

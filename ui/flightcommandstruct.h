@@ -49,7 +49,7 @@ struct FlightCommand
      * @note Units: radians or normalized input depending on implementation.
      *       Must be interpreted consistently by the simulation core.
      */
-    Vector3 rotation;
+    Vector3 rotation = {0.0, 0.0, 0.0};
 
     /**
      * @brief Translational command (RCS linear control).
@@ -64,7 +64,7 @@ struct FlightCommand
      * @note Typically mapped to RCS thruster groups.
      *       Units are usually normalized input [-1.0, 1.0].
      */
-    Vector3 translation;
+    Vector3 translation = {0.0, 0.0, 0.0};
 
     /**
      * @brief Stabilization request flag.

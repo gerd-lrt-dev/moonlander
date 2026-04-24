@@ -61,7 +61,27 @@ void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const s
     {
         FuelState state;
         state.consumptionRate = 0.0;
-        addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
+        if (cfg_.type == "main")
+        {
+            std::cout << "[Thrust]-initializeEngines- Configured Main Engine" << std::endl;
+            addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
+        }
+        else if (cfg_.type == "translation")
+        {
+            std::cout << "[Thrust]-initializeEngines- Configured RCS translational engine" << std::endl;
+            std::cout << "[Thrust]-initializeEngines- RCS Model not included yet" << std::endl;
+            addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
+        }
+        else if (cfg_.type == "rotation")
+        {
+            std::cout << "[Thrust]-initializeEngines- Configured RCS rotational engine" << std::endl;
+        }
+        else
+        {
+            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!" << std::endl;
+            return;
+        }
+
     }
 }
 
@@ -101,55 +121,200 @@ void Thrust::updateThrust(double dt)
 
 // --- Getter functions ---------------------------------------------
 
-Vector3 Thrust::getTargetThrust() const
+Vector3 Thrust::getTargetThrust(EngineType engine) const
 {
-    Vector3 total{0.0, 0.0, 0.0};
+    Vector3     total{0.0, 0.0, 0.0};
+    Vector3     dir{0.0, 0.0, 0.0};
+    double      thrust(0.0);
 
-    for (const auto& model : models_)
+    if (engine == EngineType::All)
     {
-        Vector3 dir = model->getDirectionOfThrust();
-        double thrust = model->getTargetThrust();
+        for (const auto& model : models_)
+        {
+            dir = model->getDirectionOfThrust();
+            thrust = model->getTargetThrust();
 
-        total += dir * thrust;
+            total += dir * thrust;
+        }
+    }
+    else if (engine == EngineType::MainEngine)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "main")
+            {
+                dir = model->getDirectionOfThrust();
+                thrust = model->getTargetThrust();
+                total += dir * thrust;
+            }
+        }
+    }
+    else if (engine == EngineType::RCS)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
+            {
+                dir = model->getDirectionOfThrust();
+                thrust = model->getTargetThrust();
+                total += dir * thrust;
+            }
+        }
     }
 
     return total;
 }
 
-Vector3 Thrust::getCurrentThrust() const
+Vector3 Thrust::getCurrentThrust(EngineType engine) const
 {
-    Vector3 total{0.0, 0.0, 0.0};
+    Vector3     total{0.0, 0.0, 0.0};
+    Vector3     dir{0.0, 0.0, 0.0};
+    double      thrust(0.0);
 
-    for (const auto& model : models_)
+    if (engine == EngineType::All)
     {
-        Vector3 dir = model->getDirectionOfThrust();
-        double thrust = model->getCurrentThrust();
+        for (const auto& model : models_)
+        {
+            dir = model->getDirectionOfThrust();
+            thrust = model->getCurrentThrust();
 
-        total += dir * thrust;
+            total += dir * thrust;
+        }
+    }
+    else if (engine == EngineType::MainEngine)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "main")
+            {
+                dir = model->getDirectionOfThrust();
+                thrust = model->getCurrentThrust();
+
+                total += dir * thrust;
+            }
+        }
+    }
+    else if (engine == EngineType::RCS)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
+            {
+                dir = model->getDirectionOfThrust();
+                thrust = model->getCurrentThrust();
+
+                total += dir * thrust;
+            }
+        }
+    }
+    return total;
+}
+
+Vector3 Thrust::getCurrentThrustInPercentage(EngineType engine) const
+{
+    Vector3     total{0.0, 0.0, 0.0};
+    Vector3     dir{0.0, 0.0, 0.0};
+    double      thrustInPercentage(0.0);
+
+    if (engine == EngineType::All)
+    {
+        for (const auto& model : models_)
+        {
+            dir = model->getDirectionOfThrust();
+            thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
+
+            total += dir * thrustInPercentage;
+        }
+    }
+    else if (engine == EngineType::MainEngine)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "main")
+            {
+                dir = model->getDirectionOfThrust();
+                thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
+            }
+
+            total += dir * thrustInPercentage;
+        }
+    }
+    else if (engine == EngineType::RCS)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
+            {
+                dir = model->getDirectionOfThrust();
+                thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
+            }
+
+            total += dir * thrustInPercentage;
+        }
     }
 
     return total;
 }
 
-Vector3 Thrust::getCurrentThrustInPercentage() const
+Vector3 Thrust::getDirectionOfThrust(EngineType engine, int engineID) const
 {
-    Vector3 total{0.0, 0.0, 0.0};
+    Vector3 dir{0.0, 0.0, 0.0};
 
-    for (const auto& model: models_)
+    if (engine == EngineType::MainEngine && engineID == 0)
     {
-        Vector3 dir = model->getDirectionOfThrust();
-        double thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
-
-        total += dir * thrustInPercentage;
+        for (const auto& model : models_)
+        {
+            dir = model->getDirectionOfThrust();
+        }
     }
-
-    return total;
+    else if(engineID > 0)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineID() == engineID)
+            {
+                dir = model->getDirectionOfThrust();
+            }
+        }
+    }
+    else
+    {
+        std::cerr << "[Thrust]-getDirectionOfThrust- Failed requesting direction of thrust" << std::endl;
+        return {0.0, 0.0, 0.0};
+    }
+    return dir;
 }
 
-double Thrust::getFuelConsumption() const
+double Thrust::getFuelConsumption(EngineType engine) const
 {
     double sum = 0.0;
-
+    if (engine == EngineType::All)
+    {
+        for (const auto& model : models_)
+        {
+            sum += model->getFuelConsumption();
+        }
+    }
+    else if (engine == EngineType::MainEngine)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "main")
+            {
+                sum += model->getFuelConsumption();
+            }
+        }
+    }
+    else if (engine == EngineType::RCS)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
+            {
+                sum += model->getFuelConsumption();
+            }
+        }
+    }
     for (const auto& model : models_)
     {
         sum += model->getFuelConsumption();
