@@ -184,7 +184,7 @@ public:
      * @param tThrust Target thrust [N]
      * @param engineNr Index of the engine to command
      */
-    void setTargetThrust(const double &tThrust, const size_t &engineNr);
+    void setTargetThrustInNewton(EngineType engine, const double &tMainEngineThrust = 0.0, const Vector3 &tRCSThrust = {0.0, 0.0, 0.0});
 
     /**
      * @brief Sets a new target thrust for a specific engine in normalized form.
@@ -192,10 +192,14 @@ public:
      * The input value is interpreted as a fraction of the engine's maximum
      * thrust capability.
      *
+     * Main engine thrust is incoming as a double value. Thrust for RCS engines are
+     * in vectorized form. The parameter EngineType is necessary for the model
+     * routing descision.
+     *
      * @param tThrustInPercentage Normalized thrust command [0..1]
      * @param engineNr Index of the engine to command
      */
-    void setTargetThrustInPercentage(const double &tThrustInPercentage, const size_t &engineNr);
+    void setTargetThrustInPercentage(EngineType engine, const double &tMainEngineThrust = 0.0, const Vector3 &tRCSThrust = {0.0, 0.0, 0.0});
 
     /**
      * @brief Sets target thrust to zero for all engines.

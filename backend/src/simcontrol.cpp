@@ -47,7 +47,7 @@ void simcontrol::processCommands()
     ControlCommand activeCommand = inputArbiter_->chooseCommand();
 
     setTargetMainEngineThrust(activeCommand.mainEngine);
-    setRCSThrust(activeCommand.translation);
+    setTargetRCSThrust(activeCommand.translation);
 }
 
 void simcontrol::runAutopilot(const SpacecraftState& currentSpacecraftstate, const int &engineNr, const double& dt)
@@ -169,40 +169,14 @@ void simcontrol::setJsonConfigStr(const std::string &jsonConfigStr)
 
 void simcontrol::setTargetMainEngineThrust(const double& thrustPercent, const double& thrustInNewton)
 {
-    // Using main engine with index number zero
-    landerSpacecraft->setThrust(thrustPercent, 0);
+    landerSpacecraft->setMainEngineThrust(thrustPercent);
 }
 
 // Function is going to get obsolet when RCS model is introduced
 
-void simcontrol::setRCSThrust(const Vector3 &ENU_translation)
+void simcontrol::setTargetRCSThrust(const Vector3 &ENU_translation)
 {
-    if (ENU_translation.x >= 0.0)
-    {
-        landerSpacecraft->setThrust(ENU_translation.x, 1);
-    }
-    if (ENU_translation.x <= 0.0)
-    {
-        landerSpacecraft->setThrust(ENU_translation.x, 2);
-    }
-
-    if (ENU_translation.y >= 0.0)
-    {
-        landerSpacecraft->setThrust(ENU_translation.y, 3);
-    }
-    if (ENU_translation.y <= 0.0)
-    {
-        landerSpacecraft->setThrust(ENU_translation.y, 4);
-    }
-
-    if (ENU_translation.z >= 0.0)
-    {
-        landerSpacecraft->setThrust(ENU_translation.z, 5);
-    }
-    if (ENU_translation.z <= 0.0)
-    {
-        landerSpacecraft->setThrust(ENU_translation.z, 6);
-    }
+    landerSpacecraft->setTargetRCSThrust(ENU_translation);
 }
 
 void simcontrol::setResetBoolean()

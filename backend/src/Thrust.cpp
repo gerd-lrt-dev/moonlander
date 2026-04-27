@@ -17,25 +17,57 @@ Thrust::~Thrust()
 // -------------------------------------------------------------------------
 // Public setter functions
 // -------------------------------------------------------------------------
-void Thrust::setTargetThrust(const double &tThrust, const size_t &engineNr)
+void Thrust::setTargetThrustInNewton(EngineType engine, const double &tMainEngineThrust, const Vector3 &tRCSThrust)
 {
-    if (engineNr >= models_.size())
+    if (engine == EngineType::All)
     {
-        std::cerr << "Engine index out of range!" << std::endl;
+        std::cerr << "[Thrust]-setTargetThrustInPercentage- Engine Type is ALL but the type must be specified!" << std::endl;
         return;
     }
 
-    models_[engineNr]->setTarget(tThrust);
+        if (engine == EngineType::MainEngine)
+        {
+            for (const auto& model : models_)
+            {
+                if (model->getEngineType() == "main")
+                {
+                    model->setTarget(tMainEngineThrust);
+                }
+            }
+        }
+        else if (engine == EngineType::RCS)
+        {
+            // To be done...
+        }
 }
 
-void Thrust::setTargetThrustInPercentage(const double &tThrustInPercentage, const size_t &engineNr)
+void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainEngineThrust, const Vector3 &tRCSThrust)
 {
-    if (engineNr >= models_.size())
+    if (engine == EngineType::All)
     {
-        std::cerr << "Engine index out of range!" << std::endl;
+        std::cerr << "[Thrust]-setTargetThrustInPercentage- Engine Type is ALL but the type must be specified!" << std::endl;
         return;
     }
-    models_[engineNr]->setTargetInPercentage(tThrustInPercentage);
+
+    if (engine == EngineType::MainEngine)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "main")
+            {
+                model->setTargetInPercentage(tMainEngineThrust);
+            }
+        }
+    }
+    else if (engine == EngineType::RCS)
+    {
+        // To be done...
+        std::cout << "RCS Thrust: \n"
+                  << "x: " << tRCSThrust.x << "\n"
+                  << "y: " << tRCSThrust.y << "\n"
+                  << "z: " << tRCSThrust.z << "\n"
+                  << std::endl;
+    }
 }
 
 void Thrust::shutDownAllEngines() const

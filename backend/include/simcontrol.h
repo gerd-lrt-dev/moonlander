@@ -76,7 +76,7 @@ private:
      * @brief Set RCS Thrust
      * @param Vector3 translation with thrust in cartasian coordinates within the principle ENU (East North Up)
      */
-    void setRCSThrust(const Vector3 &ENU_translation);
+    void setTargetRCSThrust(const Vector3 &ENU_translation);
 
     /**
      * @brief Process commands

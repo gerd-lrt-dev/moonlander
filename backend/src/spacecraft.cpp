@@ -219,11 +219,14 @@ void spacecraft::updateSpacecraftIntegrity()
     spacecraftState_ = SpacecraftState::Operational;
 }
 
-void spacecraft::setThrust(const double &targetThrustInPercentage, const int &engineNumber)
+void spacecraft::setMainEngineThrust(const double &targetThrustInPercentage)
 {
-    SpacecraftState currentSpacecraftState = getSpacecraftState();
+    (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::MainEngine, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::MainEngine, 0.0);
+}
 
-    (currentSpacecraftState == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(targetThrustInPercentage, engineNumber) : thrustOrchestration.setTargetThrust(0.0, engineNumber);
+void spacecraft::setTargetRCSThrust(const Vector3 &targetThrustInPercentage)
+{
+    (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS, 0.0, targetThrustInPercentage);
 }
 
 void spacecraft::setConsoleText(const std::string &txt)

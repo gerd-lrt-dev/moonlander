@@ -298,13 +298,22 @@ public:
     void updateSpacecraftIntegrity();
 
     /**
-     * @brief Set thrust up to specific level
-     * @param targetThrust Thrust clamped to [0, 1] where 1 is 100% of max thrust
+     * @brief Set thrust up to specific level for main engine
+     * @param targetThrustInPercentage clamped to [0, 1] where 1 is 100% of max thrust
      * 
      * This function initiates the main engine and provide thrust for spacecraft. It 
      * provides thrust until the setted target thrust is reached.
      */
-    void setThrust(const double &targetThrustInPercentage, const int &engineNumber);
+    void setMainEngineThrust(const double &targetThrustInPercentage);
+
+    /**
+     * @brief Set thrust for RCS engines up to specific level
+     * @param targetThrust Thrust clamped to [0, 1] where 1 is 100% of max thrust
+     *
+     * This function initiates the RCS (Reaction Control System) engines and provide thrust for spacecraft. It
+     * provides thrust until the setted target thrust is reached.
+     */
+    void setTargetRCSThrust(const Vector3 &targetThrustInPercentage);
 
     /**
      * @brief Set Console Text for output in cockpit page

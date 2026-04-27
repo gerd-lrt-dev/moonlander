@@ -117,22 +117,45 @@ void inputmapper::updateLabel(int value)
 
 void inputmapper::updateFlightCommand()
 {
-    FlightCommand cmd{};
+    FlightCommand cmd{0.0, 0.0, 0.0};
 
-    if (ENU_RCS_PosX) cmd.translation.x += 1.0;
-    if (ENU_RCS_NegX) cmd.translation.x -= 1.0;
-
-    if (ENU_RCS_PosY) cmd.translation.y += 1.0;
-    if (ENU_RCS_NegY) cmd.translation.y -= 1.0;
-
-    if (ENU_RCS_PosZ) cmd.translation.z += 1.0;
-    if (ENU_RCS_NegZ) cmd.translation.z -= 1.0;
-
-    if (cmd.translation.x == 0.0 &&
-        cmd.translation.y == 0.0 &&
-        cmd.translation.z == 0.0)
+    if (ENU_RCS_PosX == true && ENU_RCS_NegX == false)
     {
-        return;
+        cmd.translation.x = 1.0;
+    }
+    else if(ENU_RCS_NegX == true && ENU_RCS_PosX == false)
+    {
+        cmd.translation.x = -1.0;
+    }
+    else
+    {
+        cmd.translation.x = 0.0;
+    }
+
+    if (ENU_RCS_PosY == true && ENU_RCS_NegY == false)
+    {
+        cmd.translation.y = 1.0;
+    }
+    else if(ENU_RCS_NegY == true && ENU_RCS_PosY == false)
+    {
+        cmd.translation.y = -1.0;
+    }
+    else
+    {
+        cmd.translation.y = 0.0;
+    }
+
+    if (ENU_RCS_PosZ == true && ENU_RCS_NegZ == false)
+    {
+        cmd.translation.z = 1.0;
+    }
+    else if(ENU_RCS_NegZ == true && ENU_RCS_PosZ == false)
+    {
+        cmd.translation.z = -1.0;
+    }
+    else
+    {
+        cmd.translation.z = 0.0;
     }
 
     emit RCS_cmdRequested(cmd);
