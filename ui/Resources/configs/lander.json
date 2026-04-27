@@ -12,7 +12,7 @@
       "B_initialRot": { "x": 0.0, "y": 0.0, "z": 0.0 },
       "B_initialCenterOfMass": { "x": 0.0, "y": 0.0, "z": -0.2 },
 
-      "initialVelocity": { "x": 10.0, "y": 12.0, "z": 0.0 },
+      "initialVelocity": { "x": 0.0, "y": 0.0, "z": 0.0 },
 
       "structuralIntegrity": 0.25,
       "safeVelocity": 5.0,
