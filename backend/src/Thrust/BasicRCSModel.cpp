@@ -3,6 +3,26 @@
 // -------------------------------------------------------------------------
 // Public class methods
 // -------------------------------------------------------------------------
+basicRCSModel::basicRCSModel(const RCSEngineConfig& rcsConfig, FuelState fState)
+    : rcsConfig_(RCSEngineConfig::Create(rcsConfig.engineActivated,
+                                         rcsConfig.id,
+                                         rcsConfig.name,
+                                         rcsConfig.type,
+                                         rcsConfig.axis,
+                                         rcsConfig.tankID,
+                                         rcsConfig.Isp,
+                                         rcsConfig.maxThrust,
+                                         rcsConfig.commandDelay,
+                                         rcsConfig.tauOn,
+                                         rcsConfig.tauOff,
+                                         rcsConfig.minimumPulseWidth,
+                                         rcsConfig.direction,
+                                         rcsConfig.position)
+                ),
+    fuelstate_(fState)
+{
+    rcsConfig_.engineActivated = true;
+}
 
 void basicRCSModel::updateThrust(const double &dt)
 {
@@ -17,7 +37,11 @@ void basicRCSModel::updateThrust(const double &dt)
         commandBuffer.pop_front();
     }
 
-    calcThrust(cmdInputDelayed, rcsConfig_.tauOn, rcsConfig_.tauOff, dt, rcsConfig_.maxThrust);
+    thruststate_.currentThrust = calcThrust(cmdInputDelayed, rcsConfig_.tauOn, rcsConfig_.tauOff, dt, rcsConfig_.maxThrust);
+
+    fuelstate_.consumptionRate = calcMassFlow(thruststate_.currentThrust, rcsConfig_.Isp, envConfig_.earthGravity);
+
+    fuelstate_.massCurrent = calcFuelReduction(fuelstate_.massCurrent, fuelstate_.consumptionRate, dt);
 
 }
 
@@ -28,27 +52,102 @@ void basicRCSModel::setTargetInPercentage(const double &tThrustInPercentage)
 {
     int target = convertToBinaryCommand(tThrustInPercentage);
 
+    double currentThrust = tThrustInPercentage * rcsConfig_.maxThrust;
+
+    thruststate_.targetThrust = currentThrust;
+
     cmdInput = target;
 
     commandBuffer.push_back({RCSCommandSample{.time = totalEngineTime, .cmd = cmdInput}});
 }
 
 // -------------------------------------------------------------------------
+// Public getter
+// -------------------------------------------------------------------------
+
+int basicRCSModel::getEngineID() const
+{
+    return rcsConfig_.id;
+}
+
+std::string basicRCSModel::getEngineType() const
+{
+    return rcsConfig_.type;
+}
+
+double basicRCSModel::getTargetThrust() const
+{
+    return cmdInput * rcsConfig_.maxThrust;
+}
+
+double basicRCSModel::getCurrentThrust() const
+{
+    return thruststate_.currentThrust;
+}
+
+Vector3 basicRCSModel::getDirectionOfThrust() const
+{
+    return rcsConfig_.direction;
+}
+
+double basicRCSModel::getFuelConsumption() const
+{
+    return fuelstate_.consumptionRate;
+}
+
+double basicRCSModel::getCurrentFuelMass() const
+{
+    return fuelstate_.massCurrent;
+}
+
+double basicRCSModel::getTankID() const
+{
+    return rcsConfig_.tankID;
+}
+
+double basicRCSModel::getMaxThrust() const
+{
+    return rcsConfig_.maxThrust;
+}
+// -------------------------------------------------------------------------
 // Private calculation methods
 // -------------------------------------------------------------------------
 double basicRCSModel::calcThrust(const int cmdInputDelayed, const double &tauOn, const double &tauOff, const double &dt, const double &nominalThrust)
 {
-    double thrustState = 0.0;
+    const double targetState = static_cast<double>(cmdInputDelayed);
 
-    if (cmdInputDelayed == 1)
-    {
-        thrustState += (1.0 - thrustState) / (dt / tauOn);
+    const double tau = (cmdInputDelayed == 1) ? tauOn : tauOff;
+
+    thrustState = integrateFirstOrderState(thrustState, targetState, tau, dt, IntegrationMethod::ExactFirstOrder);
+
+    return calcNominalThrust(nominalThrust, thrustState);
+}
+
+double basicRCSModel::integrateFirstOrderState(double state, double target, double tau, double dt, IntegrationMethod method)
+{
+    if (tau <= 0.0) return target;
+
+    switch (method) {
+        case IntegrationMethod::Euler:
+        {
+            const double alpha = std::clamp(dt / tau, 0.0, 1.0);
+            return state + (target - state) * alpha;
+        }
+        case IntegrationMethod::ExactFirstOrder:
+        {
+            const double alpha = 1.0 - std::exp(-dt / tau);
+            return state + (target - state) * alpha;
+        }
+        default:
+        {
+            return state;
+        }
     }
-    else
-    {
-        thrustState += (0.0 - thrustState) / (dt / tauOff);
-    }
-    return ;
+}
+
+double basicRCSModel::calcNominalThrust(const double nominalThrust, const double state)
+{
+    return nominalThrust * state;
 }
 
 int basicRCSModel::convertToBinaryCommand(double input)
@@ -82,4 +181,16 @@ int basicRCSModel::convertToBinaryCommand(double input)
     }
 
     return target;
+}
+
+double basicRCSModel::calcFuelReduction(const double &fuelMass, const double &massFlowFuel, const double &dt)
+{
+    double newFuelMass = fuelMass - (massFlowFuel * dt);
+
+    return newFuelMass;
+}
+
+double basicRCSModel::calcMassFlow(const double &currenThrust, const double &Isp, const double &earthGravity)
+{
+    return currenThrust / (Isp * earthGravity);
 }
