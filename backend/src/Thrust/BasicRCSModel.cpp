@@ -48,17 +48,39 @@ void basicRCSModel::updateThrust(const double &dt)
 // -------------------------------------------------------------------------
 // Public setter
 // -------------------------------------------------------------------------
-void basicRCSModel::setTargetInPercentage(const double &tThrustInPercentage)
+void basicRCSModel::setEnginePowerSwitch(bool activateEngine)
+{
+    rcsConfig_.engineActivated = activateEngine;
+}
+
+void basicRCSModel::setTarget(const double& tThrust)
+{
+    if (rcsConfig_.maxThrust <= 0.0)
+    {
+        std::cerr << "[basicRCSModel]-setTarget- Invalid maxThrust. Command rejected."
+                  << std::endl;
+        return;
+    }
+
+    double normalizedCommand = tThrust / rcsConfig_.maxThrust;
+
+    setTargetInPercentage(normalizedCommand);
+}
+
+void basicRCSModel::setTargetInPercentage(const double& tThrustInPercentage)
 {
     int target = convertToBinaryCommand(tThrustInPercentage);
 
-    double currentThrust = tThrustInPercentage * rcsConfig_.maxThrust;
-
-    thruststate_.targetThrust = currentThrust;
+    thruststate_.targetThrustPercentage = static_cast<double>(target);
+    thruststate_.targetThrust = static_cast<double>(target) * rcsConfig_.maxThrust;
 
     cmdInput = target;
 
-    commandBuffer.push_back({RCSCommandSample{.time = totalEngineTime, .cmd = cmdInput}});
+    commandBuffer.push_back(RCSCommandSample{
+            .time = totalEngineTime,
+            .cmd = cmdInput
+        }
+        );
 }
 
 // -------------------------------------------------------------------------

@@ -78,7 +78,9 @@ void Thrust::shutDownAllEngines() const
     }
 }
 
-void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const std::vector<FuelTank> &tanks)
+void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs,
+                               std::vector<RCSEngineConfig>& RCSEngines,
+                               const std::vector<FuelTank>& tanks)
 {
     // -----------------------------------------
     // Initialize tanks
@@ -86,34 +88,71 @@ void Thrust::initializeEngines(std::vector<EngineConfig> &engineConfigs, const s
     addFuelTank(tanks);
 
     // -----------------------------------------
-    // Initialize engine configs
+    // Initialize main engines
     // -----------------------------------------
 
-    for (const auto &cfg_ : engineConfigs)
+    for (const auto& cfg_ : engineConfigs)
     {
         FuelState state;
         state.consumptionRate = 0.0;
+
         if (cfg_.type == "main")
         {
-            std::cout << "[Thrust]-initializeEngines- Configured Main Engine" << std::endl;
+            std::cout
+                << "[Thrust]-initializeEngines- Configured Main Engine | "
+                << cfg_.name
+                << " | Direction: ("
+                << cfg_.direction.x << ", "
+                << cfg_.direction.y << ", "
+                << cfg_.direction.z << ")"
+                << std::endl;
+
             addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
-        }
-        else if (cfg_.type == "translation")
-        {
-            std::cout << "[Thrust]-initializeEngines- Configured RCS translational engine" << std::endl;
-            std::cout << "[Thrust]-initializeEngines- RCS Model not included yet" << std::endl;
-            addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
-        }
-        else if (cfg_.type == "rotation")
-        {
-            std::cout << "[Thrust]-initializeEngines- Configured RCS rotational engine" << std::endl;
         }
         else
         {
-            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!" << std::endl;
+            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!"
+                      << std::endl;
             return;
         }
+    }
 
+    // -----------------------------------------
+    // Initialize RCS engines
+    // -----------------------------------------
+
+    for (const auto& rcscfg_ : RCSEngines)
+    {
+        FuelState RCSFuelState;
+        RCSFuelState.consumptionRate = 0.0;
+
+        if (rcscfg_.type == "translation")
+        {
+            std::cout
+                << "[Thrust]-initializeEngines- Configured Translational RCS Engine | "
+                << rcscfg_.name
+                << " | Axis: " << rcscfg_.axis
+                << " | Direction: ("
+                << rcscfg_.direction.x << ", "
+                << rcscfg_.direction.y << ", "
+                << rcscfg_.direction.z << ")"
+                << std::endl;
+
+            addModel(std::make_unique<basicRCSModel>(rcscfg_, RCSFuelState));
+        }
+        else if (rcscfg_.type == "rotation")
+        {
+            std::cout
+                << "[Thrust]-initializeEngines- Configured Rotational RCS Engine | "
+                << rcscfg_.name
+                << std::endl;
+        }
+        else
+        {
+            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!"
+                      << std::endl;
+            return;
+        }
     }
 }
 

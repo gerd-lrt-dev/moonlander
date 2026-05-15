@@ -8,6 +8,7 @@
 #include "vector3.h"
 #include "Thrust/iThrust.h"
 #include "Thrust/BasicMainEngineModel.h"
+#include "Thrust/BasicRCSModel.h"
 #include "Thrust/FuelStateStruct.h"
 #include "Thrust/ME_thrustState.h"
 #include "Thrust/EngineConfig.h"
@@ -157,7 +158,7 @@ public:
      * @param engines Vector of engine configurations
      * @param tanks Vector of tank masses / capacities [kg]
      */
-    void initializeEngines(std::vector<EngineConfig> &engines, const std::vector<FuelTank> &tanks);
+    void initializeEngines(std::vector<EngineConfig> &engines, std::vector<RCSEngineConfig> &RCSEngines, const std::vector<FuelTank> &tanks);
 
     /**
      * @brief Activates a specific engine.

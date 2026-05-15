@@ -8,6 +8,7 @@
 #include "vector3.h"
 #include "environmentConfig.h"
 
+#include <algorithm>
 #include <deque>
 #include <iostream>
 #include <string>
@@ -110,6 +111,28 @@ public:
     // -------------------------------------------------------------------------
     // Public command interface
     // -------------------------------------------------------------------------
+
+    /**
+     * @brief Activates or deactivates the RCS thruster.
+     *
+     * If the engine is deactivated, the thruster should not generate thrust even
+     * if a firing command is received.
+     *
+     * @param activateEngine Engine activation flag.
+     */
+    void setEnginePowerSwitch(bool activateEngine) override;
+
+    /**
+     * @brief Sets the commanded target thrust magnitude.
+     *
+     * For the BasicRCSModel this function is not the preferred command interface,
+     * because the model is designed as a binary on/off actuator. The implementation
+     * may map the scalar thrust command to a normalized binary command or reject
+     * unsupported continuous values.
+     *
+     * @param tThrust Commanded target thrust [N].
+     */
+    void setTarget(const double& tThrust) override;
 
     /**
      * @brief Sets the commanded RCS firing input.
