@@ -37,7 +37,12 @@ void Thrust::setTargetThrustInNewton(EngineType engine, const double &tMainEngin
         }
         else if (engine == EngineType::RCS)
         {
-            // To be done...
+            for (const auto& model : models_)
+            {
+                const double command = RCSControlAllocator::mapAxisCommandToThrusterNewton(tRCSThrust, model->getDirectionOfThrust());
+
+                model->setTarget(command);
+            }
         }
 }
 
@@ -61,12 +66,12 @@ void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainE
     }
     else if (engine == EngineType::RCS)
     {
-        // To be done...
-        std::cout << "RCS Thrust: \n"
-                  << "x: " << tRCSThrust.x << "\n"
-                  << "y: " << tRCSThrust.y << "\n"
-                  << "z: " << tRCSThrust.z << "\n"
-                  << std::endl;
+        for (const auto& model : models_)
+        {
+            const double command = RCSControlAllocator::mapAxisCommandToThrusterPercentage(tRCSThrust, model->getDirectionOfThrust());
+
+            model->setTargetInPercentage(command);
+        }
     }
 }
 
@@ -78,9 +83,7 @@ void Thrust::shutDownAllEngines() const
     }
 }
 
-void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs,
-                               std::vector<RCSEngineConfig>& RCSEngines,
-                               const std::vector<FuelTank>& tanks)
+void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::vector<RCSEngineConfig>& RCSEngines, const std::vector<FuelTank>& tanks)
 {
     // -----------------------------------------
     // Initialize tanks

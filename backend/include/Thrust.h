@@ -9,6 +9,7 @@
 #include "Thrust/iThrust.h"
 #include "Thrust/BasicMainEngineModel.h"
 #include "Thrust/BasicRCSModel.h"
+#include "Thrust/RCSControlAllocator.h"
 #include "Thrust/FuelStateStruct.h"
 #include "Thrust/ME_thrustState.h"
 #include "Thrust/EngineConfig.h"

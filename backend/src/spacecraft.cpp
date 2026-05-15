@@ -352,7 +352,6 @@ simData spacecraft::getFullSimulationData() const
     // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;
 
-
     simData_.ME_ThrustState_.current            = requestMainEngineThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.targetPercentage   = requestMainEngineThrustInPercentage().dot(requestMainEngineDirection());

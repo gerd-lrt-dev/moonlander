@@ -59,7 +59,7 @@
           "tankID": 1,
 
           "Isp": 285.0,
-          "maxThrust": 40.0,
+          "maxThrust": 200.0,
           "commandDelay": 0.02,
           "tauOn": 0.08,
           "tauOff": 0.08,
@@ -77,7 +77,7 @@
           "tankID": 1,
 
           "Isp": 285.0,
-          "maxThrust": 40.0,
+          "maxThrust": 200.0,
           "commandDelay": 0.02,
           "tauOn": 0.08,
           "tauOff": 0.08,
@@ -95,7 +95,7 @@
           "tankID": 1,
 
           "Isp": 285.0,
-          "maxThrust": 40.0,
+          "maxThrust": 200.0,
           "commandDelay": 0.02,
           "tauOn": 0.08,
           "tauOff": 0.08,
@@ -113,7 +113,7 @@
           "tankID": 1,
 
           "Isp": 285.0,
-          "maxThrust": 40.0,
+          "maxThrust": 200.0,
           "commandDelay": 0.02,
           "tauOn": 0.08,
           "tauOff": 0.08,
@@ -131,7 +131,7 @@
           "tankID": 1,
 
           "Isp": 285.0,
-          "maxThrust": 30.0,
+          "maxThrust": 150.0,
           "commandDelay": 0.02,
           "tauOn": 0.08,
           "tauOff": 0.08,
@@ -149,7 +149,7 @@
           "tankID": 1,
 
           "Isp": 285.0,
-          "maxThrust": 30.0,
+          "maxThrust": 150.0,
           "commandDelay": 0.02,
           "tauOn": 0.08,
           "tauOff": 0.08,

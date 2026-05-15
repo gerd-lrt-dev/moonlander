@@ -43,6 +43,16 @@ void basicRCSModel::updateThrust(const double &dt)
 
     fuelstate_.massCurrent = calcFuelReduction(fuelstate_.massCurrent, fuelstate_.consumptionRate, dt);
 
+    std::cout
+        << "[basicRCSModel]-updateThrust | "
+        << "Engine: " << rcsConfig_.name
+        << " | Cmd: " << cmdInput
+        << " | CmdDelayed: " << cmdInputDelayed
+        << " | ThrustState: " << thrustState
+        << " | CurrentThrust: " << thruststate_.currentThrust << " N"
+        << " | FuelFlow: " << fuelstate_.consumptionRate << " kg/s"
+        << " | FuelRemaining: " << fuelstate_.massCurrent << " kg"
+        << std::endl;
 }
 
 // -------------------------------------------------------------------------
