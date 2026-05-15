@@ -46,6 +46,7 @@ add_library(moonlander_backend
     include/Thrust/RCS_ThrustState.h
     include/Thrust/FueltankStruct.h
     include/Thrust/BasicRCSModel.h
+    include/Thrust/RCSControlAllocator.h
 )
 
 target_include_directories(moonlander_backend
