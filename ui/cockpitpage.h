@@ -417,9 +417,9 @@ private:
     QLCDNumber *SBF_lcdLon;         ///< Longitude [°]
     QLCDNumber *SBF_lcdRot;         ///< Rotation [°]
 
-    QLCDNumber *SBF_lcdVelX;        ///< Velocity in x -> North [m/s]
-    QLCDNumber *SBF_lcdVelY;        ///< Velocity in y -> East [m/s]
-    QLCDNumber *SBF_lcdVelZ;        ///< Velocity in z -> Up [m/s]
+    QLCDNumber *MCI_lcdVelX;        ///< Velocity in x -> North [m/s]
+    QLCDNumber *MCI_lcdVelY;        ///< Velocity in y -> East [m/s]
+    QLCDNumber *MCI_lcdVelZ;        ///< Velocity in z -> Up [m/s]
 
     QLCDNumber *SBF_lcdRoll;        ///< Roll [°/s]
     QLCDNumber *SBF_lcdPitch;       ///< Pitch [°/s]

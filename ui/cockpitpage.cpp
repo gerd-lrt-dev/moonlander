@@ -22,9 +22,9 @@ cockpitPage::cockpitPage(QWidget *parent)
     SBF_lcdLat(nullptr),
     SBF_lcdLon(nullptr),
     SBF_lcdRot(nullptr),
-    SBF_lcdVelX(nullptr),
-    SBF_lcdVelY(nullptr),
-    SBF_lcdVelZ(nullptr),
+    MCI_lcdVelX(nullptr),
+    MCI_lcdVelY(nullptr),
+    MCI_lcdVelZ(nullptr),
     SBF_lcdRoll(nullptr),
     SBF_lcdPitch(nullptr),
     SBF_lcdYaw(nullptr),
@@ -148,9 +148,9 @@ void cockpitPage::initializeQTObjects()
     SBF_lcdLon = new QLCDNumber();
     SBF_lcdRot = new QLCDNumber();
 
-    SBF_lcdVelX = new QLCDNumber();
-    SBF_lcdVelY = new QLCDNumber();
-    SBF_lcdVelZ = new QLCDNumber();
+    MCI_lcdVelX = new QLCDNumber();
+    MCI_lcdVelY = new QLCDNumber();
+    MCI_lcdVelZ = new QLCDNumber();
 
     SBF_lcdRoll = new QLCDNumber();
     SBF_lcdPitch = new QLCDNumber();
@@ -209,9 +209,9 @@ QGroupBox *cockpitPage::setupNavBox()
     absoluteRotPanel.push_back(SBF_lcdLon);
     absoluteRotPanel.push_back(SBF_lcdRot);
 
-    absoluteTransVelPanel.push_back(SBF_lcdVelX);
-    absoluteTransVelPanel.push_back(SBF_lcdVelY);
-    absoluteTransVelPanel.push_back(SBF_lcdVelZ);
+    absoluteTransVelPanel.push_back(MCI_lcdVelX);
+    absoluteTransVelPanel.push_back(MCI_lcdVelY);
+    absoluteTransVelPanel.push_back(MCI_lcdVelZ);
 
     absoluteAngVelPanel.push_back(SBF_lcdRoll);
     absoluteAngVelPanel.push_back(SBF_lcdPitch);
@@ -220,7 +220,7 @@ QGroupBox *cockpitPage::setupNavBox()
     QWidget *timeDetailBox = uibuilder.setupDetailBox(timePanel, {"TIME [s]"}, "SIMULATION TIME DATA", 1);
     QWidget *absPosDetailBox = uibuilder.setupDetailBox(absolutePosPanel, {"X [m]", "Y [m]", "Z [m]"}, "MCI_POSITION", 3);
     QWidget *absRotDetailBox = uibuilder.setupDetailBox(absoluteRotPanel, {"LAT [°]", "LON [°]", "ROT [°]"}, "SBF_ROTATION", 3);
-    QWidget *absTransVelDetailBox = uibuilder.setupDetailBox(absoluteTransVelPanel, {"VX [m/s]", "VY [m/s]", "VZ [m/s]"}, "SBF_VELOCITY", 3);
+    QWidget *absTransVelDetailBox = uibuilder.setupDetailBox(absoluteTransVelPanel, {"VX [m/s]", "VY [m/s]", "VZ [m/s]"}, "MCI_VELOCITY", 3);
     QWidget *absAngVelDetailBox = uibuilder.setupDetailBox(absoluteAngVelPanel, {"ROLL [°/s]", "PITCH [°/s]", "YAW [°/s]"}, "SBF_ANGULAR VEL", 3);
 
     navLayout->addWidget(timeDetailBox, 0, 0, 1, 2);
@@ -701,9 +701,9 @@ void cockpitPage::updateRotation(Eigen::Vector3d rot)
 
 void cockpitPage::updateVelocity(Eigen::Vector3d v)
 {
-    SBF_lcdVelX->display(QString::number(v.x(), 'f', 1));
-    SBF_lcdVelY->display(QString::number(v.y(), 'f', 1));
-    SBF_lcdVelZ->display(QString::number(v.z(), 'f', 1));
+    MCI_lcdVelX->display(QString::number(v.x(), 'f', 1));
+    MCI_lcdVelY->display(QString::number(v.y(), 'f', 1));
+    MCI_lcdVelZ->display(QString::number(v.z(), 'f', 1));
 }
 
 void cockpitPage::updateAngularVelocity(Eigen::Vector3d angV)
