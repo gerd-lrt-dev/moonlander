@@ -19,22 +19,22 @@ cockpitPage::cockpitPage(QWidget *parent)
     MCI_lcdPosX(nullptr),
     MCI_lcdPosY(nullptr),
     MCI_lcdPosZ(nullptr),
-    LNF_lcdLat(nullptr),
-    LNF_lcdLon(nullptr),
-    LNF_lcdRot(nullptr),
-    LNF_lcdVelX(nullptr),
-    LNF_lcdVelY(nullptr),
-    LNF_lcdVelZ(nullptr),
-    LNF_lcdRoll(nullptr),
-    LNF_lcdPitch(nullptr),
-    LNF_lcdYaw(nullptr),
-    LNF_totalVel(nullptr),
-    LNF_lcdThrust_BX(nullptr),
-    LNF_lcdThrust_BY(nullptr),
-    LNF_lcdThrust_BZ(nullptr),
-    LNF_lcdTargetThrust_BX(nullptr),
-    LNF_lcdTargetThrust_BY(nullptr),
-    LNF_lcdTargetThrust_BZ(nullptr),
+    SBF_lcdLat(nullptr),
+    SBF_lcdLon(nullptr),
+    SBF_lcdRot(nullptr),
+    SBF_lcdVelX(nullptr),
+    SBF_lcdVelY(nullptr),
+    SBF_lcdVelZ(nullptr),
+    SBF_lcdRoll(nullptr),
+    SBF_lcdPitch(nullptr),
+    SBF_lcdYaw(nullptr),
+    SBF_totalVel(nullptr),
+    SBF_lcdThrust_BX(nullptr),
+    SBF_lcdThrust_BY(nullptr),
+    SBF_lcdThrust_BZ(nullptr),
+    SBF_lcdTargetThrust_BX(nullptr),
+    SBF_lcdTargetThrust_BY(nullptr),
+    SBF_lcdTargetThrust_BZ(nullptr),
     lcdGLoad(nullptr),
     lcdFuelMass(nullptr),
     lcdFuelFlow(nullptr)
@@ -144,31 +144,31 @@ void cockpitPage::initializeQTObjects()
     MCI_lcdPosZ = new QLCDNumber();
 
     // Local Navigation Frame
-    LNF_lcdLat = new QLCDNumber();
-    LNF_lcdLon = new QLCDNumber();
-    LNF_lcdRot = new QLCDNumber();
+    SBF_lcdLat = new QLCDNumber();
+    SBF_lcdLon = new QLCDNumber();
+    SBF_lcdRot = new QLCDNumber();
 
-    LNF_lcdVelX = new QLCDNumber();
-    LNF_lcdVelY = new QLCDNumber();
-    LNF_lcdVelZ = new QLCDNumber();
+    SBF_lcdVelX = new QLCDNumber();
+    SBF_lcdVelY = new QLCDNumber();
+    SBF_lcdVelZ = new QLCDNumber();
 
-    LNF_lcdRoll = new QLCDNumber();
-    LNF_lcdPitch = new QLCDNumber();
-    LNF_lcdYaw = new QLCDNumber();
+    SBF_lcdRoll = new QLCDNumber();
+    SBF_lcdPitch = new QLCDNumber();
+    SBF_lcdYaw = new QLCDNumber();
 
-    LNF_totalVel = new QLCDNumber();
+    SBF_totalVel = new QLCDNumber();
 
     // =====================================================
     // Engine Instruments
     // =====================================================
 
-    LNF_lcdThrust_BX = new QLCDNumber();
-    LNF_lcdThrust_BY = new QLCDNumber();
-    LNF_lcdThrust_BZ = new QLCDNumber();
+    SBF_lcdThrust_BX = new QLCDNumber();
+    SBF_lcdThrust_BY = new QLCDNumber();
+    SBF_lcdThrust_BZ = new QLCDNumber();
 
-    LNF_lcdTargetThrust_BX = new QLCDNumber();
-    LNF_lcdTargetThrust_BY = new QLCDNumber();
-    LNF_lcdTargetThrust_BZ = new QLCDNumber();
+    SBF_lcdTargetThrust_BX = new QLCDNumber();
+    SBF_lcdTargetThrust_BY = new QLCDNumber();
+    SBF_lcdTargetThrust_BZ = new QLCDNumber();
 
     lcdGLoad = new QLCDNumber();
 
@@ -205,23 +205,23 @@ QGroupBox *cockpitPage::setupNavBox()
     absolutePosPanel.push_back(MCI_lcdPosY);
     absolutePosPanel.push_back(MCI_lcdPosZ);
 
-    absoluteRotPanel.push_back(LNF_lcdLat);
-    absoluteRotPanel.push_back(LNF_lcdLon);
-    absoluteRotPanel.push_back(LNF_lcdRot);
+    absoluteRotPanel.push_back(SBF_lcdLat);
+    absoluteRotPanel.push_back(SBF_lcdLon);
+    absoluteRotPanel.push_back(SBF_lcdRot);
 
-    absoluteTransVelPanel.push_back(LNF_lcdVelX);
-    absoluteTransVelPanel.push_back(LNF_lcdVelY);
-    absoluteTransVelPanel.push_back(LNF_lcdVelZ);
+    absoluteTransVelPanel.push_back(SBF_lcdVelX);
+    absoluteTransVelPanel.push_back(SBF_lcdVelY);
+    absoluteTransVelPanel.push_back(SBF_lcdVelZ);
 
-    absoluteAngVelPanel.push_back(LNF_lcdRoll);
-    absoluteAngVelPanel.push_back(LNF_lcdPitch);
-    absoluteAngVelPanel.push_back(LNF_lcdYaw);
+    absoluteAngVelPanel.push_back(SBF_lcdRoll);
+    absoluteAngVelPanel.push_back(SBF_lcdPitch);
+    absoluteAngVelPanel.push_back(SBF_lcdYaw);
 
     QWidget *timeDetailBox = uibuilder.setupDetailBox(timePanel, {"TIME [s]"}, "SIMULATION TIME DATA", 1);
     QWidget *absPosDetailBox = uibuilder.setupDetailBox(absolutePosPanel, {"X [m]", "Y [m]", "Z [m]"}, "MCI_POSITION", 3);
-    QWidget *absRotDetailBox = uibuilder.setupDetailBox(absoluteRotPanel, {"LAT [°]", "LON [°]", "ROT [°]"}, "LNF_ROTATION", 3);
-    QWidget *absTransVelDetailBox = uibuilder.setupDetailBox(absoluteTransVelPanel, {"VX [m/s]", "VY [m/s]", "VZ [m/s]"}, "LNF_VELOCITY", 3);
-    QWidget *absAngVelDetailBox = uibuilder.setupDetailBox(absoluteAngVelPanel, {"ROLL [°/s]", "PITCH [°/s]", "YAW [°/s]"}, "LNF_ANGULAR VEL", 3);
+    QWidget *absRotDetailBox = uibuilder.setupDetailBox(absoluteRotPanel, {"LAT [°]", "LON [°]", "ROT [°]"}, "SBF_ROTATION", 3);
+    QWidget *absTransVelDetailBox = uibuilder.setupDetailBox(absoluteTransVelPanel, {"VX [m/s]", "VY [m/s]", "VZ [m/s]"}, "SBF_VELOCITY", 3);
+    QWidget *absAngVelDetailBox = uibuilder.setupDetailBox(absoluteAngVelPanel, {"ROLL [°/s]", "PITCH [°/s]", "YAW [°/s]"}, "SBF_ANGULAR VEL", 3);
 
     navLayout->addWidget(timeDetailBox, 0, 0, 1, 2);
     navLayout->addWidget(absPosDetailBox, 1, 0);
@@ -254,15 +254,15 @@ QGroupBox *cockpitPage::setupEngineBox()
     QVector<QLCDNumber*> currentThrustPanel;
     QVector<QLCDNumber*> targetThrustPanel;
 
-    currentThrustPanel.push_back(LNF_lcdThrust_BX);
-    currentThrustPanel.push_back(LNF_lcdThrust_BY);
-    currentThrustPanel.push_back(LNF_lcdThrust_BZ);
-    targetThrustPanel.push_back(LNF_lcdTargetThrust_BX);
-    targetThrustPanel.push_back(LNF_lcdTargetThrust_BY);
-    targetThrustPanel.push_back(LNF_lcdTargetThrust_BZ);
+    currentThrustPanel.push_back(SBF_lcdThrust_BX);
+    currentThrustPanel.push_back(SBF_lcdThrust_BY);
+    currentThrustPanel.push_back(SBF_lcdThrust_BZ);
+    targetThrustPanel.push_back(SBF_lcdTargetThrust_BX);
+    targetThrustPanel.push_back(SBF_lcdTargetThrust_BY);
+    targetThrustPanel.push_back(SBF_lcdTargetThrust_BZ);
 
-    QWidget *currentThrustDetailBox = uibuilder.setupDetailBox(currentThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "LNF_CURRENT THRUST", 3);
-    QWidget *targetThrustDetailBox  = uibuilder.setupDetailBox(targetThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "LNF_TARGET THRUST", 3);
+    QWidget *currentThrustDetailBox = uibuilder.setupDetailBox(currentThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "SBF_CURRENT THRUST", 3);
+    QWidget *targetThrustDetailBox  = uibuilder.setupDetailBox(targetThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "SBF_TARGET THRUST", 3);
     QWidget *GLoadDetailBox         = uibuilder.setupDetailBox({lcdGLoad}, {"GLoad [m/s²]"}, "ACCELERATION", 1);
 
     // RCS Engines
@@ -694,24 +694,24 @@ void cockpitPage::updatePosition(Eigen::Vector3d pos)
 void cockpitPage::updateRotation(Eigen::Vector3d rot)
 {
     // TODO: Build own data type for rotational parameters
-    LNF_lcdLat->display(QString::number(rot.x(), 'f', 1));
-    LNF_lcdLon->display(QString::number(rot.y(), 'f', 1));
-    LNF_lcdRot->display(QString::number(rot.z(), 'f', 1));
+    SBF_lcdLat->display(QString::number(rot.x(), 'f', 1));
+    SBF_lcdLon->display(QString::number(rot.y(), 'f', 1));
+    SBF_lcdRot->display(QString::number(rot.z(), 'f', 1));
 }
 
 void cockpitPage::updateVelocity(Eigen::Vector3d v)
 {
-    LNF_lcdVelX->display(QString::number(v.x(), 'f', 1));
-    LNF_lcdVelY->display(QString::number(v.y(), 'f', 1));
-    LNF_lcdVelZ->display(QString::number(v.z(), 'f', 1));
+    SBF_lcdVelX->display(QString::number(v.x(), 'f', 1));
+    SBF_lcdVelY->display(QString::number(v.y(), 'f', 1));
+    SBF_lcdVelZ->display(QString::number(v.z(), 'f', 1));
 }
 
 void cockpitPage::updateAngularVelocity(Eigen::Vector3d angV)
 {
     // TODO: Build own data type for rotational parameters
-    LNF_lcdRoll->display(QString::number(angV.x(), 'f', 1));
-    LNF_lcdPitch->display(QString::number(angV.y(), 'f', 1));
-    LNF_lcdYaw->display(QString::number(angV.z(), 'f', 1));
+    SBF_lcdRoll->display(QString::number(angV.x(), 'f', 1));
+    SBF_lcdPitch->display(QString::number(angV.y(), 'f', 1));
+    SBF_lcdYaw->display(QString::number(angV.z(), 'f', 1));
 }
 
 void cockpitPage::updateFuelTanks(const QVector<Telemetry::PropulsionSystems::Tank>& tanks)
@@ -778,15 +778,15 @@ void cockpitPage::updateAcceleration(double a)
 
 void cockpitPage::updateThrust(Eigen::Vector3d t)
 {
-    LNF_lcdThrust_BX->display(QString::number(t.x(), 'f', 1));
-    LNF_lcdThrust_BY->display(QString::number(t.y(), 'f', 1));
-    LNF_lcdThrust_BZ->display(QString::number(t.z(), 'f', 1));
+    SBF_lcdThrust_BX->display(QString::number(t.x(), 'f', 1));
+    SBF_lcdThrust_BY->display(QString::number(t.y(), 'f', 1));
+    SBF_lcdThrust_BZ->display(QString::number(t.z(), 'f', 1));
 }
 void cockpitPage::updateTargetThrust(Eigen::Vector3d t)
 {
-    LNF_lcdTargetThrust_BX->display(QString::number(t.x(), 'f', 1));
-    LNF_lcdTargetThrust_BY->display(QString::number(t.y(), 'f', 1));
-    LNF_lcdTargetThrust_BZ->display(QString::number(t.z(), 'f', 1));
+    SBF_lcdTargetThrust_BX->display(QString::number(t.x(), 'f', 1));
+    SBF_lcdTargetThrust_BY->display(QString::number(t.y(), 'f', 1));
+    SBF_lcdTargetThrust_BZ->display(QString::number(t.z(), 'f', 1));
 }
 
 void cockpitPage::updateRCSThrusters(const QVector<Telemetry::PropulsionSystems::RCSThrust>& rcsStates)

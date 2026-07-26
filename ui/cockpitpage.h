@@ -194,7 +194,7 @@ signals:
     void thrustTargetRequested(double percent);
 
     /**
-     * @brief Emitted when the user provide flight command input
+     * @brief Emitted when the user provides flight command input
      * @param FlightCommand struct
      */
     void flightCmdRequested(FlightCommandDTO cmd);
@@ -413,31 +413,31 @@ private:
     QLCDNumber *MCI_lcdPosZ;        ///< Position in z [m]
 
     // Local Navigation Frame
-    QLCDNumber *LNF_lcdLat;         ///< Latitude [°]
-    QLCDNumber *LNF_lcdLon;         ///< Longitude [°]
-    QLCDNumber *LNF_lcdRot;         ///< Rotation [°]
+    QLCDNumber *SBF_lcdLat;         ///< Latitude [°]
+    QLCDNumber *SBF_lcdLon;         ///< Longitude [°]
+    QLCDNumber *SBF_lcdRot;         ///< Rotation [°]
 
-    QLCDNumber *LNF_lcdVelX;        ///< Velocity in x -> North [m/s]
-    QLCDNumber *LNF_lcdVelY;        ///< Velocity in y -> East [m/s]
-    QLCDNumber *LNF_lcdVelZ;        ///< Velocity in z -> Up [m/s]
+    QLCDNumber *SBF_lcdVelX;        ///< Velocity in x -> North [m/s]
+    QLCDNumber *SBF_lcdVelY;        ///< Velocity in y -> East [m/s]
+    QLCDNumber *SBF_lcdVelZ;        ///< Velocity in z -> Up [m/s]
 
-    QLCDNumber *LNF_lcdRoll;        ///< Roll [°/s]
-    QLCDNumber *LNF_lcdPitch;       ///< Pitch [°/s]
-    QLCDNumber *LNF_lcdYaw;         ///< Yaw [°/s]
+    QLCDNumber *SBF_lcdRoll;        ///< Roll [°/s]
+    QLCDNumber *SBF_lcdPitch;       ///< Pitch [°/s]
+    QLCDNumber *SBF_lcdYaw;         ///< Yaw [°/s]
 
-    QLCDNumber *LNF_totalVel;       ///< Total velocity [m/s]
+    QLCDNumber *SBF_totalVel;       ///< Total velocity [m/s]
 
     // =====================================================
     // Engine Instruments
     // =====================================================
 
     // Main Engine
-    QLCDNumber *LNF_lcdThrust_BX;       ///< Current engine thrust in body frame of spacecraft x direction
-    QLCDNumber *LNF_lcdThrust_BY;       ///< Current engine thrust in body frame of spacecraft y direction
-    QLCDNumber *LNF_lcdThrust_BZ;       ///< Current engine thrust in body frame of spacecraft z direction
-    QLCDNumber *LNF_lcdTargetThrust_BX; ///< Target thrust setpoint in body frame of spacecraft x direction
-    QLCDNumber *LNF_lcdTargetThrust_BY; ///< Target thrust setpoint in body frame of spacecraft y direction
-    QLCDNumber *LNF_lcdTargetThrust_BZ; ///< Target thrust setpoint in body frame of spacecraft z direction
+    QLCDNumber *SBF_lcdThrust_BX;       ///< Current engine thrust in body frame of spacecraft x direction
+    QLCDNumber *SBF_lcdThrust_BY;       ///< Current engine thrust in body frame of spacecraft y direction
+    QLCDNumber *SBF_lcdThrust_BZ;       ///< Current engine thrust in body frame of spacecraft z direction
+    QLCDNumber *SBF_lcdTargetThrust_BX; ///< Target thrust setpoint in body frame of spacecraft x direction
+    QLCDNumber *SBF_lcdTargetThrust_BY; ///< Target thrust setpoint in body frame of spacecraft y direction
+    QLCDNumber *SBF_lcdTargetThrust_BZ; ///< Target thrust setpoint in body frame of spacecraft z direction
     QLCDNumber *lcdGLoad;               ///< Current acceleration [m/s²]
 
     // RCS Engines
