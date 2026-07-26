@@ -26,7 +26,7 @@
 #include "simulationworker.h"
 #include "spacecraftselectionpage.h"
 #include "topbarwidget.h"
-#include "controlshelppage.h"
+#include "controlshellpage.h"
 #include "settingspage.h"
 
 /**

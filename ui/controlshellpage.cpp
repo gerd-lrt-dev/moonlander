@@ -1,4 +1,4 @@
-#include "controlshelppage.h"
+#include "controlshellpage.h"
 
 #include <QFrame>
 #include <QHBoxLayout>
