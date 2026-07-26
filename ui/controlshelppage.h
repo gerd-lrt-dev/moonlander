@@ -6,8 +6,8 @@
  * and simulation interaction commands.
  */
 
-#ifndef CONTROLSHELLPAGE_H
-#define CONTROLSHELLPAGE_H
+#ifndef CONTROLSHELPPAGE_H
+#define CONTROLSHELPPAGE_H
 
 #include <QVBoxLayout>
 #include <QWidget>
@@ -67,4 +67,4 @@ private:
     QWidget* createSectionTitle(const QString& title);
 };
 
-#endif // CONTROLSHELLPAGE_H
+#endif // CONTROLSHELPPAGE_H
