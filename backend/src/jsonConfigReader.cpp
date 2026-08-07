@@ -149,8 +149,6 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     lander.MCI_initialVelocity      = initialstate.at("MCI_InitialVelocity").get<Eigen::Vector3d>();
     lander.SBF_initialCenterOfMass  = initialstate.at("SBF_InitialCenterOfMass").get<Eigen::Vector3d>();
 
-
-
     lander.structuralIntegrity = j.at("structuralIntegrity").get<double>();
     lander.safeVelocity        = j.at("safeVelocity").get<double>();
 

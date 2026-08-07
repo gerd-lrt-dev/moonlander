@@ -10,6 +10,8 @@ public:
 
     virtual void        updateThrust(const double &dt) = 0;
 
+    virtual void        updateTorque(const Eigen::Vector3d& positionRelativToCOG, const Eigen::Vector3d& thrustForce);
+
     virtual double      calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) = 0;
 
     virtual void        setEnginePowerSwitch(bool activateEngine) = 0;

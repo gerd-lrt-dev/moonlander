@@ -1,6 +1,8 @@
 #ifndef IROTATIONALPHYSICSMODEL_H
 #define IROTATIONALPHYSICSMODEL_H
 
+#include <Eigen/Dense>
+
 class IRotationalPhysicsModel {
 public:
     virtual ~IRotationalPhysicsModel() = default;

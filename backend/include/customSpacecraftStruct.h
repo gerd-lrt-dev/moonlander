@@ -85,6 +85,7 @@ struct customSpacecraft
     // -------------------------------------------------------------------------
     // Attitude Dynamics (Rigid Body Inertia)
     // -------------------------------------------------------------------------
+    // INFO: For SDF light this is consider as scalar members only for diagonal parameters
 
     double Ixx;
     ///< [kg·m²] Moment of inertia about the spacecraft’s body X-axis.
