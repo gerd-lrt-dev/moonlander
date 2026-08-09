@@ -185,14 +185,21 @@ void Thrust::turnOffAllEngines()
         model->setEnginePowerSwitch(false);
     }
 }
-void Thrust::updateThrust(double dt)
+
+void Thrust::updatePropulsion(double dt)
 {
     if (getFuelMassOfAllTanks() > 0.0)
     {
         // Update thrust for all engines
         for (int i = 0; i < models_.size(); ++i)
         {
+            // Update thrust
             models_[i]->updateThrust(dt);
+
+            // Update torque
+            models_[i]->updateTorque();
+
+            // Update fuel reduction
             tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tanks_[models_[i]->getTankID()].mass, models_[i]->getFuelConsumption(), dt);
         }
     }
@@ -366,6 +373,20 @@ Eigen::Vector3d Thrust::getDirectionOfThrust(EngineType engine, int engineID) co
         return {0.0, 0.0, 0.0};
     }
     return dir;
+}
+
+Eigen::Vector3d Thrust::getTotalTorque() const
+{
+    Eigen::Vector3d torque = {0.0, 0.0, 0.0};
+
+    for (const auto& model : models_)
+    {
+        torque += model->getCurrentTorque();
+    }
+
+    std::cout << "Torque: " << torque.norm() << std::endl;
+
+    return torque;
 }
 
 std::vector<RCS_ThrustState> Thrust::getFullRCSEngineData() const

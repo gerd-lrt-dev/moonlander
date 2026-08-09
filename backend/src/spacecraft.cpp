@@ -73,7 +73,7 @@ void spacecraft::updateMovementData(double dt)
     updateFrames(time);
 
     // --- TODO: Compute orientation and angular velocity ---
-    // ...
+    Eigen::Vector3d SBFTorque = thrustOrchestration.getTotalTorque();
 
     // --- TODO: Update total mass ---
     // ...
@@ -201,7 +201,7 @@ void spacecraft::updateStep(double dt)
     // Update mass data
     updateTotalMassOnFuelReduction(spacecraftConfig_.emptyMass, getTotalFuelMass());
 
-    thrustOrchestration.updateThrust(dt);
+    thrustOrchestration.updatePropulsion(dt);
 
     // Update time systems are running
     time += dt;
