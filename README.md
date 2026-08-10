@@ -19,9 +19,9 @@ Modern • Modular • Extensible • Research-Oriented
 The **Spaceflight Dynamics Framework (SDF)** is an open-source C++
 framework for developing modular aerospace simulation software.
 
-Rather than focusing on a single simulation, SDF provides reusable
-building blocks for spacecraft dynamics, guidance, navigation, control,
-propulsion, telemetry and visualization.
+Rather than focusing on a single simulation, SDF provides reusable 
+building blocks for 6-DOF spacecraft dynamics, propulsion, guidance, 
+navigation, control, telemetry and visualization.
 
 Its mission is to provide a platform where aerospace enthusiasts,
 students, researchers and developers can learn, experiment and develop
@@ -36,9 +36,9 @@ spacecraft dynamics and aerospace software engineering.
 
 ## 🌙 Demonstration Application
 
-The repository currently contains a demonstration application showcasing
-the capabilities of the framework through an autonomous lunar landing
-scenario.
+The repository currently contains a demonstration application showcasing 
+the capabilities of the framework including full six-degree-of-freedom 
+spacecraft dynamics, autonomous lunar landing and a modular cockpit architecture.
 
 Future applications can reuse the same framework architecture while
 targeting completely different spacecraft missions and simulation
@@ -56,17 +56,20 @@ scenarios.
 
 ## ✨ Framework Highlights
 
--   Modular simulation backend
--   Dedicated interface layer
--   Frontend / backend decoupling
--   Telemetry Mapper
--   Telemetry DTOs
--   Eigen-based mathematics
--   JSON spacecraft configuration
--   Adaptive descent controller
--   Multi-engine propulsion system
--   Individual RCS thruster simulation
--   Qt cockpit application
+- Full 6-DOF rigid-body dynamics
+- Quaternion-based attitude propagation
+- Modular translational & rotational physics
+- Modular simulation backend
+- Dedicated interface layer
+- Frontend / backend decoupling
+- Telemetry Mapper
+- Telemetry DTOs
+- Eigen-based mathematics
+- JSON spacecraft configuration
+- Adaptive descent controller
+- Multi-engine propulsion system
+- Individual RCS thruster simulation
+- Qt cockpit application
 
 ------------------------------------------------------------------------
 
@@ -102,6 +105,33 @@ Research topics include:
 -   optimization
 -   telemetry analysis
 -   controller benchmarking
+-   rigid-body dynamics
+-   attitude dynamics
+-   spacecraft simulation validation
+
+------------------------------------------------------------------------
+
+## ✅ Current Project Status
+
+The first major milestone of SDF has been completed.
+
+**Milestone 1 — 6DoF Core Simulation**
+
+Implemented:
+
+- Full translational rigid-body dynamics
+- Full rotational rigid-body dynamics
+- Quaternion attitude propagation
+- Modular propulsion system
+- Force & torque aggregation
+- Numerical integration framework
+- Modular physics architecture
+
+Current focus:
+
+- Physics validation
+- Cockpit adaptation
+- SDF Light release
 
 ------------------------------------------------------------------------
 
@@ -117,14 +147,16 @@ The Spaceflight Dynamics Framework follows an incremental development strategy. 
   <i>SDF development roadmap and release strategy</i>
 </p>
 
-The long-term vision is to evolve SDF into a reusable aerospace simulation platform supporting:
+The long-term vision is to extend the existing 6-DOF simulation core with:
 
-- 6-DOF spacecraft dynamics
 - orbital mechanics
+- advanced GNC algorithms
 - ROS2 integration
 - replay & telemetry analysis
 - controller benchmarking
 - planetary mission scenarios
+- advanced sensor models
+- environmental models
 
 ------------------------------------------------------------------------
 
@@ -212,7 +244,7 @@ Whether you're an experienced aerospace engineer, a software developer, a resear
 SDF is an interdisciplinary project, and contributing means much more than writing code. There are many ways to get involved:
 
 - develop new simulation models
-- validate existing physical models
+- validate and benchmark physical models
 - improve numerical methods
 - design and evaluate control algorithms
 - test and benchmark new features
