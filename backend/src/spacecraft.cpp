@@ -1,6 +1,7 @@
 #include "spacecraft.h"
 #include "spacemath.h"
 #include "Physics/basicMoonGravityModel.h"
+#include "Physics/rigidBodyRotationalModel.h"
 #include "Integrators/eulerIntegrator.h"
 #include "Sensory_Perception/sensorModel.h"
 
@@ -73,7 +74,19 @@ void spacecraft::updateMovementData(double dt)
     updateFrames(time);
 
     // --- TODO: Compute orientation and angular velocity ---
-    Eigen::Vector3d SBFTorque = thrustOrchestration.getTotalTorque();
+    Eigen::Vector3d SBF_torque          = thrustOrchestration.getTotalTorque();
+    Eigen::Vector3d SBF_angularAcc = physics_->computeAngAcc(getAngularVelocity(), spacecraftConfig_.SBF_inertia, SBF_torque);
+
+    std::cout << "\n========== ROTATIONAL DYNAMICS ==========\n"
+              << "Angular velocity [rad/s]: "
+              << getAngularVelocity().transpose() << '\n'
+              << "Torque           [N*m]  : "
+              << SBF_torque.transpose() << '\n'
+              << "Inertia tensor   [kg*m2]:\n"
+              << spacecraftConfig_.SBF_inertia << '\n'
+              << "Angular acc.     [rad/s2]: "
+              << SBF_angularAcc.transpose() << '\n'
+              << "=========================================\n";
 
     // --- TODO: Update total mass ---
     // ...
@@ -183,11 +196,12 @@ void spacecraft::setAngularVelocity(const Eigen::Vector3d& angVel)
 spacecraft::spacecraft(customSpacecraft lMoon, MissionContext mContext) : spacecraftConfig_(lMoon), missionContext_(mContext)
     {
         // initialize
-        std::shared_ptr<IPhysicsModel> model_       = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
-        std::shared_ptr<IIntegrator> integrator_    = std::make_shared<EulerIntegrator>();
-        std::shared_ptr<ISensor> sensor_            = std::make_shared<SensorModel>(environmentConfig_);
+        std::shared_ptr<IPhysicsModel> model_               = std::make_shared<BasicMoonGravityModel>(environmentConfig_);
+        std::shared_ptr<IRotationalPhysicsModel> rotModel_  = std::make_shared<RigidBodyRotationalModel>(environmentConfig_);
+        std::shared_ptr<IIntegrator> integrator_            = std::make_shared<EulerIntegrator>();
+        std::shared_ptr<ISensor> sensor_                    = std::make_shared<SensorModel>(environmentConfig_);
 
-        physics_ = std::make_unique<physics>(model_, integrator_, sensor_);
+        physics_ = std::make_unique<physics>(model_, rotModel_, integrator_, sensor_);
 
         setDefaultValues();
     };
@@ -410,7 +424,7 @@ simData spacecraft::getFullSimulationData() const
     simData_.ME_ThrustState_.current            = requestMainEngineThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.targetPercentage   = requestMainEngineThrustInPercentage().dot(requestMainEngineDirection());
-    simData_.ME_ThrustState_.SBF_direction          = requestMainEngineDirection();
+    simData_.ME_ThrustState_.SBF_direction      = requestMainEngineDirection();
 
     simData_.RCS_ThrustState_ = requestFullRCSEngineData();
 

@@ -7,7 +7,7 @@ class IRotationalPhysicsModel {
 public:
     virtual ~IRotationalPhysicsModel() = default;
 
-    virtual Eigen::Vector3d computeAngularAcceleration(const Eigen::Vector3d& angularVelocity_B, const Eigen::Matrix3d& inertia_B, const Eigen::Vector3d& torque_B) const = 0;
+    virtual Eigen::Vector3d computeAngularAcceleration(const Eigen::Vector3d& SBF_angularVelocity, const Eigen::Matrix3d& SBF_inertia, const Eigen::Vector3d& SBF_torque) const = 0;
 };
 
 #endif // IROTATIONALPHYSICSMODEL_H

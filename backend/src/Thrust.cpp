@@ -384,8 +384,6 @@ Eigen::Vector3d Thrust::getTotalTorque() const
         torque += model->getCurrentTorque();
     }
 
-    std::cout << "Torque: " << torque.norm() << std::endl;
-
     return torque;
 }
 

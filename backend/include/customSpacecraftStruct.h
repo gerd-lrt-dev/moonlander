@@ -85,18 +85,30 @@ struct customSpacecraft
     // -------------------------------------------------------------------------
     // Attitude Dynamics (Rigid Body Inertia)
     // -------------------------------------------------------------------------
-    // INFO: For SDF light this is consider as scalar members only for diagonal parameters
 
-    double Ixx;
-    ///< [kg·m²] Moment of inertia about the spacecraft’s body X-axis.
-
-    double Iyy;
-    ///< [kg·m²] Moment of inertia about the body Y-axis.
-
-    double Izz;
-    ///< [kg·m²] Moment of inertia about the body Z-axis.
-    ///< Assumed diagonal inertia tensor (symmetric spacecraft).
-
+    /**
+     * @brief Spacecraft inertia tensor expressed in the body-fixed frame (SBF).
+     *
+     * Defines the spacecraft's rotational inertia about its center of mass.
+     * The diagonal elements represent the moments of inertia about the body
+     * X-, Y-, and Z-axes, while the off-diagonal elements represent the
+     * products of inertia.
+     *
+     * \f[
+     * \mathbf{I}_{SBF} =
+     * \begin{bmatrix}
+     * I_{xx} & I_{xy} & I_{xz} \\
+     * I_{yx} & I_{yy} & I_{yz} \\
+     * I_{zx} & I_{zy} & I_{zz}
+     * \end{bmatrix}
+     * \f]
+     *
+     * For spacecraft models aligned with their principal axes, the tensor
+     * is diagonal and all products of inertia are zero.
+     *
+     * @note Unit: [kg·m²]
+     */
+    Eigen::Matrix3d SBF_inertia;
 
     // -------------------------------------------------------------------------
     // State (Body Frame Coordinates)

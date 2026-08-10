@@ -14,6 +14,8 @@ public:
      */
     RigidBodyRotationalModel(const EnvironmentConfig& cfg) : configData(cfg) {}
 
+    Eigen::Vector3d computeAngularAcceleration(const Eigen::Vector3d& SBF_angularVelocity, const Eigen::Matrix3d& SBF_inertia, const Eigen::Vector3d& SBF_torque) const override;
+
 private:
     const EnvironmentConfig& configData;
 };
