@@ -136,6 +136,44 @@ public:
     Eigen::Vector3d computeAngAcc(const Eigen::Vector3d& SBF_angularVelocity, const Eigen::Matrix3d& SBF_inertia, const Eigen::Vector3d& SBF_torque) const;
 
     /**
+     * @brief Integrates the spacecraft angular velocity using the configured integrator.
+     *
+     * Wrapper function delegating first-order numerical integration to
+     * IIntegrator. The current angular velocity is advanced using the
+     * current angular acceleration over the given simulation timestep.
+     *
+     * All rotational quantities are expressed in the spacecraft body-fixed
+     * frame (SBF).
+     *
+     * @param SBF_angularVelocity     Current angular velocity in SBF [rad/s].
+     * @param SBF_angularAcceleration Current angular acceleration in SBF [rad/s²].
+     * @param dt                      Simulation timestep [s].
+     *
+     * @return Updated angular velocity vector in SBF [rad/s].
+     */
+    Eigen::Vector3d computeAngVel(const Eigen::Vector3d& SBF_angularVelocity, const Eigen::Vector3d& SBF_angularAcceleration, double dt) const;
+
+
+    /**
+     * @brief Integrates the spacecraft attitude using the configured integrator.
+     *
+     * Wrapper function delegating quaternion-based attitude propagation to
+     * IIntegrator. The current attitude quaternion is advanced using the
+     * spacecraft angular velocity over the given simulation timestep.
+     *
+     * The angular velocity is expressed in the spacecraft body-fixed frame
+     * (SBF). The attitude quaternion represents the spacecraft orientation
+     * relative to the inertial reference frame.
+     *
+     * @param attitude            Current spacecraft attitude quaternion.
+     * @param SBF_angularVelocity Current angular velocity in SBF [rad/s].
+     * @param dt                  Simulation timestep [s].
+     *
+     * @return Updated and normalized spacecraft attitude quaternion.
+     */
+    Eigen::Quaterniond computeAttitude(const Eigen::Quaterniond& attitude, const Eigen::Vector3d& SBF_angularVelocity, double dt) const;
+
+    /**
      * @brief Computes the proper G-load experienced by the spacecraft.
      *
      * This function calculates the proper acceleration (felt acceleration)

@@ -73,19 +73,47 @@ void spacecraft::updateMovementData(double dt)
     // --- Update Frames ---
     updateFrames(time);
 
-    // --- TODO: Compute orientation and angular velocity ---
-    Eigen::Vector3d SBF_torque          = thrustOrchestration.getTotalTorque();
-    Eigen::Vector3d SBF_angularAcc = physics_->computeAngAcc(getAngularVelocity(), spacecraftConfig_.SBF_inertia, SBF_torque);
+    // --- Compute orientation and angular velocity ---
+    Eigen::Vector3d SBF_torque      = thrustOrchestration.getTotalTorque();
+    Eigen::Vector3d SBF_angularAcc  = physics_->computeAngAcc(getAngularVelocity(), spacecraftConfig_.SBF_inertia, SBF_torque);
+    Eigen::Vector3d SBF_angularVel  = physics_->computeAngVel(getAngularVelocity(), SBF_angularAcc, dt);
+    Eigen::Quaterniond SBF_orientation = physics_->computeAttitude(getOrientation(), SBF_angularVel, dt);
 
     std::cout << "\n========== ROTATIONAL DYNAMICS ==========\n"
-              << "Angular velocity [rad/s]: "
+
+              << "Angular velocity (old) [rad/s] : "
               << getAngularVelocity().transpose() << '\n'
-              << "Torque           [N*m]  : "
+
+              << "Torque                [N*m]    : "
               << SBF_torque.transpose() << '\n'
-              << "Inertia tensor   [kg*m2]:\n"
+
+              << "Torque magnitude      [N*m]    : "
+              << SBF_torque.norm() << '\n'
+
+              << "Inertia tensor        [kg*m²]  :\n"
               << spacecraftConfig_.SBF_inertia << '\n'
-              << "Angular acc.     [rad/s2]: "
+
+              << "Angular acceleration  [rad/s²] : "
               << SBF_angularAcc.transpose() << '\n'
+
+              << "Angular velocity (new)[rad/s]  : "
+              << SBF_angularVel.transpose() << '\n'
+
+              << "Attitude (old) [w x y z]       : "
+              << getOrientation().w() << " "
+              << getOrientation().x() << " "
+              << getOrientation().y() << " "
+              << getOrientation().z() << '\n'
+
+              << "Attitude (new) [w x y z]       : "
+              << SBF_orientation.w() << " "
+              << SBF_orientation.x() << " "
+              << SBF_orientation.y() << " "
+              << SBF_orientation.z() << '\n'
+
+              << "Quaternion norm                : "
+              << SBF_orientation.norm() << '\n'
+
               << "=========================================\n";
 
     // --- TODO: Update total mass ---
@@ -96,6 +124,8 @@ void spacecraft::updateMovementData(double dt)
     // --- Commit to state vector ---
     setVelocity(MCI_velocity);
     setPosition(MCI_position);
+    setAngularVelocity(SBF_angularVel);
+    setOrientation(SBF_orientation);
     //setGload(GLoad);
 }
 

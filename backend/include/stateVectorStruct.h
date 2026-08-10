@@ -37,7 +37,7 @@ struct StateVector
      * Represents the rotation from the body-fixed frame (SBF) to the inertial frame (MCI).
      * Default constructor creates the identity quaternion (no rotation).
      */
-    Eigen::Quaterniond IB_Orientation;
+    Eigen::Quaterniond IB_Orientation = Eigen::Quaterniond::Identity();
 
     /**
      * @brief Angular velocity vector of the spacecrafts body [rad/s].
