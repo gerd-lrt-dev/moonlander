@@ -1,4 +1,5 @@
 #include "Thrust/BasicRCSModel.h"
+#include "eigen3/Eigen/Geometry"
 
 // -------------------------------------------------------------------------
 // Public class methods
@@ -62,6 +63,12 @@ void basicRCSModel::updateThrust(const double &dt)
         << " | FuelRemaining: " << fuelstate_.massCurrent << " kg"
         << std::endl;
     */
+}
+
+void basicRCSModel::updateTorque()
+{
+    Eigen::Vector3d vectorizedThrust    = thruststate_.currentThrust * thruststate_.SBF_direction;
+    thruststate_.SBF_currentTorque      = rcsConfig_.position.cross(vectorizedThrust);
 }
 
 // -------------------------------------------------------------------------
@@ -134,6 +141,11 @@ double basicRCSModel::getTargetThrust() const
 double basicRCSModel::getCurrentThrust() const
 {
     return thruststate_.currentThrust;
+}
+
+Eigen::Vector3d basicRCSModel::getCurrentTorque() const
+{
+    return thruststate_.SBF_currentTorque;
 }
 
 Eigen::Vector3d basicRCSModel::getSBF_DirectionOfThrust() const

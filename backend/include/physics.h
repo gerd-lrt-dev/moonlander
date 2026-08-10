@@ -7,6 +7,7 @@
 #include "environmentConfig.h"
 #include "spacemath.h"
 #include "Physics/iPhysicsModel.h"
+#include "Physics/iRotationalPhysicsModel.h"
 #include "Integrators/iIntegrator.h"
 #include "Sensory_Perception/iSensor.h"
 
@@ -39,13 +40,15 @@ private:
     EnvironmentConfig configData;
     spacemath math;
     std::shared_ptr<IPhysicsModel> model_;
+    std::shared_ptr<IRotationalPhysicsModel> rotModel_;
     std::shared_ptr<IIntegrator> integrator_;
     std::shared_ptr<ISensor> sensor_;
+
 public:
     /**
      * @brief Constructor
      */
-    physics(std::shared_ptr<IPhysicsModel> model, std::shared_ptr<IIntegrator> integrator, std::shared_ptr<ISensor> sensor) : model_(model), integrator_(integrator), sensor_(sensor) {};
+    physics(std::shared_ptr<IPhysicsModel> model, std::shared_ptr<IRotationalPhysicsModel> rotModel, std::shared_ptr<IIntegrator> integrator, std::shared_ptr<ISensor> sensor) : model_(model), rotModel_(rotModel), integrator_(integrator), sensor_(sensor) {};
 
     /**
      * @brief Destructor
@@ -90,6 +93,85 @@ public:
      * @return Updated position vector.
      */
     Eigen::Vector3d computePos(const Eigen::Vector3d& pos, const Eigen::Vector3d& vel, const Eigen::Vector3d& acc, double dt) const;
+
+    /**
+     * @brief Computes the current angular acceleration via the active rotational physics model.
+     *
+     * Wrapper function delegating the rotational dynamics calculation to the
+     * configured IRotationalPhysicsModel implementation.
+     *
+     * The calculation uses the spacecraft's current angular velocity, inertia
+     * tensor, and aggregated external torque. All rotational quantities are
+     * expressed in the spacecraft body-fixed frame (SBF).
+     *
+     * For a rigid body, the underlying model typically evaluates Euler's
+     * rotational equation of motion:
+     *
+     * \f[
+     * \dot{\boldsymbol{\omega}} =
+     * \mathbf{I}^{-1}
+     * \left[
+     * \boldsymbol{\tau}
+     * -
+     * \boldsymbol{\omega}
+     * \times
+     * \left(
+     * \mathbf{I}\boldsymbol{\omega}
+     * \right)
+     * \right]
+     * \f]
+     *
+     * where:
+     * - \f$\boldsymbol{\omega}\f$ is the current angular velocity [rad/s]
+     * - \f$\dot{\boldsymbol{\omega}}\f$ is the angular acceleration [rad/s²]
+     * - \f$\mathbf{I}\f$ is the inertia tensor [kg·m²]
+     * - \f$\boldsymbol{\tau}\f$ is the total applied torque [N·m]
+     *
+     * @param SBF_angularVelocity Current spacecraft angular velocity in SBF [rad/s].
+     * @param SBF_inertia         Spacecraft inertia tensor expressed in SBF [kg·m²].
+     * @param SBF_torque          Aggregated spacecraft torque expressed in SBF [N·m].
+     *
+     * @return Angular acceleration vector expressed in SBF [rad/s²].
+     */
+    Eigen::Vector3d computeAngAcc(const Eigen::Vector3d& SBF_angularVelocity, const Eigen::Matrix3d& SBF_inertia, const Eigen::Vector3d& SBF_torque) const;
+
+    /**
+     * @brief Integrates the spacecraft angular velocity using the configured integrator.
+     *
+     * Wrapper function delegating first-order numerical integration to
+     * IIntegrator. The current angular velocity is advanced using the
+     * current angular acceleration over the given simulation timestep.
+     *
+     * All rotational quantities are expressed in the spacecraft body-fixed
+     * frame (SBF).
+     *
+     * @param SBF_angularVelocity     Current angular velocity in SBF [rad/s].
+     * @param SBF_angularAcceleration Current angular acceleration in SBF [rad/s²].
+     * @param dt                      Simulation timestep [s].
+     *
+     * @return Updated angular velocity vector in SBF [rad/s].
+     */
+    Eigen::Vector3d computeAngVel(const Eigen::Vector3d& SBF_angularVelocity, const Eigen::Vector3d& SBF_angularAcceleration, double dt) const;
+
+
+    /**
+     * @brief Integrates the spacecraft attitude using the configured integrator.
+     *
+     * Wrapper function delegating quaternion-based attitude propagation to
+     * IIntegrator. The current attitude quaternion is advanced using the
+     * spacecraft angular velocity over the given simulation timestep.
+     *
+     * The angular velocity is expressed in the spacecraft body-fixed frame
+     * (SBF). The attitude quaternion represents the spacecraft orientation
+     * relative to the inertial reference frame.
+     *
+     * @param attitude            Current spacecraft attitude quaternion.
+     * @param SBF_angularVelocity Current angular velocity in SBF [rad/s].
+     * @param dt                  Simulation timestep [s].
+     *
+     * @return Updated and normalized spacecraft attitude quaternion.
+     */
+    Eigen::Quaterniond computeAttitude(const Eigen::Quaterniond& attitude, const Eigen::Vector3d& SBF_angularVelocity, double dt) const;
 
     /**
      * @brief Computes the proper G-load experienced by the spacecraft.

@@ -10,6 +10,8 @@ public:
 
     virtual void        updateThrust(const double &dt) = 0;
 
+    virtual void        updateTorque() = 0;
+
     virtual double      calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) = 0;
 
     virtual void        setEnginePowerSwitch(bool activateEngine) = 0;
@@ -27,6 +29,8 @@ public:
     virtual double      getTargetThrust() const = 0;
 
     virtual double      getCurrentThrust() const = 0;
+
+    virtual Eigen::Vector3d     getCurrentTorque() const = 0;
 
     virtual Eigen::Vector3d     getSBF_DirectionOfThrust() const = 0;
 

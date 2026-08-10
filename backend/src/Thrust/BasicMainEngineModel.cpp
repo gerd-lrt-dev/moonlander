@@ -39,6 +39,12 @@ void basicMainEngineModel::updateThrust(const double &dt)
     //std::cout << "[BasicMainEngineModel]-updateThrust-Current Thrust: " << ME_thrustState_.current << std::endl;
 }
 
+void basicMainEngineModel::updateTorque()
+{
+    Eigen::Vector3d vectorizedThrust    = ME_thrustState_.current * ME_thrustState_.SBF_direction;
+    ME_thrustState_.SBF_currentTorque   = engineConfig_.position.cross(vectorizedThrust);
+}
+
 // -------------------------------------------------------------------------
 // Public setter override functions
 // -------------------------------------------------------------------------
@@ -83,6 +89,11 @@ double basicMainEngineModel::getTargetThrust() const
 double basicMainEngineModel::getCurrentThrust() const
 {
     return ME_thrustState_.current;
+}
+
+Eigen::Vector3d basicMainEngineModel::getCurrentTorque() const
+{
+    return ME_thrustState_.SBF_currentTorque;
 }
 
 double basicMainEngineModel::getFuelConsumption() const

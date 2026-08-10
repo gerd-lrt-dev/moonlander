@@ -108,6 +108,15 @@ public:
      */
     void updateThrust(const double& dt) override;
 
+    /**
+     * @brief Updates the Torque provided by one single RCS Thruster.
+     *
+     * The torque will be calculated based on the provided thrust and the
+     * position vector relative to the spacecrafts center of gravity.
+     *
+     */
+    void updateTorque() override;
+
     // -------------------------------------------------------------------------
     // Public command interface
     // -------------------------------------------------------------------------
@@ -206,6 +215,12 @@ public:
      * @return Current thrust magnitude [N].
      */
     double getCurrentThrust() const override;
+
+    /**
+     * @brief Get the current Torque provided by engine
+     * @return ///< [Nm] Current Torque
+     */
+    Eigen::Vector3d getCurrentTorque() const override;
 
     /**
      * @brief Returns the normalized thrust direction vector.

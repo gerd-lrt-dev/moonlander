@@ -138,9 +138,7 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     lander.emptyMass    = j.at("emptyMass").get<double>();
     lander.fuelM        = j.at("fuelM").get<double>();
 
-    lander.Ixx          = j.at("Ixx").get<double>();
-    lander.Iyy          = j.at("Iyy").get<double>();
-    lander.Izz          = j.at("Izz").get<double>();
+    lander.SBF_inertia = Eigen::Vector3d(j.at("Ixx").get<double>(), j.at("Iyy").get<double>(), j.at("Izz").get<double>()).asDiagonal();
 
     const auto& initialstate = j.at("initialState");
 
@@ -148,8 +146,6 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     lander.IB_initialRot            = initialstate.at("IB_InitialOrientation").get<Eigen::Quaterniond>();
     lander.MCI_initialVelocity      = initialstate.at("MCI_InitialVelocity").get<Eigen::Vector3d>();
     lander.SBF_initialCenterOfMass  = initialstate.at("SBF_InitialCenterOfMass").get<Eigen::Vector3d>();
-
-
 
     lander.structuralIntegrity = j.at("structuralIntegrity").get<double>();
     lander.safeVelocity        = j.at("safeVelocity").get<double>();
