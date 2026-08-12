@@ -43,7 +43,8 @@ void SimulationWorker::stop()
     simulationTimer->stop();
     currentTime = 0.0;
 
-    emit stateUpdated(currentTime,
+    emit stateUpdated(Telemetry{},
+                      currentTime,
                       {0.0, 0.0, 0.0},
                       {0.0, 0.0, 0.0},
                       0.0,
@@ -104,7 +105,8 @@ void SimulationWorker::stepSimulation()
     sendControlCommands();
 
     // signals
-    emit stateUpdated(currentTime,
+    emit stateUpdated(telemetry_,
+                      currentTime,
                       telemetry_.navigation.MCI_position, //spacecraftData.statevector_.MCI_Position,
                       telemetry_.navigation.MCI_velocity, //spacecraftData.statevector_.MCI_Velocity,
                       telemetry_.sensor.GLoad, //spacecraftData.GLoad,

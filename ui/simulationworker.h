@@ -97,7 +97,8 @@ signals:
      *
      * @param consoleOutput Formatted debug / telemetry output string
      */
-    void stateUpdated(double time,
+    void stateUpdated(Telemetry telemetry_,
+                      double time,
                       Eigen::Vector3d pos,
                       Eigen::Vector3d vel,
                       double GLoad,

@@ -222,7 +222,8 @@ public slots:
      * @param fuelMass Remaining fuel mass in kilograms.
      * @param fuelFlow Current fuel flow in kilograms per second.
      */
-    void onStateUpdated(double time,
+    void onStateUpdated(Telemetry telemetry_,
+                        double time,
                         const Eigen::Vector3d& pos,
                         const Eigen::Vector3d& vel,
                         const double& GLoad,
