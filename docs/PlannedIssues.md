@@ -196,3 +196,217 @@ Attitude
 → Translational Acceleration
 
 and is therefore required for a physically consistent 6DoF spacecraft simulation.
+
+_________________________________________________________________________________________________________
+
+# D30 - Develop 3D Attitude View
+
+## Objective
+
+Implement a dedicated 3D attitude visualization for the spacecraft cockpit.
+
+The current cockpit can display rotational state numerically, but arbitrary spacecraft orientation cannot be represented intuitively through scalar attitude values alone.
+
+The new 3D Attitude View shall visualize the spacecraft orientation directly from the quaternion-based 6DoF state.
+
+The visualization must remain a pure frontend component and must not introduce independent physics or state propagation.
+
+---
+
+## Background
+
+SDF now propagates a complete rotational spacecraft state including:
+
+- angular velocity
+- angular acceleration
+- quaternion-based attitude
+
+The cockpit can expose these quantities numerically, but the current 2D/2.5D Landing View is not suitable for displaying arbitrary three-dimensional spacecraft orientation.
+
+A dedicated 3D attitude representation is therefore required.
+
+The first implementation should remain intentionally small and isolated. The goal is not to replace the existing Landing View or develop a complete 3D landing environment.
+
+---
+
+## Scope
+
+The initial 3D Attitude View shall provide:
+
+- a fixed 3D camera
+- a visible spacecraft or asymmetric test body
+- quaternion-driven orientation
+- real-time updates from cockpit telemetry
+- clear visual reference for spacecraft roll, pitch, and yaw behavior
+- consistent mapping between SDF coordinate conventions and the rendering coordinate system
+
+The first implementation does not require:
+
+- lunar terrain
+- spacecraft translation
+- landing target visualization
+- trajectory rendering
+- engine plume effects
+- RCS plume effects
+- free camera movement
+- external 3D scene physics
+
+These capabilities may be introduced in a later full 3D Landing View issue.
+
+---
+
+## Architecture
+
+The intended data flow is:
+
+SDF Backend State
+
+→ TelemetryDTO
+
+→ Cockpit Frontend
+
+→ Attitude View
+
+→ 3D Renderer
+
+The authoritative spacecraft orientation remains the backend quaternion.
+
+The frontend shall only transform the quaternion into the representation required by the rendering framework.
+
+No attitude integration or physical calculation shall be performed by the 3D view.
+
+---
+
+## Rendering Technology
+
+Evaluate and integrate Qt Quick 3D within the existing Qt Widgets cockpit.
+
+The preferred architecture is:
+
+Cockpit QWidget
+
+→ AttitudeView wrapper
+
+→ QQuickWidget
+
+→ QML View3D
+
+→ spacecraft model
+
+This allows 3D rendering to be introduced without migrating the complete cockpit frontend to QML.
+
+---
+
+## Implementation Tasks
+
+- [ ] Add required Qt Quick / Qt Quick 3D dependencies
+- [ ] Create a minimal QML-based 3D scene
+- [ ] Embed the QML scene into the existing QWidget cockpit
+- [ ] Create an `AttitudeView` frontend wrapper
+- [ ] Render a simple asymmetric test body
+- [ ] Verify static 3D rendering
+- [ ] Verify manual test rotations around all three axes
+- [ ] Convert the SDF attitude quaternion to the Qt quaternion representation
+- [ ] Connect cockpit telemetry to the 3D view
+- [ ] Apply the live quaternion directly to the rendered spacecraft node
+- [ ] Verify real-time spacecraft attitude updates
+- [ ] Document the mapping between SDF and renderer coordinate frames
+- [ ] Correct axis or handedness differences only inside the visualization layer
+- [ ] Replace the test body with a spacecraft model if the basic pipeline is stable
+
+---
+
+## Coordinate System Verification
+
+The 3D rendering coordinate system must be compared explicitly with the SDF spacecraft body-fixed frame.
+
+Verify:
+
+- [ ] SDF +X rotation
+- [ ] SDF -X rotation
+- [ ] SDF +Y rotation
+- [ ] SDF -Y rotation
+- [ ] SDF +Z rotation
+- [ ] SDF -Z rotation
+- [ ] positive and negative rotation direction
+- [ ] spacecraft forward direction
+- [ ] spacecraft up direction
+- [ ] quaternion multiplication / orientation convention
+- [ ] renderer handedness
+
+Any required visualization-frame transformation must remain inside the frontend.
+
+The physics state must not be modified to compensate for rendering conventions.
+
+---
+
+## Reference Test Cases
+
+### Test 1 — Identity Attitude
+
+Input:
+
+`q = [1, 0, 0, 0]`
+
+Expected:
+
+- spacecraft displayed in defined neutral orientation
+- no unintended rotation
+
+---
+
+### Test 2 — Single-Axis Rotation
+
+Apply known spacecraft rotations independently around X, Y, and Z.
+
+Expected:
+
+- correct rendered axis
+- correct rotation direction
+- no axis swapping
+
+---
+
+### Test 3 — Continuous Rotation
+
+Provide a continuously changing quaternion from the simulation.
+
+Expected:
+
+- smooth visual attitude propagation
+- no independent frontend integration
+- no discontinuities caused by Euler-angle conversion
+
+---
+
+### Test 4 — Translational RCS Torque
+
+Operate existing translational RCS thrusters that generate off-center torque.
+
+Expected:
+
+- visible spacecraft rotation consistent with backend attitude
+- observed tumbling corresponds to the simulated quaternion state
+
+---
+
+## Acceptance Criteria
+
+The issue is complete when:
+
+- a 3D attitude widget is integrated into the existing Qt cockpit,
+- the rendered spacecraft orientation is driven directly by the backend attitude quaternion,
+- no Euler-angle conversion is required for the visual orientation pipeline,
+- all three rotational axes are displayed correctly,
+- sign and axis conventions match the SDF coordinate definitions,
+- the frontend contains no independent rotational physics,
+- the visualization updates in real time with cockpit telemetry,
+- the component can later serve as the technical basis for a full 3D Landing View.
+
+---
+
+## Result
+
+SDF provides a dedicated real-time 3D visualization of spacecraft attitude.
+
+The new component makes the rotational 6DoF state directly observable and provides both an engineering visualization tool and the foundation for future full 3D spacecraft simulation views.

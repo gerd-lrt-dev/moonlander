@@ -30,7 +30,7 @@ void basicMainEngineModel::updateThrust(const double &dt)
         fuelstate_.consumptionRate = calcMassFlow(ME_thrustState_.current, engineConfig_.Isp, 9.81);
 
         // Calculate fuel mass based on fuel consumption
-        fuelstate_.massCurrent = calcFuelReduction(fuelstate_.massCurrent, fuelstate_.consumptionRate, dt);
+        fuelstate_.massCurrent = calcFuelReduction(fuelstate_.massCurrent, ME_thrustState_.consumptionRate, dt);
     }
     else
     {
@@ -136,6 +136,8 @@ void basicMainEngineModel::setDefaultValues()
 double basicMainEngineModel::calcFuelReduction(const double &fuelMass, const double &massFlowFuel, const double &dt)
 {
     double newFuelMass = fuelMass - (massFlowFuel * dt);
+
+    std::cout << "BASICMEMODEL<MASS FLOW FUEL>: " << massFlowFuel << std::endl;
 
     return newFuelMass;
 }

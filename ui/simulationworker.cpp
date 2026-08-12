@@ -44,16 +44,6 @@ void SimulationWorker::stop()
     currentTime = 0.0;
 
     emit stateUpdated(Telemetry{},
-                      currentTime,
-                      {0.0, 0.0, 0.0},
-                      {0.0, 0.0, 0.0},
-                      0.0,
-                      "Operational",
-                      {0.0, 0.0, 0.0},
-                      {0.0, 0.0, 0.0},
-                      {0.0, 0.0, 0.0},
-                      QVector<Telemetry::PropulsionSystems::RCSThrust>{},
-                      QVector<Telemetry::PropulsionSystems::Tank>{},
                       0.0,
                       0.0,
                       "");
@@ -106,16 +96,6 @@ void SimulationWorker::stepSimulation()
 
     // signals
     emit stateUpdated(telemetry_,
-                      currentTime,
-                      telemetry_.navigation.MCI_position, //spacecraftData.statevector_.MCI_Position,
-                      telemetry_.navigation.MCI_velocity, //spacecraftData.statevector_.MCI_Velocity,
-                      telemetry_.sensor.GLoad, //spacecraftData.GLoad,
-                      telemetry_.hullIntegrity.spacecraftState, //spacecraftData.spacecraftState_,
-                      telemetry_.propulsionSystems.mainEngine.SBF_direction * telemetry_.propulsionSystems.mainEngine.T_current, //spacecraftData.ME_ThrustState_.SBF_direction * spacecraftData.ME_ThrustState_.current,
-                      telemetry_.propulsionSystems.mainEngine.SBF_direction * telemetry_.propulsionSystems.mainEngine.T_target, //spacecraftData.ME_ThrustState_.SBF_direction * spacecraftData.ME_ThrustState_.target,
-                      telemetry_.propulsionSystems.mainEngine.SBF_direction * telemetry_.propulsionSystems.mainEngine.T_targetPercentage, //spacecraftData.ME_ThrustState_.SBF_direction * spacecraftData.ME_ThrustState_.targetPercentage,
-                      telemetry_.propulsionSystems.RCSEngines, //RCSTelemetryVec,
-                      telemetry_.propulsionSystems.fuelTanks, //fuelTanksQVec,
                       0.0, //spacecraftData.fuelMass,
                       0.0, //spacecraftData.fuelFlow,
                       telemetry_.console.output //consoleOutput

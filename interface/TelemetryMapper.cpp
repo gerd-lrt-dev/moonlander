@@ -97,6 +97,9 @@ Telemetry TelemetryMapper::getQTTelemetryData() const
     FE.propulsionSystems.mainEngine.T_targetPercentage =
         backendData.ME_ThrustState_.targetPercentage;
 
+    FE.propulsionSystems.mainEngine.massflow =
+        backendData.ME_ThrustState_.consumptionRate;
+
     FE.propulsionSystems.mainEngine.SBF_direction =
         backendData.ME_ThrustState_.SBF_direction;
 
@@ -133,6 +136,9 @@ Telemetry TelemetryMapper::getQTTelemetryData() const
 
         frontendRCS.thrustState =
             backendRCS.thrustState;
+
+        frontendRCS.massflow =
+            backendRCS.consumptionRate;
 
         FE.propulsionSystems.RCSEngines.append(frontendRCS);
     }

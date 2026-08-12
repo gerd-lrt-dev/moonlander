@@ -98,16 +98,6 @@ signals:
      * @param consoleOutput Formatted debug / telemetry output string
      */
     void stateUpdated(Telemetry telemetry_,
-                      double time,
-                      Eigen::Vector3d pos,
-                      Eigen::Vector3d vel,
-                      double GLoad,
-                      QString spacecraftState,
-                      Eigen::Vector3d thrust,
-                      Eigen::Vector3d targetThrust,
-                      Eigen::Vector3d thrustInPercentage,
-                      QVector<Telemetry::PropulsionSystems::RCSThrust> RCSTelemetryVec_,
-                      QVector<Telemetry::PropulsionSystems::Tank> fuelTanks,
                       double fuelMass,
                       double fuelFlow,
                       QString consoleOutput);

@@ -940,16 +940,6 @@ void cockpitPage::sendFlightCmd()
 // Slots
 // ------------------------------------------------
 void cockpitPage::onStateUpdated(Telemetry telemetry_,
-                                 double time,
-                                 const Eigen::Vector3d& pos,
-                                 const Eigen::Vector3d& vel,
-                                 const double& GLoad,
-                                 const QString spacecraftState_,
-                                 const Eigen::Vector3d thrust,
-                                 const Eigen::Vector3d targetThrust,
-                                 const Eigen::Vector3d thrustInPercentage,
-                                 QVector<Telemetry::PropulsionSystems::RCSThrust> RCSTelemetryVec_,
-                                 QVector<Telemetry::PropulsionSystems::Tank> tanks,
                                  double fuelMass,
                                  double fuelFlow,
                                  QString consoleOutput_)
@@ -971,11 +961,25 @@ void cockpitPage::onStateUpdated(Telemetry telemetry_,
                   qRound(telemetry_.propulsionSystems.mainEngine.T_current * telemetry_.propulsionSystems.mainEngine.SBF_direction.y() * 10.0) / 10.0,
                   qRound(telemetry_.propulsionSystems.mainEngine.T_current * telemetry_.propulsionSystems.mainEngine.SBF_direction.z() * 10.0) / 10.0});
     updateTargetThrust({qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.x() * 10.0) / 10.0,
-                        qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.x() * 10.0) / 10.0,
-                        qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.x() * 10.0) / 10.0});
+                        qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.y() * 10.0) / 10.0,
+                        qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.z() * 10.0) / 10.0});
     updateFuelTanks(telemetry_.propulsionSystems.fuelTanks);
-    updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
-    updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
+
+    double totalFuelMass = 0.0;
+    for (auto& tank : telemetry_.propulsionSystems.fuelTanks)
+    {
+        totalFuelMass += tank.mass;
+    }
+    updateFuelMass(totalFuelMass);
+
+    double totalFuelFlow = 0.0;
+    for (auto& engine : telemetry_.propulsionSystems.RCSEngines)
+    {
+        totalFuelFlow += engine.massflow;
+        qDebug() << "Fuel flow: " << engine.massflow;
+    }
+
+    updateFuelFlow(totalFuelFlow += telemetry_.propulsionSystems.mainEngine.massflow);
     updateRCSThrusters(telemetry_.propulsionSystems.RCSEngines);
 
     // HULL INTEGRITY
