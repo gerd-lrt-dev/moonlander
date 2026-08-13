@@ -140,6 +140,7 @@ struct Telemetry
             double T_target{0.0};                           ///< Commanded target thrust in newtons.
             double T_current{0.0};                          ///< Current actual thrust in newtons.
             double T_targetPercentage{0.0};                 ///< Target thrust percentage.
+            double massflow{0.0};    ///< Current consumption rate
             Eigen::Vector3d SBF_direction{0.0, 0.0, 0.0};   ///< Thrust direction in SBF.
         };
 
@@ -155,6 +156,7 @@ struct Telemetry
             double T_current{0.0};         ///< Current thrust in newtons.
             double T_target{0.0};          ///< Target thrust in newtons.
             double thrustState{0.0};       ///< Normalized or discrete thrust state.
+            double massflow{0.0};    ///< Current consumption rate
         };
 
         /**

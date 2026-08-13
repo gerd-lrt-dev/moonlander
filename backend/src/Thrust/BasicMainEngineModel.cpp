@@ -3,7 +3,7 @@
 // -------------------------------------------------------------------------
 // Public class methods
 // -------------------------------------------------------------------------
-basicMainEngineModel::basicMainEngineModel(const EngineConfig& eConfig, FuelState fState)
+basicMainEngineModel::basicMainEngineModel(const EngineConfig& eConfig)
     : engineConfig_(EngineConfig::Create(eConfig.engineActivated,
                                          eConfig.id,
                                          eConfig.name,
@@ -15,8 +15,7 @@ basicMainEngineModel::basicMainEngineModel(const EngineConfig& eConfig, FuelStat
                                          eConfig.maxThrust,
                                          eConfig.direction,
                                          eConfig.position)
-                    ),
-    fuelstate_(fState)
+                    )
 {
     engineConfig_.engineActivated = true;
 }
@@ -27,16 +26,12 @@ void basicMainEngineModel::updateThrust(const double &dt)
     {
         ME_thrustState_.current += (1 - exp(-dt / engineConfig_.timeConstant)) * (ME_thrustState_.target - ME_thrustState_.current);
 
-        fuelstate_.consumptionRate = calcMassFlow(ME_thrustState_.current, engineConfig_.Isp, 9.81);
-
-        // Calculate fuel mass based on fuel consumption
-        fuelstate_.massCurrent = calcFuelReduction(fuelstate_.massCurrent, fuelstate_.consumptionRate, dt);
+        ME_thrustState_.consumptionRate = calcMassFlow(ME_thrustState_.current, engineConfig_.Isp, 9.81);
     }
     else
     {
         throw std::runtime_error("time constant tau is zero!");
     }
-    //std::cout << "[BasicMainEngineModel]-updateThrust-Current Thrust: " << ME_thrustState_.current << std::endl;
 }
 
 void basicMainEngineModel::updateTorque()
@@ -48,6 +43,7 @@ void basicMainEngineModel::updateTorque()
 // -------------------------------------------------------------------------
 // Public setter override functions
 // -------------------------------------------------------------------------
+
 void basicMainEngineModel::setEnginePowerSwitch(bool activateEngine)
 {
     engineConfig_.engineActivated = activateEngine;
@@ -98,12 +94,7 @@ Eigen::Vector3d basicMainEngineModel::getCurrentTorque() const
 
 double basicMainEngineModel::getFuelConsumption() const
 {
-    return fuelstate_.consumptionRate;
-}
-
-double basicMainEngineModel::getCurrentFuelMass() const
-{
-    return fuelstate_.massCurrent;
+    return ME_thrustState_.consumptionRate;
 }
 
 double basicMainEngineModel::getTankID() const
@@ -133,12 +124,6 @@ void basicMainEngineModel::setDefaultValues()
 // -------------------------------------------------------------------------
 // Private calculation methods
 // -------------------------------------------------------------------------
-double basicMainEngineModel::calcFuelReduction(const double &fuelMass, const double &massFlowFuel, const double &dt)
-{
-    double newFuelMass = fuelMass - (massFlowFuel * dt);
-
-    return newFuelMass;
-}
 
 double basicMainEngineModel::calcMassFlow(const double &currenThrust, const double &Isp, const double &earthGravity)
 {

@@ -47,6 +47,28 @@ struct ME_ThrustState
     double targetPercentage{0.0};
 
     /**
+     * @brief Current fuel consumption rate of the engine.
+     *
+     * Represents the instantaneous propellant mass flow consumed by the engine
+     * at its current operating state. The value is used to determine the
+     * propellant mass reduction over a simulation timestep.
+     *
+     * The consumed propellant mass is given by:
+     *
+     * \f[
+     * \Delta m = \dot{m} \Delta t
+     * \f]
+     *
+     * where:
+     * - \f$\dot{m}\f$ is the consumption rate [kg/s]
+     * - \f$\Delta t\f$ is the simulation timestep [s]
+     * - \f$\Delta m\f$ is the consumed propellant mass [kg]
+     *
+     * @note A value of zero indicates that no propellant is currently consumed.
+     */
+    double consumptionRate{0.0};
+
+    /**
      * @brief Current Thrust SBF_direction
      *
      * Represents the thrust SBF_direction. Normally this SBF_direction is fixed. Nevertheless it

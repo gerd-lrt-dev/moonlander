@@ -4,7 +4,7 @@
 // -------------------------------------------------------------------------
 // Public class methods
 // -------------------------------------------------------------------------
-basicRCSModel::basicRCSModel(const RCSEngineConfig& rcsConfig, FuelState fState)
+basicRCSModel::basicRCSModel(const RCSEngineConfig& rcsConfig)
     : rcsConfig_(RCSEngineConfig::Create(rcsConfig.engineActivated,
                                          rcsConfig.id,
                                          rcsConfig.name,
@@ -19,8 +19,7 @@ basicRCSModel::basicRCSModel(const RCSEngineConfig& rcsConfig, FuelState fState)
                                          rcsConfig.minimumPulseWidth,
                                          rcsConfig.direction,
                                          rcsConfig.position)
-                ),
-    fuelstate_(fState)
+                )
 {
     // Set meta data for thrust state struct
     thruststate_.engineID   = rcsConfig_.id;
@@ -47,22 +46,7 @@ void basicRCSModel::updateThrust(const double &dt)
 
     thruststate_.currentThrust  = calcThrust(cmdInputDelayed, rcsConfig_.tauOn, rcsConfig_.tauOff, dt, rcsConfig_.maxThrust);
 
-    fuelstate_.consumptionRate  = calcMassFlow(thruststate_.currentThrust, rcsConfig_.Isp, envConfig_.earthGravity);
-
-    fuelstate_.massCurrent      = calcFuelReduction(fuelstate_.massCurrent, fuelstate_.consumptionRate, dt);
-
-    /*
-    std::cout
-        << "[basicRCSModel]-updateThrust | "
-        << "Engine: " << rcsConfig_.name
-        << " | Cmd: " << cmdInput
-        << " | CmdDelayed: " << cmdInputDelayed
-        << " | ThrustState: " << thrustState
-        << " | CurrentThrust: " << thruststate_.currentThrust << " N"
-        << " | FuelFlow: " << fuelstate_.consumptionRate << " kg/s"
-        << " | FuelRemaining: " << fuelstate_.massCurrent << " kg"
-        << std::endl;
-    */
+    thruststate_.consumptionRate = calcMassFlow(thruststate_.currentThrust, rcsConfig_.Isp, envConfig_.earthGravity);
 }
 
 void basicRCSModel::updateTorque()
@@ -155,12 +139,7 @@ Eigen::Vector3d basicRCSModel::getSBF_DirectionOfThrust() const
 
 double basicRCSModel::getFuelConsumption() const
 {
-    return fuelstate_.consumptionRate;
-}
-
-double basicRCSModel::getCurrentFuelMass() const
-{
-    return fuelstate_.massCurrent;
+    return thruststate_.consumptionRate;
 }
 
 double basicRCSModel::getTankID() const
@@ -244,13 +223,6 @@ int basicRCSModel::convertToBinaryCommand(double input)
     }
 
     return target;
-}
-
-double basicRCSModel::calcFuelReduction(const double &fuelMass, const double &massFlowFuel, const double &dt)
-{
-    double newFuelMass = fuelMass - (massFlowFuel * dt);
-
-    return newFuelMass;
 }
 
 double basicRCSModel::calcMassFlow(const double &currenThrust, const double &Isp, const double &earthGravity)

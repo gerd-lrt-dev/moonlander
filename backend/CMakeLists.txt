@@ -124,7 +124,7 @@ add_library(moonlander_backend
     include/Thrust/BasicMainEngineModel.h
     include/Thrust/BasicRCSModel.h
     include/Thrust/EngineConfig.h
-    include/Thrust/FuelStateStruct.h
+
     include/Thrust/FueltankStruct.h
     include/Thrust/ME_thrustState.h
     include/Thrust/RCSConfig.h

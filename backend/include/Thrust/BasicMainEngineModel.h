@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Thrust/iThrust.h"
-#include "Thrust/FuelStateStruct.h"
 #include "Thrust/EngineConfig.h"
 #include "Thrust/ME_thrustState.h"
 
@@ -16,7 +15,7 @@ public:
      * @param eConfig Configuration parameters for a spacecraft engine
      * @param fState Fuel-related state variables for the engine
      */
-    basicMainEngineModel(const EngineConfig& eConfig, FuelState fState);
+    basicMainEngineModel(const EngineConfig& eConfig);
 
     /**
      * @brief Destructor
@@ -131,12 +130,6 @@ public:
     double getFuelConsumption() const override;
 
     /**
-     * @brief Getter function for current fuel mass
-     * @return ///< [kg] fuel mass
-     */
-    double getCurrentFuelMass() const override;
-
-    /**
      * @brief Getter function for tank ID
      * @return tank id as integer
      *
@@ -161,7 +154,6 @@ public:
 private:
     EngineConfig engineConfig_;      ///< [-] Configuration parameters for a spacecraft engine.
     ME_ThrustState ME_thrustState_;  ///< [-] Dynamic state of the engine thrust.
-    FuelState fuelstate_;            ///< [-] Fuel-related state variables for the engine.
 
     // -------------------------------------------------------------------------
     // Private setter functions
@@ -174,16 +166,6 @@ private:
     // -------------------------------------------------------------------------
     // Private calculation methods
     // -------------------------------------------------------------------------
-    /**
-     * @brief Calculate fuel cunsomption
-     * @param fuelMass      ///< [kg] Mass of fuel
-     * @param massflowFuel  ///< [kg/s] Mass flow of fuel
-     * @param dt            ///< [s] discrete time step and update parameter
-     *
-     * Reduces fuel supply depending on fuel consumption through the thrust provision process
-     */
-    double calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) override;
-
     /**
      * @brief Calculate mass flow rate
      * @param currenThrust      ///<[N] Current Thrust in Newton

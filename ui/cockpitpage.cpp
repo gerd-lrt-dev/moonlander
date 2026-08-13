@@ -35,6 +35,9 @@ cockpitPage::cockpitPage(QWidget *parent)
     LNF_lcdTargetThrust_BX(nullptr),
     LNF_lcdTargetThrust_BY(nullptr),
     LNF_lcdTargetThrust_BZ(nullptr),
+    MCI_lcdThrustDirection_X(nullptr),
+    MCI_lcdThrustDirection_Y(nullptr),
+    MCI_lcdThrustDirection_Z(nullptr),
     lcdGLoad(nullptr),
     lcdFuelMass(nullptr),
     lcdFuelFlow(nullptr)
@@ -170,6 +173,10 @@ void cockpitPage::initializeQTObjects()
     LNF_lcdTargetThrust_BY = new QLCDNumber();
     LNF_lcdTargetThrust_BZ = new QLCDNumber();
 
+    MCI_lcdThrustDirection_X = new QLCDNumber();
+    MCI_lcdThrustDirection_Y = new QLCDNumber();
+    MCI_lcdThrustDirection_Z = new QLCDNumber();
+
     lcdGLoad = new QLCDNumber();
 
     // =====================================================
@@ -253,17 +260,51 @@ QGroupBox *cockpitPage::setupEngineBox()
     // Main Engine
     QVector<QLCDNumber*> currentThrustPanel;
     QVector<QLCDNumber*> targetThrustPanel;
+    QVector<QLCDNumber*> thrustDirectionMCIPanel;
 
     currentThrustPanel.push_back(LNF_lcdThrust_BX);
     currentThrustPanel.push_back(LNF_lcdThrust_BY);
     currentThrustPanel.push_back(LNF_lcdThrust_BZ);
+
     targetThrustPanel.push_back(LNF_lcdTargetThrust_BX);
     targetThrustPanel.push_back(LNF_lcdTargetThrust_BY);
     targetThrustPanel.push_back(LNF_lcdTargetThrust_BZ);
 
-    QWidget *currentThrustDetailBox = uibuilder.setupDetailBox(currentThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "LNF_CURRENT THRUST", 3);
-    QWidget *targetThrustDetailBox  = uibuilder.setupDetailBox(targetThrustPanel, {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"}, "LNF_TARGET THRUST", 3);
-    QWidget *GLoadDetailBox         = uibuilder.setupDetailBox({lcdGLoad}, {"GLoad [m/s²]"}, "ACCELERATION", 1);
+    thrustDirectionMCIPanel.push_back(MCI_lcdThrustDirection_X);
+    thrustDirectionMCIPanel.push_back(MCI_lcdThrustDirection_Y);
+    thrustDirectionMCIPanel.push_back(MCI_lcdThrustDirection_Z);
+
+    QWidget *currentThrustDetailBox =
+        uibuilder.setupDetailBox(
+            currentThrustPanel,
+            {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"},
+            "LNF_CURRENT THRUST",
+            3
+            );
+
+    QWidget *targetThrustDetailBox =
+        uibuilder.setupDetailBox(
+            targetThrustPanel,
+            {"Thrust [N] X:", "Thrust [N] Y:", "Thrust [N] Z:"},
+            "LNF_TARGET THRUST",
+            3
+            );
+
+    QWidget *GLoadDetailBox =
+        uibuilder.setupDetailBox(
+            {lcdGLoad},
+            {"GLoad [m/s²]"},
+            "ACCELERATION",
+            1
+            );
+
+    QWidget *thrustDirectionMCIDetailBox =
+        uibuilder.setupDetailBox(
+            thrustDirectionMCIPanel,
+            {"Direction X:", "Direction Y:", "Direction Z:"},
+            "MCI THRUST DIRECTION",
+            3
+            );
 
     // RCS Engines
     rcsThrusterContainer = new QWidget();
@@ -277,11 +318,15 @@ QGroupBox *cockpitPage::setupEngineBox()
     rcsScrollArea->setWidget(rcsThrusterContainer);
     rcsScrollArea->setMinimumHeight(160);
 
-    engineLayout->addWidget(currentThrustDetailBox, 0, 0);
-    engineLayout->addWidget(targetThrustDetailBox, 0, 1);
-    engineLayout->addWidget(GLoadDetailBox, 1, 0, 1, 2);
-    engineLayout->addWidget(rcsSectionTitle, 2, 0, 1, 2);
-    engineLayout->addWidget(rcsScrollArea, 3, 0, 1, 2);
+    // Layout
+    engineLayout->addWidget(currentThrustDetailBox,       0, 0);
+    engineLayout->addWidget(targetThrustDetailBox,        0, 1);
+
+    engineLayout->addWidget(GLoadDetailBox,               1, 1);
+    engineLayout->addWidget(thrustDirectionMCIDetailBox,  1, 0);
+
+    engineLayout->addWidget(rcsSectionTitle,              2, 0, 1, 2);
+    engineLayout->addWidget(rcsScrollArea,                3, 0, 1, 2);
 
     engineLayout->setRowStretch(0, 1);
     engineLayout->setRowStretch(1, 1);
@@ -789,6 +834,13 @@ void cockpitPage::updateTargetThrust(Eigen::Vector3d t)
     LNF_lcdTargetThrust_BZ->display(QString::number(t.z(), 'f', 1));
 }
 
+void cockpitPage::updateMainEngineThrustDirectionInMCI(Eigen::Vector3d MCI_MEDirection)
+{
+    MCI_lcdThrustDirection_X->display(QString::number(MCI_MEDirection.x(), 'f', 1));
+    MCI_lcdThrustDirection_Y->display(QString::number(MCI_MEDirection.y(), 'f', 1));
+    MCI_lcdThrustDirection_Z->display(QString::number(MCI_MEDirection.z(), 'f', 1));
+}
+
 void cockpitPage::updateRCSThrusters(const QVector<Telemetry::PropulsionSystems::RCSThrust>& rcsStates)
 {
     const QVector<Telemetry::PropulsionSystems::RCSThrust> activeStates =
@@ -939,43 +991,57 @@ void cockpitPage::sendFlightCmd()
 // ------------------------------------------------
 // Slots
 // ------------------------------------------------
-void cockpitPage::onStateUpdated(double time,
-                                 const Eigen::Vector3d& pos,
-                                 const Eigen::Vector3d& vel,
-                                 const double& GLoad,
-                                 const QString spacecraftState_,
-                                 const Eigen::Vector3d thrust,
-                                 const Eigen::Vector3d targetThrust,
-                                 const Eigen::Vector3d thrustInPercentage,
-                                 QVector<Telemetry::PropulsionSystems::RCSThrust> RCSTelemetryVec_,
-                                 QVector<Telemetry::PropulsionSystems::Tank> tanks,
-                                 double fuelMass,
-                                 double fuelFlow,
-                                 QString consoleOutput_)
+void cockpitPage::onStateUpdated(Telemetry telemetry_)
 {
-    updateTime(time);
-    updatePosition(pos);
-    updateRotation({0.0, 0.0, 0.0});
-    updateVelocity(vel);
-    updateAngularVelocity({0.0, 0.0, 0.0});
-    updateAcceleration(qRound(GLoad * 100.0) / 100.0);
-    updateThrust({qRound(thrust.x() * 10.0) / 10.0, qRound(thrust.y() * 10.0) / 10.0, qRound(thrust.z() * 10.0) / 10.0});
-    updateTargetThrust({qRound(targetThrust.x() * 10.0) / 10.0, qRound(targetThrust.y() * 10.0) / 10.0, qRound(targetThrust.z() * 10.0) / 10.0});
+    // TIME
+    updateTime(telemetry_.time);
 
-    updateFuelTanks(tanks);
-    updateFuelMass(qRound(fuelMass * 10.0) / 10.0);
-    updateFuelFlow(qRound(fuelFlow * 100.0) / 100.0);
-    updateRCSThrusters(RCSTelemetryVec_);
-    updateHullStatus(spacecraftState_);
+    // NAVIGATION
+    updatePosition(telemetry_.navigation.MCI_position);
+    updateRotation(telemetry_.navigation.IB_Orientation.toRotationMatrix().eulerAngles(0, 1, 2) * (180.0 / std::numbers::pi));
+    updateVelocity(telemetry_.navigation.MCI_velocity * (180.0 / std::numbers::pi));
+    updateAngularVelocity(telemetry_.navigation.SBF_AngularVelocity);
 
-    landingView->setPositionENU(pos);
-    landingView->setVelocityENU(vel);
+    // SENSOR
+    updateAcceleration(telemetry_.sensor.GLoad);
+
+    // PROPULSION
+    updateThrust({qRound(telemetry_.propulsionSystems.mainEngine.T_current * telemetry_.propulsionSystems.mainEngine.SBF_direction.x() * 10.0) / 10.0,
+                  qRound(telemetry_.propulsionSystems.mainEngine.T_current * telemetry_.propulsionSystems.mainEngine.SBF_direction.y() * 10.0) / 10.0,
+                  qRound(telemetry_.propulsionSystems.mainEngine.T_current * telemetry_.propulsionSystems.mainEngine.SBF_direction.z() * 10.0) / 10.0});
+    updateTargetThrust({qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.x() * 10.0) / 10.0,
+                        qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.y() * 10.0) / 10.0,
+                        qRound(telemetry_.propulsionSystems.mainEngine.T_target * telemetry_.propulsionSystems.mainEngine.SBF_direction.z() * 10.0) / 10.0});
+    updateMainEngineThrustDirectionInMCI(telemetry_.navigation.IB_Orientation * telemetry_.propulsionSystems.mainEngine.SBF_direction);
+    updateFuelTanks(telemetry_.propulsionSystems.fuelTanks);
+
+    double totalFuelMass = 0.0;
+    for (auto& tank : telemetry_.propulsionSystems.fuelTanks)
+    {
+        totalFuelMass += tank.mass;
+    }
+    updateFuelMass(totalFuelMass);
+
+    double totalFuelFlow = 0.0;
+    for (auto& engine : telemetry_.propulsionSystems.RCSEngines)
+    {
+        totalFuelFlow += engine.massflow;
+    }
+
+    updateFuelFlow(totalFuelFlow += telemetry_.propulsionSystems.mainEngine.massflow);
+    updateRCSThrusters(telemetry_.propulsionSystems.RCSEngines);
+
+    // HULL INTEGRITY
+    updateHullStatus(telemetry_.hullIntegrity.spacecraftState);
+
+    landingView->setPositionENU(telemetry_.navigation.MCI_position);
+    landingView->setVelocityENU(telemetry_.navigation.MCI_velocity);
     landingView->setYawDeg(0.0);          // DUMMY later from Quaternion/Euler
     landingView->setTargetENU({0,0,0});   // DUMMY
-    landingView->setThrust(-thrustInPercentage.z());
-    landingView->setHullIntact(spacecraftState_);
+    landingView->setThrust(telemetry_.propulsionSystems.mainEngine.T_current);
+    landingView->setHullIntact(telemetry_.hullIntegrity.spacecraftState);
 
-    (autopilotActive) ? consoleOutput(consoleOutput_) : consoleOutput("No controlling active");
+    (autopilotActive) ? consoleOutput(telemetry_.console.output) : consoleOutput("No controlling active");
 
 }
 

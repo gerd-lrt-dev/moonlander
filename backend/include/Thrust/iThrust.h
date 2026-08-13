@@ -12,8 +12,6 @@ public:
 
     virtual void        updateTorque() = 0;
 
-    virtual double      calcFuelReduction(const double &fuelMass,const double &massFlowFuel,const double &dt) = 0;
-
     virtual void        setEnginePowerSwitch(bool activateEngine) = 0;
 
     virtual void        setTarget(const double &tThrust) = 0;
@@ -35,8 +33,6 @@ public:
     virtual Eigen::Vector3d     getSBF_DirectionOfThrust() const = 0;
 
     virtual double      getFuelConsumption() const = 0;
-
-    virtual double      getCurrentFuelMass() const = 0;
 
     virtual double      getTankID() const = 0;
 
