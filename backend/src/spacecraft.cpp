@@ -277,7 +277,9 @@ void spacecraft::updateStep(double dt)
         break;
 
     case SpacecraftState::Destroyed:
-        // Do nothing
+        thrustOrchestration.shutDownAllEngines();
+
+        updateMovementDataToZero(dt);
         break;
     }
 }

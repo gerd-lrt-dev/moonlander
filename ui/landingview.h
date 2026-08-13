@@ -10,9 +10,10 @@
  *
  * The widget is split into three main regions:
  *
- * - Side View (E-UP): Shows vertical motion and lateral offset
- * - Top View (E-N):   Shows horizontal drift and target relation
- * - State Panel:      Displays key numerical telemetry values
+ * - Side View (E-UP): Shows vertical motion, lateral offset, projected attitude,
+ *   and main-engine thrust direction
+ * - Top View (E-N): Shows horizontal drift, target relation, and yaw orientation
+ * - State Panel: Displays key numerical telemetry values
  *
  * The widget is passive and only visualizes values provided
  * through update functions.
@@ -23,8 +24,10 @@
  * - Z → Up
  *
  * Info:
- * - Quaternion-based attitude is expected to be converted externally
- *   (e.g. to yaw angle) before passing to this widget.
+ * - Quaternion-based attitude is expected to be processed externally.
+ * - The top view receives yaw explicitly.
+ * - The side view derives the visible E-UP attitude projection from the
+ *   main-engine/body-axis direction provided in the ENU frame.
  * - This widget does NOT perform simulation or control logic.
  *
  * @author
@@ -51,16 +54,18 @@
  *
  * Displayed information includes:
  * - Position relative to landing target
- * - Velocity vectors (vertical and lateral)
- * - Trajectory history (top view)
- * - Thrust indication
- * - Yaw orientation (top view)
+ * - Velocity vectors
+ * - Trajectory history
+ * - Main-engine thrust direction
+ * - Projected spacecraft attitude in side view
+ * - Yaw orientation in top view
  * - Hull integrity status
  *
  * The widget is optimized for:
  * - Controller tuning
  * - Stability analysis
  * - Landing behavior interpretation
+ * - 6DoF state visualization in a lightweight 2.5D representation
  */
 class LandingView : public QWidget
 {
@@ -110,6 +115,20 @@ public:
     void setYawDeg(double yawDeg);
 
     /**
+     * @brief Updates the main-engine thrust direction in the ENU frame.
+     *
+     * The supplied direction is used to visualize the current main-engine
+     * thrust direction in the side view and to derive the visible spacecraft
+     * attitude projection in the East-Up plane.
+     *
+     * @param direction Main-engine thrust direction expressed in ENU coordinates.
+     *
+     * @note The vector is expected to represent a direction only. Its magnitude
+     *       is not used for thrust scaling.
+     */
+    void setMainEngineDirectionENU(const Eigen::Vector3d& direction);
+
+    /**
      * @brief Updates target landing position in ENU frame.
      *
      * @param target Target position vector:
@@ -122,14 +141,16 @@ public:
     /**
      * @brief Updates engine thrust level.
      *
-     * @param percent Thrust percentage [0–100].
+     * @param percent Thrust percentage [0–1].
+     *
+     * @note The value is converted internally to percent representation.
      */
     void setThrust(double percent);
 
     /**
-     * @brief Updates RCS active switch
-     * @param boolean
-     * @param thrust
+     * @brief Updates the RCS activity state.
+     *
+     * @param active true if at least one RCS thruster is active.
      */
     void setRCSActive(bool active);
 
@@ -158,18 +179,19 @@ private:
     // Internal State
     // =====================================================
 
-    Eigen::Vector3d positionENU {0.0, 0.0, 0.0}; ///< Current position (ENU)
-    Eigen::Vector3d velocityENU {0.0, 0.0, 0.0}; ///< Current velocity (ENU)
-    Eigen::Vector3d targetENU   {0.0, 0.0, 0.0}; ///< Target position (ENU)
+    Eigen::Vector3d positionENU {0.0, 0.0, 0.0};          ///< Current position in ENU [m]
+    Eigen::Vector3d velocityENU {0.0, 0.0, 0.0};          ///< Current velocity in ENU [m/s]
+    Eigen::Vector3d targetENU   {0.0, 0.0, 0.0};          ///< Target position in ENU [m]
+    Eigen::Vector3d mainEngineDirectionENU {0.0, 0.0, 1.0}; ///< Main-engine thrust direction in ENU
 
-    double thrustPercent = 0.0; ///< Main Engine thrust [%]
-    bool RCSActive = false;     ///< Switch that represents if RCS engines are active [0,1]
-    int activeThruster = 0.0;   ///< Amount of engine which are active
+    double thrustPercent = 0.0; ///< Main-engine thrust [%]
+    bool RCSActive = false;     ///< Indicates whether RCS thrusters are active
+    int activeThruster = 0;     ///< Number of active RCS thrusters
     double yawDeg = 0.0;        ///< Yaw angle [deg]
 
     bool hullIntact = true;     ///< Hull integrity state
 
-    QVector<QPointF> trajectoryEN; ///< Trajectory history (E-N plane)
+    QVector<QPointF> trajectoryEN; ///< Trajectory history in E-N plane
 
     // =====================================================
     // Animation
@@ -222,13 +244,24 @@ private:
 
     /**
      * @brief Draws lander in side view.
+     *
+     * The displayed attitude represents the projection of the spacecraft
+     * orientation into the East-Up plane.
+     *
+     * @param p Painter used for rendering.
+     * @param center Screen-space center position of the lander.
+     * @param attitudeDeg Projected spacecraft attitude in the E-UP plane [deg].
      */
-    void drawLanderSide(QPainter& p, const QPointF& center);
+    void drawLanderSide(QPainter& p,
+                        const QPointF& center,
+                        double attitudeDeg);
 
     /**
      * @brief Draws lander in top view including yaw orientation.
      */
-    void drawLanderTop(QPainter& p, const QPointF& center, double yawDeg);
+    void drawLanderTop(QPainter& p,
+                       const QPointF& center,
+                       double yawDeg);
 
     /**
      * @brief Draws vector (e.g. velocity or thrust).
