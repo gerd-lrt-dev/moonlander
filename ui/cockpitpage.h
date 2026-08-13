@@ -117,6 +117,20 @@ public:
     void updateTargetThrust(Eigen::Vector3d target);
 
     /**
+     * @brief Updates the displayed main engine thrust direction in the MCI frame.
+     *
+     * Updates the cockpit visualization of the main engine thrust direction
+     * expressed in the Moon-Centered Inertial (MCI) coordinate frame.
+     *
+     * The supplied vector represents the current orientation-dependent thrust
+     * direction after transformation from the spacecraft body-fixed frame (SBF)
+     * into the MCI frame.
+     *
+     * @param MCI_MEDirection Main engine thrust direction expressed in MCI coordinates.
+     */
+    void updateMainEngineThrustDirectionInMCI(Eigen::Vector3d MCI_MEDirection);
+
+    /**
      * @brief Updates the dynamic RCS thruster telemetry panel.
      *
      * Rebuilds the panel if the number of RCS engines has changed and updates
@@ -426,6 +440,9 @@ private:
     QLCDNumber *LNF_lcdTargetThrust_BX; ///< Target thrust setpoint in body frame of spacecraft x direction
     QLCDNumber *LNF_lcdTargetThrust_BY; ///< Target thrust setpoint in body frame of spacecraft y direction
     QLCDNumber *LNF_lcdTargetThrust_BZ; ///< Target thrust setpoint in body frame of spacecraft z direction
+    QLCDNumber *MCI_lcdThrustDirection_X;   ///< Thrust direction of main engine in MCI x direction
+    QLCDNumber *MCI_lcdThrustDirection_Y;   ///< Thrust direction of main engine in MCI y direction
+    QLCDNumber *MCI_lcdThrustDirection_Z;   ///< Thrust direction of main engine in MCI z direction
     QLCDNumber *lcdGLoad;               ///< Current acceleration [m/s²]
 
     // RCS Engines
