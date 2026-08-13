@@ -19,12 +19,36 @@
         "orientationFrame": "IB",
         "angularVelocityFrame": "SBF",
 
-        "MCI_InitialPosition": { "x": 100.0, "y": -20.0, "z": 1738900.0 },
-        "MCI_InitialVelocity": { "x": 0.0, "y": 0.0, "z": 0.0 },
+        "MCI_InitialPosition": {
+          "x": 100.0,
+          "y": -20.0,
+          "z": 1738900.0
+        },
 
-        "IB_InitialOrientation": { "w": 0.0, "x": 1.0, "y": 0.0, "z": 0.0 },
-        "SBF_InitialAngularVelocity": { "x": 0.0, "y": 0.0, "z": 0.0 },
-        "SBF_InitialCenterOfMass": { "x": 0.0, "y": 0.0, "z": 0.2 }
+        "MCI_InitialVelocity": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+
+        "IB_InitialOrientation": {
+          "w": 0.0,
+          "x": 1.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+
+        "SBF_InitialAngularVelocity": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0
+        },
+
+        "SBF_InitialCenterOfMass": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.2
+        }
       },
 
       "mission": {
@@ -40,8 +64,18 @@
       "safeVelocity": 5.0,
 
       "tanks": [
-        { "id": 0, "name": "MainTank", "role": "main", "fuelMass": 100.0 },
-        { "id": 1, "name": "RCSTank", "role": "rcs", "fuelMass": 20.0 }
+        {
+          "id": 0,
+          "name": "MainTank",
+          "role": "main",
+          "fuelMass": 100.0
+        },
+        {
+          "id": 1,
+          "name": "RCSTank",
+          "role": "rcs",
+          "fuelMass": 20.0
+        }
       ],
 
       "engines": [
@@ -56,9 +90,18 @@
           "timeConstant": 0.6,
           "responseRate": 5.0,
           "maxThrust": 7000.0,
-          "direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
-          "position": { "x": 0.0, "y": 0.0, "z": 0.5 }
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.5
+          }
         },
+
         {
           "engineActivated": true,
           "id": 1,
@@ -72,9 +115,18 @@
           "tauOn": 0.08,
           "tauOff": 0.08,
           "minimumPulseWidth": 0.0,
-          "direction": { "x": 1.0, "y": 0.0, "z": 0.0 },
-          "position": { "x": 0.0, "y": -0.8, "z": -0.6 }
+          "direction": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": -0.8,
+            "z": -0.6
+          }
         },
+
         {
           "engineActivated": true,
           "id": 2,
@@ -88,9 +140,18 @@
           "tauOn": 0.08,
           "tauOff": 0.08,
           "minimumPulseWidth": 0.0,
-          "direction": { "x": -1.0, "y": 0.0, "z": 0.0 },
-          "position": { "x": 0.0, "y": 0.8, "z": -0.6 }
+          "direction": {
+            "x": -1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": 0.8,
+            "z": -0.6
+          }
         },
+
         {
           "engineActivated": true,
           "id": 3,
@@ -104,9 +165,18 @@
           "tauOn": 0.08,
           "tauOff": 0.08,
           "minimumPulseWidth": 0.0,
-          "direction": { "x": 0.0, "y": 1.0, "z": 0.0 },
-          "position": { "x": -0.8, "y": 0.0, "z": -0.6 }
+          "direction": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": -0.8,
+            "y": 0.0,
+            "z": -0.6
+          }
         },
+
         {
           "engineActivated": true,
           "id": 4,
@@ -120,9 +190,18 @@
           "tauOn": 0.08,
           "tauOff": 0.08,
           "minimumPulseWidth": 0.0,
-          "direction": { "x": 0.0, "y": -1.0, "z": 0.0 },
-          "position": { "x": 0.8, "y": 0.0, "z": -0.6 }
+          "direction": {
+            "x": 0.0,
+            "y": -1.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.8,
+            "y": 0.0,
+            "z": -0.6
+          }
         },
+
         {
           "engineActivated": true,
           "id": 5,
@@ -136,9 +215,18 @@
           "tauOn": 0.08,
           "tauOff": 0.08,
           "minimumPulseWidth": 0.0,
-          "direction": { "x": 0.0, "y": 0.0, "z": 1.0 },
-          "position": { "x": 0.5, "y": -0.5, "z": -0.6 }
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "position": {
+            "x": 0.5,
+            "y": -0.5,
+            "z": -0.6
+          }
         },
+
         {
           "engineActivated": true,
           "id": 6,
@@ -152,8 +240,328 @@
           "tauOn": 0.08,
           "tauOff": 0.08,
           "minimumPulseWidth": 0.0,
-          "direction": { "x": 0.0, "y": 0.0, "z": -1.0 },
-          "position": { "x": -0.5, "y": 0.5, "z": -0.6 }
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "position": {
+            "x": -0.5,
+            "y": 0.5,
+            "z": -0.6
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 7,
+          "name": "RCS_RollPos_Right",
+          "type": "attitude",
+          "controlAssignment": "+roll",
+          "axis": "+z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": 0.8,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 8,
+          "name": "RCS_RollPos_Left",
+          "type": "attitude",
+          "controlAssignment": "+roll",
+          "axis": "-z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": -0.8,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 9,
+          "name": "RCS_RollNeg_Right",
+          "type": "attitude",
+          "controlAssignment": "-roll",
+          "axis": "-z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": 0.8,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 10,
+          "name": "RCS_RollNeg_Left",
+          "type": "attitude",
+          "controlAssignment": "-roll",
+          "axis": "+z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": -0.8,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 11,
+          "name": "RCS_PitchPos_Front",
+          "type": "attitude",
+          "controlAssignment": "+pitch",
+          "axis": "-z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "position": {
+            "x": 0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 12,
+          "name": "RCS_PitchPos_Rear",
+          "type": "attitude",
+          "controlAssignment": "+pitch",
+          "axis": "+z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "position": {
+            "x": -0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 13,
+          "name": "RCS_PitchNeg_Front",
+          "type": "attitude",
+          "controlAssignment": "-pitch",
+          "axis": "+z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "position": {
+            "x": 0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 14,
+          "name": "RCS_PitchNeg_Rear",
+          "type": "attitude",
+          "controlAssignment": "-pitch",
+          "axis": "-z",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "position": {
+            "x": -0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 15,
+          "name": "RCS_YawPos_Front",
+          "type": "attitude",
+          "controlAssignment": "+yaw",
+          "axis": "+y",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 16,
+          "name": "RCS_YawPos_Rear",
+          "type": "attitude",
+          "controlAssignment": "+yaw",
+          "axis": "-y",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": -1.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": -0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 17,
+          "name": "RCS_YawNeg_Front",
+          "type": "attitude",
+          "controlAssignment": "-yaw",
+          "axis": "-y",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": -1.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
+        },
+
+        {
+          "engineActivated": true,
+          "id": 18,
+          "name": "RCS_YawNeg_Rear",
+          "type": "attitude",
+          "controlAssignment": "-yaw",
+          "axis": "+y",
+          "tankID": 1,
+          "Isp": 285.0,
+          "maxThrust": 100.0,
+          "commandDelay": 0.02,
+          "tauOn": 0.08,
+          "tauOff": 0.08,
+          "minimumPulseWidth": 0.0,
+          "direction": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": -0.8,
+            "y": 0.0,
+            "z": 0.2
+          }
         }
       ]
     }

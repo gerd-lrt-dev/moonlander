@@ -132,7 +132,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
 
     for (const auto& rcscfg_ : RCSEngines)
     {
-        if (rcscfg_.type == "translation")
+        if (rcscfg_.type == "translation" || rcscfg_.type == "attitude")
         {
             std::cout
                 << "[Thrust]-initializeEngines- Configured Translational RCS Engine | "

@@ -204,6 +204,27 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
 
             lander.RCSengines_.push_back(RCS);
         }
+        else if (e.at("type").get<std::string>() == "attitude")
+        {
+            std::cout << "[jsonConfigReader] Parselander" << std::endl;
+            RCSEngineConfig RCS;
+
+            RCS.id                  = e.at("id").get<int>();
+            RCS.name                = e.at("name").get<std::string>();
+            RCS.type                = e.at("type").get<std::string>();
+            RCS.axis                = e.at("axis").get<std::string>();
+            RCS.tankID              = e.at("tankID").get<int>();
+
+            RCS.Isp                 = e.at("Isp").get<double>();
+            RCS.maxThrust           = e.at("maxThrust").get<double>();
+            RCS.commandDelay        = e.at("commandDelay").get<double>();
+            RCS.tauOn               = e.at("tauOn").get<double>();
+            RCS.tauOff              = e.at("tauOff").get<double>();
+            RCS.minimumPulseWidth   = e.at("minimumPulseWidth").get<double>();
+
+            RCS.direction           = e.at("direction").get<Eigen::Vector3d>();
+            RCS.position            = e.at("position").get<Eigen::Vector3d>();
+        }
     }
 
     // -------------------------
