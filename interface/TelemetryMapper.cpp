@@ -97,6 +97,7 @@ Telemetry TelemetryMapper::getQTTelemetryData() const
     FE.propulsionSystems.mainEngine.T_targetPercentage =
         backendData.ME_ThrustState_.targetPercentage;
 
+    std::cout << "[TelemetryMapper] Massflow: " << backendData.ME_ThrustState_.consumptionRate << std::endl;
     FE.propulsionSystems.mainEngine.massflow =
         backendData.ME_ThrustState_.consumptionRate;
 

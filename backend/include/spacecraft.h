@@ -386,9 +386,6 @@ public:
     // -------------------------------------------------------------------------
     // Requester functions
     // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-    // Request functions
-    // -------------------------------------------------------------------------
     /**
      * @brief Returns the current totalthrust.
      *
@@ -533,6 +530,32 @@ public:
     // Public getter functions
     // -------------------------------------------------------------------------
 
+    /**
+     * @brief Returns a consolidated snapshot of the current simulation state.
+     *
+     * Collects the current spacecraft, navigation, propulsion, fuel, load, and
+     * console data required by the telemetry pipeline and combines them into a
+     * single simulation data structure.
+     *
+     * The returned data represents the simulation state at the time of the
+     * request and serves as the primary data source for the TelemetryMapper.
+     * Individual subsystem states are queried from their respective owners and
+     * assembled without modifying the underlying simulation state.
+     *
+     * The collected data includes:
+     * - spacecraft state and navigation state vector
+     * - main engine thrust state and propellant consumption
+     * - individual RCS engine states
+     * - fuel tank states and total remaining propellant mass
+     * - current G-load
+     * - spacecraft console output
+     *
+     * The reported vertical position is adjusted by the lunar radius to provide
+     * altitude relative to the lunar surface rather than the absolute MCI
+     * position component.
+     *
+     * @return Consolidated snapshot of the current simulation data.
+     */
     simData getFullSimulationData() const;
 
     /**
@@ -585,22 +608,14 @@ public:
      * Considers mass of all tanks for physical calculation
      * @return total mass of fuel [kg]
      */
-    double getTotalFuelMass() const;
+    double requestTotalFuelMass() const;
 
     /**
      * @brief Return Fuel tank information for all installed tanks
      *
      * @return Vector with Fuel Tank Struct
      */
-    std::vector<FuelTank> getFuelTanks() const;
-
-    /**
-     * @brief Return current fuel mass
-     * @return fuel mass
-     * 
-     * Fuel mass is updated by update thrust
-     */
-    const std::vector<FuelTank> getfuelMass() const;
+    std::vector<FuelTank> requestFuelTanks() const;
 
     /**
      * @brief Return GLoad
@@ -608,6 +623,14 @@ public:
      */
     double getGload() const;
 
+    /**
+     * @brief Returns the current spacecraft console output.
+     *
+     * Provides the current console text generated or maintained by the
+     * spacecraft for display by external systems such as the cockpit frontend.
+     *
+     * @return Current spacecraft console text.
+     */
     std::string getConsoleTxt() const;
 
     /**

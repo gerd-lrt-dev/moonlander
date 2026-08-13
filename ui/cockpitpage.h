@@ -222,10 +222,7 @@ public slots:
      * @param fuelMass Remaining fuel mass in kilograms.
      * @param fuelFlow Current fuel flow in kilograms per second.
      */
-    void onStateUpdated(Telemetry telemetry_,
-                        double fuelMass,
-                        double fuelFlow,
-                        QString consoleOutput);
+    void onStateUpdated(Telemetry telemetry_);
 
 private slots:
     /**

@@ -105,9 +105,6 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
 
     for (const auto& cfg_ : engineConfigs)
     {
-        FuelState state;
-        state.consumptionRate = 0.0;
-
         if (cfg_.type == "main")
         {
             std::cout
@@ -119,7 +116,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
                 << cfg_.direction.z() << ")"
                 << std::endl;
 
-            addModel(std::make_unique<basicMainEngineModel>(cfg_, state));
+            addModel(std::make_unique<basicMainEngineModel>(cfg_));
         }
         else
         {
@@ -135,9 +132,6 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
 
     for (const auto& rcscfg_ : RCSEngines)
     {
-        FuelState RCSFuelState;
-        RCSFuelState.consumptionRate = 0.0;
-
         if (rcscfg_.type == "translation")
         {
             std::cout
@@ -150,7 +144,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
                 << rcscfg_.direction.z() << ")"
                 << std::endl;
 
-            addModel(std::make_unique<basicRCSModel>(rcscfg_, RCSFuelState));
+            addModel(std::make_unique<basicRCSModel>(rcscfg_));
         }
         else if (rcscfg_.type == "rotation")
         {
@@ -200,7 +194,14 @@ void Thrust::updatePropulsion(double dt)
             models_[i]->updateTorque();
 
             // Update fuel reduction
-            tanks_[models_[i]->getTankID()].mass = models_[i]->calcFuelReduction(tanks_[models_[i]->getTankID()].mass, models_[i]->getFuelConsumption(), dt);
+            for (auto& tank : tanks_)
+            {
+                if (tank.id == models_[i]->getTankID())
+                {
+                    tank.consume(models_[i]->getFuelConsumption() * dt);
+                    break;
+                }
+            }
         }
     }
     else
@@ -210,7 +211,6 @@ void Thrust::updatePropulsion(double dt)
 }
 
 // --- Getter functions ---------------------------------------------
-
 Eigen::Vector3d Thrust::getTargetThrust(EngineType engine) const
 {
     Eigen::Vector3d     total{0.0, 0.0, 0.0};

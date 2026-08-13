@@ -10,7 +10,6 @@
 #include "Thrust/BasicMainEngineModel.h"
 #include "Thrust/BasicRCSModel.h"
 #include "Thrust/RCSControlAllocator.h"
-#include "Thrust/FuelStateStruct.h"
 #include "Thrust/ME_thrustState.h"
 #include "Thrust/RCS_ThrustState.h"
 #include "Thrust/EngineConfig.h"
@@ -229,6 +228,21 @@ public:
     // -------------------------------------------------------------------------
 
     /**
+     * @brief Returns the current runtime state of the main engine.
+     *
+     * Provides the consolidated thrust state of the main engine managed by the
+     * propulsion system. The returned state contains the current engine-related
+     * quantities required by higher-level systems such as the spacecraft,
+     * telemetry, control, and visualization layers.
+     *
+     * The state may include quantities such as current and commanded thrust,
+     * propellant consumption rate, and the currently generated torque.
+     *
+     * @return Current main engine thrust state.
+     */
+    ME_ThrustState getMainEngineThrustState() const;
+
+    /**
      * @brief Returns the commanded target thrust vector.
      *
      * Depending on the selected engine type, this function returns either the
@@ -384,13 +398,6 @@ private:
      * more engines.
      */
     std::vector<FuelTank> tanks_;
-
-    /**
-     * @brief Global fuel-related state of the propulsion system.
-     *
-     * Used for aggregated fuel bookkeeping and telemetry.
-     */
-    FuelState fuelState_;
 
     /**
      * @brief Legacy single-engine configuration cache.

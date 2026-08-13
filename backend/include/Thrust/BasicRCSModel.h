@@ -3,7 +3,6 @@
 
 #include "Thrust/iThrust.h"
 #include "Thrust/RCSConfig.h"
-#include "Thrust/FuelStateStruct.h"
 #include "Thrust/RCS_ThrustState.h"
 #include "environmentConfig.h"
 
@@ -88,7 +87,7 @@ public:
      * @param rcsConfig Configuration parameters of the RCS thruster.
      * @param fState Fuel-related runtime state associated with the thruster.
      */
-    basicRCSModel(const RCSEngineConfig& rcsConfig, FuelState fState);
+    basicRCSModel(const RCSEngineConfig& rcsConfig);
 
     /**
      * @brief Destroys the RCS model.
@@ -243,13 +242,6 @@ public:
     double getFuelConsumption() const override;
 
     /**
-     * @brief Returns the current remaining fuel mass of the assigned tank.
-     *
-     * @return Current fuel mass [kg].
-     */
-    double getCurrentFuelMass() const override;
-
-    /**
      * @brief Returns the identifier of the assigned fuel tank.
      *
      * @return Tank identifier [-].
@@ -272,11 +264,6 @@ private:
      * @brief Static configuration parameters of the RCS thruster.
      */
     RCSEngineConfig rcsConfig_{};
-
-    /**
-     * @brief Runtime fuel state associated with the assigned tank.
-     */
-    FuelState fuelstate_{};
 
     /**
      * @brief Runtime scalar thrust state of the RCS thruster.
@@ -415,22 +402,6 @@ private:
      * @return Binary command value [-].
      */
     int convertToBinaryCommand(double input);
-
-    /**
-     * @brief Computes the remaining fuel mass after one simulation time step.
-     *
-     * Reduces the available fuel mass according to the current mass flow rate
-     * and simulation time step.
-     *
-     * @param fuelMass Current fuel mass [kg].
-     * @param massFlowFuel Fuel mass flow rate [kg/s].
-     * @param dt Discrete simulation time step [s].
-     *
-     * @return Updated fuel mass [kg].
-     */
-    double calcFuelReduction(const double& fuelMass,
-                             const double& massFlowFuel,
-                             const double& dt) override;
 
     /**
      * @brief Computes the propellant mass flow rate.

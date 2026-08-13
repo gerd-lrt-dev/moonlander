@@ -43,10 +43,7 @@ void SimulationWorker::stop()
     simulationTimer->stop();
     currentTime = 0.0;
 
-    emit stateUpdated(Telemetry{},
-                      0.0,
-                      0.0,
-                      "");
+    emit stateUpdated(Telemetry{});
 
     telemetryMapper_.setReset();
 }
@@ -95,11 +92,7 @@ void SimulationWorker::stepSimulation()
     sendControlCommands();
 
     // signals
-    emit stateUpdated(telemetry_,
-                      0.0, //spacecraftData.fuelMass,
-                      0.0, //spacecraftData.fuelFlow,
-                      telemetry_.console.output //consoleOutput
-                      );
+    emit stateUpdated(telemetry_);
 }
 
 void SimulationWorker::collectControlCommands(const FlightCommandDTO &cmd, const double &thrustInPercentage, const double &thrustInNewton)
@@ -115,7 +108,7 @@ void SimulationWorker::collectAutopilotCommand(bool autopilotActive)
 
 void SimulationWorker::sendControlCommands()
 {
-    telemetryMapper_.transferUserCommandtoBackend(collectedCmdData); //->receiveCommandFromFrontEnd(FEControlCommands_);
+    telemetryMapper_.transferUserCommandtoBackend(collectedCmdData);
 }
 
 

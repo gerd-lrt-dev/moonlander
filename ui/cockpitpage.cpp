@@ -939,10 +939,7 @@ void cockpitPage::sendFlightCmd()
 // ------------------------------------------------
 // Slots
 // ------------------------------------------------
-void cockpitPage::onStateUpdated(Telemetry telemetry_,
-                                 double fuelMass,
-                                 double fuelFlow,
-                                 QString consoleOutput_)
+void cockpitPage::onStateUpdated(Telemetry telemetry_)
 {
     // TIME
     updateTime(telemetry_.time);
@@ -976,7 +973,6 @@ void cockpitPage::onStateUpdated(Telemetry telemetry_,
     for (auto& engine : telemetry_.propulsionSystems.RCSEngines)
     {
         totalFuelFlow += engine.massflow;
-        qDebug() << "Fuel flow: " << engine.massflow;
     }
 
     updateFuelFlow(totalFuelFlow += telemetry_.propulsionSystems.mainEngine.massflow);
@@ -992,7 +988,7 @@ void cockpitPage::onStateUpdated(Telemetry telemetry_,
     landingView->setThrust(telemetry_.propulsionSystems.mainEngine.T_current);
     landingView->setHullIntact(telemetry_.hullIntegrity.spacecraftState);
 
-    (autopilotActive) ? consoleOutput(consoleOutput_) : consoleOutput("No controlling active");
+    (autopilotActive) ? consoleOutput(telemetry_.console.output) : consoleOutput("No controlling active");
 
 }
 

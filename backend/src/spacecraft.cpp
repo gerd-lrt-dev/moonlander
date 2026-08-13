@@ -79,6 +79,7 @@ void spacecraft::updateMovementData(double dt)
     Eigen::Vector3d SBF_angularVel  = physics_->computeAngVel(getAngularVelocity(), SBF_angularAcc, dt);
     Eigen::Quaterniond SBF_orientation = physics_->computeAttitude(getOrientation(), SBF_angularVel, dt);
 
+    /*
     std::cout << "\n========== ROTATIONAL DYNAMICS ==========\n"
 
               << "Angular velocity (old) [rad/s] : "
@@ -115,7 +116,7 @@ void spacecraft::updateMovementData(double dt)
               << SBF_orientation.norm() << '\n'
 
               << "=========================================\n";
-
+    */
     // --- TODO: Update total mass ---
     // ...
 
@@ -243,7 +244,7 @@ spacecraft::~spacecraft()
 void spacecraft::updateStep(double dt)
 {
     // Update mass data
-    updateTotalMassOnFuelReduction(spacecraftConfig_.emptyMass, getTotalFuelMass());
+    updateTotalMassOnFuelReduction(spacecraftConfig_.emptyMass, requestTotalFuelMass());
 
     thrustOrchestration.updatePropulsion(dt);
 
@@ -455,11 +456,12 @@ simData spacecraft::getFullSimulationData() const
     simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.targetPercentage   = requestMainEngineThrustInPercentage().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.SBF_direction      = requestMainEngineDirection();
+    simData_.ME_ThrustState_.consumptionRate    = requestMainEngineLiveFuelConsumption();
 
     simData_.RCS_ThrustState_ = requestFullRCSEngineData();
 
-    simData_.tanks    = getFuelTanks(); //TODO: Should be a request
-    simData_.fuelMass = getTotalFuelMass(); //TODO: Should be a request
+    simData_.tanks    = requestFuelTanks(); //TODO: Should be a request
+    simData_.fuelMass = requestTotalFuelMass(); //TODO: Should be a request
     simData_.fuelFlow = requestMainEngineLiveFuelConsumption();
 
     simData_.GLoad = getGload();
@@ -504,12 +506,12 @@ double spacecraft::getTotalMass()
     return state_.totalMass;
 }
 
-double spacecraft::getTotalFuelMass() const
+double spacecraft::requestTotalFuelMass() const
 {
     return thrustOrchestration.getFuelMassOfAllTanks();
 }
 
-std::vector<FuelTank> spacecraft::getFuelTanks() const
+std::vector<FuelTank> spacecraft::requestFuelTanks() const
 {
     return thrustOrchestration.getFuelTanks();
 }

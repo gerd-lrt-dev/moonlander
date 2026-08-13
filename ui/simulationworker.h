@@ -97,10 +97,7 @@ signals:
      *
      * @param consoleOutput Formatted debug / telemetry output string
      */
-    void stateUpdated(Telemetry telemetry_,
-                      double fuelMass,
-                      double fuelFlow,
-                      QString consoleOutput);
+    void stateUpdated(Telemetry telemetry_);
 
     /**
      * @brief simulationError
