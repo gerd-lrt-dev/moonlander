@@ -85,6 +85,7 @@ void basicRCSModel::setTargetInPercentage(const double& tThrustInPercentage)
 {
     int target = convertToBinaryCommand(tThrustInPercentage);
 
+    //std::cout << "[BasicRCSModel]-setTargetInPercentage: Receive Target Thrust: " << tThrustInPercentage << std::endl;
     thruststate_.targetThrustPercentage = static_cast<double>(target);
     thruststate_.targetThrust = static_cast<double>(target) * rcsConfig_.maxThrust;
 
@@ -135,6 +136,11 @@ Eigen::Vector3d basicRCSModel::getCurrentTorque() const
 Eigen::Vector3d basicRCSModel::getSBF_DirectionOfThrust() const
 {
     return rcsConfig_.direction;
+}
+
+Eigen::Vector3d basicRCSModel::getEnginePosition() const
+{
+    return rcsConfig_.position;
 }
 
 double basicRCSModel::getFuelConsumption() const

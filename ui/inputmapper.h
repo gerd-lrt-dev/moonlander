@@ -148,6 +148,15 @@ private:
     void updateFlightCommand();
 
     /**
+     * @brief Resolves opposing RCS command states into a normalized axis command.
+     *
+     * @param positive Indicates whether the positive axis command is active.
+     * @param negative Indicates whether the negative axis command is active.
+     * @return Normalized axis command in the range [-1.0, 1.0].
+     */
+    double resolveAxisCommand(bool positive, bool negative);
+
+    /**
      * @brief Pointer to the main engine thrust slider.
      *
      * The slider is externally managed by the UI and serves as the main engine
@@ -189,4 +198,34 @@ private:
      * @brief Internal RCS translation state for negative Z.
      */
     bool ENU_RCS_NegZ = false;
+
+    /**
+     * @brief Internal RCS rotational state for positive roll around the SBF X-axis.
+     */
+    bool ENU_RCS_PosRoll = false;
+
+    /**
+     * @brief Internal RCS rotational state for negative roll around the SBF X-axis.
+     */
+    bool ENU_RCS_NegRoll = false;
+
+    /**
+     * @brief Internal RCS rotational state for positive pitch around the SBF Y-axis.
+     */
+    bool ENU_RCS_PosPitch = false;
+
+    /**
+     * @brief Internal RCS rotational state for negative pitch around the SBF Y-axis.
+     */
+    bool ENU_RCS_NegPitch = false;
+
+    /**
+     * @brief Internal RCS rotational state for positive yaw around the SBF Z-axis.
+     */
+    bool ENU_RCS_PosYaw = false;
+
+    /**
+     * @brief Internal RCS rotational state for negative yaw around the SBF Z-axis.
+     */
+    bool ENU_RCS_NegYaw = false;
 };

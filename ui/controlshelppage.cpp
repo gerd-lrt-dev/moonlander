@@ -92,34 +92,67 @@ void ControlsHelpPage::setupUI()
     // RCS TRANSLATION
     // =====================================================
 
-    QFrame *rcsFrame = new QFrame();
-    rcsFrame->setObjectName("SectionFrame");
+    QFrame *rcsTranslationFrame = new QFrame();
+    rcsTranslationFrame->setObjectName("SectionFrame");
 
-    QVBoxLayout *rcsLayout =
-        new QVBoxLayout(rcsFrame);
+    QVBoxLayout *rcsTranslationLayout =
+        new QVBoxLayout(rcsTranslationFrame);
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createSectionTitle("RCS TRANSLATION"));
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createControlRow("W", "+Y translation"));
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createControlRow("S", "-Y translation"));
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createControlRow("D", "+X translation"));
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createControlRow("A", "-X translation"));
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createControlRow("E", "+Z translation"));
 
-    rcsLayout->addWidget(
+    rcsTranslationLayout->addWidget(
         createControlRow("Q", "-Z translation"));
 
-    mainLayout->addWidget(rcsFrame);
+    mainLayout->addWidget(rcsTranslationFrame);
+
+    // =====================================================
+    // RCS ROTATION
+    // =====================================================
+
+    QFrame *rcsRotationFrame = new QFrame();
+    rcsRotationFrame->setObjectName("SectionFrame");
+
+    QVBoxLayout *rcsRotationLayout =
+        new QVBoxLayout(rcsRotationFrame);
+
+    rcsRotationLayout->addWidget(
+        createSectionTitle("RCS ROTATION"));
+
+    rcsRotationLayout->addWidget(
+        createControlRow("NUM 6", "+Roll about SBF X-axis"));
+
+    rcsRotationLayout->addWidget(
+        createControlRow("NUM 4", "-Roll about SBF X-axis"));
+
+    rcsRotationLayout->addWidget(
+        createControlRow("NUM 8", "+Pitch about SBF Y-axis"));
+
+    rcsRotationLayout->addWidget(
+        createControlRow("NUM 2", "-Pitch about SBF Y-axis"));
+
+    rcsRotationLayout->addWidget(
+        createControlRow("NUM 9", "+Yaw about SBF Z-axis"));
+
+    rcsRotationLayout->addWidget(
+        createControlRow("NUM 7", "-Yaw about SBF Z-axis"));
+
+    mainLayout->addWidget(rcsRotationFrame);
 
     // =====================================================
     // SIMULATION
@@ -154,8 +187,8 @@ void ControlsHelpPage::setupUI()
 
     QLabel *info =
         new QLabel(
-            "The current control system is keyboard-first and "
-            "prepared for future controller integration.");
+            "The current control system supports translational and rotational "
+            "RCS commands and is prepared for future controller integration.");
 
     info->setWordWrap(true);
 

@@ -369,7 +369,7 @@ public:
      * This function initiates the RCS (Reaction Control System) engines and provide thrust for spacecraft. It
      * provides thrust until the setted target thrust is reached.
      */
-    void setTargetRCSThrust(const Eigen::Vector3d &targetThrustInPercentage);
+    void setTargetRCSThrust(const Eigen::Vector3d &targetThrustInPercentage, const std::string &engineType);
 
     /**
      * @brief Set Console Text for output in cockpit page

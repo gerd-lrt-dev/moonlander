@@ -999,8 +999,8 @@ void cockpitPage::onStateUpdated(Telemetry telemetry_)
     // NAVIGATION
     updatePosition(telemetry_.navigation.MCI_position);
     updateRotation(telemetry_.navigation.IB_Orientation.toRotationMatrix().eulerAngles(0, 1, 2) * (180.0 / std::numbers::pi));
-    updateVelocity(telemetry_.navigation.MCI_velocity * (180.0 / std::numbers::pi));
-    updateAngularVelocity(telemetry_.navigation.SBF_AngularVelocity);
+    updateVelocity(telemetry_.navigation.MCI_velocity);
+    updateAngularVelocity(telemetry_.navigation.SBF_AngularVelocity * (180.0 / std::numbers::pi));
 
     // SENSOR
     updateAcceleration(telemetry_.sensor.GLoad);

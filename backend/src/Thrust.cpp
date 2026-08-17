@@ -1,5 +1,6 @@
 #include "Thrust.h"
 #include <iostream>
+#include <iomanip>
 // ---Private-------------------------------------
 
 
@@ -36,13 +37,26 @@ void Thrust::setTargetThrustInNewton(EngineType engine, const double &tMainEngin
             }
         }
 
-        if (engine == EngineType::RCS)
+        if (engine == EngineType::RCS_translation)
         {
             for (const auto& model : models_)
             {
                 if (model->getEngineType() == "translation")
                 {
-                    const double command = RCSControlAllocator::mapAxisCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
+                    const double command = RCSControlAllocator::mapTranslationCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
+
+                    model->setTarget(command);
+                }
+            }
+        }
+
+        if (engine == EngineType::RCS_rotation)
+        {
+            for (const auto& model : models_)
+            {
+                if (model->getEngineType() == "attitude")
+                {
+                    const double command = RCSControlAllocator::mapTranslationCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
 
                     model->setTarget(command);
                 }
@@ -70,13 +84,31 @@ void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainE
         }
     }
 
-    if (engine == EngineType::RCS)
+    if (engine == EngineType::RCS_translation)
     {
         for (const auto& model : models_)
         {
             if (model->getEngineType() == "translation")
             {
-                const double command = RCSControlAllocator::mapAxisCommandToThrusterPercentage(tRCSThrust, model->getSBF_DirectionOfThrust());
+                const double command = RCSControlAllocator::mapTranslationCommandToThrusterPercentage(tRCSThrust, model->getSBF_DirectionOfThrust());
+                if (command != 0)
+                std::cout << "[Thrust]-setTargetThrustInPercentage-: Thrust allocated for direction: \n" << model->getSBF_DirectionOfThrust() << std::endl;
+
+                model->setTargetInPercentage(command);
+            }
+        }
+    }
+
+    if (engine == EngineType::RCS_rotation)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == "attitude")
+            {
+                const double command = RCSControlAllocator::mapAttitudeCommandToThrusterPercentage(tRCSThrust, model->getEnginePosition(),); //TODO: Three more arguments needed);
+
+                if (command != 0)
+                std::cout << "[Thrust]-setTargetThrustInPercentage-: Thrust allocated for direction: \n" << model->getSBF_DirectionOfThrust() << std::endl;
 
                 model->setTargetInPercentage(command);
             }
@@ -130,28 +162,26 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
     // Initialize RCS engines
     // -----------------------------------------
 
+    std::cout << "[Thrust]-initializeEngines- Found " << RCSEngines.size() << " engines to configure." << std::endl;
+
     for (const auto& rcscfg_ : RCSEngines)
     {
         if (rcscfg_.type == "translation" || rcscfg_.type == "attitude")
         {
             std::cout
-                << "[Thrust]-initializeEngines- Configured Translational RCS Engine | "
-                << rcscfg_.name
-                << " | Axis: " << rcscfg_.axis
+                << "[Thrust]-initializeEngines- Configured RCS Engine | "
+                << std::left
+                << "Type: " << std::setw(12) << rcscfg_.type
+                << " | Name: " << std::setw(24) << rcscfg_.name
+                << " | Axis: " << std::setw(3) << rcscfg_.axis
                 << " | Direction: ("
-                << rcscfg_.direction.x() << ", "
-                << rcscfg_.direction.y() << ", "
-                << rcscfg_.direction.z() << ")"
-                << std::endl;
+                << std::fixed << std::setprecision(1)
+                << std::setw(4) << rcscfg_.direction.x() << ", "
+                << std::setw(4) << rcscfg_.direction.y() << ", "
+                << std::setw(4) << rcscfg_.direction.z() << ")"
+                << '\n';
 
             addModel(std::make_unique<basicRCSModel>(rcscfg_));
-        }
-        else if (rcscfg_.type == "rotation")
-        {
-            std::cout
-                << "[Thrust]-initializeEngines- Configured Rotational RCS Engine | "
-                << rcscfg_.name
-                << std::endl;
         }
         else
         {
@@ -239,7 +269,7 @@ Eigen::Vector3d Thrust::getTargetThrust(EngineType engine) const
             }
         }
     }
-    else if (engine == EngineType::RCS)
+    else if (engine == EngineType::RCS_translation || engine == EngineType::RCS_rotation)
     {
         for (const auto& model : models_)
         {
@@ -284,7 +314,7 @@ Eigen::Vector3d Thrust::getCurrentThrust(EngineType engine) const
             }
         }
     }
-    else if (engine == EngineType::RCS)
+    else if (engine == EngineType::RCS_translation)
     {
         for (const auto& model : models_)
         {
@@ -329,7 +359,7 @@ Eigen::Vector3d Thrust::getCurrentThrustInPercentage(EngineType engine) const
             total += dir * thrustInPercentage;
         }
     }
-    else if (engine == EngineType::RCS)
+    else if (engine == EngineType::RCS_translation)
     {
         for (const auto& model : models_)
         {
@@ -431,7 +461,7 @@ double Thrust::getFuelConsumption(EngineType engine) const
             }
         }
     }
-    else if (engine == EngineType::RCS)
+    else if (engine == EngineType::RCS_translation)
     {
         for (const auto& model : models_)
         {

@@ -206,7 +206,6 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
         }
         else if (e.at("type").get<std::string>() == "attitude")
         {
-            std::cout << "[jsonConfigReader] Parselander" << std::endl;
             RCSEngineConfig RCS;
 
             RCS.id                  = e.at("id").get<int>();
@@ -224,6 +223,8 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
 
             RCS.direction           = e.at("direction").get<Eigen::Vector3d>();
             RCS.position            = e.at("position").get<Eigen::Vector3d>();
+
+            lander.RCSengines_.push_back(RCS);
         }
     }
 

@@ -32,6 +32,8 @@ public:
 
     virtual Eigen::Vector3d     getSBF_DirectionOfThrust() const = 0;
 
+    virtual Eigen::Vector3d     getEnginePosition() const = 0;
+
     virtual double      getFuelConsumption() const = 0;
 
     virtual double      getTankID() const = 0;

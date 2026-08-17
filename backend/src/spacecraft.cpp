@@ -321,9 +321,20 @@ void spacecraft::setMainEngineThrust(const double &targetThrustInPercentage)
     (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::MainEngine, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::MainEngine, 0.0);
 }
 
-void spacecraft::setTargetRCSThrust(const Eigen::Vector3d &targetThrustInPercentage)
+void spacecraft::setTargetRCSThrust(const Eigen::Vector3d &targetThrustInPercentage, const std::string &engineType)
 {
-    (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS, 0.0, targetThrustInPercentage);
+    if (engineType == "translation")
+    {
+        (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_translation, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_translation, 0.0, targetThrustInPercentage);
+    }
+    else if (engineType == "attitude")
+    {
+        (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_rotation, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_rotation, 0.0, targetThrustInPercentage);
+    }
+    else
+    {
+        std::cerr << "Engine type <" << engineType << "> does not match any configured engine Type!" << std::endl;
+    }
 }
 
 void spacecraft::setConsoleText(const std::string &txt)

@@ -42,13 +42,20 @@ enum class EngineType
     MainEngine,
 
     /**
-     * @brief Reaction Control System (RCS).
+     * @brief Reaction Control System (RCS) for translational motion.
      *
-     * Refers to the set of smaller thrusters used for attitude control and
-     * fine translational maneuvers. The resulting thrust is typically modeled
-     * as a vector quantity.
+     * Refers to RCS functionality associated with linear motion along the
+     * spacecraft body-fixed axes.
      */
-    RCS
+    RCS_translation,
+
+    /**
+     * @brief Reaction Control System (RCS) for rotational motion.
+     *
+     * Refers to RCS functionality associated with rotational motion about the
+     * spacecraft body-fixed axes.
+     */
+    RCS_rotation
 };
 
 /**

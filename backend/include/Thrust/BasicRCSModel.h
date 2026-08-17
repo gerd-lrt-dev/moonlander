@@ -232,6 +232,12 @@ public:
     Eigen::Vector3d getSBF_DirectionOfThrust() const override;
 
     /**
+     * @brief Returns the engines position related to the spacecraft center of gravity
+     * @return Engine position [m]
+     */
+    Eigen::Vector3d getEnginePosition() const override;
+
+    /**
      * @brief Returns the current propellant mass flow rate.
      *
      * The value represents the instantaneous fuel consumption caused by the

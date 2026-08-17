@@ -124,7 +124,7 @@ private:
      * @brief Set RCS Thrust
      * @param Vector3 translation with thrust in cartasian coordinates within the principle SBF (Spacecraft Body Frame)
      */
-    void setTargetRCSThrust(const Eigen::Vector3d &SBF_translation);
+    void setTargetRCSThrust(const Eigen::Vector3d &SBF_translation, const std::string &engineType);
 
     /**
      * @brief Process commands

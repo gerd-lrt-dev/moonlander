@@ -33,6 +33,7 @@ void inputmapper::handleKeyPress(QKeyEvent* event)
         mE_Slider->setValue(mE_Slider->value() - 1);
         return;
 
+    // Translation
     case Qt::Key_D:
         ENU_RCS_PosX = true;
         break;
@@ -57,6 +58,33 @@ void inputmapper::handleKeyPress(QKeyEvent* event)
         ENU_RCS_NegZ = true;
         break;
 
+    // Rotation - Roll
+    case Qt::Key_6:
+        ENU_RCS_PosRoll = true;
+        break;
+
+    case Qt::Key_4:
+        ENU_RCS_NegRoll = true;
+        break;
+
+    // Rotation - Pitch
+    case Qt::Key_8:
+        ENU_RCS_PosPitch = true;
+        break;
+
+    case Qt::Key_2:
+        ENU_RCS_NegPitch = true;
+        break;
+
+    // Rotation - Yaw
+    case Qt::Key_9:
+        ENU_RCS_PosYaw = true;
+        break;
+
+    case Qt::Key_7:
+        ENU_RCS_NegYaw = true;
+        break;
+
     default:
         break;
     }
@@ -77,6 +105,7 @@ void inputmapper::handleKeyRelease(QKeyEvent* event)
 
     switch (event->key())
     {
+    // Translation
     case Qt::Key_D:
         ENU_RCS_PosX = false;
         break;
@@ -101,6 +130,33 @@ void inputmapper::handleKeyRelease(QKeyEvent* event)
         ENU_RCS_NegZ = false;
         break;
 
+    // Rotation - Roll
+    case Qt::Key_6:
+        ENU_RCS_PosRoll = false;
+        break;
+
+    case Qt::Key_4:
+        ENU_RCS_NegRoll = false;
+        break;
+
+    // Rotation - Pitch
+    case Qt::Key_8:
+        ENU_RCS_PosPitch = false;
+        break;
+
+    case Qt::Key_2:
+        ENU_RCS_NegPitch = false;
+        break;
+
+    // Rotation - Yaw
+    case Qt::Key_9:
+        ENU_RCS_PosYaw = false;
+        break;
+
+    case Qt::Key_7:
+        ENU_RCS_NegYaw = false;
+        break;
+
     default:
         break;
     }
@@ -119,44 +175,30 @@ void inputmapper::updateFlightCommand()
 {
     FlightCommandDTO cmd{};
 
-    if (ENU_RCS_PosX == true && ENU_RCS_NegX == false)
-    {
-        cmd.translation.x() = 1.0;
-    }
-    else if(ENU_RCS_NegX == true && ENU_RCS_PosX == false)
-    {
-        cmd.translation.x() = -1.0;
-    }
-    else
-    {
-        cmd.translation.x() = 0.0;
-    }
+    // Translation
+    cmd.translation.x() = resolveAxisCommand(ENU_RCS_PosX, ENU_RCS_NegX);
+    cmd.translation.y() = resolveAxisCommand(ENU_RCS_PosY, ENU_RCS_NegY);
+    cmd.translation.z() = resolveAxisCommand(ENU_RCS_PosZ, ENU_RCS_NegZ);
 
-    if (ENU_RCS_PosY == true && ENU_RCS_NegY == false)
-    {
-        cmd.translation.y() = 1.0;
-    }
-    else if(ENU_RCS_NegY == true && ENU_RCS_PosY == false)
-    {
-        cmd.translation.y() = -1.0;
-    }
-    else
-    {
-        cmd.translation.y() = 0.0;
-    }
-
-    if (ENU_RCS_PosZ == true && ENU_RCS_NegZ == false)
-    {
-        cmd.translation.z() = 1.0;
-    }
-    else if(ENU_RCS_NegZ == true && ENU_RCS_PosZ == false)
-    {
-        cmd.translation.z() = -1.0;
-    }
-    else
-    {
-        cmd.translation.z() = 0.0;
-    }
+    // Rotation
+    cmd.rotation.x() = resolveAxisCommand(ENU_RCS_PosRoll, ENU_RCS_NegRoll);
+    cmd.rotation.y() = resolveAxisCommand(ENU_RCS_PosPitch, ENU_RCS_NegPitch);
+    cmd.rotation.z() = resolveAxisCommand(ENU_RCS_PosYaw, ENU_RCS_NegYaw);
 
     emit RCS_cmdRequested(cmd);
+}
+
+double inputmapper::resolveAxisCommand(bool positive, bool negative)
+{
+    if (positive && !negative)
+    {
+        return 1.0;
+    }
+
+    if (negative && !positive)
+    {
+        return -1.0;
+    }
+
+    return 0.0;
 }
