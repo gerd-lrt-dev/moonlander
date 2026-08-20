@@ -1,6 +1,7 @@
 #include "Thrust.h"
 #include <iostream>
 #include <iomanip>
+#include "Thrust/EngineType.h"
 // ---Private-------------------------------------
 
 
@@ -20,64 +21,51 @@ Thrust::~Thrust()
 // -------------------------------------------------------------------------
 void Thrust::setTargetThrustInNewton(EngineType engine, const double &tMainEngineThrust, const Eigen::Vector3d &tRCSThrust)
 {
-    if (engine == EngineType::All)
-    {
-        std::cerr << "[Thrust]-setTargetThrustInPercentage- Engine Type is ALL but the type must be specified!" << std::endl;
-        return;
-    }
-
-        if (engine == EngineType::MainEngine)
-        {
-            for (const auto& model : models_)
-            {
-                if (model->getEngineType() == "main")
-                {
-                    model->setTarget(tMainEngineThrust);
-                }
-            }
-        }
-
-        if (engine == EngineType::RCS_translation)
-        {
-            for (const auto& model : models_)
-            {
-                if (model->getEngineType() == "translation")
-                {
-                    const double command = RCSControlAllocator::mapTranslationCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
-
-                    model->setTarget(command);
-                }
-            }
-        }
-
-        if (engine == EngineType::RCS_rotation)
-        {
-            for (const auto& model : models_)
-            {
-                if (model->getEngineType() == "attitude")
-                {
-                    const double command = RCSControlAllocator::mapTranslationCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
-
-                    model->setTarget(command);
-                }
-            }
-        }
-}
-
-void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainEngineThrust, const Eigen::Vector3d &tRCSThrust)
-{
-    if (engine == EngineType::All)
-    {
-        std::cerr << "[Thrust]-setTargetThrustInPercentage- Engine Type is ALL but the type must be specified!" << std::endl;
-        return;
-    }
-
-    int counter(0);
     if (engine == EngineType::MainEngine)
     {
         for (const auto& model : models_)
         {
-            if (model->getEngineType() == "main")
+            if (model->getEngineType() == EngineType::MainEngine)
+            {
+                model->setTarget(tMainEngineThrust);
+            }
+        }
+    }
+
+    if (engine == EngineType::RCS_translation)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == EngineType::RCS_translation)
+            {
+                const double command = RCSControlAllocator::mapTranslationCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
+
+                model->setTarget(command);
+            }
+        }
+    }
+
+    if (engine == EngineType::RCS_rotation)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == EngineType::RCS_rotation)
+            {
+                const double command = RCSControlAllocator::mapTranslationCommandToThrusterNewton(tRCSThrust, model->getSBF_DirectionOfThrust());
+
+                model->setTarget(command);
+            }
+        }
+    }
+}
+
+void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainEngineThrust, const Eigen::Vector3d &tRCSThrust)
+{
+    if (engine == EngineType::MainEngine)
+    {
+        for (const auto& model : models_)
+        {
+            if (model->getEngineType() == EngineType::MainEngine)
             {
                 model->setTargetInPercentage(tMainEngineThrust);
             }
@@ -88,7 +76,7 @@ void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainE
     {
         for (const auto& model : models_)
         {
-            if (model->getEngineType() == "translation")
+            if (model->getEngineType() == EngineType::RCS_translation)
             {
                 const double command = RCSControlAllocator::mapTranslationCommandToThrusterPercentage(tRCSThrust, model->getSBF_DirectionOfThrust());
                 if (command != 0)
@@ -98,20 +86,28 @@ void Thrust::setTargetThrustInPercentage(EngineType engine, const double &tMainE
             }
         }
     }
+}
 
-    if (engine == EngineType::RCS_rotation)
+void Thrust::setRCSRotationTargetThrustInPercentage(const Eigen::Vector3d &RCSThrust, const Eigen::Vector3d &centerOfMass)
+{
+    for (const auto &model : models_)
     {
-        for (const auto& model : models_)
+        if (model->getEngineType() == EngineType::RCS_rotation)
         {
-            if (model->getEngineType() == "attitude")
+            const double command =
+                RCSControlAllocator::mapAttitudeCommandToThrusterPercentage(RCSThrust, model->getEnginePosition(), centerOfMass, model->getSBF_DirectionOfThrust());
+
+            if (command != 0.0)
             {
-                const double command = RCSControlAllocator::mapAttitudeCommandToThrusterPercentage(tRCSThrust, model->getEnginePosition(),); //TODO: Three more arguments needed);
-
-                if (command != 0)
-                std::cout << "[Thrust]-setTargetThrustInPercentage-: Thrust allocated for direction: \n" << model->getSBF_DirectionOfThrust() << std::endl;
-
-                model->setTargetInPercentage(command);
+                std::cout
+                    << "[Thrust]-setRCSRotationTargetThrustInPercentage- "
+                    << "Thrust allocated to <"
+                    << model->getEngineName()
+                    << ">."
+                    << std::endl;
             }
+
+            model->setTargetInPercentage(command);
         }
     }
 }
@@ -137,7 +133,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
 
     for (const auto& cfg_ : engineConfigs)
     {
-        if (cfg_.type == "main")
+        if (cfg_.type == EngineType::MainEngine)
         {
             std::cout
                 << "[Thrust]-initializeEngines- Configured Main Engine | "
@@ -152,8 +148,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
         }
         else
         {
-            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!"
-                      << std::endl;
+            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!" << std::endl;
             return;
         }
     }
@@ -166,7 +161,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
 
     for (const auto& rcscfg_ : RCSEngines)
     {
-        if (rcscfg_.type == "translation" || rcscfg_.type == "attitude")
+        if (rcscfg_.type == EngineType::RCS_translation || rcscfg_.type == EngineType::RCS_rotation)
         {
             std::cout
                 << "[Thrust]-initializeEngines- Configured RCS Engine | "
@@ -185,8 +180,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
         }
         else
         {
-            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!"
-                      << std::endl;
+            std::cerr << "[Thrust]-initializeEngines- Engine Type unknown!!" << std::endl;
             return;
         }
     }

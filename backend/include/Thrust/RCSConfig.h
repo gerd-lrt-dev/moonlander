@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <eigen3/Eigen/Dense>
+#include "Thrust/EngineType.h"
 
 /**
  * @brief Configuration parameters for a single RCS thruster.
@@ -47,7 +48,7 @@ struct RCSEngineConfig
      *
      * Recommended value for this model: "translation".
      */
-    std::string type{"translation"};
+    EngineType type{};
 
     /**
      * @brief Controlled RCS axis.
@@ -153,7 +154,7 @@ struct RCSEngineConfig
     static RCSEngineConfig Create(bool engineActivated,
                                   int id,
                                   const std::string& name,
-                                  const std::string& type,
+                                  const EngineType type,
                                   const std::string& axis,
                                   int tankID,
                                   double Isp,

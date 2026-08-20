@@ -72,7 +72,7 @@ std::string basicMainEngineModel::getEngineName() const
     return engineConfig_.name;
 }
 
-std::string basicMainEngineModel::getEngineType() const
+EngineType basicMainEngineModel::getEngineType() const
 {
     return engineConfig_.type;
 }

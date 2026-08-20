@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <eigen3/Eigen/Dense>
+#include <Thrust/EngineType.h>
 
 class IThrustModel{
 public:
@@ -22,7 +23,7 @@ public:
 
     virtual std::string getEngineName() const = 0;
 
-    virtual std::string getEngineType() const = 0;
+    virtual EngineType  getEngineType() const = 0;
 
     virtual double      getTargetThrust() const = 0;
 

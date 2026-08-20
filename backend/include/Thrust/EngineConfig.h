@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <eigen3/Eigen/Dense>
+#include "Thrust/EngineType.h"
 
 /**
  * @brief Configuration parameters for a single spacecraft engine.
@@ -43,7 +44,7 @@ struct EngineConfig
      * Example: "Main Descent Engine", "RCS Port Thruster"
      */
 
-    std::string type;
+    EngineType type;
     /**<
      * @brief Engine type category
      * Example: "Main", "RCS", "Vernier", "AttitudeControl"
@@ -120,7 +121,7 @@ struct EngineConfig
     static EngineConfig Create(bool engineActivated,
                                int id,
                                const std::string& name,
-                               const std::string& type,
+                               const EngineType& type,
                                int tankID,
                                double Isp,
                                double timeConstant,

@@ -131,6 +131,7 @@ add_library(moonlander_backend
     include/Thrust/RCSControlAllocator.h
     include/Thrust/RCS_ThrustState.h
     include/Thrust/iThrust.h
+    include/Thrust/EngineType.h
 )
 
 target_include_directories(moonlander_backend

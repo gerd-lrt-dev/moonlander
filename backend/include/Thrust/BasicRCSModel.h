@@ -4,6 +4,7 @@
 #include "Thrust/iThrust.h"
 #include "Thrust/RCSConfig.h"
 #include "Thrust/RCS_ThrustState.h"
+#include "Thrust/EngineType.h"
 #include "environmentConfig.h"
 
 #include <algorithm>
@@ -190,9 +191,9 @@ public:
      * The engine type describes the propulsion model category, for example
      * "translation" or "rcs".
      *
-     * @return Engine type string.
+     * @return Engine type
      */
-    std::string getEngineType() const override;
+    EngineType getEngineType() const override;
 
     /**
      * @brief Returns the commanded scalar target thrust.

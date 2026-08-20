@@ -112,7 +112,7 @@ std::string basicRCSModel::getEngineName() const
     return rcsConfig_.name;
 }
 
-std::string basicRCSModel::getEngineType() const
+EngineType basicRCSModel::getEngineType() const
 {
     return rcsConfig_.type;
 }

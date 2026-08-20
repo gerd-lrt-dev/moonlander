@@ -2,6 +2,7 @@
 
 #include "Thrust/iThrust.h"
 #include "Thrust/EngineConfig.h"
+#include "Thrust/EngineType.h"
 #include "Thrust/ME_thrustState.h"
 
 #include <iostream>
@@ -91,9 +92,9 @@ public:
 
     /**
      * @brief Get the Engine Type such as main, translation (RCS), rotation (RCS)
-     * @return Engine Type as steady string
+     * @return Engine Type
      */
-    std::string getEngineType() const override;
+    EngineType getEngineType() const override;
 
     /**
      * @brief Returns the engine name
