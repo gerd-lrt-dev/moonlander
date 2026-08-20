@@ -91,12 +91,6 @@ public:
     int getEngineID() const override;
 
     /**
-     * @brief Get the Engine Type such as main, translation (RCS), rotation (RCS)
-     * @return Engine Type
-     */
-    EngineType getEngineType() const override;
-
-    /**
      * @brief Returns the engine name
      *
      * The engine Name specifies the function of engine
@@ -105,6 +99,12 @@ public:
      * @return Engine name string
      */
     std::string getEngineName() const override;
+
+    /**
+     * @brief Get the Engine Type such as main, translation (RCS), rotation (RCS)
+     * @return Engine Type
+     */
+    EngineType getEngineType() const override;
 
     /**
      * @brief Get the target thrust
@@ -125,6 +125,20 @@ public:
     Eigen::Vector3d getCurrentTorque() const override;
 
     /**
+     * @brief Getter function for thrust direction
+     * @return ///< [-] Vector with direction of thrust ins Spacecraft Body Frame (SBF)
+     *
+     * The vector is aligned with the static coordinate system of the spacecraft
+     */
+    Eigen::Vector3d getSBF_DirectionOfThrust() const override;
+
+    /**
+     * @brief Returns the engines position related to the spacecraft center of gravity
+     * @return Engine position [m]
+     */
+    Eigen::Vector3d getEnginePosition() const override;
+
+    /**
      * @brief Getter function for fuel live fuel consumption
      * @return ///< [kg / dt] Real-time fuel consumption
      */
@@ -137,14 +151,6 @@ public:
      * The tank ID specifies which tank is connected to the engine system
      */
     double getTankID() const override;
-
-    /**
-     * @brief Getter function for thrust direction
-     * @return ///< [-] Vector with direction of thrust ins Spacecraft Body Frame (SBF)
-     *
-     * The vector is aligned with the static coordinate system of the spacecraft
-     */
-    Eigen::Vector3d getSBF_DirectionOfThrust() const override;
 
     /**
      * @brief Getter function for maximum thrust given by engine config

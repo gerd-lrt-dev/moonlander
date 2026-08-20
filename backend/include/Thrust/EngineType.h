@@ -36,4 +36,27 @@ enum class EngineType
     RCS_rotation
 };
 
+/**
+ * @brief Converts an engine type to its human-readable string representation.
+ *
+ * @param type Engine type to convert.
+ * @return String representation of the specified engine type.
+ */
+inline const char* engineTypeToString(EngineType type)
+{
+    switch (type)
+    {
+    case EngineType::MainEngine:
+        return "MainEngine";
+
+    case EngineType::RCS_translation:
+        return "RCS_translation";
+
+    case EngineType::RCS_rotation:
+        return "RCS_rotation";
+
+    default:
+        return "Unknown";
+    }
+}
 #endif // ENGINETYPE_H

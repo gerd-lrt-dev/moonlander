@@ -107,6 +107,11 @@ Eigen::Vector3d basicMainEngineModel::getSBF_DirectionOfThrust() const
     return engineConfig_.direction;
 }
 
+Eigen::Vector3d basicMainEngineModel::getEnginePosition() const
+{
+    return engineConfig_.position;
+}
+
 double basicMainEngineModel::getMaxThrust() const
 {
     return engineConfig_.maxThrust;

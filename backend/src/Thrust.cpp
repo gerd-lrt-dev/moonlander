@@ -166,7 +166,7 @@ void Thrust::initializeEngines(std::vector<EngineConfig>& engineConfigs, std::ve
             std::cout
                 << "[Thrust]-initializeEngines- Configured RCS Engine | "
                 << std::left
-                << "Type: " << std::setw(12) << rcscfg_.type
+                << "Type: " << std::setw(12) << engineTypeToString(rcscfg_.type)
                 << " | Name: " << std::setw(24) << rcscfg_.name
                 << " | Axis: " << std::setw(3) << rcscfg_.axis
                 << " | Direction: ("
@@ -241,53 +241,28 @@ Eigen::Vector3d Thrust::getTargetThrust(EngineType engine) const
     Eigen::Vector3d     dir{0.0, 0.0, 0.0};
     double      thrust(0.0);
 
-    if (engine == EngineType::All)
+    for (const auto& model : models_)
     {
-        for (const auto& model : models_)
+        if (model->getEngineType() == engine)
         {
             dir = model->getSBF_DirectionOfThrust();
             thrust = model->getTargetThrust();
-
             total += dir * thrust;
-        }
-    }
-    else if (engine == EngineType::MainEngine)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "main")
-            {
-                dir = model->getSBF_DirectionOfThrust();
-                thrust = model->getTargetThrust();
-                total += dir * thrust;
-            }
-        }
-    }
-    else if (engine == EngineType::RCS_translation || engine == EngineType::RCS_rotation)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
-            {
-                dir = model->getSBF_DirectionOfThrust();
-                thrust = model->getTargetThrust();
-                total += dir * thrust;
-            }
         }
     }
 
     return total;
 }
 
-Eigen::Vector3d Thrust::getCurrentThrust(EngineType engine) const
+Eigen::Vector3d Thrust::getCurrentThrustOfOneEngine(EngineType engine) const
 {
     Eigen::Vector3d     total{0.0, 0.0, 0.0};
     Eigen::Vector3d     dir{0.0, 0.0, 0.0};
     double      thrust(0.0);
 
-    if (engine == EngineType::All)
+    for (const auto& model : models_)
     {
-        for (const auto& model : models_)
+        if (model->getEngineType() == engine)
         {
             dir = model->getSBF_DirectionOfThrust();
             thrust = model->getCurrentThrust();
@@ -295,32 +270,24 @@ Eigen::Vector3d Thrust::getCurrentThrust(EngineType engine) const
             total += dir * thrust;
         }
     }
-    else if (engine == EngineType::MainEngine)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "main")
-            {
-                dir = model->getSBF_DirectionOfThrust();
-                thrust = model->getCurrentThrust();
 
-                total += dir * thrust;
-            }
-        }
-    }
-    else if (engine == EngineType::RCS_translation)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
-            {
-                dir = model->getSBF_DirectionOfThrust();
-                thrust = model->getCurrentThrust();
+    return total;
+}
 
-                total += dir * thrust;
-            }
-        }
+Eigen::Vector3d Thrust::getCurrentThrustOfAllEngines() const
+{
+    Eigen::Vector3d     total{0.0, 0.0, 0.0};
+    Eigen::Vector3d     dir{0.0, 0.0, 0.0};
+    double      thrust(0.0);
+
+    for (const auto& model : models_)
+    {
+        dir = model->getSBF_DirectionOfThrust();
+        thrust = model->getCurrentThrust();
+
+        total += dir * thrust;
     }
+
     return total;
 }
 
@@ -330,21 +297,10 @@ Eigen::Vector3d Thrust::getCurrentThrustInPercentage(EngineType engine) const
     Eigen::Vector3d     dir{0.0, 0.0, 0.0};
     double      thrustInPercentage(0.0);
 
-    if (engine == EngineType::All)
-    {
-        for (const auto& model : models_)
-        {
-            dir = model->getSBF_DirectionOfThrust();
-            thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
 
-            total += dir * thrustInPercentage;
-        }
-    }
-    else if (engine == EngineType::MainEngine)
-    {
         for (const auto& model : models_)
         {
-            if (model->getEngineType() == "main")
+            if (model->getEngineType() == engine)
             {
                 dir = model->getSBF_DirectionOfThrust();
                 thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
@@ -352,20 +308,6 @@ Eigen::Vector3d Thrust::getCurrentThrustInPercentage(EngineType engine) const
 
             total += dir * thrustInPercentage;
         }
-    }
-    else if (engine == EngineType::RCS_translation)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
-            {
-                dir = model->getSBF_DirectionOfThrust();
-                thrustInPercentage = model->getCurrentThrust() / model->getMaxThrust();
-            }
-
-            total += dir * thrustInPercentage;
-        }
-    }
 
     return total;
 }
@@ -378,7 +320,10 @@ Eigen::Vector3d Thrust::getDirectionOfThrust(EngineType engine, int engineID) co
     {
         for (const auto& model : models_)
         {
-            dir = model->getSBF_DirectionOfThrust();
+            if (model->getEngineType() == EngineType::MainEngine)
+            {
+                dir = model->getSBF_DirectionOfThrust();
+            }
         }
     }
     else if(engineID > 0)
@@ -391,11 +336,7 @@ Eigen::Vector3d Thrust::getDirectionOfThrust(EngineType engine, int engineID) co
             }
         }
     }
-    else
-    {
-        std::cerr << "[Thrust]-getDirectionOfThrust- Failed requesting direction of thrust" << std::endl;
-        return {0.0, 0.0, 0.0};
-    }
+
     return dir;
 }
 
@@ -417,7 +358,7 @@ std::vector<RCS_ThrustState> Thrust::getFullRCSEngineData() const
 
     for (const auto& model : models_)
     {
-        if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
+        if (model->getEngineType() == EngineType::RCS_translation || model->getEngineType() == EngineType::RCS_rotation)
         {
             RCS_ThrustState state{};
 
@@ -435,36 +376,21 @@ std::vector<RCS_ThrustState> Thrust::getFullRCSEngineData() const
     return rcsThrustStates;
 }
 
-double Thrust::getFuelConsumption(EngineType engine) const
+double Thrust::getTotalFuelConsumption() const
 {
     double sum = 0.0;
-    if (engine == EngineType::All)
+
+    // For single engine if needed
+    /*
+    for (const auto& model : models_)
     {
-        for (const auto& model : models_)
+        if (model->getEngineType() == engine)
         {
             sum += model->getFuelConsumption();
         }
     }
-    else if (engine == EngineType::MainEngine)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "main")
-            {
-                sum += model->getFuelConsumption();
-            }
-        }
-    }
-    else if (engine == EngineType::RCS_translation)
-    {
-        for (const auto& model : models_)
-        {
-            if (model->getEngineType() == "translation" || model->getEngineType() == "rotation")
-            {
-                sum += model->getFuelConsumption();
-            }
-        }
-    }
+    */
+
     for (const auto& model : models_)
     {
         sum += model->getFuelConsumption();

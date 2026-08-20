@@ -6,6 +6,7 @@
 #include "Sensory_Perception/sensorModel.h"
 
 #include <iostream>
+#include <iomanip>
 // -------------------------------------------------------------------------
 // Private
 // -------------------------------------------------------------------------
@@ -408,19 +409,18 @@ std::vector<double> spacecraft::compute_optimization(double h0, double v0, doubl
 
 Eigen::Vector3d spacecraft::requestTotalThrust() const
 {
-    return thrustOrchestration.getCurrentThrust();
+    return thrustOrchestration.getCurrentThrustOfAllEngines();
 }
 
 Eigen::Vector3d spacecraft::requestMainEngineTargetThrust() const
 {
-    
     return thrustOrchestration.getTargetThrust(EngineType::MainEngine);
 }
 
 Eigen::Vector3d spacecraft::requestMainEngineThrust() const
 {
     
-    return thrustOrchestration.getCurrentThrust(EngineType::MainEngine);
+    return thrustOrchestration.getCurrentThrustOfOneEngine(EngineType::MainEngine);
 }
 
 Eigen::Vector3d spacecraft::requestMainEngineThrustInPercentage() const
@@ -435,7 +435,7 @@ Eigen::Vector3d spacecraft::requestMainEngineDirection() const
 
 double spacecraft::requestMainEngineLiveFuelConsumption() const
 {
-    return thrustOrchestration.getFuelConsumption(EngineType::MainEngine);
+    return thrustOrchestration.getTotalFuelConsumption();
 }
 
 std::vector<RCS_ThrustState> spacecraft::requestFullRCSEngineData() const
@@ -465,6 +465,33 @@ simData spacecraft::getFullSimulationData() const
     // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;
 
+    std::cout
+        << "\n============================================================\n"
+        << "[Simulation]- Main Engine Thrust DEBUG\n"
+        << "============================================================\n"
+        << std::fixed << std::setprecision(6)
+
+        << "requestMainEngineThrust():\n"
+        << requestMainEngineThrust() << '\n'
+
+        << "\nrequestMainEngineDirection():\n"
+        << requestMainEngineDirection() << '\n'
+
+        << "\nrequestMainEngineTargetThrust():\n"
+        << requestMainEngineTargetThrust() << '\n'
+
+        << "\nDot Products:\n"
+        << "  Current: "
+        << requestMainEngineThrust().dot(requestMainEngineDirection())
+        << '\n'
+
+        << "  Target:  "
+        << requestMainEngineTargetThrust().dot(requestMainEngineDirection())
+        << '\n'
+
+        << "============================================================\n"
+        << std::endl;
+
     simData_.ME_ThrustState_.current            = requestMainEngineThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.targetPercentage   = requestMainEngineThrustInPercentage().dot(requestMainEngineDirection());
@@ -473,8 +500,8 @@ simData spacecraft::getFullSimulationData() const
 
     simData_.RCS_ThrustState_ = requestFullRCSEngineData();
 
-    simData_.tanks    = requestFuelTanks(); //TODO: Should be a request
-    simData_.fuelMass = requestTotalFuelMass(); //TODO: Should be a request
+    simData_.tanks    = requestFuelTanks();
+    simData_.fuelMass = requestTotalFuelMass();
     simData_.fuelFlow = requestMainEngineLiveFuelConsumption();
 
     simData_.GLoad = getGload();

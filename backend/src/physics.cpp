@@ -28,6 +28,7 @@ Eigen::Vector3d physics::computeAngAcc(const Eigen::Vector3d& SBF_angularVelocit
 {
     Eigen::Vector3d angularAcceleration = Eigen::Vector3d::Zero();
     angularAcceleration = rotModel_->computeAngularAcceleration(SBF_angularVelocity, SBF_inertia, SBF_torque);
+    /*
     std::cout
         << "\n"
         << "============================================================\n"
@@ -89,6 +90,7 @@ Eigen::Vector3d physics::computeAngAcc(const Eigen::Vector3d& SBF_angularVelocit
 
         << "============================================================\n"
         << std::endl;
+*/
     return angularAcceleration;
 }
 
