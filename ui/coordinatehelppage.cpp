@@ -128,14 +128,23 @@ void CoordinateHelpPage::setupUI()
 
     if (!overviewPixmap.isNull())
     {
+        const int maxImageWidth = 1300;
+
+        const int targetWidth =
+            std::min(maxImageWidth, overviewPixmap.width());
+
         imageLabel->setPixmap(
             overviewPixmap.scaledToWidth(
-                1300,
+                targetWidth,
                 Qt::SmoothTransformation));
+
+        imageLabel->setPixmap(overviewPixmap);
+        imageLabel->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     }
     else
     {
-        imageLabel->setText("Coordinate frame overview image could not be loaded.");
+        imageLabel->setText(
+            "Coordinate frame overview image could not be loaded.");
         imageLabel->setMinimumHeight(120);
     }
 
