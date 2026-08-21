@@ -64,7 +64,20 @@ struct ControlCommand{
 
 class InputArbiter{
 public:
+    /**
+     * @brief Selects the active control command based on the current automation state.
+     *
+     * B02 fix: When automation is active, only command fields explicitly provided
+     * by the automation are taken from autoCmd_. Currently, this is limited to the
+     * main engine command and thrust percentage. All remaining control inputs are
+     * preserved from usrCmd_.
+     *
+     * This prevents uninitialized or unspecified fields in autoCmd_ from
+     * unintentionally affecting the spacecraft state. Additional automated control
+     * channels can be added here explicitly as they are implemented.
+     */
     ControlCommand chooseCommand();
+
     void receiveUserControlCommand(const ControlCommand &userCmd);
     void receiveAutoControlCommand(const ControlCommand &autoCmd);
 

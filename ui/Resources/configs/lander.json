@@ -26,15 +26,15 @@
         "angularVelocityFrame": "SBF",
 
         "MCI_InitialPosition": {
-          "x": 100.0,
-          "y": -20.0,
-          "z": 1838900.0
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1737700.0
         },
 
         "MCI_InitialVelocity": {
           "x": 0.0,
           "y": 0.0,
-          "z": 0.0
+          "z": -20.0
         },
 
         "IB_InitialOrientation": {
