@@ -94,11 +94,17 @@ struct EngineConfig
      * Should never be zero; normalized automatically.
      */
 
+
     Eigen::Vector3d position;
     /**<
-     * @brief Engine position relative to spacecraft body frame [m]
-     * For point-mass lander this can be nominal; used in multi-engine
-     * torque calculations if moment arms are considered.
+     * @brief Engine mounting position in the spacecraft body frame.
+     *
+     * Defines the fixed geometric position of the engine relative to the
+     * spacecraft body-fixed frame (SBF) origin. The current moment arm is
+     * determined at runtime from the difference between the engine position
+     * and the current spacecraft center of mass.
+     *
+     * Unit: m
      */
 
     /**

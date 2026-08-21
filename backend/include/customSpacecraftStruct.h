@@ -32,6 +32,17 @@ struct customSpacecraft
     double maxFuelM;
     ///< [kg] Maximum fuel tank capacity (optional; used for validation or HUD).
 
+    /**
+     * @brief Center of mass position in the spacecraft body-fixed frame.
+     *
+     * Defines the spacecraft center of mass relative to the SBF origin.
+     * The value serves as the reference point for calculating engine moment
+     * arms and may be updated during simulation as the mass distribution changes.
+     *
+     * Unit: m
+     */
+    Eigen::Vector3d centerOfMass{};
+
     // -------------------------------------------------------------------------
     // Propulsion System
     // -------------------------------------------------------------------------

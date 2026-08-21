@@ -138,6 +138,7 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     // -------------------------
     lander.emptyMass    = j.at("emptyMass").get<double>();
     lander.fuelM        = j.at("fuelM").get<double>();
+    lander.centerOfMass = j.at("centerOfMass").get<Eigen::Vector3d>();
 
     lander.SBF_inertia = Eigen::Vector3d(j.at("Ixx").get<double>(), j.at("Iyy").get<double>(), j.at("Izz").get<double>()).asDiagonal();
 

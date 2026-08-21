@@ -134,10 +134,12 @@ struct RCSEngineConfig
     Eigen::Vector3d direction{};
 
     /**
-     * @brief Thruster mounting position relative to the spacecraft body frame.
+     * @brief Thruster mounting position in the spacecraft body frame.
      *
-     * Used for future torque computation through the moment arm relative to the
-     * center of gravity.
+     * Defines the fixed geometric position of the thruster relative to the
+     * spacecraft body-fixed frame (SBF) origin. The current moment arm is
+     * determined at runtime from the difference between the thruster position
+     * and the current spacecraft center of mass.
      *
      * Unit: m
      */

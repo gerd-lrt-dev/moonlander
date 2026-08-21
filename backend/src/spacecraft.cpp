@@ -322,19 +322,19 @@ void spacecraft::setMainEngineThrust(const double &targetThrustInPercentage)
     (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::MainEngine, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::MainEngine, 0.0);
 }
 
-void spacecraft::setTargetRCSThrust(const Eigen::Vector3d &targetThrustInPercentage, const std::string &engineType)
+void spacecraft::setTargetRCSThrust(const Eigen::Vector3d &targetThrustInPercentage, const EngineType &engineType)
 {
-    if (engineType == "translation")
+    if (engineType == EngineType::RCS_translation)
     {
-        (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_translation, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_translation, 0.0, targetThrustInPercentage);
+        (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_translation, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_translation, 0.0, {0.0, 0.0, 0.0});
     }
-    else if (engineType == "attitude")
+    else if (engineType == EngineType::RCS_rotation)
     {
-        (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_rotation, 0.0, targetThrustInPercentage) : thrustOrchestration.setTargetThrustInPercentage(EngineType::RCS_rotation, 0.0, targetThrustInPercentage);
+        (getSpacecraftState() == SpacecraftState::Operational) ? thrustOrchestration.setRCSRotationTargetThrustInPercentage(targetThrustInPercentage, spacecraftConfig_.centerOfMass) : thrustOrchestration.setRCSRotationTargetThrustInPercentage({0.0, 0.0, 0.0}, spacecraftConfig_.centerOfMass);
     }
     else
     {
-        std::cerr << "Engine type <" << engineType << "> does not match any configured engine Type!" << std::endl;
+        std::cerr << "Engine type <" << engineTypeToString(engineType) << "> does not match any configured engine Type!" << std::endl;
     }
 }
 
@@ -464,33 +464,6 @@ simData spacecraft::getFullSimulationData() const
 
     // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;
-
-    std::cout
-        << "\n============================================================\n"
-        << "[Simulation]- Main Engine Thrust DEBUG\n"
-        << "============================================================\n"
-        << std::fixed << std::setprecision(6)
-
-        << "requestMainEngineThrust():\n"
-        << requestMainEngineThrust() << '\n'
-
-        << "\nrequestMainEngineDirection():\n"
-        << requestMainEngineDirection() << '\n'
-
-        << "\nrequestMainEngineTargetThrust():\n"
-        << requestMainEngineTargetThrust() << '\n'
-
-        << "\nDot Products:\n"
-        << "  Current: "
-        << requestMainEngineThrust().dot(requestMainEngineDirection())
-        << '\n'
-
-        << "  Target:  "
-        << requestMainEngineTargetThrust().dot(requestMainEngineDirection())
-        << '\n'
-
-        << "============================================================\n"
-        << std::endl;
 
     simData_.ME_ThrustState_.current            = requestMainEngineThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());

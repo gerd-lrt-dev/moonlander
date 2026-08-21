@@ -73,9 +73,8 @@ void simcontrol::processCommands()
     ControlCommand activeCommand = inputArbiter_->chooseCommand();
 
     setTargetMainEngineThrust(activeCommand.mainEngine);
-    setTargetRCSThrust(activeCommand.translation, "translation");
-    setTargetRCSThrust({0.0, 1.0, 0.0}, "attitude");
-    //setTargetRCSThrust(activeCommand.rotation, "attitude");
+    setTargetRCSThrust(activeCommand.translation, EngineType::RCS_translation);
+    setTargetRCSThrust(activeCommand.rotation, EngineType::RCS_rotation);
 
 }
 
@@ -214,7 +213,7 @@ void simcontrol::setTargetMainEngineThrust(const double& thrustPercent, const do
 
 // Function is going to get obsolet when RCS model is introduced
 
-void simcontrol::setTargetRCSThrust(const Eigen::Vector3d &SBF_RCS_Command, const std::string &engineType)
+void simcontrol::setTargetRCSThrust(const Eigen::Vector3d &SBF_RCS_Command, const EngineType &engineType)
 {
     landerSpacecraft->setTargetRCSThrust(SBF_RCS_Command, engineType);
 }
