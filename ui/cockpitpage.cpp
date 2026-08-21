@@ -9,6 +9,7 @@
 #include <QString>
 #include <QtMath>
 #include <QThread>
+#include <numbers>
 
 // ------------------------------------------------
 // Constructor
