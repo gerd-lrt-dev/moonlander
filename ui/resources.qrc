@@ -6,4 +6,7 @@
     <qresource prefix="/configs">
         <file>Resources/configs/lander.json</file>
     </qresource>
+    <qresource prefix="/help">
+        <file alias="Frames_convention.png">../docs/images/Frames_convention.png</file>
+    </qresource>
 </RCC>
