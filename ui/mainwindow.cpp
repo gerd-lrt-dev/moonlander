@@ -47,12 +47,14 @@ void MainWindow::setupUI()
     selectionPage       = new SpacecraftSelectionPage(configManager_, this);
     cockpit             = new cockpitPage(this);
     controlsHelpPage    = new ControlsHelpPage(this);
+    coordinateHelpPage  = new CoordinateHelpPage(this);
     settingsPage        = new SettingsPage(this);
 
     stackedWidget->addWidget(homepage);
     stackedWidget->addWidget(selectionPage);
     stackedWidget->addWidget(cockpit);
     stackedWidget->addWidget(controlsHelpPage);
+    stackedWidget->addWidget(coordinateHelpPage);
     stackedWidget->addWidget(settingsPage);
 
     vLayout->addWidget(topBar);
@@ -113,6 +115,14 @@ void MainWindow::setupConnections()
             [this]()
             {
                 stackedWidget->setCurrentWidget(controlsHelpPage);
+            });
+
+    connect(topBar,
+            &TopBarWidget::coordinateHelpRequested,
+            this,
+            [this]()
+            {
+                stackedWidget->setCurrentWidget(coordinateHelpPage);
             });
 
     connect(topBar,
