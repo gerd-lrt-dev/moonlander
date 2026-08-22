@@ -9,11 +9,10 @@
 #ifndef COORDINATEHELPPAGE_H
 #define COORDINATEHELPPAGE_H
 
+#include <QString>
 #include <QWidget>
 
 class QFrame;
-class QLabel;
-class QVBoxLayout;
 
 /**
  * @class CoordinateHelpPage
