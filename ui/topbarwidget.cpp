@@ -26,6 +26,7 @@ TopBarWidget::TopBarWidget(QWidget *parent)
     startSimulationButton = uiBuilder.createTopBarButton("Start Simulation", this);
 
     controlsHelpButton = uiBuilder.createTopBarButton("Controls", this);
+    coordinateHelpButton = uiBuilder.createTopBarButton("Coordinate Frames", this);
     settingsButton = uiBuilder.createTopBarButton("Settings", this);
 
     layout->addWidget(homeButton);
@@ -35,6 +36,7 @@ TopBarWidget::TopBarWidget(QWidget *parent)
     layout->addStretch();
 
     layout->addWidget(controlsHelpButton);
+    layout->addWidget(coordinateHelpButton);
     layout->addWidget(settingsButton);
 
     connect(homeButton, &QPushButton::clicked,
@@ -48,6 +50,9 @@ TopBarWidget::TopBarWidget(QWidget *parent)
 
     connect(controlsHelpButton, &QPushButton::clicked,
             this, &TopBarWidget::controlsHelpRequested);
+
+    connect(coordinateHelpButton, &QPushButton::clicked,
+            this, &TopBarWidget::coordinateHelpRequested);
 
     connect(settingsButton, &QPushButton::clicked,
             this, &TopBarWidget::settingsRequested);
