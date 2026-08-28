@@ -9,6 +9,8 @@
 #include <QScrollArea>
 #include <QVBoxLayout>
 
+#include <cmath>
+
 namespace
 {
 
@@ -87,16 +89,17 @@ private:
         const QLineF line(start, end);
         const double angle = std::atan2(-line.dy(), line.dx());
         constexpr double arrowSize = 7.0;
+        constexpr double pi = 3.14159265358979323846;
 
         const QPointF arrowP1 =
             end - QPointF(
-                      std::cos(angle + M_PI / 6.0) * arrowSize,
-                     -std::sin(angle + M_PI / 6.0) * arrowSize);
+                      std::cos(angle + pi / 6.0) * arrowSize,
+                     -std::sin(angle + pi / 6.0) * arrowSize);
 
         const QPointF arrowP2 =
             end - QPointF(
-                      std::cos(angle - M_PI / 6.0) * arrowSize,
-                     -std::sin(angle - M_PI / 6.0) * arrowSize);
+                      std::cos(angle - pi / 6.0) * arrowSize,
+                     -std::sin(angle - pi / 6.0) * arrowSize);
 
         QPolygonF head;
         head << end << arrowP1 << arrowP2;
