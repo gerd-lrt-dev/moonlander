@@ -2,8 +2,8 @@
  * @file coordinatehelppage.h
  * @brief Coordinate frame reference page for the simulator frontend.
  *
- * Presents the authoritative SDF coordinate-frame overview together with
- * concise descriptions of the currently supported reference frames.
+ * Presents concise descriptions and schematic visualizations of the
+ * coordinate systems currently used by SDF.
  */
 
 #ifndef COORDINATEHELPPAGE_H
@@ -50,7 +50,7 @@ private:
     void setupUI();
 
     /**
-     * @brief Creates one textual frame-reference card.
+     * @brief Creates one frame-reference card with a compact schematic.
      *
      * @param frameName Short frame identifier.
      * @param title Human-readable frame name.
@@ -65,6 +65,14 @@ private:
         const QString& description,
         const QString& coordinates,
         const QString& origin);
+
+    /**
+     * @brief Creates the schematic visualization for a coordinate frame.
+     *
+     * @param frameName Short frame identifier used to select the diagram.
+     * @return Widget containing the schematic frame visualization.
+     */
+    QWidget *createFrameDiagram(const QString& frameName);
 };
 
 #endif // COORDINATEHELPPAGE_H
