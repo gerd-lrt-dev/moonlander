@@ -6,19 +6,30 @@ It is intended as architectural reference material for future contributors and t
 The diagrams below focus on **architectural data flow and ownership** as of the current `main` branch. They are grouped around the runtime backbone:
 
 ```text
-Frontend Input / Autopilot
+Manual Frontend Input
         ↓
-FlightCommandDTO / ControlCommand
+FlightCommandDTO
+        ↓
+SimulationWorker / TelemetryMapper
+        ↓
+ControlCommand
         ↓
 InputArbiter
+        ← Autopilot (spacecraft state → AdaptiveDescentController → PD → ControlCommand)
         ↓
 Actuation / Propulsion
         ↓
-Forces + Torques
+SBF Forces + Torques
         ↓
-Physics Models
+SBF-to-MCI Transform
         ↓
-Numerical Integration
+Physics Facade (physics::computeAcc)
+        ↓
+BasicMoonGravityModel
+        ↓
+Total MCI Acceleration
+        ↓
+Numerical Integration (EulerIntegrator)
         ↓
 Authoritative StateVector
         ↓
@@ -57,9 +68,13 @@ This diagram shows the complete control-input processing chain, from user/autopi
 
 ```mermaid
 flowchart LR
-    subgraph Inputs
+    subgraph ManualInputs
         UI[User Input<br/>ui/ Cockpit widgets]
+    end
+
+    subgraph Autopilot
         AP[Autopilot<br/>AdaptiveDescentController]
+        PD[PD Controller]
     end
 
     IM[Control Input System<br/>ui/inputmapper.cpp]
@@ -75,12 +90,13 @@ flowchart LR
 
     UI --> IM
     IM --> DTO
-    AP --> DTO
     DTO --> CW
     CW --> SW
     SW --> TM
     TM --> CC
     CC --> IA
+    AP --> PD
+    PD --> CC
     IA --> SC
     SC --> SC2
     SC2 --> TH
@@ -99,9 +115,18 @@ flowchart LR
 
 ### Manual vs. autopilot paths
 
-- **Manual path** (DF-005, DF-008): user input → `FlightCommandDTO` → `InputArbiter` → main engine / RCS actuators.
-- **Autopilot path** (DF-006, DF-007): autopilot enabled flag + spacecraft state → `AdaptiveDescentController` → **PD controller** → normalized thrust command → `InputArbiter` → main engine. The PD controller belongs specifically to the automated-descent path, not the generic manual actuation path.
-- **Rotational commands** (DF-009, DF-010): `FlightCommandDTO.rotation` / stabilize / kill-rotation flags are mapped to `ControlCommand` but currently terminate before actuation; full attitude-control RCS handling is on the development path.
+The two command paths remain separate until `InputArbiter`, which combines or selects the applicable command fields before `simcontrol` forwards them to the spacecraft systems.
+
+- **Manual path**: `inputmapper → FlightCommandDTO → cockpitPage → SimulationWorker → TelemetryMapper → ControlCommand → InputArbiter`.
+- **Autopilot path**: `spacecraft state → AdaptiveDescentController → PD_Controller → ControlCommand → InputArbiter`. The PD controller belongs specifically to the automated-descent path, not the generic manual actuation path.
+
+### Rotational command actuation
+
+`ControlCommand.rotation` now reaches the rotational RCS path:
+
+`InputArbiter → simcontrol → spacecraft::setTargetRCSThrust(..., RCS_rotation) → Thrust → RCSControlAllocator → rotational RCS actuators`
+
+The `stabilize` and `killRotation` flags are still not fully processed and remain documented as incomplete.
 
 ---
 
@@ -116,22 +141,24 @@ flowchart LR
         RCS[RCS Thrusters<br/>RCSControlAllocator]
     end
 
-    TH[Thrust Orchestrator<br/>aggregates engine forces/torques]
-    GM[BasicMoonGravityModel]
-    PM[Physics Model<br/>backend/Physics]
-    AC[Acceleration Calculation]
+    TH[Thrust Orchestrator<br/>aggregates SBF forces/torques]
+    TX[SBF-to-MCI Transform]
+    PHY[Physics Facade<br/>backend/Physics]
+    GM[BasicMoonGravityModel<br/>translational physics model]
+    AC[Total MCI Acceleration]
 
     ME --> TH
     RCS --> TH
-    TH --> PM
+    TH --> TX
+    TX --> PHY
+    PHY --> GM
     GM --> AC
-    PM --> AC
 ```
 
-### Force sources
+### Force sources and acceleration calculation
 
-- **Propulsion** — main engines and RCS thrusters produce forces/torques in the spacecraft body frame (SBF). The `Thrust` orchestrator aggregates these into net thrust force and torque.
-- **Gravity** — `BasicMoonGravityModel` computes gravitational acceleration directly during the acceleration-calculation step; it is not added to a force accumulator.
+- **Propulsion** — main engines and RCS thrusters produce forces/torques in the spacecraft body frame (SBF). The `Thrust` orchestrator aggregates these into net SBF thrust force and torque.
+- **Translational physics model** — `BasicMoonGravityModel` is the currently configured implementation behind `physics::computeAcc()`. The aggregated SBF thrust is transformed into the MCI frame, then `physics::computeAcc()` calls `BasicMoonGravityModel::computeAcceleration()` and combines gravity acceleration with thrust / mass to produce the total MCI acceleration. `BasicMoonGravityModel` is therefore not a parallel force source; it is the concrete physics model called through the `physics` façade.
 - **Aerodynamics** — not currently implemented; intended as a future extension.
 
 ### Controller output is actuation input
@@ -140,7 +167,7 @@ Controller output (e.g., the PD controller in automated descent, or RCS commands
 
 ### Integration boundaries
 
-The physics model derives linear and angular acceleration from the rigid-body equations of motion. The net propulsion force/torque and gravity are inputs to this calculation; the integrator consumes the resulting accelerations (see Diagram 3).
+The physics façade derives linear and angular acceleration from the rigid-body equations of motion. The net propulsion force/torque and gravity are combined inside `physics::computeAcc()`; the integrator consumes the resulting accelerations (see Diagram 3).
 
 ---
 
@@ -155,16 +182,19 @@ flowchart LR
     end
 
     UMD[spacecraft::updateMovementData]
-    PHY[Physics Model<br/>backend/Physics]
+    TH[Thrust Orchestrator<br/>SBF net force/torque]
+    TX[SBF-to-MCI Transform]
+    PHY[Physics Facade<br/>backend/Physics]
     GM[BasicMoonGravityModel]
-    AA[Acceleration / Angular Acceleration]
+    AA[Total MCI Acceleration]
     EI[EulerIntegrator]
     SC[spacecraft state commit]
 
     SV --> UMD
-    UMD --> PHY
-    UMD --> GM
-    PHY --> AA
+    UMD --> TH
+    TH --> TX
+    TX --> PHY
+    PHY --> GM
     GM --> AA
     AA --> EI
     EI --> SC
@@ -175,17 +205,19 @@ flowchart LR
 
 - **Authoritative `StateVector`** — owned by the `spacecraft` object; single source of truth for position, velocity, attitude, and angular velocity.
 - **`spacecraft::updateMovementData()`** — coordinates the physics and integration calls and commits the results back to the authoritative state.
-- **`backend/Physics`** — computes linear/angular acceleration from forces/torques but does not mutate state directly.
-- **`BasicMoonGravityModel`** — computes gravitational acceleration during the same step.
+- **`Thrust` orchestrator** — aggregates net SBF force/torque from main engines and RCS.
+- **`backend/Physics`** — façade for translational and rotational physics; calls `BasicMoonGravityModel` through `physics::computeAcc()` and combines gravity with thrust / mass. It does not mutate state directly.
+- **`BasicMoonGravityModel`** — the currently configured translational physics model; computes gravitational acceleration and combines it with thrust / mass inside `physics::computeAcc()`.
 - **`backend/Integrators/EulerIntegrator`** — advances individual quantities (velocity, position, angular velocity, attitude) one time step. It does **not** construct or own a complete new `StateVector`.
 
 ### Update workflow
 
 1. `spacecraft::updateMovementData()` reads the current state.
-2. `Physics` computes accelerations from the net propulsion force/torque.
-3. `BasicMoonGravityModel` computes gravitational acceleration.
-4. `EulerIntegrator` advances each state component individually.
-5. `spacecraft` commits the updated values back to the authoritative `StateVector`.
+2. `Thrust` aggregates net SBF force/torque from propulsion.
+3. The SBF thrust is transformed into MCI; `physics::computeAcc()` calls `BasicMoonGravityModel::computeAcceleration()` and combines gravity with thrust / mass to produce total MCI acceleration.
+4. Rotational physics computes angular acceleration from net torque.
+5. `EulerIntegrator` advances each state component individually.
+6. `spacecraft` commits the updated values back to the authoritative `StateVector`.
 
 ### Numerical integration
 
