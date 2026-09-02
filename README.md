@@ -85,6 +85,8 @@ scenarios.
 
 Further documentation:
 
+- [Core Data Flow Documentation](docs/data-flow-diagrams.md) — architectural data flow diagrams and subsystem ownership
+
 https://www.aerospace-simulation.dev/simulation/architecture/
 
 ------------------------------------------------------------------------
