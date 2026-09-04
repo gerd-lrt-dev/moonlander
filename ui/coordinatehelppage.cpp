@@ -23,8 +23,8 @@ public:
         : QWidget(parent),
           frameName_(frameName)
     {
-        setMinimumSize(220, 135);
-        setMaximumHeight(155);
+        setMinimumSize(220, 145);
+        setMaximumHeight(165);
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     }
 
@@ -330,7 +330,13 @@ private:
 
         painter.setPen(secondary_);
         painter.setFont(QFont("Sans Serif", 8));
-        painter.drawText(QPointF(83.0, 118.0), "landing site");
+        painter.setPen(secondary_);
+        painter.setFont(QFont("Sans Serif", 8));
+
+        painter.drawText(
+            QRectF(118.0, 112.0, 90.0, 22.0),
+            Qt::AlignLeft | Qt::AlignVCenter,
+            "landing site");
     }
 
     void drawLVLH(QPainter& painter) const
@@ -398,7 +404,13 @@ private:
 
         painter.setPen(secondary_);
         painter.setFont(QFont("Sans Serif", 8));
-        painter.drawText(QPointF(24.0, 122.0), "rigidly attached to spacecraft");
+        painter.setPen(secondary_);
+        painter.setFont(QFont("Sans Serif", 8));
+
+        painter.drawText(
+            QRectF(12.0, 124.0, 155.0, 22.0),
+            Qt::AlignRight | Qt::AlignVCenter,
+            "rigidly attached to spacecraft");
     }
 };
 
@@ -551,7 +563,7 @@ void CoordinateHelpPage::setupUI()
             "Orbital-derived spacecraft-local frame constructed from the MCI "
             "position and velocity. SDF uses the Forward-Right-Down convention.",
             "+X Forward, +Y Right, +Z Down",
-            "Spacecraft / orbital state"),
+            "Spacecraft center of mass"),
         2, 0);
 
     grid->addWidget(
@@ -561,7 +573,7 @@ void CoordinateHelpPage::setupUI()
             "Rigidly attached spacecraft frame used by propulsion, RCS, attitude "
             "dynamics, inertia, torque calculations and onboard sensors.",
             "+X Forward, +Y Right, +Z Down",
-            "Spacecraft center of mass"),
+            "Spacecraft body reference point"),
         2, 1);
 
     layout->addLayout(grid);
