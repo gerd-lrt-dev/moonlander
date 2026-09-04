@@ -44,9 +44,7 @@ struct RCSEngineConfig
     std::string name{};
 
     /**
-     * @brief Engine type category.
-     *
-     * Recommended value for this model: "translation".
+     * @brief Defines whether the RCS engine is used for translational or rotational control.
      */
     EngineType type{};
 
