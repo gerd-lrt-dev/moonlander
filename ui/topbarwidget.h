@@ -16,6 +16,7 @@ signals:
     void selectSpacecraftRequested();
     void startSimulationRequested();
     void controlsHelpRequested();
+    void coordinateHelpRequested();
     void settingsRequested();
 
 private:
@@ -23,5 +24,6 @@ private:
     QPushButton *selectSpacecraftButton = nullptr;
     QPushButton *startSimulationButton = nullptr;
     QPushButton *controlsHelpButton = nullptr;
+    QPushButton *coordinateHelpButton = nullptr;
     QPushButton *settingsButton = nullptr;
 };

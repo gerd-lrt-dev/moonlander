@@ -27,6 +27,7 @@
 #include "spacecraftselectionpage.h"
 #include "topbarwidget.h"
 #include "controlshelppage.h"
+#include "coordinatehelppage.h"
 #include "settingspage.h"
 
 /**
@@ -117,12 +118,17 @@ private:
     cockpitPage *cockpit = nullptr;
 
     /**
-     * @brief Controls Help Page
+     * @brief Controls help page.
      */
     ControlsHelpPage *controlsHelpPage = nullptr;
 
     /**
-     * @brief Settings Page
+     * @brief Coordinate frame reference page.
+     */
+    CoordinateHelpPage *coordinateHelpPage = nullptr;
+
+    /**
+     * @brief Settings page.
      */
     SettingsPage *settingsPage = nullptr;
 
