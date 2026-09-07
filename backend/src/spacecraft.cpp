@@ -6,7 +6,6 @@
 #include "Sensory_Perception/sensorModel.h"
 
 #include <iostream>
-#include <iomanip>
 // -------------------------------------------------------------------------
 // Private
 // -------------------------------------------------------------------------
@@ -104,9 +103,6 @@ void spacecraft::updateMovementData(double dt)
     // --- Compute position ---
     Eigen::Vector3d MCI_position = physics_->computePos(getPosition(), MCI_velocity, MCI_acceleration, dt);
 
-    // --- Update Frames ---
-    updateFrames(time);
-
     // --- Compute orientation and angular velocity ---
     Eigen::Vector3d SBF_torque      = thrustOrchestration.getTotalTorque();
     Eigen::Vector3d SBF_angularAcc  = physics_->computeAngAcc(getAngularVelocity(), spacecraftConfig_.SBF_inertia, SBF_torque);
@@ -179,7 +175,7 @@ void spacecraft::updateFrames(double t)
     simFrameContext_.MCI_State.velocity = state_.MCI_Velocity;
 
     // --- MCI to MCMF ---
-    simFrameContext_.MCMF_State = coordTransf_.MCItoMCMF(simFrameContext_.MCI_State, dt);
+    simFrameContext_.MCMF_State = coordTransf_.MCItoMCMF(simFrameContext_.MCI_State, t);
 
     // --- Compute ENU ---
     simFrameContext_.ENU_Frame  = missionContext_.ENU_landingSite;
@@ -277,23 +273,23 @@ spacecraft::~spacecraft()
 
 void spacecraft::updateStep(double dt)
 {
+    // Update time systems are running
+    time += dt;
+
     // Update mass data
     updateTotalMassOnFuelReduction(spacecraftConfig_.emptyMass, requestTotalFuelMass());
 
     thrustOrchestration.updatePropulsion(dt);
 
-    // Update time systems are running
-    time += dt;
-
     // Apply landing damage
-    if (state_.MCI_Position.z() <= environmentConfig_.radiusMoon)
+    if (state_.MCI_Position.norm() <= environmentConfig_.radiusMoon)
     {
-        applyLandingDamage(state_.MCI_Velocity.z());
+        applyLandingDamage(simFrameContext_.ENU_State.velocity.z());
     }
 
     updateSpacecraftIntegrity();
 
-    // Update Movement data due to spacecraft state
+    // Update Movement data (dynamics state) due to spacecraft state
     switch (spacecraftState_)
     {
     case SpacecraftState::Operational:
@@ -316,6 +312,9 @@ void spacecraft::updateStep(double dt)
         updateMovementDataToZero(dt);
         break;
     }
+
+    // --- Update frame logic---
+    updateFrames(time);
 }
 
 void spacecraft::updateSpacecraftIntegrity()
@@ -340,7 +339,7 @@ void spacecraft::updateSpacecraftIntegrity()
     }
 
     // 3. Successful touchdown
-    if (getPosition().z() <= environmentConfig_.radiusMoon)
+    if (getPosition().norm() <= environmentConfig_.radiusMoon)
     {
         spacecraftState_ = SpacecraftState::Landed;
         return;
