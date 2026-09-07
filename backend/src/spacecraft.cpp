@@ -16,19 +16,52 @@ void spacecraft::setDefaultValues()
     spacecraftIntegrity = 1.0;
     spacecraftState_ = SpacecraftState::Operational;
     totalMass = spacecraftConfig_.emptyMass + spacecraftConfig_.fuelM;
-    state_.MCI_Position = spacecraftConfig_.MCI_initialPos;
-    state_.MCI_Velocity = spacecraftConfig_.MCI_initialVelocity;
 
-    originState_.origin.position    = spacecraftConfig_.MCI_initialPos;
-    originState_.origin.velocity    = spacecraftConfig_.MCI_initialVelocity;
-    originState_.orientation        = spacecraftConfig_.IB_initialRot;
+    // ---------------------------------------------------------
+    // Initialize mission reference frames
+    // ---------------------------------------------------------
 
     initializeMissionFrames(0.0);
 
+    // ---------------------------------------------------------
+    // Resolve spacecraft initial state
+    // ENU -> MCMF -> MCI
+    // ---------------------------------------------------------
+
+    // Landing Site: MSC -> MCMF
+    missionContext_.MCMF_landingSite = coordTransf_.MSCtoMCMF(missionContext_.MSC_LandingSite);
+
+    // Landing Site: ENU
+    missionContext_.ENU_landingSite = coordTransf_.computeENUFrame(missionContext_.MCMF_landingSite);
+
+    CoordinateTransformer::State initialMCMF = coordTransf_.ENUtoMCMF(spacecraftConfig_.ENU_initialState, missionContext_.ENU_landingSite);
+
+    CoordinateTransformer::State initialMCI = coordTransf_.MCMFtoMCI(initialMCMF, 0.0);
+
+    // ---------------------------------------------------------
+    // Authoritative runtime state
+    // ---------------------------------------------------------
+
+    state_.MCI_Position = initialMCI.position;
+    state_.MCI_Velocity = initialMCI.velocity;
+
+    // ---------------------------------------------------------
+    // Spacecraft body-frame origin
+    // ---------------------------------------------------------
+
+    originState_.origin.position    = initialMCI.position;
+    originState_.origin.velocity    = initialMCI.velocity;
+    originState_.orientation        = spacecraftConfig_.IB_initialRot;
+
+    // ---------------------------------------------------------
+    // Propulsion
+    // ---------------------------------------------------------
     thrustOrchestration.initializeEngines(spacecraftConfig_.engines_, spacecraftConfig_.RCSengines_, spacecraftConfig_.tanks_);
 
 
-    // TODO just testing here optimization
+    // ---------------------------------------------------------
+    // Optimization
+    // ---------------------------------------------------------
 
     //double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
     //double v0 = landerMoon.I_initialVelocity.z; // vertikale Geschwindigkeit

@@ -4,6 +4,7 @@
 #include "Thrust/EngineConfig.h"
 #include "Thrust/RCSConfig.h"
 #include "Thrust/FueltankStruct.h"
+#include "Coordinates/coordinateTransformer.h"
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
@@ -131,6 +132,9 @@ struct customSpacecraft
 
     Eigen::Vector3d MCI_initialVelocity;
     ///< [m/s] Velocity in three spatial directions
+
+    CoordinateTransformer::State ENU_initialState;
+    ///< [m] Initial state in the ENU (East, North, Up) reference frame
 
     Eigen::Quaterniond IB_initialRot;
     ///< [rad] Initial orientation (pitch, yaw, roll) in body coordinates.
