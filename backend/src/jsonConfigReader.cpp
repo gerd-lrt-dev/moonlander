@@ -341,9 +341,6 @@ MissionContext jsonConfigReader::parseMissionContext(const nlohmann::json& j)
     // Initial State for mission context
     const auto& initialState = j.at("initialState");
 
-    const std::string frame_ISP = initialState.at("positionFrame").get<std::string>();
-    const std::string frame_ISV = initialState.at("velocityFrame").get<std::string>();
-
     // Mission context
 
     const auto& missionJson = j.at("mission");

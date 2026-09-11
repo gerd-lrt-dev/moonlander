@@ -28,9 +28,6 @@ void spacecraft::setDefaultValues()
 
     if (spacecraftConfig_.initialStateFrame_ == InitialStateFrame::ENU)
     {
-        initializeMissionFrames(0.0);
-
-
         CoordinateTransformer::State initialMCMF = coordTransf_.ENUtoMCMF(spacecraftConfig_.ENU_initialState, missionContext_.ENU_landingSite);
 
         CoordinateTransformer::State initialMCI = coordTransf_.MCMFtoMCI(initialMCMF, 0.0);
