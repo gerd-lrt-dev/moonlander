@@ -1,5 +1,4 @@
 #include "jsonConfigReader.h"
-#include "stateVectorStruct.h"
 #include "Thrust/EngineType.h"
 
 namespace nlohmann
@@ -144,21 +143,91 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
 
     const auto& initialstate = j.at("initialState");
 
-    const auto& ENU_InitialPosition = initialstate.at("ENU_InitialPosition");
+    // -------------------------------------------------------------------------
+    // Validate initial-state frame selection
+    // D31 currently supports only two consistent initialization modes:
+    //   1. ENU position + ENU velocity
+    //   2. MCI position + MCI velocity
+    // Mixed frame combinations are intentionally not supported.
+    // -------------------------------------------------------------------------
 
-    lander.ENU_initialState.position = Eigen::Vector3d{
-        ENU_InitialPosition.at("east").get<double>(),
-        ENU_InitialPosition.at("north").get<double>(),
-        ENU_InitialPosition.at("up").get<double>()
-    };
+    const std::string positionFrame =
+        initialstate.at("positionFrame").get<std::string>();
 
-    const auto& ENU_InitialVelocity = initialstate.at("ENU_InitialVelocity");
+    const std::string velocityFrame =
+        initialstate.at("velocityFrame").get<std::string>();
 
-    lander.ENU_initialState.velocity = Eigen::Vector3d{
-        ENU_InitialVelocity.at("east").get<double>(),
-        ENU_InitialVelocity.at("north").get<double>(),
-        ENU_InitialVelocity.at("up").get<double>()
-    };
+    if (positionFrame != velocityFrame)
+    {
+        throw std::runtime_error(
+            "Unsupported initial state frame combination. "
+            "Position and velocity must use the same frame."
+            );
+    }
+
+    // -------------------------------------------------------------------------
+    // Parse initial position in the selected configuration frame.
+    // ENU states are resolved to MCI later during spacecraft initialization,
+    // while MCI states can be assigned directly to the runtime state.
+    // -------------------------------------------------------------------------
+
+    if (positionFrame == "ENU")
+    {
+        lander.initialStateFrame_ = InitialStateFrame::ENU;
+
+        const auto& ENU_InitialPosition =
+            initialstate.at("ENU_InitialPosition");
+
+        lander.ENU_initialState.position = Eigen::Vector3d{
+            ENU_InitialPosition.at("east").get<double>(),
+            ENU_InitialPosition.at("north").get<double>(),
+            ENU_InitialPosition.at("up").get<double>()
+        };
+    }
+    else if (positionFrame == "MCI")
+    {
+        lander.initialStateFrame_ = InitialStateFrame::ENU;
+
+        lander.MCI_initialPos =
+            initialstate.at("MCI_InitialPosition").get<Eigen::Vector3d>();
+    }
+    else
+    {
+        throw std::runtime_error(
+            "Unsupported initial state position frame. "
+            "Currently only ENU and MCI are supported."
+            );
+    }
+
+    // -------------------------------------------------------------------------
+    // Parse initial velocity in the same frame as the initial position.
+    // Frame consistency has already been validated above.
+    // -------------------------------------------------------------------------
+
+    if (velocityFrame == "ENU")
+    {
+        const auto& ENU_InitialVelocity =
+            initialstate.at("ENU_InitialVelocity");
+
+        lander.ENU_initialState.velocity = Eigen::Vector3d{
+            ENU_InitialVelocity.at("east").get<double>(),
+            ENU_InitialVelocity.at("north").get<double>(),
+            ENU_InitialVelocity.at("up").get<double>()
+        };
+    }
+    else if (velocityFrame == "MCI")
+    {
+        lander.MCI_initialVelocity =
+            initialstate.at("MCI_InitialVelocity").get<Eigen::Vector3d>();
+    }
+    else
+    {
+        throw std::runtime_error(
+            "Unsupported initial state velocity frame. "
+            "Currently only ENU and MCI are supported."
+            );
+    }
+
 
     lander.IB_initialRot            = initialstate.at("IB_InitialOrientation").get<Eigen::Quaterniond>();
     lander.SBF_initialCenterOfMass  = initialstate.at("SBF_InitialCenterOfMass").get<Eigen::Vector3d>();
@@ -275,7 +344,7 @@ MissionContext jsonConfigReader::parseMissionContext(const nlohmann::json& j)
     const std::string frame_ISP = initialState.at("positionFrame").get<std::string>();
     const std::string frame_ISV = initialState.at("velocityFrame").get<std::string>();
 
-    if (frame_ISP != "ENU" && frame_ISV != "ENU")
+    if (frame_ISP != "ENU" || frame_ISV != "ENU")
     {
         throw std::runtime_error(
             "Unsupported intialstate frame: " + frame_ISP + " & " + frame_ISV +

@@ -34,7 +34,7 @@
         "ENU_InitialVelocity": {
           "east": 0.0,
           "north": 0.0,
-          "up": -20.0
+          "up": 0.0
         },
 
         "IB_InitialOrientation": {
