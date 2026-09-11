@@ -87,7 +87,7 @@ void spacecraft::updateMovementData(double dt)
     }
 
     // --- Compute acceleration ---
-    Eigen::Vector3d MCI_total_Thrust = coordTransf_.GenSBFtoMCI(requestTotalThrust(), originState_);
+    Eigen::Vector3d MCI_total_Thrust = coordTransf_.GenSBFtoMCI(requestTotalThrust(), simFrameContext_.SBF_Frame);
 
     Eigen::Vector3d MCI_acceleration = physics_->computeAcc(MCI_getPosition(), MCI_getVelocity(), getTotalMass(), MCI_total_Thrust);
 
