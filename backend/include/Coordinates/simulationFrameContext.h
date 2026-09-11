@@ -54,6 +54,8 @@ struct SimulationFrameContext
      * @brief Spacecraft state expressed in the active local ENU frame.
      *
      * Typically used for landing guidance, navigation and telemetry.
+     *
+     * Currently used for applying landing damage.
      */
     CoordinateTransformer::State ENU_State;
 

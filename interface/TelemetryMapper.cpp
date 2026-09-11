@@ -68,6 +68,43 @@ Telemetry TelemetryMapper::getQTTelemetryData() const
         backendData.statevector_.SBF_AngularVelocity;
 
     // -------------------------------------------------------------------------
+    // Frame context
+    // -------------------------------------------------------------------------
+
+    FE.frameContext.MCI_State.position =
+        backendData.simFrameContext_.MCI_State.position;
+
+    FE.frameContext.MCI_State.velocity =
+        backendData.simFrameContext_.MCI_State.velocity;
+
+    FE.frameContext.MCMF_State.position =
+        backendData.simFrameContext_.MCMF_State.position;
+
+    FE.frameContext.MCMF_State.velocity =
+        backendData.simFrameContext_.MCMF_State.velocity;
+
+    FE.frameContext.ENU_State.position =
+        backendData.simFrameContext_.ENU_State.position;
+
+    FE.frameContext.ENU_State.velocity =
+        backendData.simFrameContext_.ENU_State.velocity;
+
+    FE.frameContext.LVLH_State.position =
+        backendData.simFrameContext_.LVLH_State.position;
+
+    FE.frameContext.LVLH_State.velocity =
+        backendData.simFrameContext_.LVLH_State.velocity;
+
+    FE.frameContext.MSC_State.latitude =
+        backendData.simFrameContext_.MSC_State.latitude;
+
+    FE.frameContext.MSC_State.longitude =
+        backendData.simFrameContext_.MSC_State.longitude;
+
+    FE.frameContext.MSC_State.altitude =
+        backendData.simFrameContext_.MSC_State.altitude;
+
+    // -------------------------------------------------------------------------
     // Hull integrity
     // -------------------------------------------------------------------------
 

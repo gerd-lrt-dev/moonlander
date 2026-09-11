@@ -1035,10 +1035,10 @@ void cockpitPage::onStateUpdated(Telemetry telemetry_)
     // HULL INTEGRITY
     updateHullStatus(telemetry_.hullIntegrity.spacecraftState);
 
-    landingView->setPositionENU(telemetry_.navigation.MCI_position);
-    landingView->setVelocityENU(telemetry_.navigation.MCI_velocity);
+    landingView->setPositionENU(telemetry_.frameContext.ENU_State.position);
+    landingView->setVelocityENU(telemetry_.frameContext.ENU_State.velocity);
     landingView->setYawDeg(0.0);          // DUMMY later from Quaternion/Euler
-    landingView->setTargetENU({0,0,0});   // DUMMY
+    landingView->setTargetENU({0,0,0});   // target ENU is zero because the ENU frame is fixed on the landing site
     landingView->setThrust(telemetry_.propulsionSystems.mainEngine.T_current);
     landingView->setHullIntact(telemetry_.hullIntegrity.spacecraftState);
 

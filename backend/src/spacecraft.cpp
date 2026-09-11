@@ -6,7 +6,6 @@
 #include "Sensory_Perception/sensorModel.h"
 
 #include <iostream>
-#include <iomanip>
 // -------------------------------------------------------------------------
 // Private
 // -------------------------------------------------------------------------
@@ -16,19 +15,46 @@ void spacecraft::setDefaultValues()
     spacecraftIntegrity = 1.0;
     spacecraftState_ = SpacecraftState::Operational;
     totalMass = spacecraftConfig_.emptyMass + spacecraftConfig_.fuelM;
+
+    // Mission reference frames are required for derived frame state
+    initializeMissionFrames(0.0);
+
+    // ---------------------------------------------------------
+    // Authoritative runtime state
+    // ---------------------------------------------------------
+
     state_.MCI_Position = spacecraftConfig_.MCI_initialPos;
     state_.MCI_Velocity = spacecraftConfig_.MCI_initialVelocity;
 
-    originState_.origin.position    = spacecraftConfig_.MCI_initialPos;
-    originState_.origin.velocity    = spacecraftConfig_.MCI_initialVelocity;
+    if (spacecraftConfig_.initialStateFrame_ == InitialStateFrame::ENU)
+    {
+        CoordinateTransformer::State initialMCMF = coordTransf_.ENUtoMCMF(spacecraftConfig_.ENU_initialState, missionContext_.ENU_landingSite);
+
+        CoordinateTransformer::State initialMCI = coordTransf_.MCMFtoMCI(initialMCMF, 0.0);
+
+        state_.MCI_Position = initialMCI.position;
+        state_.MCI_Velocity = initialMCI.velocity;
+    }
+    // ---------------------------------------------------------
+    // Spacecraft body-frame origin
+    // ---------------------------------------------------------
+
+    originState_.origin.position    = state_.MCI_Position;
+    originState_.origin.velocity    = state_.MCI_Velocity;
     originState_.orientation        = spacecraftConfig_.IB_initialRot;
 
-    initializeMissionFrames(0.0);
+    // Initialize derived frame representations from the resolved MCI state
+    updateFrames(0.0);
 
+    // ---------------------------------------------------------
+    // Propulsion
+    // ---------------------------------------------------------
     thrustOrchestration.initializeEngines(spacecraftConfig_.engines_, spacecraftConfig_.RCSengines_, spacecraftConfig_.tanks_);
 
 
-    // TODO just testing here optimization
+    // ---------------------------------------------------------
+    // Optimization
+    // ---------------------------------------------------------
 
     //double h0 = landerMoon.I_initialPos.z;      // Höhe über Oberfläche
     //double v0 = landerMoon.I_initialVelocity.z; // vertikale Geschwindigkeit
@@ -63,22 +89,19 @@ void spacecraft::updateMovementData(double dt)
     // --- Compute acceleration ---
     Eigen::Vector3d MCI_total_Thrust = coordTransf_.GenSBFtoMCI(requestTotalThrust(), originState_);
 
-    Eigen::Vector3d MCI_acceleration = physics_->computeAcc(getPosition(), getVelocity(), getTotalMass(), MCI_total_Thrust);
+    Eigen::Vector3d MCI_acceleration = physics_->computeAcc(MCI_getPosition(), MCI_getVelocity(), getTotalMass(), MCI_total_Thrust);
 
     // --- Compute velocity ---
-    Eigen::Vector3d MCI_velocity = physics_->computeVel(getVelocity(), MCI_acceleration, dt);
+    Eigen::Vector3d MCI_velocity = physics_->computeVel(MCI_getVelocity(), MCI_acceleration, dt);
 
     // --- Compute position ---
-    Eigen::Vector3d MCI_position = physics_->computePos(getPosition(), MCI_velocity, MCI_acceleration, dt);
-
-    // --- Update Frames ---
-    updateFrames(time);
+    Eigen::Vector3d MCI_position = physics_->computePos(MCI_getPosition(), MCI_velocity, MCI_acceleration, dt);
 
     // --- Compute orientation and angular velocity ---
     Eigen::Vector3d SBF_torque      = thrustOrchestration.getTotalTorque();
-    Eigen::Vector3d SBF_angularAcc  = physics_->computeAngAcc(getAngularVelocity(), spacecraftConfig_.SBF_inertia, SBF_torque);
-    Eigen::Vector3d SBF_angularVel  = physics_->computeAngVel(getAngularVelocity(), SBF_angularAcc, dt);
-    Eigen::Quaterniond SBF_orientation = physics_->computeAttitude(getOrientation(), SBF_angularVel, dt);
+    Eigen::Vector3d SBF_angularAcc  = physics_->computeAngAcc(SBF_getAngularVelocity(), spacecraftConfig_.SBF_inertia, SBF_torque);
+    Eigen::Vector3d SBF_angularVel  = physics_->computeAngVel(SBF_getAngularVelocity(), SBF_angularAcc, dt);
+    Eigen::Quaterniond SBF_orientation = physics_->computeAttitude(IB_getOrientation(), SBF_angularVel, dt);
 
     /*
     std::cout << "\n========== ROTATIONAL DYNAMICS ==========\n"
@@ -146,7 +169,7 @@ void spacecraft::updateFrames(double t)
     simFrameContext_.MCI_State.velocity = state_.MCI_Velocity;
 
     // --- MCI to MCMF ---
-    simFrameContext_.MCMF_State = coordTransf_.MCItoMCMF(simFrameContext_.MCI_State, dt);
+    simFrameContext_.MCMF_State = coordTransf_.MCItoMCMF(simFrameContext_.MCI_State, t);
 
     // --- Compute ENU ---
     simFrameContext_.ENU_Frame  = missionContext_.ENU_landingSite;
@@ -244,23 +267,16 @@ spacecraft::~spacecraft()
 
 void spacecraft::updateStep(double dt)
 {
-    // Update mass data
-    updateTotalMassOnFuelReduction(spacecraftConfig_.emptyMass, requestTotalFuelMass());
-
-    thrustOrchestration.updatePropulsion(dt);
-
     // Update time systems are running
     time += dt;
 
-    // Apply landing damage
-    if (state_.MCI_Position.z() <= environmentConfig_.radiusMoon)
-    {
-        applyLandingDamage(state_.MCI_Velocity.z());
-    }
+    // Update mass data
+    updateTotalMassOnFuelReduction(spacecraftConfig_.emptyMass, requestTotalFuelMass());
 
-    updateSpacecraftIntegrity();
+    // Update propulsion systems
+    thrustOrchestration.updatePropulsion(dt);
 
-    // Update Movement data due to spacecraft state
+    // Update Movement data (dynamics state) due to spacecraft state
     switch (spacecraftState_)
     {
     case SpacecraftState::Operational:
@@ -283,6 +299,18 @@ void spacecraft::updateStep(double dt)
         updateMovementDataToZero(dt);
         break;
     }
+
+    // --- Derive all frame representations from the thruth state---
+    updateFrames(time);
+
+    // Apply landing damage
+    if (state_.MCI_Position.norm() <= environmentConfig_.radiusMoon)
+    {
+        applyLandingDamage(std::abs(simFrameContext_.ENU_State.velocity.z()));
+    }
+
+    // Update integrity
+    updateSpacecraftIntegrity();
 }
 
 void spacecraft::updateSpacecraftIntegrity()
@@ -307,7 +335,7 @@ void spacecraft::updateSpacecraftIntegrity()
     }
 
     // 3. Successful touchdown
-    if (getPosition().z() <= environmentConfig_.radiusMoon)
+    if (MCI_getPosition().norm() <= environmentConfig_.radiusMoon)
     {
         spacecraftState_ = SpacecraftState::Landed;
         return;
@@ -457,14 +485,17 @@ simData spacecraft::getFullSimulationData() const
 {
     simData simData_;
 
+    // State
+
     simData_.statevector_ = getState();
 
-    // Reduce height by radius of moon
-    simData_.statevector_.MCI_Position.z() -= environmentConfig_.radiusMoon;
-
-    // Fill struct with data for emitting signal to UI
     simData_.spacecraftState_ = spacecraftState_;
 
+    // Frames & Mission
+    simData_.simFrameContext_ = simFrameContext_;
+    simData_.missionContext_  = missionContext_;
+
+    // Propulsion
     simData_.ME_ThrustState_.current            = requestMainEngineThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.target             = requestMainEngineTargetThrust().dot(requestMainEngineDirection());
     simData_.ME_ThrustState_.targetPercentage   = requestMainEngineThrustInPercentage().dot(requestMainEngineDirection());
@@ -473,12 +504,15 @@ simData spacecraft::getFullSimulationData() const
 
     simData_.RCS_ThrustState_ = requestFullRCSEngineData();
 
+    // Tanks
     simData_.tanks    = requestFuelTanks();
     simData_.fuelMass = requestTotalFuelMass();
     simData_.fuelFlow = requestMainEngineLiveFuelConsumption();
 
+    // Sensors
     simData_.GLoad = getGload();
 
+    // Output
     simData_.output = getConsoleTxt();
 
     return simData_;
@@ -494,24 +528,39 @@ const StateVector& spacecraft::getState() const
     return state_;
 }
 
-Eigen::Vector3d spacecraft::getPosition() const
+Eigen::Vector3d spacecraft::MCI_getPosition() const
 {
     return state_.MCI_Position;
 }
 
-Eigen::Vector3d spacecraft::getVelocity() const
+Eigen::Vector3d spacecraft::MCI_getVelocity() const
 {
     return state_.MCI_Velocity;
 }
 
-Eigen::Quaterniond spacecraft::getOrientation() const
+Eigen::Quaterniond spacecraft::IB_getOrientation() const
 {
     return state_.IB_Orientation;
 }
 
-Eigen::Vector3d spacecraft::getAngularVelocity() const
+Eigen::Vector3d spacecraft::SBF_getAngularVelocity() const
 {
     return state_.SBF_AngularVelocity;
+}
+
+Eigen::Vector3d spacecraft::ENU_getPosition() const
+{
+    return simFrameContext_.ENU_State.position;
+}
+
+Eigen::Vector3d spacecraft::ENU_getVelocity() const
+{
+    return simFrameContext_.ENU_State.velocity;
+}
+
+const CoordinateTransformer::State& spacecraft::ENU_getState() const
+{
+    return simFrameContext_.ENU_State;
 }
 
 double spacecraft::getTotalMass()

@@ -20,21 +20,21 @@
       "Izz": 720.0,
 
       "initialState": {
-        "positionFrame": "ENU",
-        "velocityFrame": "ENU",
+        "positionFrame": "MCI",
+        "velocityFrame": "MCI",
         "orientationFrame": "IB",
         "angularVelocityFrame": "SBF",
 
-        "ENU_InitialPosition": {
-          "east": 0.0,
-          "north": 0.0,
-          "up": 300.0
+        "MCI_InitialPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1737700.0
         },
 
-        "ENU_InitialVelocity": {
-          "east": 0.0,
-          "north": 0.0,
-          "up": 0.0
+        "MCI_InitialVelocity": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": -20.0
         },
 
         "IB_InitialOrientation": {

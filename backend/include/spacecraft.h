@@ -571,28 +571,87 @@ public:
     const StateVector& getState() const;
 
     /**
-     * @brief Return current position of spacecraft
-     * @return Current position in cartesian-coordinates [m]
+     * @brief Returns the current spacecraft position expressed in the
+     * Moon-Centered Inertial (MCI) frame.
+     *
+     * This value is part of the authoritative translational state used for
+     * physics propagation.
+     *
+     * @return Spacecraft position in MCI coordinates [m].
      */
-    Eigen::Vector3d getPosition() const;
+    Eigen::Vector3d MCI_getPosition() const;
+
 
     /**
-     * @brief Return current velocity of spacecraft
-    //  * @return Current velocity [m/s]
+     * @brief Returns the current spacecraft velocity expressed in the
+     * Moon-Centered Inertial (MCI) frame.
+     *
+     * This value is part of the authoritative translational state used for
+     * physics propagation.
+     *
+     * @return Spacecraft velocity in MCI coordinates [m/s].
      */
-    Eigen::Vector3d getVelocity() const;
+    Eigen::Vector3d MCI_getVelocity() const;
+
 
     /**
-     * @brief Return orientation of spacecraft
-     * @return Quaternion with q0 Scalar component, q1 First vector component, q2 Second vector component, q3 Third vector component
+     * @brief Returns the current spacecraft attitude relative to the
+     * inertial reference frame.
+     *
+     * @return Attitude quaternion in scalar-first convention
+     *         (w, x, y, z).
      */
-    Eigen::Quaterniond getOrientation() const;
+    Eigen::Quaterniond IB_getOrientation() const;
+
 
     /**
-     * @brief Return angular velocity of spacecraft
-     * @return Angular velocity vector of the spacecraft [rad/s].
+     * @brief Returns the current spacecraft angular velocity expressed in the
+     * Spacecraft Body Frame (SBF).
+     *
+     * @return Angular velocity vector in SBF coordinates [rad/s].
      */
-    Eigen::Vector3d getAngularVelocity() const;
+    Eigen::Vector3d SBF_getAngularVelocity() const;
+
+
+    /**
+     * @brief Returns the current spacecraft position expressed in the local
+     * East-North-Up (ENU) frame of the configured landing site.
+     *
+     * The ENU position is derived from the authoritative MCI state and represents
+     * the spacecraft relative to the landing-site reference frame.
+     *
+     * Components:
+     * - x: East
+     * - y: North
+     * - z: Up
+     *
+     * @return Spacecraft position in ENU coordinates [m].
+     */
+    Eigen::Vector3d ENU_getPosition() const;
+
+
+    /**
+     * @brief Returns the current spacecraft velocity expressed in the local
+     * East-North-Up (ENU) frame of the configured landing site.
+     *
+     * The z-component represents the local vertical velocity, where positive
+     * values indicate motion upward and negative values indicate descent.
+     *
+     * @return Spacecraft velocity in ENU coordinates [m/s].
+     */
+    Eigen::Vector3d ENU_getVelocity() const;
+
+
+    /**
+     * @brief Returns the current spacecraft translational state expressed in the
+     * local East-North-Up (ENU) frame of the configured landing site.
+     *
+     * The returned state is derived from the authoritative MCI state and contains
+     * both position and velocity relative to the landing-site ENU frame.
+     *
+     * @return Current spacecraft ENU state.
+     */
+    const CoordinateTransformer::State& ENU_getState() const;
 
     /**
      * @brief Return current total mass

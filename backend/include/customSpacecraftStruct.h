@@ -4,9 +4,27 @@
 #include "Thrust/EngineConfig.h"
 #include "Thrust/RCSConfig.h"
 #include "Thrust/FueltankStruct.h"
+#include "Coordinates/coordinateTransformer.h"
 
 #include <vector>
 #include <eigen3/Eigen/Dense>
+
+/**
+ * @brief Supported reference frames for spacecraft initial-state definition.
+ *
+ * Defines the frame in which the configured initial position and velocity
+ * are provided before the simulation runtime state is initialized.
+ *
+ * - ENU: Initial state is specified relative to the configured mission
+ *        landing site and is transformed to MCI during initialization.
+ * - MCI: Initial state is specified directly in Moon-Centered Inertial
+ *        coordinates and can be assigned directly to the runtime state.
+ */
+enum class InitialStateFrame
+{
+    ENU,
+    MCI
+};
 
 /**
  * @struct customSpacecraft
@@ -125,12 +143,18 @@ struct customSpacecraft
     // State (Body Frame Coordinates)
     // -------------------------------------------------------------------------
 
+    InitialStateFrame initialStateFrame_ = InitialStateFrame::MCI;
+    ///< Initial State Frame given by config
+
     Eigen::Vector3d MCI_initialPos;
     ///< [m] Initial spacecraft position expressed in body coordinates.
     ///< Typically initial (0, 0, 0) because physics handles world/Moon coordinates.
 
     Eigen::Vector3d MCI_initialVelocity;
     ///< [m/s] Velocity in three spatial directions
+
+    CoordinateTransformer::State ENU_initialState;
+    ///< [m] Initial state in the ENU (East, North, Up) reference frame
 
     Eigen::Quaterniond IB_initialRot;
     ///< [rad] Initial orientation (pitch, yaw, roll) in body coordinates.
