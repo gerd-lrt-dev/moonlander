@@ -186,7 +186,7 @@ customSpacecraft jsonConfigReader::parseLander(const nlohmann::json& j)
     }
     else if (positionFrame == "MCI")
     {
-        lander.initialStateFrame_ = InitialStateFrame::ENU;
+        lander.initialStateFrame_ = InitialStateFrame::MCI;
 
         lander.MCI_initialPos =
             initialstate.at("MCI_InitialPosition").get<Eigen::Vector3d>();
@@ -343,13 +343,6 @@ MissionContext jsonConfigReader::parseMissionContext(const nlohmann::json& j)
 
     const std::string frame_ISP = initialState.at("positionFrame").get<std::string>();
     const std::string frame_ISV = initialState.at("velocityFrame").get<std::string>();
-
-    if (frame_ISP != "ENU" || frame_ISV != "ENU")
-    {
-        throw std::runtime_error(
-            "Unsupported intialstate frame: " + frame_ISP + " & " + frame_ISV +
-            ". Currently only ENU is supported.");
-    }
 
     // Mission context
 

@@ -16,6 +16,9 @@ void spacecraft::setDefaultValues()
     spacecraftState_ = SpacecraftState::Operational;
     totalMass = spacecraftConfig_.emptyMass + spacecraftConfig_.fuelM;
 
+    // Mission reference frames are required for derived frame state
+    initializeMissionFrames(0.0);
+
     // ---------------------------------------------------------
     // Authoritative runtime state
     // ---------------------------------------------------------
